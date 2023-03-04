@@ -7,4 +7,10 @@
     <RootNamespace>Timeoff</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="Commands\" />
+    <Folder Include="RequestModels\" />
+    <Folder Include="ResultModels\" />
+  </ItemGroup>
+
 </Project>
