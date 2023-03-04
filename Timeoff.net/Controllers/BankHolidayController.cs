@@ -2,7 +2,7 @@
 
 namespace Timeoff.Controllers
 {
-    [Route("bankholidays")]
+    [Route("settings/bankholidays")]
     public class BankHolidayController : Controller
     {
         [HttpGet()]

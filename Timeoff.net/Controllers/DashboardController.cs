@@ -4,7 +4,7 @@ namespace Timeoff.Controllers
 {
     public class DashboardController : Controller
     {
-        [HttpGet]
+        [HttpGet("/")]
         public IActionResult Index()
         {
             if (User.Identity.IsAuthenticated)

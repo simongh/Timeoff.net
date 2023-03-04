@@ -1,0 +1,13 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+{{# each grouped_leaves}}
+  <h2>{{this.year}}</h2>
+  {{> user_requests leaves=this.leaves no_header=1 logged_user=../logged_user}}
+  <partial name="_UserRequests" />
+  <p><em>Days would be deducted from allowance:</em> <span>{{ this.total_deduction }}</span></p>
+  <div class="main-row_header">&nbsp;</div>
+{{/ each}}

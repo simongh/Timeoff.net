@@ -2,7 +2,7 @@
 
 namespace Timeoff.Controllers
 {
-    [Route("")]
+    [Route("audit")]
     public class AuditController : Controller
     {
         [HttpGet("email")]

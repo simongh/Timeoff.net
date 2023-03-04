@@ -2,7 +2,7 @@
 
 namespace Timeoff.Controllers
 {
-    [Route("")]
+    [Route("calendar")]
     public class CalendarController : Controller
     {
         [HttpPost("bookleave")]

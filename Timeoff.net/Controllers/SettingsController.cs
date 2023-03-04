@@ -2,6 +2,7 @@
 
 namespace Timeoff.Controllers
 {
+    [Route("settings")]
     public class SettingsController : Controller
     {
         [HttpGet("general")]

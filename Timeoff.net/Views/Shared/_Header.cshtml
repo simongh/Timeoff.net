@@ -1,0 +1,90 @@
+﻿<div class="header">
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="{{url_to_the_site_root}}">TimeOff.Management</a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-left">
+                    {{# if logged_user }}
+                    <li><a asp-controller="Calendar" asp-action="Index">Calendar</a></li>
+                    {{# unless keep_team_view_hidden }}
+                    <li><a asp-controller="Calendar" asp-action="TeamView">Team View</a></li>
+                    {{/ unless }}
+                    {{# if logged_user.admin }}
+                    <li class="hidden-xs"><a asp-controller="Users" asp-action="Index">Employees</a></li>
+                    {{/if}}
+                    <li class="navbar-form navbar-left">
+                        <div class="form-group">
+                            <button type="button" class="btn btn-info" data-toggle="modal" data-target="#book_leave_modal" id="book_time_off_btn">New absence</button>
+                        </div>
+                    </li>
+                    {{/if}}
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        {{#if logged_user }}
+                    <li class="dropdown" id="header-notification-dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                            <span class="fa fa-bell-o"></span>
+                            <span class="label label-info notification-badge hidden"></span>
+                        </a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li class="dropdown-header">No notifications</li>
+                        </ul>
+                    </li>
+                    {{#if logged_user.admin }}
+                    <li class="dropdown hidden-xs">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><span class="fa fa-gears"></span> <span class="caret"></span></a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li><a asp-controller="Settings" asp-action="General">General</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a asp-controller="Departments" asp-action="Index">Departments</a></li>
+                            <li><a asp-controller="BankHolidays" asp-action="Index">Bank Holidays</a></li>
+                            <li><a asp-controller="Settings" asp-action="CompanyAuthentication">LDAP configuration</a></li>
+                            <li><a asp-controller="Settings" asp-action="CompanyIntergrationApi">API configuration</a></li>
+                            <li><a asp-controller="Users" asp-action="Import">Import employees</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a asp-controller="Audit" asp-action="Email">Emails audit</a></li>
+                            <li><a asp-controller="Reports" asp-action="Index" href="/reports/">Reports</a></li>
+                        </ul>
+                    </li>
+                    {{/if}}
+                    <li class="visible-xs-block"><a asp-controller="Requests" asp-action="Index">Requests</a></li>
+                    <li class="visible-xs-block"><a asp-controller="Account" asp-action="Logout" href="/logout/">Logout</a></li>
+                    <li class="dropdown hidden-xs">
+                        <a id="me_menu" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Me <span class="caret"></span></a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li><a asp-controller="Requests" asp-action="Index">Requests</a></li>
+                            <li class="hidden-xs"><a asp-controller="Calendar" asp-action="Feeds">Feeds</a></li>
+                            <li role="separator" class="divider hidden-xs"></li>
+                            <li><a asp-controller="Account" asp-action="Logout">Logout</a></li>
+                        </ul>
+                    </li>
+                    {{else}}
+                    <li><a asp-controller="Account" asp-action="Login">Login</a></li>
+                    {{/if}}
+                    </li>
+                </ul>
+            </div><!-- /.navbar-collapse -->
+        </div><!-- /.container-fluid -->
+    </nav>
+
+    @*{{# if logged_user }}
+    {{# if logged_user.company.company_wide_message  }}
+    <div class="alert alert-danger" role="alert">{{ logged_user.company.company_wide_message }}</div>
+    {{/if}}
+    {{/if}}*@
+
+</div>
+
+
