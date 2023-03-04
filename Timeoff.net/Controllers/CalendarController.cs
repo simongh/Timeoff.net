@@ -12,6 +12,7 @@ namespace Timeoff.Controllers
         }
 
         [HttpGet]
+        [Route("~/")]
         public async Task<IActionResult> IndexAsync()
         {
             return View();

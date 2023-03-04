@@ -1,3 +1,6 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
+
 namespace Timeoff.net
 {
     public class Program
@@ -6,8 +9,24 @@ namespace Timeoff.net
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
+            builder.Services.AddHttpContextAccessor();
+
+            builder.Services
+                .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(options =>
+                {
+                    options.LoginPath = "/login";
+                    options.LogoutPath = "/logout";
+                });
+
             builder.Services.AddControllersWithViews();
+
+            builder.Services.AddAuthorization(options =>
+            {
+                options.DefaultPolicy = new AuthorizationPolicyBuilder()
+                    .RequireAuthenticatedUser()
+                    .Build();
+            });
 
             var app = builder.Build();
 
@@ -24,8 +43,9 @@ namespace Timeoff.net
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
-            app.MapControllers();
+            app.MapControllers().RequireAuthorization();
 
             app.Run();
         }

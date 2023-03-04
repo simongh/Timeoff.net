@@ -1,9 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Timeoff.Controllers
 {
     public class AccountController : Controller
     {
+        [AllowAnonymous]
         [HttpGet("login")]
         public async Task<IActionResult> LoginAsync()
         {
@@ -19,7 +22,8 @@ namespace Timeoff.Controllers
         [HttpGet("logout")]
         public async Task<IActionResult> LogoutAsync()
         {
-            return View();
+            await HttpContext.SignOutAsync();
+            return Redirect("/");
         }
 
         [HttpGet("register")]
