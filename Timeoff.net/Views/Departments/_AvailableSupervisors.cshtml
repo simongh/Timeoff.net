@@ -1,0 +1,15 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<div class="list-group">
+    {{# if users }}
+    {{#each users}}
+    <label class="list-group-item label-plain"><input type="checkbox" name="supervisor_id" value="{{ this.id }}" {{#if this._marked }} checked=checked {{ /if}}> {{ this.full_name }}</label>
+    {{/each}}
+    {{else}}
+    <p>No employees available to be added as secondary supervisors.</p>
+    <p> <a asp-controller="Users" asp-action="Add" data-vpp-add-supervisor-modal-add-new-user="1">Add new employee <i class="fa fa-angle-double-right"></i></a></p>
+    {{/if}}
+</div>

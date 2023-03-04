@@ -1,0 +1,33 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+<h1>{{department.name}} details</h1>
+
+<form method="post" asp-controller="Departments" asp-action="Delete" asp-route-id="{{ department.id }}">
+  <div class="row">
+    <div class="col-md-3 lead">
+      Department details
+    </div>
+    <div class="col-md-1 col-md-offset-8">
+      <button id="remove_btn" type="submit" class="pull-right btn btn-danger single-click" data-toggle="tooltip" data-placement="top" title="Remove department"><i class="fa fa-trash"></i> Delete</button>
+    </div>
+  </div>
+</form>
+
+<div class="row">&nbsp;</div>
+
+{{> show_flash_messages }}
+
+<div class="col-md-3 list-group">
+  <a asp-controller="Departments" asp-action="GetForUpdate" asp-route-id="{{department.id}}" class="list-group-item selected-item">General details</a>
+  <a asp-controller="Users" asp-action="Index" asp-route-department="{{ department.id }}" class="list-group-item">Employees from department</a>
+</div>
+
+
+{{> department_details/general }}
+<partial name="_General" />
+
+<div class="row">&nbsp;</div>
