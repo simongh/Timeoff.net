@@ -2,5 +2,6 @@
 {
     public class Options
     {
+        public bool AllowNewAccountCreation { get; set; }
     }
 }

@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
 
 namespace Timeoff.net
 {
@@ -9,7 +10,17 @@ namespace Timeoff.net
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            builder.Services.AddHttpContextAccessor();
+            builder.Services
+                .Configure<Types.Options>(builder.Configuration.GetSection("timeoff"))
+                .ConfigureApplication(options =>
+                {
+                    options.UseSqlite(builder.Configuration.GetConnectionString("timeoff"));
+                })
+                .AddHttpContextAccessor()
+                .AddMediatR(options =>
+                {
+                    options.RegisterServicesFromAssembly(typeof(IDataContext).Assembly);
+                });
 
             builder.Services
                 .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
