@@ -1,10 +1,21 @@
-﻿@{
+﻿@model Timeoff.ResultModels.LoginViewModel
+
+@{
+    Timeoff.ResultModels.FlashResult? flash = null;
+}
+@if (!Model.Success)
+{
+    flash = new()
+    {
+        Errors = new[]
+        {
+            "Invalid credentials"
+        },
+    };
 }
 
 <h1>Login</h1>
-
-{{> show_flash_messages }}
-
+<partial name="_Flash" model="flash" />
 <form class="form-horizontal" asp-controller="Account" asp-action="LoginPost" method="post">
 
     <div class="row">&nbsp;</div>
@@ -30,8 +41,12 @@
         <div class="col-md-4">
             <p class="pull-right">
                 <a asp-controller="Account" asp-action="ForgotPassword">Forgot password?</a>
-                {{#if allow_create_new_accounts }} | <a asp-controller="Account" asp-action="Register">Register new company</a>{{/if}}</p>
-        </div>gister
+                @if (Model.AllowRegistrations)
+                {
+                    <a asp-controller="Account" asp-action="Register">Register new company</a>
+                }
+            </p>
+        </div>
     </div>
 
 </form>

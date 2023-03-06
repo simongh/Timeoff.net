@@ -1,0 +1,20 @@
+﻿@model Timeoff.ResultModels.FlashResult
+
+@if (Model == null)
+{
+    return;
+}
+@if (Model.Errors != null)
+{
+    foreach (var item in Model.Errors)
+    {
+        <div class="alert alert-danger" role="alert">@item</div>
+    }
+}
+@if (Model.Messages != null)
+{
+    foreach (var item in Model.Messages)
+    {
+        <div class="alert alert-success" role="alert">@item</div>
+    }
+}
