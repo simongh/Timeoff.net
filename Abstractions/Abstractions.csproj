@@ -8,6 +8,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="countries.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="countries.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Validators\" />
     <Folder Include="RequestModels\" />
   </ItemGroup>
 

@@ -34,10 +34,14 @@
 
         public Department Department { get; set; }
 
-        public ICollection<Leave> Leave { get; set; }
+        public Schedule? Schedule { get; set; }
 
-        public ICollection<UserFeed> Feeds { get; }
+        public ICollection<Department> ManagedDepartments { get; set; } = new HashSet<Department>();
 
-        public ICollection<UserAllowanceAdjustment> Adjustments { get; }
+        public ICollection<Leave> Leave { get; set; } = new HashSet<Leave>();
+
+        public ICollection<UserFeed> Feeds { get; set; } = new HashSet<UserFeed>();
+
+        public ICollection<UserAllowanceAdjustment> Adjustments { get; set; } = new HashSet<UserAllowanceAdjustment>();
     }
 }

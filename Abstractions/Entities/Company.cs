@@ -32,14 +32,18 @@
 
         public int CompanyId { get; private set; }
 
-        public ICollection<Department> Departments { get; set; }
+        public Schedule Schedule { get; set; }
 
-        public ICollection<User> Users { get; set; }
+        public ICollection<Department> Departments { get; set; } = new HashSet<Department>();
 
-        public ICollection<BankHoliday> BankHolidays { get; set; }
+        public ICollection<User> Users { get; set; } = new HashSet<User>();
 
-        public ICollection<EmailAudit> EmailAudits { get; set; }
+        public ICollection<BankHoliday> BankHolidays { get; set; } = new HashSet<BankHoliday>();
 
-        public ICollection<Audit> Audits { get; set; }
+        public ICollection<EmailAudit> EmailAudits { get; set; } = new HashSet<EmailAudit>();
+
+        public ICollection<Audit> Audits { get; set; } = new HashSet<Audit>();
+
+        public ICollection<LeaveType> LeaveTypes { get; set; } = new HashSet<LeaveType>();
     }
 }

@@ -14,19 +14,17 @@
 
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <ul class="nav navbar-nav navbar-left">
-                    @if (User.Identity?.IsAuthenticated == true){                    
+                <ul class="nav navbar-nav navbar-left" asp-authorise>
                     <li><a asp-controller="Calendar" asp-action="Index">Calendar</a></li>
                     @*{{# unless keep_team_view_hidden }}
                     <li><a asp-controller="Calendar" asp-action="TeamView">Team View</a></li>
                     {{/ unless }}*@
-                    <li asp-authorise asp-roles="admin" class="hidden-xs" asp-authorize><a asp-controller="Users" asp-action="Index">Employees</a></li>
+                    <li asp-authorise asp-roles="Admin" class="hidden-xs"><a asp-controller="Users" asp-action="Index">Employees</a></li>
                     <li class="navbar-form navbar-left">
                         <div class="form-group">
                             <button type="button" class="btn btn-info" data-toggle="modal" data-target="#book_leave_modal" id="book_time_off_btn">New absence</button>
                         </div>
                     </li>
-                    }
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     @if (User.Identity?.IsAuthenticated ==true){
@@ -39,7 +37,7 @@
                                 <li class="dropdown-header">No notifications</li>
                             </ul>
                         </li>
-                        <li asp-authorize asp-roles="admin" class="dropdown hidden-xs">
+                        <li asp-authorise asp-roles="Admin" class="dropdown hidden-xs">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><span class="fa fa-gears"></span> <span class="caret"></span></a>
                             <ul class="dropdown-menu" role="menu">
                                 <li><a asp-controller="Settings" asp-action="General">General</a></li>

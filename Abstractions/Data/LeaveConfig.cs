@@ -8,6 +8,10 @@ namespace Timeoff.Data
         public void Configure(EntityTypeBuilder<Entities.Leave> builder)
         {
             builder.ToTable("Leaves");
+
+            builder
+                .HasOne(p => p.Approver)
+                .WithMany();
         }
     }
 }

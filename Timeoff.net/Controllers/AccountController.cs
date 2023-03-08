@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -27,6 +28,7 @@ namespace Timeoff.Controllers
         public async Task<IActionResult> LoginPostAsync(Commands.LoginCommand command)
         {
             command.SignInFunc = p => HttpContext.SignInAsync(p);
+            command.AuthType = CookieAuthenticationDefaults.AuthenticationScheme;
 
             var vm = await _mediator.Send(command);
             if (vm.Success)
@@ -46,14 +48,32 @@ namespace Timeoff.Controllers
         [HttpGet("register")]
         public async Task<IActionResult> RegisterAsync()
         {
-            return View();
+            if (User.Identity?.IsAuthenticated == true)
+                return Redirect("/");
+
+            var vm = await _mediator.Send(new Commands.GetRegisterCommand());
+
+            if (vm == null)
+                return Redirect("/");
+            else
+                return View(vm);
         }
 
         [AllowAnonymous]
         [HttpPost("register")]
-        public async Task<IActionResult> RegisterPostAsync()
+        public async Task<IActionResult> RegisterPostAsync(Commands.RegisterCommand command)
         {
-            return View();
+            if (User.Identity?.IsAuthenticated == true)
+                return Redirect("/");
+
+            var vm = await _mediator.Send(command);
+
+            if (vm == null)
+                return Redirect("/");
+            else if (vm.Success)
+                return Redirect("/");
+            else
+                return View("Register", vm);
         }
 
         [AllowAnonymous]

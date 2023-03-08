@@ -1,12 +1,15 @@
 ﻿using System.Security.Cryptography;
+using Timeoff.Types;
 
 namespace Timeoff.Services
 {
     internal class UsersService : IUsersService
     {
+        private const int SaltBytesSize = 24;
+        private const int HashBytesSize = 24; // 24 is too long for SHA1 but sufficient for > SHA224. not less than 20.
+
         public UsersService()
-        {
-        }
+        { }
 
         public bool Authenticate(string original, string? password)
         {
@@ -14,23 +17,41 @@ namespace Timeoff.Services
             {
                 return false;
             }
-            var parts = original.Split(':');
 
-            if (parts.Length != 3)
-            {
+            if (!PhcFormat.TryParse(original, out var parts))
                 return false;
-            }
 
-            var hashed = HashPassword(password, parts[1], int.Parse(parts[0]));
+            var hashed = HashPassword(password, parts);
 
-            return hashed == parts[2];
+            return parts.Equals(hashed);
         }
 
-        private string HashPassword(string password, string salt, int count)
+        public bool ShouldUpgrade(string password)
         {
-            var saltBytes = Convert.FromBase64String(salt);
-            using var hasher = new Rfc2898DeriveBytes(password, saltBytes, count, HashAlgorithmName.SHA256);
-            return Convert.ToBase64String(hasher.GetBytes(24));
+            PhcFormat.TryParse(password, out var parts);
+            return parts.ShouldUpgrade;
+        }
+
+        private byte[] HashPassword(string password, PhcFormat phc)
+        {
+            using var hasher = new Rfc2898DeriveBytes(password, phc.Salt, phc.IterationCount, phc.HashAlgorithm);
+            return hasher.GetBytes(HashBytesSize);
+        }
+
+        public string HashPassword(string password)
+        {
+            var csprng = RandomNumberGenerator.Create();
+            var salt = new byte[SaltBytesSize];
+            csprng.GetBytes(salt);
+
+            var parts = new PhcFormat
+            {
+                Salt = salt,
+            };
+
+            parts.Hash = HashPassword(password, parts);
+
+            return parts.ToString();
         }
     }
 }

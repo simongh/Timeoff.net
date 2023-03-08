@@ -19,6 +19,6 @@
         public int CompanyId { get; set; }
 
         public Company Company { get; set; }
-        public ICollection<object> Leaves { get; set; }
+        public ICollection<Leave> Leaves { get; set; } = new HashSet<Leave>();
     }
 }

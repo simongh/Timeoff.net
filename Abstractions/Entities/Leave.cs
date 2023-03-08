@@ -32,6 +32,6 @@
 
         public LeaveType LeaveType { get; set; }
 
-        public ICollection<object> Comments { get; set; }
+        //public ICollection<Comment> Comments { get; set; }
     }
 }

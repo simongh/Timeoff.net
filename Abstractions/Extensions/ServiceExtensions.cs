@@ -16,7 +16,8 @@ namespace Timeoff
 
         public static void Migrate(this IServiceProvider serviceProvider)
         {
-            serviceProvider.GetRequiredService<DataContext>().Database.Migrate();
+            using var scope = serviceProvider.CreateScope();
+            scope.ServiceProvider.GetRequiredService<DataContext>().Database.Migrate();
         }
     }
 }
