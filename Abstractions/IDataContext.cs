@@ -21,6 +21,6 @@ namespace Timeoff
 
         //DatabaseFacade Database { get; }
 
-        Task<int> SaveChangesAsync(CancellationToken cancellationToken);
+        Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
     }
 }

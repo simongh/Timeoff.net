@@ -1,12 +1,11 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model Timeoff.ResultModels.RegisterViewModel
 @{
+    Timeoff.ResultModels.FlashResult? flash = null;
 }
 
 <h1>New company</h1>
 
-@*{{> show_flash_messages }}*@
+<partial name="_Flash" model="flash" />
 
 <div class="row">
   <div class="col-md-6 lead">Register new company account and supervisor user</div>
@@ -19,35 +18,35 @@
       <div class="form-group">
         <label for="company_name_inp" class="col-md-2 control-label">Company name</label>
         <div class="col-md-6">
-          <input class="form-control" id="company_name_inp" placeholder="Company name" name="company_name" required>
+          <input class="form-control" id="company_name_inp" placeholder="Company name" asp-for="CompanyName" required>
         </div>
       </div>
 
       <div class="form-group">
         <label for="name_inp" class="col-md-2 control-label">First Name</label>
         <div class="col-md-6">
-          <input class="form-control" id="name_inp" placeholder="First name" name="name" required>
+          <input class="form-control" id="name_inp" placeholder="First name" asp-for="FirstName" required>
         </div>
       </div>
 
       <div class="form-group">
         <label for="lastname_inp" class="col-md-2 control-label">Last Name</label>
         <div class="col-md-6">
-          <input class="form-control" id="lastname_inp" placeholder="Last Name" name="lastname" required>
+          <input class="form-control" id="lastname_inp" placeholder="Last Name" asp-for="LastName" required>
         </div>
       </div>
 
       <div class="form-group">
         <label for="email_inp" class="col-md-2 control-label">Email Address</label>
         <div class="col-md-6">
-          <input class="form-control" id="email_inp" type="email" placeholder="Email" name="email" required>
+          <input class="form-control" id="email_inp" type="email" placeholder="Email" asp-for="Email" required>
         </div>
       </div>
 
       <div class="form-group">
         <label for="pass_inp" class="col-md-2 control-label">Password</label>
         <div class="col-md-6">
-          <input class="form-control" id="pass_inp" type="password" placeholder="Password" name="password" required>
+          <input class="form-control" id="pass_inp" type="password" placeholder="Password" asp-for="Password" required>
         </div>
       </div>
 
@@ -55,7 +54,7 @@
       <div class="form-group">
         <label for="confirm_pass_inp" class="col-md-2 control-label">Confirm Password</label>
         <div class="col-md-6">
-          <input class="form-control" id="confirm_pass_inp" type="password" placeholder="Password" name="password_confirmed" required>
+          <input class="form-control" id="confirm_pass_inp" type="password" placeholder="Password" asp-for="ConfirmPassword" required>
         </div>
       </div>
 
@@ -63,9 +62,11 @@
         <label for="country_inp" class="col-md-2 control-label">Country</label>
         <div class="col-md-6">
           <select class="form-control" id="country_inp" placeholder="Country name" name="country">
-            @*{{#each countries}}
-            <option value="{{@key}}" {{#if this.default }} selected="selected" {{/if}}>{{@key}}: {{this.name}}</option>
-            {{/each}}*@
+              @foreach (var item in Model.Countries)
+                {
+                    var selected = Model.Country == item.Code;
+                    <option value="@item.Code" selected="@selected">@item.Code: @item.Name</option>
+                }
           </select>
         </div>
       </div>
@@ -74,9 +75,11 @@
         <label for="timezone_inp" class="col-md-2 control-label">Time zone</label>
         <div class="col-md-6">
           <select class="form-control" id="timezone_inp" placeholder="Time zone" name="timezone">
-           @* {{#each timezones_available}}
-            <option value="{{this}}" {{#if_equal this 'Europe/London' }} selected="selected" {{/if_equal}}>{{this}}</option>
-            {{/each}}*@
+              @foreach (var item in Model.TimeZones)
+                        {
+                            var selected = Model.TimeZone == item.Id;      
+               <option value="@item.Id" selected="@selected">@item.Name</option>
+                     }
           </select>
         </div>
       </div>

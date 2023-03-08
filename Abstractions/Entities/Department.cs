@@ -12,16 +12,16 @@
 
         public int DepartmentId { get; private set; }
 
-        public int ManagerId { get; set; }
+        public int? ManagerId { get; set; }
 
-        public User Manager { get; set; }
+        public User? Manager { get; set; }
 
         public int CompanyId { get; set; }
 
         public Company Company { get; set; }
 
-        public ICollection<User> Users { get; set; }
+        public ICollection<User> Users { get; set; } = new HashSet<User>();
 
-        public ICollection<DepartmentSupervisor> Supervisors { get; set; }
+        public ICollection<DepartmentSupervisor> Supervisors { get; set; } = new HashSet<DepartmentSupervisor>();
     }
 }

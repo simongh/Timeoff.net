@@ -8,6 +8,14 @@ namespace Timeoff.Data
         public void Configure(EntityTypeBuilder<Entities.User> builder)
         {
             builder.ToTable("Users");
+
+            builder
+                .HasMany(p => p.ManagedDepartments)
+                .WithOne(p => p.Manager);
+
+            builder
+                .HasOne(p => p.Schedule)
+                .WithOne(p => p.User);
         }
     }
 }

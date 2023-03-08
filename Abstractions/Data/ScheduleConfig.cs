@@ -9,6 +9,9 @@ namespace Timeoff.Data
         public void Configure(EntityTypeBuilder<Entities.Schedule> builder)
         {
             builder.ToTable("Schedules");
+
+            builder.HasOne(p => p.Company)
+                .WithOne(p => p.Schedule);
         }
     }
 }

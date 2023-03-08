@@ -11,7 +11,9 @@ namespace Timeoff.Commands
 
         public string? Password { get; init; }
 
-        public Func<ClaimsPrincipal, Task> SignInFunc { get; set; }
+        public string AuthType { get; set; } = null!;
+
+        public Func<ClaimsPrincipal, Task> SignInFunc { get; set; } = null!;
     }
 
     internal class LoginCommandHandler : IRequestHandler<LoginCommand, ResultModels.LoginViewModel>
@@ -43,16 +45,24 @@ namespace Timeoff.Commands
                     u.Password,
                     u.Admin,
                 })
+                .AsNoTracking()
                 .FirstOrDefaultAsync(cancellationToken);
 
             if (user != null && _usersService.Authenticate(user.Password, request.Password))
             {
+                if (_usersService.ShouldUpgrade(user.Password))
+                {
+                    var u = await _dataContext.Users.FindAsync(user.UserId);
+                    u!.Password = _usersService.HashPassword(request.Password);
+                    await _dataContext.SaveChangesAsync();
+                }
+
                 var userId = new ClaimsIdentity(new Claim[]
                 {
                     new ("userid",user.UserId.ToString()),
                     new ("companyid",user.CompanyId.ToString()),
-                    new (ClaimTypes.Role,user.Admin ? "Admin" : "User")
-                });
+                    new (ClaimTypes.Role, user.Admin ? "Admin" : "User")
+                }, request.AuthType);
 
                 await request.SignInFunc(new(userId));
                 success = true;

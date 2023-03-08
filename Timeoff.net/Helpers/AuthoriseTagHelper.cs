@@ -38,6 +38,7 @@ namespace Timeoff.Helpers
 
             var authorizeResult = await _policyEvaluator.AuthorizeAsync(policy!, authenticateResult, _httpContextAccessor.HttpContext!, null);
 
+            output.Attributes.RemoveAll("asp-authorise");
             if (!authorizeResult.Succeeded)
             {
                 output.SuppressOutput();

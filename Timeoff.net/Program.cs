@@ -41,6 +41,8 @@ namespace Timeoff.net
 
             var app = builder.Build();
 
+            app.Services.Migrate();
+
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
             {

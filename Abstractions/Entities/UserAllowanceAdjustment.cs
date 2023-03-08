@@ -10,7 +10,7 @@
 
         public DateTimeOffset CreatedAt { get; set; }
 
-        public int UserAllowAdjustmentId { get; private set; }
+        public int UserAllowanceAdjustmentId { get; private set; }
 
         public int UserId { get; set; }
 
