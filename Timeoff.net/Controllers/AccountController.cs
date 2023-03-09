@@ -85,9 +85,10 @@ namespace Timeoff.Controllers
 
         [AllowAnonymous]
         [HttpPost("forgot-password")]
-        public async Task<IActionResult> ForgotPasswordPostAsync()
+        public async Task<IActionResult> ForgotPasswordPostAsync(Commands.ForgotPasswordComand comand)
         {
-            return View();
+            await _mediator.Send(comand);
+            return View("ForgotPassword", new ResultModels.ForgotPasswordViewModel { Success = true });
         }
 
         [HttpGet("reset-password")]

@@ -1,11 +1,12 @@
-﻿using MediatR;
+﻿using FluentValidation.Results;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using System.Security.Claims;
 
 namespace Timeoff.Commands
 {
-    public record LoginCommand : IRequest<ResultModels.LoginViewModel>
+    public record LoginCommand : IRequest<ResultModels.LoginViewModel>, IValidated
     {
         public string? Username { get; init; }
 
@@ -14,6 +15,7 @@ namespace Timeoff.Commands
         public string AuthType { get; set; } = null!;
 
         public Func<ClaimsPrincipal, Task> SignInFunc { get; set; } = null!;
+        public IEnumerable<ValidationFailure>? Failures { get; set; }
     }
 
     internal class LoginCommandHandler : IRequestHandler<LoginCommand, ResultModels.LoginViewModel>
@@ -36,36 +38,31 @@ namespace Timeoff.Commands
         {
             var success = false;
 
-            var user = await _dataContext.Users
+            if (request.Failures == null)
+            {
+                var user = await _dataContext.Users
                 .FindByEmail(request.Username)
-                .Select(u => new
-                {
-                    u.UserId,
-                    u.CompanyId,
-                    u.Password,
-                    u.Admin,
-                })
-                .AsNoTracking()
                 .FirstOrDefaultAsync(cancellationToken);
 
-            if (user != null && _usersService.Authenticate(user.Password, request.Password))
-            {
-                if (_usersService.ShouldUpgrade(user.Password))
+                if (user != null && _usersService.Authenticate(user.Password, request.Password))
                 {
-                    var u = await _dataContext.Users.FindAsync(user.UserId);
-                    u!.Password = _usersService.HashPassword(request.Password);
+                    if (_usersService.ShouldUpgrade(user.Password))
+                    {
+                        user.Password = _usersService.HashPassword(request.Password);
+                    }
+                    user.Token = null;
                     await _dataContext.SaveChangesAsync();
-                }
 
-                var userId = new ClaimsIdentity(new Claim[]
-                {
+                    var userId = new ClaimsIdentity(new Claim[]
+                    {
                     new ("userid",user.UserId.ToString()),
                     new ("companyid",user.CompanyId.ToString()),
                     new (ClaimTypes.Role, user.Admin ? "Admin" : "User")
-                }, request.AuthType);
+                    }, request.AuthType);
 
-                await request.SignInFunc(new(userId));
-                success = true;
+                    await request.SignInFunc(new(userId));
+                    success = true;
+                }
             }
 
             return new()

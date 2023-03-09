@@ -11,7 +11,7 @@ using Timeoff;
 namespace Timeoff.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230308013838_InitialCreate")]
+    [Migration("20230309001928_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -435,6 +435,9 @@ namespace Timeoff.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("StartDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Token")
                         .HasColumnType("TEXT");
 
                     b.HasKey("UserId");
