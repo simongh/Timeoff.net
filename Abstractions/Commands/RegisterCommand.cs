@@ -1,11 +1,13 @@
-﻿using MediatR;
+﻿using FluentValidation.Results;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
 namespace Timeoff.Commands
 {
-    public record RegisterCommand : Types.RegisterModel, IRequest<ResultModels.RegisterViewModel?>
+    public record RegisterCommand : Types.RegisterModel, IRequest<ResultModels.RegisterViewModel?>, IValidated
     {
+        public IEnumerable<ValidationFailure>? Failures { get; set; }
     }
 
     internal class RegisterCommandHandler : IRequestHandler<RegisterCommand, ResultModels.RegisterViewModel?>
@@ -29,20 +31,17 @@ namespace Timeoff.Commands
             if (!_options.AllowNewAccountCreation)
                 return null;
 
+            if (request.Failures != null)
+            {
+                return Errored(request.Failures.Select(e => e.ErrorMessage));
+            }
+
             if (await _dataContext.Users.FindByEmail(request.Email).AnyAsync())
             {
-                return new()
+                return Errored(new[]
                 {
-                    TimeZones = Services.TimeZoneService.TimeZones,
-                    Countries = Services.CountriesService.Countries,
-                    Result = new()
-                    {
-                        Errors = new[]
-                        {
-                            "The email address is already in use",
-                        },
-                    },
-                };
+                    "The email address is already in use",
+                });
             }
 
             var user = new Entities.User
@@ -99,6 +98,19 @@ namespace Timeoff.Commands
             return new()
             {
                 Success = true,
+            };
+        }
+
+        private ResultModels.RegisterViewModel Errored(IEnumerable<string> errors)
+        {
+            return new()
+            {
+                TimeZones = Services.TimeZoneService.TimeZones,
+                Countries = Services.CountriesService.Countries,
+                Result = new()
+                {
+                    Errors = errors,
+                }
             };
         }
     }

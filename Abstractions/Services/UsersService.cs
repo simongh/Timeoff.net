@@ -53,5 +53,14 @@ namespace Timeoff.Services
 
             return parts.ToString();
         }
+
+        public string Token()
+        {
+            var csprng = RandomNumberGenerator.Create();
+            var token = new byte[8];
+            csprng.GetBytes(token);
+
+            return Convert.ToBase64String(token);
+        }
     }
 }

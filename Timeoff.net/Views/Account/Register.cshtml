@@ -1,11 +1,7 @@
 ﻿@model Timeoff.ResultModels.RegisterViewModel
-@{
-    Timeoff.ResultModels.FlashResult? flash = null;
-}
-
 <h1>New company</h1>
 
-<partial name="_Flash" model="flash" />
+<partial name="_Flash" model="Model.Result" />
 
 <div class="row">
   <div class="col-md-6 lead">Register new company account and supervisor user</div>

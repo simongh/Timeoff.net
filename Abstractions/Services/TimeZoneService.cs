@@ -4,7 +4,7 @@
     {
         private static readonly Lazy<IEnumerable<(string, string)>> _instance = new(Get);
 
-        public static IEnumerable<(string, string)> TimeZones => _instance.Value;
+        public static IEnumerable<(string Id, string DisplayName)> TimeZones => _instance.Value;
 
         private static IEnumerable<(string, string)> Get()
         {

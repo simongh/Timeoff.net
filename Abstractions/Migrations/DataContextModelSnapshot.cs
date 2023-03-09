@@ -434,6 +434,9 @@ namespace Timeoff.Migrations
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("Token")
+                        .HasColumnType("TEXT");
+
                     b.HasKey("UserId");
 
                     b.HasIndex("CompanyId");

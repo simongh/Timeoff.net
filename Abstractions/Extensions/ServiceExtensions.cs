@@ -1,5 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using FluentValidation;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Timeoff.Services;
 
 namespace Timeoff
 {
@@ -10,6 +13,14 @@ namespace Timeoff
             services.AddTransient<Services.IUsersService, Services.UsersService>();
             services.AddScoped<IDataContext, DataContext>();
             services.AddDbContext<DataContext>(optionsActions);
+            services.AddSingleton<IEmailTemplateService, EmailTemplateService>();
+
+            services.AddTransient<IValidator<Commands.LoginCommand>, Validators.LoginCommandValidator>();
+            services.AddTransient<IValidator<Commands.RegisterCommand>, Validators.RegisterCommandValidator>();
+            services.AddTransient<IValidator<Commands.ForgotPasswordComand>, Validators.ForgotPasswordCommandValidator>();
+
+            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(Behaviours.ValidationBehaviour<,>));
+            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(Behaviours.UnhandledExceptionBehaviour<,>));
 
             return services;
         }

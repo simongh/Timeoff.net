@@ -8,6 +8,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Emails\ForgotPassword.hbs" />
+    <None Remove="Emails\Wrapper.hbs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Emails\ForgotPassword.hbs" />
+    <EmbeddedResource Include="Emails\Wrapper.hbs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="Controllers\" />
     <Folder Include="Data\" />
     <Folder Include="Models\" />
