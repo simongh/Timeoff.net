@@ -1,10 +1,18 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using MediatR;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Timeoff.Controllers
 {
     [Route("calendar")]
     public class CalendarController : Controller
     {
+        private readonly IMediator _mediator;
+
+        public CalendarController(IMediator mediator)
+        {
+            _mediator = mediator;
+        }
+
         [HttpPost("bookleave")]
         public async Task<IActionResult> BookAsync()
         {
@@ -13,9 +21,11 @@ namespace Timeoff.Controllers
 
         [HttpGet]
         [Route("~/")]
-        public async Task<IActionResult> IndexAsync()
+        public async Task<IActionResult> IndexAsync([FromQuery] Commands.GetCalendarCommand command)
         {
-            return View();
+            command.User = User;
+            var vm = await _mediator.Send(command);
+            return View(vm);
         }
 
         [HttpGet("teamview")]
