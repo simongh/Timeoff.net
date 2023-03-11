@@ -18,6 +18,7 @@ namespace Timeoff
             services.AddTransient<IValidator<Commands.LoginCommand>, Validators.LoginCommandValidator>();
             services.AddTransient<IValidator<Commands.RegisterCommand>, Validators.RegisterCommandValidator>();
             services.AddTransient<IValidator<Commands.ForgotPasswordComand>, Validators.ForgotPasswordCommandValidator>();
+            services.AddTransient<IValidator<Commands.ResetPasswordCommand>, Validators.ResetPasswordCommandValidator>();
 
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(Behaviours.ValidationBehaviour<,>));
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(Behaviours.UnhandledExceptionBehaviour<,>));

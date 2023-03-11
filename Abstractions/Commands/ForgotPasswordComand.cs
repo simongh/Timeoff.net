@@ -1,5 +1,4 @@
-﻿using FluentValidation;
-using FluentValidation.Results;
+﻿using FluentValidation.Results;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,7 +6,7 @@ namespace Timeoff.Commands
 {
     public record ForgotPasswordComand : IRequest, IValidated
     {
-        public string Email { get; init; }
+        public string Email { get; init; } = null!;
         public IEnumerable<ValidationFailure>? Failures { get; set; }
     }
 
@@ -16,7 +15,6 @@ namespace Timeoff.Commands
         private readonly IDataContext _dataContext;
         private readonly Services.IEmailTemplateService _emailTemplateService;
         private readonly Services.IUsersService _usersService;
-        private readonly IValidator<ForgotPasswordComand> validator;
 
         public ForgotPasswordCommandHandler(
             IDataContext dataContext,
