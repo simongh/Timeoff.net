@@ -48,7 +48,7 @@ namespace Timeoff.Commands
                 {
                     if (_usersService.ShouldUpgrade(user.Password))
                     {
-                        user.Password = _usersService.HashPassword(request.Password);
+                        user.Password = _usersService.HashPassword(request.Password!);
                     }
                     user.Token = null;
                     await _dataContext.SaveChangesAsync();

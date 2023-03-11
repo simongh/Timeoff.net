@@ -1,7 +1,13 @@
-﻿namespace Timeoff.Services
+﻿using HandlebarsDotNet;
+
+namespace Timeoff.Services
 {
     public interface IEmailTemplateService
     {
-        Entities.EmailAudit ForgotPassword(Entities.User user);
+        Types.Options Options { get; }
+
+        HandlebarsTemplate<object, object> CreateWrapper(string templateName);
+
+        Entities.EmailAudit Wrap(string content, Entities.User user);
     }
 }

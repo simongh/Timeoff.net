@@ -5,25 +5,24 @@ namespace Timeoff.Services
 {
     internal class EmailTemplateService : IEmailTemplateService
     {
-        private Lazy<HandlebarsTemplate<object, object>> _wrapper;
-        private Lazy<HandlebarsTemplate<object, object>> _forgotPassword;
-        private readonly Types.Options _options;
+        private static HandlebarsTemplate<object, object> _wrapper;
+
+        public Types.Options Options { get; }
 
         public EmailTemplateService(IOptions<Types.Options> options)
         {
-            _options = options.Value;
-            _wrapper = new(() => CreateWrapper("wrapper"));
-            _forgotPassword = new(() => CreateWrapper("ForgotPassword"));
+            Options = options.Value;
+            _wrapper ??= CreateWrapper("wrapper");
         }
 
         private string GetTemplate(string name)
         {
-            var file = Path.Combine(_options.Email.Templates, name + ".hbs");
+            var file = Path.Combine(Options.Email.Templates, name + ".hbs");
 
             return File.ReadAllText(file);
         }
 
-        private HandlebarsTemplate<object, object> CreateWrapper(string templateName)
+        public HandlebarsTemplate<object, object> CreateWrapper(string templateName)
         {
             var template = Handlebars.Create();
             template.RegisterHelper("concatenate", (writer, context, parameters) =>
@@ -35,14 +34,14 @@ namespace Timeoff.Services
             return template.Compile(GetTemplate(templateName));
         }
 
-        private Entities.EmailAudit Wrap(string content, Entities.User user)
+        public Entities.EmailAudit Wrap(string content, Entities.User user)
         {
             var parts = content.Split("\r\n=====\r\n");
-            var body = _wrapper.Value(new
+            var body = _wrapper(new
             {
                 subject = parts[0],
                 body = parts[1],
-                siteUrl = _options.SiteUrl
+                siteUrl = Options.SiteUrl
             });
 
             return new Entities.EmailAudit
@@ -52,21 +51,8 @@ namespace Timeoff.Services
                 Subject = parts[0],
                 CreatedAt = DateTimeOffset.UtcNow,
                 User = user,
-                Company = user.Company,
+                CompanyId = user.CompanyId,
             };
-        }
-
-        public Entities.EmailAudit ForgotPassword(Entities.User user)
-        {
-            var content = _forgotPassword.Value(new
-            {
-                user.Fullname,
-                user.Company.LdapAuthEnabled,
-                _options.SiteUrl,
-                user.Token,
-            });
-
-            return Wrap(content, user);
         }
     }
 }

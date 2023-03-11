@@ -15,15 +15,18 @@ namespace Timeoff.Commands
         private readonly Types.Options _options;
         private readonly IDataContext _dataContext;
         private readonly Services.IUsersService _usersService;
+        private readonly Services.IEmailTemplateService _templateService;
 
         public RegisterCommandHandler(
             IOptions<Types.Options> options,
             IDataContext dataContext,
-            Services.IUsersService usersService)
+            Services.IUsersService usersService,
+            Services.IEmailTemplateService templateService)
         {
             _options = options.Value;
             _dataContext = dataContext;
             _usersService = usersService;
+            _templateService = templateService;
         }
 
         public async Task<ResultModels.RegisterViewModel?> Handle(RegisterCommand request, CancellationToken cancellationToken)
@@ -90,6 +93,10 @@ namespace Timeoff.Commands
             company.Users.Add(user);
 
             _dataContext.Companies.Add(company);
+
+            var email = _templateService.ConfirmRegistration(user);
+            _dataContext.EmailAudits.Add(email);
+
             await _dataContext.SaveChangesAsync();
 
             company.Departments.First().Manager = user;

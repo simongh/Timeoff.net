@@ -78,7 +78,7 @@ namespace Timeoff.Controllers
 
         [AllowAnonymous]
         [HttpGet("forgot-password")]
-        public async Task<IActionResult> ForgotPasswordAsync()
+        public IActionResult ForgotPassword()
         {
             return View();
         }
@@ -91,16 +91,26 @@ namespace Timeoff.Controllers
             return View("ForgotPassword", new ResultModels.ForgotPasswordViewModel { Success = true });
         }
 
+        [AllowAnonymous]
         [HttpGet("reset-password")]
-        public async Task<IActionResult> ResetPasswordAsync()
+        public async Task<IActionResult> ResetPasswordAsync([FromQuery] Commands.GetResetPasswordCommand command)
         {
-            return View();
+            command.User = User;
+            var vm = await _mediator.Send(command);
+            return View(vm);
         }
 
+        [AllowAnonymous]
         [HttpPost("reset-password")]
-        public async Task<IActionResult> RestPasswordPostAsync()
+        public async Task<IActionResult> RestPasswordPostAsync(Commands.ResetPasswordCommand command)
         {
-            return View();
+            command.User = User;
+
+            if (string.IsNullOrEmpty(command.Token) && command.User?.Identity?.IsAuthenticated != true)
+                return await ResetPasswordAsync(new());
+
+            var vm = await _mediator.Send(command);
+            return View("ResetPassword", vm);
         }
     }
 }
