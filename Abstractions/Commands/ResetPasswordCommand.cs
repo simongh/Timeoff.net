@@ -103,11 +103,8 @@ namespace Timeoff.Commands
 
         private async Task<Entities.User?> FromIdAsync(ResetPasswordCommand request)
         {
-            if (!int.TryParse(request.User!.FindFirst("userid")?.Value, out var id))
-                return null;
-
             return await _dataContext.Users
-                .Where(u => u.UserId == id)
+                .FindFromPrincipal(request.User)
                 .FirstOrDefaultAsync();
         }
     }

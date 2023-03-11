@@ -1,0 +1,80 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model Timeoff.ResultModels.CalendarDayResult
+@{
+}
+
+
+<td class="calendar_cell half_1st @{CssClasses(Model.IsMorning);}">
+    <span @*{{#unless day.is_bank_holiday}}
+          {{#unless day.is_weekend}}
+          {{# with day.leave_obj }}
+          {{#if this }}
+          class="leave-details-summary-trigger"
+          data-leave-id="{{this.id}}"
+          data-toggle="tooltip"
+          data-placement="top"
+          title="
+            {{~#if ../day.leaveLabel ~}}{{~../day.leaveLabel~}}: {{/if~}}
+            {{~#if ../../day.is_current_day}}Today{{/if~}}
+            {{~#if this.is_new_leave}}New absence waiting approval{{/if~}}
+            {{~#if this.is_pended_revoke_leave}}Revoked waiting for approval{{/if~}}
+            {{~#if this.is_approved_leave~}}
+              {{~#unless this.is_pended_revoke_leave}}Approved absence{{/unless~}}
+            {{~/if}}"
+          {{ /if}}
+          {{ /with}}
+          {{ /unless}}
+          {{ /unless}}*@
+          @if (Model.IsToday) {
+              <text>
+                  data-toggle="tooltip"
+                  data-placement="top"
+                  title="Today"
+            </text>
+          }
+    @if (Model.IsBankHoliday)
+    {
+        <text>
+              data-toggle="tooltip"
+              data-placement="top"
+              title="Bank holiday: {{day.bank_holiday_name}}"
+        </text>
+    }>@Model.Day</span>
+</td>
+<td class="calendar_cell half_2nd @{CssClasses(Model.IsAfternoon);}"></td>
+
+@functions {
+    public void CssClasses(bool isLeave)
+    {
+        @:day_@Model.Day
+
+        if (Model.IsWeekend)
+        {
+            @:weekend_cell
+        }
+
+        if (Model.IsBankHoliday)
+        {
+            @:bank_holiday_cell
+        }
+
+        if (isLeave)
+        {
+            if (Model.IsPending)
+            {
+                @:leave_cell_pending
+            }
+            else
+            {
+                @:leave_cell
+            }
+        }
+
+        if (Model.IsToday)
+        {
+            @:current_day_cell
+        }
+    }
+}
