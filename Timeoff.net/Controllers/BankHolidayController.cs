@@ -1,20 +1,32 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Timeoff.Controllers
 {
     [Route("settings/bankholidays")]
+    [Authorize(Roles = "Admin")]
     public class BankHolidayController : Controller
     {
-        [HttpGet()]
-        public async Task<IActionResult> IndexAsync()
+        private readonly IMediator _mediator;
+
+        public BankHolidayController(IMediator mediator)
         {
-            return View();
+            _mediator = mediator;
+        }
+
+        [HttpGet()]
+        public async Task<IActionResult> IndexAsync([FromQuery] Commands.GetBankHolidaysQuery query)
+        {
+            var vm = await _mediator.Send(query);
+            return View(vm);
         }
 
         [HttpPost()]
-        public async Task<IActionResult> NewAsync()
+        public async Task<IActionResult> NewAsync(Commands.NewBankHolidayCommand command)
         {
-            return View();
+            var vm = await _mediator.Send(command);
+            return View("Index", vm);
         }
 
         [HttpPost("import")]

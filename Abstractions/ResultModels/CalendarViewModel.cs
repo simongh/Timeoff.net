@@ -13,5 +13,7 @@
         public int LastYear => CurrentYear - 1;
 
         public IEnumerable<CalendarMonthResult> Calendar { get; init; }
+
+        public AllowanceSummaryResult AllowanceSummary { get; init; }
     }
 }

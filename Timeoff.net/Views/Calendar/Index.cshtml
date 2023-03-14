@@ -20,11 +20,9 @@
 
     <div class="col-md-3 top-leave-type-statistics">
         <dl>
-            {{#with current_user }}
-            <dt data-tom-days-available-in-allowance>{{ ../user_allowance.number_of_days_available_in_allowance }}</dt>
+            <dt data-tom-days-available-in-allowance>@Model.AllowanceSummary.Remaining</dt>
             <dd>Days available</dd>
-            <dd>out of <span data-tom-total-days-in-allowance>{{ ../user_allowance.total_number_of_days_in_allowance }}</span> in allowance</dd>
-            {{/with}}
+            <dd>out of <span data-tom-total-days-in-allowance>@Model.AllowanceSummary.TotalAllowance</span> in allowance</dd>
         </dl>
     </div>
 
@@ -119,7 +117,7 @@
     @foreach (var month in Model.Calendar)
     {
     <div class="col-md-3 month_container">
-        <table class="calendar_month month_{{ this.month }}">
+        <table class="calendar_month month_@month.Date.ToString("MMMM")">
             <thead>
                 <tr>
                     <td colspan="14">
@@ -144,9 +142,9 @@
                 </tr>
             </thead>
             <tbody>
-                    @{
-                        var count = 0;
-                    }
+                @{
+                    var count = 0;
+                }
                 @foreach (var item in month.Days)
                     {
                         if (count %7 == 0)

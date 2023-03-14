@@ -1,6 +1,5 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
-using System.Security.Claims;
 
 namespace Timeoff.Commands
 {
@@ -9,23 +8,25 @@ namespace Timeoff.Commands
         public int Year { get; init; } = DateTime.Today.Year;
 
         public bool ShowFullYear { get; init; }
-
-        public ClaimsPrincipal User { get; set; } = null!;
     }
 
     internal class GetCalendarCommandHandler : IRequestHandler<GetCalendarCommand, ResultModels.CalendarViewModel>
     {
         private readonly IDataContext _dataContext;
+        private readonly Services.ICurrentUserService _currentUserService;
 
-        public GetCalendarCommandHandler(IDataContext dataContext)
+        public GetCalendarCommandHandler(
+            IDataContext dataContext,
+            Services.ICurrentUserService currentUserService)
         {
             _dataContext = dataContext;
+            _currentUserService = currentUserService;
         }
 
         public async Task<ResultModels.CalendarViewModel> Handle(GetCalendarCommand request, CancellationToken cancellationToken)
         {
             var user = await _dataContext.Users
-                 .FindFromPrincipal(request.User)
+                 .FindById(_currentUserService.UserId)
                  .AsNoTracking()
                  .FirstOrDefaultAsync();
 
@@ -34,11 +35,12 @@ namespace Timeoff.Commands
                 CurrentYear = request.Year,
                 ShowFullYear = request.ShowFullYear,
                 Name = user.Fullname,
-                Calendar = await GetCalendarAsync(user.UserId, request.Year, request.ShowFullYear),
+                Calendar = await GetCalendarAsync(user.UserId, user.CompanyId, request.Year, request.ShowFullYear),
+                AllowanceSummary = await _dataContext.GetAllowanceAsync(user.UserId, request.Year)
             };
         }
 
-        private async Task<IEnumerable<ResultModels.CalendarMonthResult>> GetCalendarAsync(int userId, int year, bool fullYear)
+        private async Task<IEnumerable<ResultModels.CalendarMonthResult>> GetCalendarAsync(int userId, int companyId, int year, bool fullYear)
         {
             var calendar = new List<ResultModels.CalendarMonthResult>();
             int months;
@@ -55,9 +57,23 @@ namespace Timeoff.Commands
                 months = 4;
             }
 
+            var absences = await _dataContext.Leaves
+                .Where(a => a.UserId == userId & a.DateStart >= startDate && a.DateStart < startDate.AddMonths(months + 1))
+                .ToArrayAsync();
+
+            var holidays = await _dataContext.BankHolidays
+                .Where(h => h.CompanyId == companyId && h.Date >= startDate && h.Date < startDate.AddMonths(months + 1))
+                .Select(h => new ResultModels.BankHolidayResult
+                {
+                    Id = h.BankHolidayId,
+                    Date = h.Date,
+                    Name = h.Name,
+                })
+                .ToArrayAsync();
+
             for (int i = 0; i < months; i++)
             {
-                calendar.Add(ResultModels.CalendarMonthResult.FromDate(startDate.AddMonths(i)));
+                calendar.Add(ResultModels.CalendarMonthResult.FromDate(startDate.AddMonths(i), absences, holidays));
             }
 
             return calendar;

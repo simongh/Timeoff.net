@@ -1,8 +1,6 @@
 ﻿using FluentValidation.Results;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using System.Security.Claims;
-using Timeoff.Services;
 
 namespace Timeoff.Commands
 {
@@ -16,9 +14,6 @@ namespace Timeoff.Commands
 
         public string? Token { get; set; }
 
-        public ClaimsPrincipal? User { get; set; }
-
-        internal bool IsAuthenticated => User?.Identity?.IsAuthenticated == true;
         public IEnumerable<ValidationFailure>? Failures { get; set; }
     }
 
@@ -26,15 +21,18 @@ namespace Timeoff.Commands
     {
         private readonly IDataContext _dataContext;
         private readonly Services.IUsersService _usersService;
-        private readonly IEmailTemplateService _emailTemplateService;
+        private readonly Services.ICurrentUserService _currentUserService;
+        private readonly Services.IEmailTemplateService _emailTemplateService;
 
         public ResetPasswordCommandHandler(
             IDataContext dataContext,
             Services.IUsersService usersService,
+            Services.ICurrentUserService currentUserService,
             Services.IEmailTemplateService emailTemplateService)
         {
             _dataContext = dataContext;
             _usersService = usersService;
+            _currentUserService = currentUserService;
             _emailTemplateService = emailTemplateService;
         }
 
@@ -44,7 +42,7 @@ namespace Timeoff.Commands
             {
                 return new()
                 {
-                    ShowCurrent = request.IsAuthenticated,
+                    ShowCurrent = _currentUserService.IsAuthenticated,
                     Token = request.Token,
                     Result = new()
                     {
@@ -60,14 +58,14 @@ namespace Timeoff.Commands
             {
                 user = await FromTokenAsync(request);
             }
-            else if (request.IsAuthenticated)
+            else if (_currentUserService.IsAuthenticated)
             {
                 user = await FromIdAsync(request);
             }
 
             if (user != null)
             {
-                if (request.IsAuthenticated && !_usersService.Authenticate(user.Password, request.Password))
+                if (_currentUserService.IsAuthenticated && !_usersService.Authenticate(user.Password, request.Password))
                     result = ResultModels.FlashResult.WithError("Current password is incorrect");
                 else
                 {
@@ -90,7 +88,7 @@ namespace Timeoff.Commands
             {
                 Result = result,
                 Token = request.Token,
-                ShowCurrent = request.IsAuthenticated
+                ShowCurrent = _currentUserService.IsAuthenticated
             };
         }
 
@@ -104,7 +102,7 @@ namespace Timeoff.Commands
         private async Task<Entities.User?> FromIdAsync(ResetPasswordCommand request)
         {
             return await _dataContext.Users
-                .FindFromPrincipal(request.User)
+                .FindById(_currentUserService.UserId)
                 .FirstOrDefaultAsync();
         }
     }

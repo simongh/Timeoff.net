@@ -12,15 +12,11 @@ namespace Timeoff.net
 
             builder.Services
                 .Configure<Types.Options>(builder.Configuration.GetSection("timeoff"))
-                .ConfigureApplication(options =>
+                .AddApplicationServices(options =>
                 {
                     options.UseSqlite(builder.Configuration.GetConnectionString("timeoff"));
                 })
-                .AddHttpContextAccessor()
-                .AddMediatR(options =>
-                {
-                    options.RegisterServicesFromAssembly(typeof(IDataContext).Assembly);
-                });
+                .AddWebServices();
 
             builder.Services
                 .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
