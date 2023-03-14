@@ -12,9 +12,6 @@ namespace Timeoff.Commands
 
         public string? Password { get; init; }
 
-        public string AuthType { get; set; } = null!;
-
-        public Func<ClaimsPrincipal, Task> SignInFunc { get; set; } = null!;
         public IEnumerable<ValidationFailure>? Failures { get; set; }
     }
 
@@ -22,15 +19,18 @@ namespace Timeoff.Commands
     {
         private readonly Types.Options _options;
         private readonly Services.IUsersService _usersService;
+        private readonly Services.ICurrentUserService _currentUserService;
         private readonly IDataContext _dataContext;
 
         public LoginCommandHandler(
             IOptions<Types.Options> options,
             Services.IUsersService usersService,
+            Services.ICurrentUserService currentUserService,
             IDataContext dataContext)
         {
             _options = options.Value;
             _usersService = usersService;
+            _currentUserService = currentUserService;
             _dataContext = dataContext;
         }
 
@@ -55,12 +55,12 @@ namespace Timeoff.Commands
 
                     var userId = new ClaimsIdentity(new Claim[]
                     {
-                    new ("userid",user.UserId.ToString()),
-                    new ("companyid",user.CompanyId.ToString()),
-                    new (ClaimTypes.Role, user.Admin ? "Admin" : "User")
-                    }, request.AuthType);
+                        new ("userid",user.UserId.ToString()),
+                        new ("companyid",user.CompanyId.ToString()),
+                        new (ClaimTypes.Role, user.Admin ? "Admin" : "User")
+                    }, _currentUserService.AuthenticationScheme);
 
-                    await request.SignInFunc(new(userId));
+                    await _currentUserService.SignInAsync(new(userId));
                     success = true;
                 }
             }

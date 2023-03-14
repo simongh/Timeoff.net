@@ -1,6 +1,5 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -27,9 +26,6 @@ namespace Timeoff.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> LoginPostAsync(Commands.LoginCommand command)
         {
-            command.SignInFunc = p => HttpContext.SignInAsync(p);
-            command.AuthType = CookieAuthenticationDefaults.AuthenticationScheme;
-
             var vm = await _mediator.Send(command);
             if (vm.Success)
                 return Redirect("/");
@@ -95,7 +91,6 @@ namespace Timeoff.Controllers
         [HttpGet("reset-password")]
         public async Task<IActionResult> ResetPasswordAsync([FromQuery] Commands.GetResetPasswordCommand command)
         {
-            command.User = User;
             var vm = await _mediator.Send(command);
             return View(vm);
         }
@@ -104,9 +99,7 @@ namespace Timeoff.Controllers
         [HttpPost("reset-password")]
         public async Task<IActionResult> RestPasswordPostAsync(Commands.ResetPasswordCommand command)
         {
-            command.User = User;
-
-            if (string.IsNullOrEmpty(command.Token) && command.User?.Identity?.IsAuthenticated != true)
+            if (string.IsNullOrEmpty(command.Token) && User.Identity?.IsAuthenticated != true)
                 return await ResetPasswordAsync(new());
 
             var vm = await _mediator.Send(command);

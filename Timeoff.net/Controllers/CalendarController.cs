@@ -23,7 +23,6 @@ namespace Timeoff.Controllers
         [Route("~/")]
         public async Task<IActionResult> IndexAsync([FromQuery] Commands.GetCalendarCommand command)
         {
-            command.User = User;
             var vm = await _mediator.Send(command);
             return View(vm);
         }

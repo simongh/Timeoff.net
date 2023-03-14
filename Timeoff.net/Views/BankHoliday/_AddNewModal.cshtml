@@ -1,29 +1,24 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
-
-<div class="modal fade" id="{{container_id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+﻿@model Timeoff.ResultModels.BankHolidaysViewModel
+<div class="modal fade" id="add_new_bank_holiday_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form method="POST" asp-route-year="{{yearCurrent}}" asp-action="New" asp-controller="BankHoliday" id="add_new_bank_holiday_form">
+            <form method="POST" asp-route-year="@Model.CurrentYear" asp-action="New" asp-controller="BankHoliday" id="add_new_bank_holiday_form">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title">Add new Bank Holiday</h4>
                 </div>
 
-
-                {{#each company.bank_holidays}}
-                @*<input type="hidden" value="{{name}}" name="name__{{@index}}">
-                <input type="hidden" value="{{as_date date}}" name="date__{{@index}}">*@
-                {{/each}}
+                @for (int i = 0; i < Model.BankHolidays.Length; i++)
+                {
+                    <input type="hidden" value="@Model.BankHolidays[i].Name" asp-for="BankHolidays[i].Name" />
+                    <input type="hidden" value="@Model.BankHolidays[i].Date" asp-for="BankHolidays[i].Date" />
+                }
 
                 <div class="modal-body">
 
                     <div class="form-group">
                         <label for="bank_holiday_name_new" class="control-label">Name:</label>
-                        <input type="text" class="form-control" id="bank_holiday_name_new" name="name__new" required>
+                        <input type="text" class="form-control" id="bank_holiday_name_new" name="holidays[@Model.BankHolidays.Length].Name" required>
                     </div>
 
                     <div class="form-group">
@@ -31,12 +26,12 @@
                         <input type="text"
                                class="form-control"
                                id="bank_holiday_date_new"
-                               name="date__new"
-                               value="{{as_date startDateOfYearCurrent}}"
+                               name="holidays[@Model.BankHolidays.Length].date"
+                               value="@(new DateTime(Model.CurrentYear,1,1).ToString(Model.DateFormat))"
                                required
                                data-provide="datepicker"
                                data-date-autoclose="1"
-                               data-date-format="{{#with logged_user.company }}{{this.get_default_date_format_for_date_picker}}{{/with}}"
+                               data-date-format="@Model.DateFormat"
                                data-date-week-start="1">
                     </div>
 

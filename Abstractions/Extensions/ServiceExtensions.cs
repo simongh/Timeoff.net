@@ -2,23 +2,23 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Timeoff.Services;
 
 namespace Timeoff
 {
     public static class ServiceExtensions
     {
-        public static IServiceCollection ConfigureApplication(this IServiceCollection services, Action<DbContextOptionsBuilder> optionsActions)
+        public static IServiceCollection AddApplicationServices(this IServiceCollection services, Action<DbContextOptionsBuilder> optionsActions)
         {
             services.AddTransient<Services.IUsersService, Services.UsersService>();
             services.AddScoped<IDataContext, DataContext>();
             services.AddDbContext<DataContext>(optionsActions);
-            services.AddSingleton<IEmailTemplateService, EmailTemplateService>();
+            services.AddSingleton<Services.IEmailTemplateService, Services.EmailTemplateService>();
 
             services.AddTransient<IValidator<Commands.LoginCommand>, Validators.LoginCommandValidator>();
             services.AddTransient<IValidator<Commands.RegisterCommand>, Validators.RegisterCommandValidator>();
             services.AddTransient<IValidator<Commands.ForgotPasswordComand>, Validators.ForgotPasswordCommandValidator>();
             services.AddTransient<IValidator<Commands.ResetPasswordCommand>, Validators.ResetPasswordCommandValidator>();
+            services.AddTransient<IValidator<Commands.NewBankHolidayCommand>, Validators.NewBankHolidayCommandValidator>();
 
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(Behaviours.ValidationBehaviour<,>));
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(Behaviours.UnhandledExceptionBehaviour<,>));
