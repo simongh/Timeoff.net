@@ -35,10 +35,11 @@ namespace Timeoff.Controllers
             return View();
         }
 
-        [HttpPost("delete/{id:int}")]
-        public async Task<IActionResult> DeleteAsync(int id)
+        [HttpPost("delete")]
+        public async Task<IActionResult> DeleteAsync(Commands.DeleteHolidayCommand command)
         {
-            return View();
+            var vm = await _mediator.Send(command);
+            return View("index", vm);
         }
     }
 }

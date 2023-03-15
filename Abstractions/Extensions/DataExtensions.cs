@@ -17,7 +17,7 @@ namespace Timeoff
                 .Where(u => u.UserId == userId);
         }
 
-        public static IQueryable<Entities.Company> FindById(this DbSet<Entities.Company> companies, int companyId)
+        public static IQueryable<Entities.Company> FindById(this IQueryable<Entities.Company> companies, int companyId)
         {
             return companies.Where(c => c.CompanyId == companyId);
         }
@@ -41,6 +41,49 @@ namespace Timeoff
             {
                 TotalAllowance = allowance,
                 Used = used,
+            };
+        }
+
+        public static async Task<ResultModels.BankHolidaysViewModel> GetBankHolidaysAsync(this IQueryable<Entities.Company> companies,
+            int companyId,
+            int year)
+        {
+            var company = await companies
+                .FindById(companyId)
+                .Select(c => new
+                {
+                    c.Name,
+                    c.DateFormat,
+                    BankHolidays = c.BankHolidays
+                        .Where(h => h.Date.Year == year)
+                        .Select(h => new ResultModels.BankHolidayResult
+                        {
+                            Id = h.BankHolidayId,
+                            Date = h.Date,
+                            Name = h.Name,
+                        }),
+                })
+                .FirstAsync();
+
+            var noLeave = Enumerable.Empty<Entities.Leave>();
+            var startDate = new DateTime(year, 1, 1);
+            var calendar = new List<ResultModels.CalendarMonthResult>();
+
+            for (int i = 0; i < 12; i++)
+            {
+                calendar.Add(ResultModels.CalendarMonthResult.FromDate(
+                    startDate.AddMonths(i),
+                    noLeave,
+                    company.BankHolidays.Where(h => h.Date.Month == startDate.AddMonths(i).Month)));
+            }
+
+            return new()
+            {
+                CompanyName = company.Name,
+                DateFormat = company.DateFormat,
+                CurrentYear = year,
+                Calendar = calendar,
+                BankHolidays = company.BankHolidays.ToArray(),
             };
         }
     }

@@ -15,5 +15,7 @@
         public IEnumerable<CalendarMonthResult> Calendar { get; init; }
 
         public BankHolidayResult[] BankHolidays { get; init; }
+
+        public FlashResult Result { get; set; } = new();
     }
 }

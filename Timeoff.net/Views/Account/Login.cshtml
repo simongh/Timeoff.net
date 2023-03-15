@@ -2,6 +2,8 @@
 
 @{
     Timeoff.ResultModels.FlashResult? flash = null;
+
+    var test = DateTime.Today;
 }
 @if (!Model.Success)
 {
@@ -13,6 +15,7 @@
         },
     };
 }
+
 
 <h1>Login</h1>
 <partial name="_Flash" model="flash" />
