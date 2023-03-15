@@ -2,7 +2,7 @@
 {
     public abstract record BankHolidayModel
     {
-        public int Id { get; init; }
+        public int? Id { get; init; }
 
         public string Name { get; init; }
 

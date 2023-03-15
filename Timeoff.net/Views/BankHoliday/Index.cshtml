@@ -1,4 +1,5 @@
-﻿@model Timeoff.ResultModels.BankHolidaysViewModel
+﻿@using Timeoff;
+@model Timeoff.ResultModels.BankHolidaysViewModel
 <h1>Bank holidays</h1>
 
 <div class="row">
@@ -22,8 +23,7 @@
 
 <div class="row">&nbsp;</div>
 
-{{> show_flash_messages }}
-
+<partial name="_flash" model="Model.Result" />
 <div class="row">
     <div class="col-xs-2">
         <a class="btn btn-default" asp-route-year="@Model.PreviousYear"><span aria-hidden="true" class="fa fa-chevron-left"></span> @Model.PreviousYear </a>
@@ -102,24 +102,25 @@
 
         <form id="delete_bankholiday_form" method="post" asp-action="Delete" asp-controller="BankHoliday">
             <input name="year" value="@Model.CurrentYear" type="hidden">
+            <input id="deleteid" name="id" value="" type="hidden">
         </form>
         <form id="import_bankholiday_form" method="post" asp-action="import" asp-controller="BankHoliday" asp-route-year="@Model.CurrentYear"></form>
         <form id="update_bankholiday_form" method="post" asp-action="New" asp-asp-controller="BankHoliday" asp-route-year="@Model.CurrentYear">
             @for (int i = 0; i < Model.BankHolidays.Length; i++)
             {
-                
+                <input type="hidden" asp-for="BankHolidays[i].Id"/>
                 <div class="row">
                     <div class="col-md-4">
                         <div class="input-append date">
-                            <input type="text" class="form-control" value="@Model.BankHolidays[i].Date.ToString(Model.DateFormat)" name="holidays[@i].date" tom-test-hook="date__@i" data-date-autoclose="1" data-provide="datepicker" data-date-format="@Model.DateFormat" data-date-week-start="1">
+                            <input type="text" class="form-control" asp-for="BankHolidays[i].Date" asp-format="@($"{{0:{Model.DateFormat}}}")" tom-test-hook="date__@i" data-date-autoclose="1" data-provide="datepicker" data-date-format="@Model.DateFormat.ToJsFormat()" data-date-week-start="1">
                             <span class="add-on"><i class="icon-th"></i></span>
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <input type="text" class="form-control" value="@Model.BankHolidays[i].Name" name="holidays[@i].name" tom-test-hook="name__@i">
+                        <input type="text" class="form-control" asp-for="BankHolidays[i].Name" tom-test-hook="name__@i">
                     </div>
                     <div class="col-md-2">
-                        <button class="btn btn-default pull-right bankholiday-remove-btn" type="button" value="@i" tom-test-hook="remove__@i"><span class="fa fa-remove"></span></button>
+                        <button class="btn btn-default pull-right bankholiday-remove-btn" type="button" value="@Model.BankHolidays[i].Id" tom-test-hook="remove__@i"><span class="fa fa-remove"></span></button>
                     </div>
                 </div>
 
@@ -148,12 +149,6 @@
 
 <div class="row">&nbsp;</div>
 
-{{> add_new_bank_holiday_modal
-  container_id='add_new_bank_holiday_modal'
-  form_action='/settings/bankholidays/'
-  startDateOfYearCurrent=startDateOfYearCurrent
-  yearCurrent=yearCurrent
-}}
 <partial name="_AddNewModal" />
 
 @section Scripts {

@@ -6,14 +6,18 @@ namespace Timeoff.Validators
     {
         public NewBankHolidayCommandValidator()
         {
-            RuleFor(m => m.Holidays)
+            RuleFor(m => m.BankHolidays)
                 .NotEmpty();
 
-            RuleForEach(m => m.Holidays)
+            RuleForEach(m => m.BankHolidays)
                 .NotNull();
 
-            RuleForEach(m => m.Holidays)
+            RuleForEach(m => m.BankHolidays)
                 .SetValidator(new BankHolidayRequestValidator());
+
+            RuleForEach(m => m.BankHolidays)
+                .Must((m, h) => h.Date.Year == m.Year)
+                .WithMessage("Holidays can only be added for the current year");
         }
     }
 }
