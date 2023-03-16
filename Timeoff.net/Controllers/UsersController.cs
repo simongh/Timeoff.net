@@ -79,7 +79,7 @@ namespace Timeoff.Controllers
         }
 
         [HttpGet("")]
-        public async Task<IActionResult> IndexAsync()
+        public async Task<IActionResult> IndexAsync(int? department)
         {
             return View();
         }

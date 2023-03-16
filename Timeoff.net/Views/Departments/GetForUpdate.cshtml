@@ -1,12 +1,7 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+﻿@model Timeoff.ResultModels.EditDepartmentViewModel
+<h1>@Model.Name details</h1>
 
-<h1>{{department.name}} details</h1>
-
-<form method="post" asp-controller="Departments" asp-action="Delete" asp-route-id="{{ department.id }}">
+<form method="post" asp-controller="Departments" asp-action="Delete" asp-route-id="@Model.Id">
   <div class="row">
     <div class="col-md-3 lead">
       Department details
@@ -19,15 +14,13 @@
 
 <div class="row">&nbsp;</div>
 
-{{> show_flash_messages }}
+<partial name="_Flash" model="Model.Result" />
 
 <div class="col-md-3 list-group">
-  <a asp-controller="Departments" asp-action="GetForUpdate" asp-route-id="{{department.id}}" class="list-group-item selected-item">General details</a>
-  <a asp-controller="Users" asp-action="Index" asp-route-department="{{ department.id }}" class="list-group-item">Employees from department</a>
+  <a asp-controller="Departments" asp-action="GetForUpdate" asp-route-id="@Model.Id" class="list-group-item selected-item">General details</a>
+  <a asp-controller="Users" asp-action="Index" asp-route-department="@Model.Id" class="list-group-item">Employees from department</a>
 </div>
 
-
-{{> department_details/general }}
 <partial name="_General" />
 
 <div class="row">&nbsp;</div>

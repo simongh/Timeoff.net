@@ -21,7 +21,7 @@ namespace Timeoff.Controllers
         }
 
         [HttpPost("departments")]
-        public async Task<IActionResult> CreateAsync(Commands.NewDepartmentCommand command)
+        public async Task<IActionResult> CreateAsync(Commands.UpdateDepartmentCommand command)
         {
             var vm = await _mediator.Send(command);
             return View("Index", vm);
@@ -34,12 +34,18 @@ namespace Timeoff.Controllers
         }
 
         [HttpGet("departments/edit/{id:int}")]
-        public async Task<IActionResult> GetForUpdateAsync(int id)
-        { return View(); }
+        public async Task<IActionResult> GetForUpdateAsync([FromRoute] Commands.GetDepartmentCommand command)
+        {
+            var vm = await _mediator.Send(command);
+            return View(vm);
+        }
 
         [HttpPost("departments/edit/{id:int}")]
-        public async Task<IActionResult> UpdateAsync(int id)
-        { return View(); }
+        public async Task<IActionResult> UpdateAsync(Commands.UpdateDepartmentCommand command)
+        {
+            var vm = await _mediator.Send(command);
+            return View("Index", vm);
+        }
 
         [HttpGet("departments/available-supervisors/{id:int}")]
         public async Task<IActionResult> AvailableSupervisorsAsync(int id)

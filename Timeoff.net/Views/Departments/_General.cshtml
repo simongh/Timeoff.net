@@ -1,35 +1,31 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
-
-<form method="POST" asp-controller="Departments" asp-action="Update" asp-route-id="{{ department.id }}/" id="department_edit_form">
+﻿@model Timeoff.ResultModels.EditDepartmentViewModel
+<form method="POST" asp-controller="Departments" asp-action="Update" asp-route-id="@Model.Id" id="department_edit_form">
 
     <div class="col-md-7">
 
         <ol class="breadcrumb">
             <li><a asp-controller="Departments" asp-action="Index" data-vpp-all-departments-link="1">All departments</a></li>
-            <li class="active">{{ department.name }}</li>
+            <li class="active">@Model.Name</li>
         </ol>
 
         <div class="form-group">
-            <label for="name" class="control-label">Name</label>
-            <input class="form-control" id="name" name="name" required value="{{department.name}}">
+            <label asp-for="Name" class="control-label">Name</label>
+            <input class="form-control" id="name" asp-for="Name" required value="@Model.Name">
         </div>
 
 
         <div class="form-group">
-            <label for="manager_id" class="control-label">Manager</label>
-            <select class="form-control" name="boss_id" id="manager_id">
-                {{#each company.users}}
-                <option value="{{this.id}}" {{#if_equal .. /department.bossId this.id }} selected="selected" {{ /if_equal}}>{{this.full_name}}</option>
-                {{/each}}
+            <label asp-for="ManagerId" class="control-label">Manager</label>
+            <select class="form-control" asp-for="ManagerId" id="manager_id">
+                @foreach (var item in Model.Users)
+                {
+                    <option value="@item.Id" selected="@(item.Id == Model.ManagerId)">@item.Value</option>
+                }
             </select>
-            <span class="help-block">Head of {{department.name}} department. Main manager. <a href="/users/edit/{{department.bossId}}/">More details <i class="fa fa-angle-double-right"></i></a></span>
+            <span class="help-block">Head of @Model.Name department. Main manager. <a asp-controller="users" asp-action="edit" asp-route-id="@Model.ManagerId">More details <i class="fa fa-angle-double-right"></i></a></span>
         </div>
 
-        <div class="form-group">
+        @*<div class="form-group">
             <label class="control-label">Secondary supervisors (BETA)</label>
             <ul class="list-group no-bottom-space">
                 {{# each department.supervisors }}
@@ -54,30 +50,31 @@
                 </li>
             </ul>
             <span class="help-block">List of users who also could decide on leave requests from {{department.name}} department's employees.</span>
-        </div>
+        </div>*@
 
 
         <div class="form-group">
-            <label for="allowance_select">Allowance</label>
+            <label asp-for="Allowance">Allowance</label>
 
-            <select class="form-control" name="allowance" id="allowance_select">
-                {{#each allowance_options}}
-                <option value="{{value}}" {{#if_equal this.value .. /department.allowance}} selected="selected" {{ /if_equal}}>{{caption}}</option>
-                {{/each}}
+            <select class="form-control" asp-for="Allowance" id="allowance_select">
+                @foreach (var item in Model.Allowances)
+                {
+                    <option value="@item" selected="@(Model.Allowance== item)">@(item == 0 ? "None":item)</option>
+                }
             </select>
         </div>
 
         <div class="form-group">
-            <label for="use_bank_holidays_inp" class="control-label">
-                <input class="" id="use_bank_holidays_inp" name="include_public_holidays" type="checkbox" {{# if department.include_public_holidays}} checked="checked" {{ /if}}>
+            <label asp-for="IncludePublicHolidays" class="control-label">
+                <input class="" type="checkbox" asp-for="IncludePublicHolidays" checked="@Model.IncludePublicHolidays" value="true">
                 Include public holidays
             </label>
-            <span class="help-block">Determine if employees from {{department.name}} have <a href="/settings/general" />bank holidays</a> in addition to their allowance</span>
+            <span class="help-block">Determine if employees from @Model.Name have <a asp-controller="settings" asp-action="general" />bank holidays</a> in addition to their allowance</span>
         </div>
 
         <div class="form-group">
-            <label for="is_accrued_allowance_inp" class="control-label">
-                <input class="" id="is_accrued_allowance_inp" name="is_accrued_allowance" type="checkbox" {{# if department.is_accrued_allowance}} checked="checked" {{ /if}}>
+            <label asp-for="IsAccruedAllowance" class="control-label">
+                <input class="" type="checkbox" asp-for="IsAccruedAllowance" checked="@Model.IsAccruedAllowance" value="true">
                 Accrued allowance
             </label>
             <span class="help-block">If enabled, holiday allowance starts to build up - or accrue - from the first day of employment. It accrues in proportion to the annual entitlement. E.g. an employee in the ninth month of employment would have built up 9/12ths (or three-quarters) of annual entitlement.</span>
@@ -93,5 +90,5 @@
 
 </form>
 
-{{> department_details/supervisers_modal department=department }}
-<partial name="_SupervisorModal" />
+@*{{> department_details/supervisers_modal department=department }}
+<partial name="_SupervisorModal" />*@

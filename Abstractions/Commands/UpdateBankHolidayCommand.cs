@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Timeoff.Commands
 {
-    public record NewBankHolidayCommand : IRequest<ResultModels.BankHolidaysViewModel>, IValidated
+    public record UpdateBankHolidayCommand : IRequest<ResultModels.BankHolidaysViewModel>, IValidated
     {
         public RequestModels.BankHolidayRequest[] BankHolidays { get; init; }
 
@@ -12,7 +12,7 @@ namespace Timeoff.Commands
         public IEnumerable<ValidationFailure>? Failures { get; set; }
     }
 
-    internal class NewBankHolidayCommandHandler : IRequestHandler<NewBankHolidayCommand, ResultModels.BankHolidaysViewModel>
+    internal class NewBankHolidayCommandHandler : IRequestHandler<UpdateBankHolidayCommand, ResultModels.BankHolidaysViewModel>
     {
         private readonly IDataContext _dataContext;
         private readonly Services.ICurrentUserService _currentUserService;
@@ -25,7 +25,7 @@ namespace Timeoff.Commands
             _currentUserService = currentUserService;
         }
 
-        public async Task<ResultModels.BankHolidaysViewModel> Handle(NewBankHolidayCommand request, CancellationToken cancellationToken)
+        public async Task<ResultModels.BankHolidaysViewModel> Handle(UpdateBankHolidayCommand request, CancellationToken cancellationToken)
         {
             if (request.Failures == null)
             {
@@ -44,7 +44,7 @@ namespace Timeoff.Commands
             return result;
         }
 
-        private void Insert(NewBankHolidayCommand request)
+        private void Insert(UpdateBankHolidayCommand request)
         {
             var items = request.BankHolidays
                 .Where(h => h.Id == null);
@@ -60,7 +60,7 @@ namespace Timeoff.Commands
             }));
         }
 
-        private async Task UpdateAsync(NewBankHolidayCommand request)
+        private async Task UpdateAsync(UpdateBankHolidayCommand request)
         {
             var ids = request.BankHolidays
                 .Where(h => h.Id.HasValue)

@@ -2,9 +2,9 @@
 
 namespace Timeoff.Validators
 {
-    internal class DepartmentModelValidator : AbstractValidator<Types.DepartmentModel>
+    internal class UpdateDepartmentCommandValidator : AbstractValidator<Commands.UpdateDepartmentCommand>
     {
-        public DepartmentModelValidator()
+        public UpdateDepartmentCommandValidator()
         {
             RuleFor(m => m.Name)
                 .NotEmpty();
