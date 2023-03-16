@@ -23,7 +23,7 @@ namespace Timeoff.Controllers
         }
 
         [HttpPost()]
-        public async Task<IActionResult> NewAsync(Commands.NewBankHolidayCommand command)
+        public async Task<IActionResult> NewAsync(Commands.UpdateBankHolidayCommand command)
         {
             var vm = await _mediator.Send(command);
             return View("Index", vm);

@@ -2,9 +2,9 @@
 
 namespace Timeoff.Validators
 {
-    internal class NewBankHolidayCommandValidator : AbstractValidator<Commands.NewBankHolidayCommand>
+    internal class UpdateBankHolidayCommandValidator : AbstractValidator<Commands.UpdateBankHolidayCommand>
     {
-        public NewBankHolidayCommandValidator()
+        public UpdateBankHolidayCommandValidator()
         {
             RuleFor(m => m.BankHolidays)
                 .NotEmpty();
