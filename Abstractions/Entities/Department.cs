@@ -4,7 +4,7 @@
     {
         public string Name { get; set; }
 
-        public int Allowance { get; set; } = 20;
+        public double Allowance { get; set; } = 20;
 
         public bool IncludeBankHolidays { get; set; } = true;
 

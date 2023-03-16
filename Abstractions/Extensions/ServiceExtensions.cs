@@ -19,6 +19,8 @@ namespace Timeoff
             services.AddTransient<IValidator<Commands.ForgotPasswordComand>, Validators.ForgotPasswordCommandValidator>();
             services.AddTransient<IValidator<Commands.ResetPasswordCommand>, Validators.ResetPasswordCommandValidator>();
             services.AddTransient<IValidator<Commands.NewBankHolidayCommand>, Validators.NewBankHolidayCommandValidator>();
+            services.AddTransient<Validators.DepartmentModelValidator>();
+            services.AddTransient<IValidator<Commands.NewDepartmentCommand>, Validators.NewDepartmentCommandValidator>();
 
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(Behaviours.ValidationBehaviour<,>));
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(Behaviours.UnhandledExceptionBehaviour<,>));
