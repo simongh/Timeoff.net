@@ -86,5 +86,40 @@ namespace Timeoff
                 BankHolidays = company.BankHolidays.ToArray(),
             };
         }
+
+        public static async Task<ResultModels.DepartmentsViewModel> QueryDepartments(this IDataContext dataContext, int companyId)
+        {
+            var departments = await dataContext.Departments
+                 .Where(d => d.CompanyId == companyId)
+                 .OrderBy(d => d.Name)
+                 .Select(d => new ResultModels.DepartmentResult
+                 {
+                     Id = d.DepartmentId,
+                     Name = d.Name,
+                     Allowance = d.Allowance,
+                     EmployeeCount = d.Users.Count(),
+                     IsAccruedAllowance = d.IsAccrued,
+                     IncludePublicHolidays = d.IncludeBankHolidays,
+                     ManagerId = d.ManagerId!.Value,
+                 })
+                 .ToArrayAsync();
+
+            var users = await dataContext.Users
+                .Where(u => u.CompanyId == companyId)
+                .OrderBy(u => u.Name)
+                .ThenBy(u => u.LastName)
+                .Select(u => new ResultModels.ListItem
+                {
+                    Id = u.UserId,
+                    Value = u.Name + " " + u.LastName,
+                })
+                .ToArrayAsync();
+
+            return new()
+            {
+                Departments = departments,
+                Users = users,
+            };
+        }
     }
 }

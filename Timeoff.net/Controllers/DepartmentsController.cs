@@ -1,20 +1,30 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using MediatR;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Timeoff.Controllers
 {
     [Route("settings")]
     public class DepartmentsController : Controller
     {
+        private readonly IMediator _mediator;
+
+        public DepartmentsController(IMediator mediator)
+        {
+            _mediator = mediator;
+        }
+
         [HttpGet("departments")]
         public async Task<IActionResult> IndexAsync()
         {
-            return View();
+            var vm = await _mediator.Send(new Commands.DepartmentsQuery());
+            return View(vm);
         }
 
         [HttpPost("departments")]
-        public async Task<IActionResult> CreateAsync()
+        public async Task<IActionResult> CreateAsync(Commands.NewDepartmentCommand command)
         {
-            return View();
+            var vm = await _mediator.Send(command);
+            return View("Index", vm);
         }
 
         [HttpPost("departments/delete/{id:int}")]
