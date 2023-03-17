@@ -1,12 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Timeoff.Controllers
 {
     [Route("reports")]
+    [Authorize(Roles = "Admin")]
     public class ReportsController : Controller
     {
-        [HttpGet()]
-        public async Task<IActionResult> IndexAsync()
+        [HttpGet("")]
+        public IActionResult Index()
         {
             return View();
         }

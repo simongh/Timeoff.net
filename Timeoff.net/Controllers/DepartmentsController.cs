@@ -1,9 +1,11 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Timeoff.Controllers
 {
     [Route("settings")]
+    [Authorize(Roles = "Admin")]
     public class DepartmentsController : Controller
     {
         private readonly IMediator _mediator;
@@ -28,9 +30,10 @@ namespace Timeoff.Controllers
         }
 
         [HttpPost("departments/delete/{id:int}")]
-        public async Task<IActionResult> DeleteAsync(int id)
+        public async Task<IActionResult> DeleteAsync([FromRoute] Commands.DeleteDepartmentCommand command)
         {
-            return View();
+            var vm = await _mediator.Send(command);
+            return View("index", vm);
         }
 
         [HttpGet("departments/edit/{id:int}")]
