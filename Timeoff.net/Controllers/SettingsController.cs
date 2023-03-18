@@ -1,20 +1,28 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using MediatR;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Timeoff.Controllers
 {
     [Route("settings")]
     public class SettingsController : Controller
     {
+        private readonly IMediator _mediator;
+
+        public SettingsController(IMediator mediator)
+        {
+            _mediator = mediator;
+        }
+
         [HttpGet("general")]
         public async Task<IActionResult> GeneralAsync()
         {
-            return View();
+            return View(await _mediator.Send(new Commands.GetSettingsCommand()));
         }
 
         [HttpPost("company")]
-        public async Task<IActionResult> NewCompanyAsync()
+        public async Task<IActionResult> UpdateCompanyAsync(Commands.UpdateSettingsCommand command)
         {
-            return View();
+            return View("general", await _mediator.Send(command));
         }
 
         [HttpPost("carryOverUnusedAllowance")]

@@ -121,5 +121,47 @@ namespace Timeoff
                 Users = users,
             };
         }
+
+        public static async Task<ResultModels.SettingsViewModel> GetSettingsAsync(this IDataContext dataContext, int companyId)
+        {
+            var settings = await dataContext.Companies
+                .Where(c => c.CompanyId == companyId)
+                .Select(c => new ResultModels.SettingsViewModel
+                {
+                    Name = c.Name,
+                    CarryOver = c.CarryOver,
+                    Country = c.Country,
+                    DateFormat = c.DateFormat,
+                    TimeZone = c.TimeZone,
+                    HideTeamView = c.IsTeamViewHidden,
+                    ShowHoliday = c.ShareAllAbsences,
+                    Schedule = new[]
+                    {
+                        c.Schedule.Monday == WorkingDay.WholeDay,
+                        c.Schedule.Tuesday == WorkingDay.WholeDay,
+                        c.Schedule.Wednesday == WorkingDay.WholeDay,
+                        c.Schedule.Thursday == WorkingDay.WholeDay,
+                        c.Schedule.Friday == WorkingDay.WholeDay,
+                        c.Schedule.Saturday == WorkingDay.WholeDay,
+                        c.Schedule.Sunday == WorkingDay.WholeDay,
+                    },
+                    LeaveTypes = c.LeaveTypes.Select(l => new ResultModels.LeaveTypeResult
+                    {
+                        Name = l.Name,
+                        First = l.SortOrder == 1,
+                        AutoApprove = l.AutoApprove,
+                        UseAllowance = l.UseAllowance,
+                        Colour = l.Colour,
+                        Id = l.LeaveTypeId,
+                        Limit = l.Limit,
+                    }).ToArray(),
+                })
+                .FirstAsync();
+
+            settings.Countries = Services.CountriesService.Countries;
+            settings.TimeZones = Services.TimeZoneService.TimeZones;
+
+            return settings;
+        }
     }
 }
