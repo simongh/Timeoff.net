@@ -1,0 +1,20 @@
+﻿@model bool[]
+<div class="btn-group" data-toggle="buttons">
+    @{
+        Day("Monday", 0);
+        Day("Tuesday", 1);
+        Day("Wednesday", 2);
+        Day("Thursday", 3);
+        Day("Friday", 4);
+        Day("Saturday", 5);
+        Day("Sunday", 6);
+    }
+</div>
+
+@functions{
+    public void Day(string name, int index)
+    {
+        var isActive = Model[index] ? " active" : "";
+        <label class="btn btn-default @isActive" id="schedule_item_@name.ToLower()">    <input name="@name.ToLower()" type="checkbox" autocomplete="off" checked="@Model[index]">@name.Substring(0,3)</label>
+    }
+}

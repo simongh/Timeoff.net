@@ -1,12 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Timeoff.ResultModels
+﻿namespace Timeoff.ResultModels
 {
-    internal class LeaveTypeResult
+    public record LeaveTypeResult
     {
+        public int Id { get; init; }
+
+        public string Name { get; init; }
+
+        public int Limit { get; init; }
+
+        public string Colour { get; init; }
+
+        public bool UseAllowance { get; init; }
+
+        public bool AutoApprove { get; init; }
+
+        public bool First { get; init; }
     }
 }

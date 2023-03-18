@@ -26,16 +26,7 @@ namespace Timeoff.Commands
 
         public async Task<ResultModels.AllowanceByTimeViewModel> Handle(AllowanceByTimeQuery request, CancellationToken cancellationToken)
         {
-            var query = _dataContext.Leaves
-                .Where(a => a.DateStart >= request.StartDate && a.DateEnd <= request.EndDate)
-                .Where(a => a.User.CompanyId == _currentUserService.CompanyId);
-
-            if (request.Department != null)
-            {
-                query = query.Where(a => a.User.DepartmentId == request.Department.Value);
-            }
-
-            var summary = query.GroupBy(a => new { a.UserId, a.LeaveTypeId }, (k, v) => v.Count());
+            throw new NotImplementedException();
         }
     }
 }
