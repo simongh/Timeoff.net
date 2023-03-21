@@ -21,5 +21,14 @@
                 Messages = new[] { message },
             };
         }
+
+        public static FlashResult operator +(FlashResult? a, FlashResult? b)
+        {
+            return new()
+            {
+                Errors = (a?.Errors ?? Enumerable.Empty<string>()).Concat(b?.Errors ?? Enumerable.Empty<string>()),
+                Messages = (a?.Messages ?? Enumerable.Empty<string>()).Concat(b?.Messages ?? Enumerable.Empty<string>()),
+            };
+        }
     }
 }

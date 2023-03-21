@@ -37,5 +37,7 @@
         public IEnumerable<CountryResult> Countries { get; set; }
 
         public IEnumerable<(string Id, string Name)> TimeZones { get; set; }
+
+        public FlashResult? Result { get; set; }
     }
 }

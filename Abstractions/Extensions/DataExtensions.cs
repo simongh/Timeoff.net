@@ -145,16 +145,18 @@ namespace Timeoff
                         c.Schedule.Saturday == WorkingDay.WholeDay,
                         c.Schedule.Sunday == WorkingDay.WholeDay,
                     },
-                    LeaveTypes = c.LeaveTypes.Select(l => new ResultModels.LeaveTypeResult
-                    {
-                        Name = l.Name,
-                        First = l.SortOrder == 1,
-                        AutoApprove = l.AutoApprove,
-                        UseAllowance = l.UseAllowance,
-                        Colour = l.Colour,
-                        Id = l.LeaveTypeId,
-                        Limit = l.Limit,
-                    }).ToArray(),
+                    LeaveTypes = c.LeaveTypes
+                        .Select(l => new ResultModels.LeaveTypeResult
+                        {
+                            Name = l.Name,
+                            First = l.SortOrder == 0,
+                            AutoApprove = l.AutoApprove,
+                            UseAllowance = l.UseAllowance,
+                            Colour = l.Colour,
+                            Id = l.LeaveTypeId,
+                            Limit = l.Limit,
+                        })
+                        .ToArray(),
                 })
                 .FirstAsync();
 

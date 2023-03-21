@@ -1,6 +1,5 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Timeoff.ResultModels;
 
 namespace Timeoff.Commands
 {
@@ -29,16 +28,16 @@ namespace Timeoff.Commands
             var holiday = await _dataContext.BankHolidays
                 .FirstOrDefaultAsync(h => h.BankHolidayId == request.Id && h.CompanyId == _currentUserService.CompanyId);
 
-            FlashResult result;
+            ResultModels.FlashResult result;
             if (holiday == null)
             {
-                result = FlashResult.WithError("Unabled to find holiday");
+                result = ResultModels.FlashResult.WithError("Unabled to find holiday");
             }
             else
             {
                 _dataContext.BankHolidays.Remove(holiday);
                 await _dataContext.SaveChangesAsync();
-                result = FlashResult.Success("Holiday was successfully removed");
+                result = ResultModels.FlashResult.Success("Holiday was successfully removed");
             }
 
             var vm = await _dataContext.Companies.GetBankHolidaysAsync(_currentUserService.CompanyId, request.Year);
