@@ -6,7 +6,9 @@ namespace Timeoff.Commands
 {
     public record UpdateBankHolidayCommand : IRequest<ResultModels.BankHolidaysViewModel>, IValidated
     {
-        public RequestModels.BankHolidayRequest[] BankHolidays { get; init; }
+        public RequestModels.BankHolidayRequest[]? BankHolidays { get; init; }
+
+        public RequestModels.BankHolidayRequest? Add { get; init; }
 
         public int Year { get; init; }
         public IEnumerable<ValidationFailure>? Failures { get; set; }
@@ -27,7 +29,7 @@ namespace Timeoff.Commands
 
         public async Task<ResultModels.BankHolidaysViewModel> Handle(UpdateBankHolidayCommand request, CancellationToken cancellationToken)
         {
-            if (request.Failures == null)
+            if (request.Failures.IsValid())
             {
                 Insert(request);
                 await UpdateAsync(request);
@@ -46,22 +48,24 @@ namespace Timeoff.Commands
 
         private void Insert(UpdateBankHolidayCommand request)
         {
-            var items = request.BankHolidays
-                .Where(h => h.Id == null);
-
-            if (!items.Any())
-                return;
-
-            _dataContext.BankHolidays.AddRange(items.Select(h => new Entities.BankHoliday
+            if (request.Add == null)
             {
-                Date = h.Date,
-                Name = h.Name,
+                return;
+            }
+
+            _dataContext.BankHolidays.Add(new()
+            {
+                Date = request.Add.Date,
+                Name = request.Add.Name,
                 CompanyId = _currentUserService.CompanyId,
-            }));
+            });
         }
 
         private async Task UpdateAsync(UpdateBankHolidayCommand request)
         {
+            if (request.BankHolidays == null)
+                return;
+
             var ids = request.BankHolidays
                 .Where(h => h.Id.HasValue)
                 .Select(h => h.Id!.Value);

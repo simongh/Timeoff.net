@@ -28,7 +28,7 @@ namespace Timeoff.Commands
 
         public async Task Handle(ForgotPasswordComand request, CancellationToken cancellationToken)
         {
-            if (request.Failures != null)
+            if (!request.Failures.IsValid())
                 return;
 
             var user = await _dataContext.Users

@@ -27,7 +27,7 @@ namespace Timeoff.Commands
         {
             ResultModels.FlashResult messages;
 
-            if (request.Failures == null)
+            if (request.Failures.IsValid())
             {
                 Entities.Department? dept;
                 if (request.Id == null)
@@ -63,10 +63,7 @@ namespace Timeoff.Commands
             }
             else
             {
-                messages = new()
-                {
-                    Errors = request.Failures.Select(e => e.ErrorMessage),
-                };
+                messages = request.Failures.ToFlashResult();
             }
 
             var result = await _dataContext.QueryDepartments(_currentUserService.CompanyId);

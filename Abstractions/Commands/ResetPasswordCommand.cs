@@ -38,16 +38,13 @@ namespace Timeoff.Commands
 
         public async Task<ResultModels.ResetPasswordViewModel> Handle(ResetPasswordCommand request, CancellationToken cancellationToken)
         {
-            if (request.Failures != null)
+            if (!request.Failures.IsValid())
             {
                 return new()
                 {
                     ShowCurrent = _currentUserService.IsAuthenticated,
                     Token = request.Token,
-                    Result = new()
-                    {
-                        Errors = request.Failures.Select(e => e.ErrorMessage),
-                    },
+                    Result = request.Failures.ToFlashResult(),
                 };
             }
 
@@ -60,7 +57,7 @@ namespace Timeoff.Commands
             }
             else if (_currentUserService.IsAuthenticated)
             {
-                user = await FromIdAsync(request);
+                user = await FromIdAsync();
             }
 
             if (user != null)
@@ -95,11 +92,11 @@ namespace Timeoff.Commands
         private async Task<Entities.User?> FromTokenAsync(ResetPasswordCommand request)
         {
             return await _dataContext.Users
-                     .Where(u => u.Token == request.Token)
-                     .FirstOrDefaultAsync();
+                .Where(u => u.Token == request.Token)
+                .FirstOrDefaultAsync();
         }
 
-        private async Task<Entities.User?> FromIdAsync(ResetPasswordCommand request)
+        private async Task<Entities.User?> FromIdAsync()
         {
             return await _dataContext.Users
                 .FindById(_currentUserService.UserId)

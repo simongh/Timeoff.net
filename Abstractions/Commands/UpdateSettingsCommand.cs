@@ -24,27 +24,39 @@ namespace Timeoff.Commands
 
         public async Task<ResultModels.SettingsViewModel> Handle(UpdateSettingsCommand request, CancellationToken cancellationToken)
         {
-            var company = await _dataContext.Companies
-                .Where(c => c.CompanyId == _currentUserService.CompanyId)
-                .FirstOrDefaultAsync();
+            ResultModels.FlashResult messages;
 
-            if (company == null)
+            if (request.Failures.IsValid())
             {
+                var company = await _dataContext.Companies
+                    .Where(c => c.CompanyId == _currentUserService.CompanyId)
+                    .FirstOrDefaultAsync();
+
+                if (company == null)
+                {
+                    messages = ResultModels.FlashResult.WithError("The current company was not found!");
+                }
+                else
+                {
+                    company.Name = request.Name;
+                    company.CarryOver = request.CarryOver;
+                    company.ShareAllAbsences = request.ShowHoliday;
+                    company.IsTeamViewHidden = request.HideTeamView;
+                    company.DateFormat = request.DateFormat;
+                    company.TimeZone = request.TimeZone;
+                    company.Country = request.Country;
+
+                    await _dataContext.SaveChangesAsync();
+                    messages = ResultModels.FlashResult.Success("Company details updated");
+                }
             }
             else
-            {
-                company.Name = request.Name;
-                company.CarryOver = request.CarryOver;
-                company.ShareAllAbsences = request.ShowHoliday;
-                company.IsTeamViewHidden = request.HideTeamView;
-                company.DateFormat = request.DateFormat;
-                company.TimeZone = request.TimeZone;
-                company.Country = request.Country;
+                messages = request.Failures.ToFlashResult();
 
-                await _dataContext.SaveChangesAsync();
-            }
+            var result = await _dataContext.GetSettingsAsync(_currentUserService.CompanyId);
+            result.Result = messages;
 
-            return await _dataContext.GetSettingsAsync(_currentUserService.CompanyId);
+            return result;
         }
     }
 }

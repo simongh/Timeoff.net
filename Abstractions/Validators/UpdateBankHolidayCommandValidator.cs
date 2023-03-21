@@ -6,8 +6,8 @@ namespace Timeoff.Validators
     {
         public UpdateBankHolidayCommandValidator()
         {
-            RuleFor(m => m.BankHolidays)
-                .NotEmpty();
+            RuleFor(m => m.Add)
+                .SetValidator(new BankHolidayRequestValidator()!);
 
             RuleForEach(m => m.BankHolidays)
                 .NotNull();

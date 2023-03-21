@@ -9,26 +9,20 @@
                     <h4 class="modal-title">Add new Bank Holiday</h4>
                 </div>
 
-                @for (int i = 0; i < Model.BankHolidays.Length; i++)
-                {
-                    <input type="hidden" asp-for="BankHolidays[i].Id" />
-                    <input type="hidden" asp-for="BankHolidays[i].Name" />
-                    <input type="hidden" asp-for="BankHolidays[i].Date" />
-                }
-
                 <div class="modal-body">
-
+                    @{
+                        var add = new Timeoff.RequestModels.BankHolidayRequest();
+                    }
                     <div class="form-group">
-                        <label for="bank_holiday_name_new" class="control-label">Name:</label>
-                        <input type="text" class="form-control" id="bank_holiday_name_new" name="BankHolidays[@Model.BankHolidays.Length].Name" required>
+                        <label asp-for="@add.Name" class="control-label">Name:</label>
+                        <input type="text" class="form-control" asp-for="@add.Name" required>
                     </div>
 
                     <div class="form-group">
-                        <label for="bank_holiday_date_new" class="control-label">Date:</label>
+                        <label asp-for="@add.Date" class="control-label">Date:</label>
                         <input type="text"
                                class="form-control"
-                               id="bank_holiday_date_new"
-                               name="BankHolidays[@Model.BankHolidays.Length].date"
+                               asp-for="@add.Date"
                                value="@(new DateTime(Model.CurrentYear,1,1).ToString(Model.DateFormat))"
                                required
                                data-provide="datepicker"

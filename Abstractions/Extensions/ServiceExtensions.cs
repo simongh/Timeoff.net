@@ -21,6 +21,7 @@ namespace Timeoff
             services.AddTransient<IValidator<Commands.UpdateBankHolidayCommand>, Validators.UpdateBankHolidayCommandValidator>();
             services.AddTransient<IValidator<Commands.UpdateDepartmentCommand>, Validators.UpdateDepartmentCommandValidator>();
             services.AddTransient<IValidator<Commands.UpdateSettingsCommand>, Validators.UpdateSettingsCommandValidator>();
+            services.AddTransient<IValidator<Commands.UpdateLeaveTypesCommand>, Validators.UpdateLeaveTypesCommandValidator>();
 
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(Behaviours.ValidationBehaviour<,>));
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(Behaviours.UnhandledExceptionBehaviour<,>));

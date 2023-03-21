@@ -34,17 +34,14 @@ namespace Timeoff.Commands
             if (!_options.AllowNewAccountCreation)
                 return null;
 
-            if (request.Failures != null)
+            if (!request.Failures.IsValid())
             {
-                return Errored(request.Failures.Select(e => e.ErrorMessage));
+                return Errored(request.Failures.ToFlashResult());
             }
 
             if (await _dataContext.Users.FindByEmail(request.Email).AnyAsync())
             {
-                return Errored(new[]
-                {
-                    "The email address is already in use",
-                });
+                return Errored(ResultModels.FlashResult.WithError("The email address is already in use"));
             }
 
             var user = new Entities.User
@@ -67,12 +64,12 @@ namespace Timeoff.Commands
                     new Entities.LeaveType
                     {
                         Name = "Holiday",
-                        Colour = "#22AA66"
+                        Colour = "leave_type_color_1"
                     },
                     new Entities.LeaveType
                     {
                         Name = "Sickness",
-                        Colour = "#459FF3",
+                        Colour = "leave_type_color_1",
                         UseAllowance = false,
                     },
                 },
@@ -108,16 +105,13 @@ namespace Timeoff.Commands
             };
         }
 
-        private ResultModels.RegisterViewModel Errored(IEnumerable<string> errors)
+        private ResultModels.RegisterViewModel Errored(ResultModels.FlashResult errors)
         {
             return new()
             {
                 TimeZones = Services.TimeZoneService.TimeZones,
                 Countries = Services.CountriesService.Countries,
-                Result = new()
-                {
-                    Errors = errors,
-                }
+                Result = errors,
             };
         }
     }

@@ -38,9 +38,10 @@ namespace Timeoff.Controllers
         }
 
         [HttpPost("leavetypes")]
-        public async Task<IActionResult> CreateLeaveTypesAsync()
+        public async Task<IActionResult> UpdateLeaveTypesAsync(Commands.UpdateLeaveTypesCommand command)
         {
-            return View();
+            var vm = await _mediator.Send(command);
+            return View("general", vm);
         }
 
         [HttpPost("leavetypes/delete/{id:int}")]

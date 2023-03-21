@@ -3,7 +3,7 @@
 
 <p class="lead">Account main settings</p>
 
-{{> show_flash_messages }}
+<Partial name="_Flash" model="Model.Result" />
 
 <div class="row">&nbsp;</div>
 
@@ -205,7 +205,7 @@
                 <div class="row">&nbsp;</div>
 
                 <form id="delete_leavetype_form" method="post" asp-controller="Settings" asp-action="DeleteLeaveTypes"></form>
-                <form id="leave_type_edit_form" method="post" asp-controller="Settings" asp-action="CreateLeaveTypes">
+                <form id="leave_type_edit_form" method="post" asp-controller="Settings" asp-action="UpdateLeaveTypes">
 
                     @if (!Model.LeaveTypes.Any())
                     {
@@ -215,6 +215,7 @@
                     }
                     @for (int i = 0; i < Model.LeaveTypes.Length; i++)
                     {
+                        <input type="hidden" asp-for="LeaveTypes[i].Id" value="@Model.LeaveTypes[i].Id"/>
                     <div class="row">
                         <div class="col-md-6">
 
@@ -225,7 +226,7 @@
                                 <input type="text" class="form-control" asp-for="LeaveTypes[i].Name" value="@Model.LeaveTypes[i].Name" data-tom-leave-type-order="LeaveType[@i].Name">
 
                                 <div class="input-group-btn" data-tom-color-picker="1" data-tom-leave-type-order="LeaveType[@i].Colour">
-                                    <input type="hidden" name="LeaveType[@i].Colour" value="@Model.LeaveTypes[i].Colour">
+                                    <input type="hidden" asp-for="LeaveTypes[i].Colour" value="@Model.LeaveTypes[i].Colour">
                                     <button type="button" class="btn btn-default dropdown-toggle @Model.LeaveTypes[i].Colour" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-paint-brush"></i></button>
                                     <ul class="dropdown-menu">
                                     <partial name="_OptionsForColourPicker"/>
@@ -318,10 +319,6 @@
     </div>
 </div>
 
-{{> add_new_leave_type_modal
-  container_id='add_new_leave_type_modal'
-  form_action='/settings/leavetypes/'
-}}
 <partial name="_AddNewLeaveTypeModal" />
 
 {{> remove_company_modal
