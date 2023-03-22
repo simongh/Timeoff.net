@@ -146,6 +146,7 @@ namespace Timeoff
                         c.Schedule.Sunday == WorkingDay.WholeDay,
                     },
                     LeaveTypes = c.LeaveTypes
+                        .OrderBy(t => t.Name)
                         .Select(l => new ResultModels.LeaveTypeResult
                         {
                             Name = l.Name,

@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace Timeoff
 {
@@ -43,5 +44,7 @@ namespace Timeoff
 
             base.OnModelCreating(modelBuilder);
         }
+
+        public IDbContextTransaction BeginTransaction() => base.Database.BeginTransaction();
     }
 }

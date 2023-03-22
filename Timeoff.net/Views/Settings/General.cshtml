@@ -320,8 +320,8 @@
 </div>
 
 <partial name="_AddNewLeaveTypeModal" />
+<partial name="_RemoveCompanyModal" model="null" />
 
-{{> remove_company_modal
-  container_id='remove_company_modal'
-}}
-<partial name="_RemoveCompanyModal" />
+@section Scripts {
+    <script src="~/js/settings_general.js"></script>
+}
