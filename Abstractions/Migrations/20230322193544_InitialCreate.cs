@@ -94,7 +94,7 @@ namespace Timeoff.Migrations
                     Attribute = table.Column<string>(type: "TEXT", nullable: false),
                     OldValue = table.Column<string>(type: "TEXT", nullable: true),
                     NewValue = table.Column<string>(type: "TEXT", nullable: true),
-                    CreatedAt = table.Column<DateTimeOffset>(type: "TEXT", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
                     CompanyId = table.Column<int>(type: "INTEGER", nullable: false),
                     UserId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
@@ -140,7 +140,7 @@ namespace Timeoff.Migrations
                     DepartmentId = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Name = table.Column<string>(type: "TEXT", nullable: false),
-                    Allowance = table.Column<int>(type: "INTEGER", nullable: false),
+                    Allowance = table.Column<double>(type: "REAL", nullable: false),
                     IncludeBankHolidays = table.Column<bool>(type: "INTEGER", nullable: false),
                     IsAccrued = table.Column<bool>(type: "INTEGER", nullable: false),
                     ManagerId = table.Column<int>(type: "INTEGER", nullable: true),

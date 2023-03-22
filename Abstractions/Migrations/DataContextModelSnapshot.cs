@@ -30,7 +30,7 @@ namespace Timeoff.Migrations
                     b.Property<int>("CompanyId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateTimeOffset>("CreatedAt")
+                    b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
 
                     b.Property<int>("EntityId")
@@ -179,8 +179,8 @@ namespace Timeoff.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("Allowance")
-                        .HasColumnType("INTEGER");
+                    b.Property<double>("Allowance")
+                        .HasColumnType("REAL");
 
                     b.Property<int>("CompanyId")
                         .HasColumnType("INTEGER");

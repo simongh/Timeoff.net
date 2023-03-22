@@ -11,7 +11,7 @@ using Timeoff;
 namespace Timeoff.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230309001928_InitialCreate")]
+    [Migration("20230322193544_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -33,7 +33,7 @@ namespace Timeoff.Migrations
                     b.Property<int>("CompanyId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateTimeOffset>("CreatedAt")
+                    b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
 
                     b.Property<int>("EntityId")
@@ -182,8 +182,8 @@ namespace Timeoff.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("Allowance")
-                        .HasColumnType("INTEGER");
+                    b.Property<double>("Allowance")
+                        .HasColumnType("REAL");
 
                     b.Property<int>("CompanyId")
                         .HasColumnType("INTEGER");
