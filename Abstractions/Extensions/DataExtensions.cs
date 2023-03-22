@@ -166,5 +166,18 @@ namespace Timeoff
 
             return settings;
         }
+
+        public static async Task<ResultModels.IntegrationApiViewModel> GetIntegrationApiAsync(this IDataContext dataContext, int companyId)
+        {
+            return await dataContext.Companies
+                .Where(c => c.CompanyId == companyId)
+                .Select(c => new ResultModels.IntegrationApiViewModel
+                {
+                    Name = c.Name,
+                    ApiKey = c.IntegrationApiToken.ToString(),
+                    Enabled = c.IntegrationApiEnabled,
+                })
+                .FirstAsync();
+        }
     }
 }

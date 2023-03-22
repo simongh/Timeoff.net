@@ -1,9 +1,11 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Timeoff.Controllers
 {
     [Route("audit")]
+    [Authorize(Roles = "Admin")]
     public class AuditController : Controller
     {
         private readonly IMediator _mediator;
