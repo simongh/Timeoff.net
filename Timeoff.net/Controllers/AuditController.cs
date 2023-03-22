@@ -1,14 +1,22 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using MediatR;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Timeoff.Controllers
 {
     [Route("audit")]
     public class AuditController : Controller
     {
-        [HttpGet("email")]
-        public async Task<IActionResult> EmailAsync()
+        private readonly IMediator _mediator;
+
+        public AuditController(IMediator mediator)
         {
-            return View();
+            _mediator = mediator;
+        }
+
+        [HttpGet("email")]
+        public async Task<IActionResult> EmailAsync([FromQuery] Commands.EmailAuditQuery command)
+        {
+            return View(await _mediator.Send(command));
         }
     }
 }

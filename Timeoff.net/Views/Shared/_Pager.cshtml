@@ -1,0 +1,47 @@
+﻿@model Timeoff.ResultModels.PagerResult
+@using Timeoff
+<ul class="pagination">
+    <li @{
+        IsDisabled(Model.PreviousPage);
+    }>
+        <span>
+            @if (Model.PreviousPage > 0)
+            {
+                <a href="@Model.ToLink(Url, Model.PreviousPage)">&laquo; Prev</a>
+            }
+            else
+            {
+                @:&laquo; Prev
+            }
+        </span>
+    </li>
+    <li>
+        <span>@Model.CurrentPage of @Model.TotalPages</span>
+    </li>
+    <li @{
+        IsDisabled(Model.NextPage);
+    }>
+        <span>
+            @if (Model.NextPage > 0)
+            {
+                <a href="@Model.ToLink(Url, Model.NextPage)">Next &raquo;</a>
+            }
+            else
+            {
+                @:Next &raquo;
+            }
+        </span>
+    </li>
+</ul>
+
+@functions {
+
+    public void IsDisabled(int page)
+    {
+        if (page == 0)
+        {
+            @:class="disabled"
+        }
+    }
+
+}

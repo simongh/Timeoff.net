@@ -49,7 +49,7 @@ namespace Timeoff.Services
                 Email = user.Email,
                 Body = body,
                 Subject = parts[0],
-                CreatedAt = DateTimeOffset.UtcNow,
+                CreatedAt = DateTime.UtcNow,
                 User = user,
                 CompanyId = user.CompanyId,
             };

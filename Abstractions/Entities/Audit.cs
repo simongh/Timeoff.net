@@ -12,7 +12,7 @@
 
         public string? NewValue { get; set; }
 
-        public DateTimeOffset CreatedAt { get; set; }
+        public DateTime CreatedAt { get; set; }
 
         public int AuditId { get; private set; }
 

@@ -30,4 +30,12 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <EditorConfigFiles Remove="C:\workspace\Timeoff.net\Abstractions\.editorconfig" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="C:\workspace\Timeoff.net\Abstractions\.editorconfig" />
+  </ItemGroup>
+
 </Project>
