@@ -56,13 +56,13 @@ namespace Timeoff.Controllers
         [HttpGet("company/integration-api")]
         public async Task<IActionResult> CompanyIntegrationApiAsync()
         {
-            return View();
+            return View(await _mediator.Send(new Commands.GetIntegrationApiCommand()));
         }
 
         [HttpPost("company/integration-api")]
-        public async Task<IActionResult> UpdateCompanyIntegrationApiAsync()
+        public async Task<IActionResult> UpdateCompanyIntegrationApiAsync(Commands.UpdateIntegrationApiCommand command)
         {
-            return View();
+            return View("CompanyIntegrationApi", await _mediator.Send(command));
         }
 
         [HttpGet("company/authentication")]
