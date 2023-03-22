@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using Timeoff.Entities;
 
 namespace Timeoff
@@ -18,6 +19,8 @@ namespace Timeoff
         DbSet<Schedule> Schedules { get; set; }
         DbSet<UserAllowanceAdjustment> UserAllowanceAdjustments { get; set; }
         DbSet<User> Users { get; set; }
+
+        IDbContextTransaction BeginTransaction();
 
         //DatabaseFacade Database { get; }
 

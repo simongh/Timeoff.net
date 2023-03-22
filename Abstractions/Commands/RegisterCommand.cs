@@ -91,14 +91,25 @@ namespace Timeoff.Commands
 
             _dataContext.Companies.Add(company);
 
-            var email = _templateService.ConfirmRegistration(user);
-            _dataContext.EmailAudits.Add(email);
+            var tx = _dataContext.BeginTransaction();
+            try
+            {
+                await _dataContext.SaveChangesAsync();
 
-            await _dataContext.SaveChangesAsync();
+                var email = _templateService.ConfirmRegistration(user);
+                _dataContext.EmailAudits.Add(email);
 
-            company.Departments.First().Manager = user;
-            await _dataContext.SaveChangesAsync();
+                company.Departments.First().Manager = user;
+                await _dataContext.SaveChangesAsync();
 
+                await tx.CommitAsync();
+            }
+            catch
+            {
+                tx.Dispose();
+
+                return Errored(ResultModels.FlashResult.WithError("Unable to create company. A database error occurred"));
+            }
             return new()
             {
                 Success = true,

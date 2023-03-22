@@ -1,9 +1,11 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Timeoff.Controllers
 {
     [Route("settings")]
+    [Authorize(Roles = "Admin")]
     public class SettingsController : Controller
     {
         private readonly IMediator _mediator;
@@ -44,10 +46,11 @@ namespace Timeoff.Controllers
             return View("general", vm);
         }
 
-        [HttpPost("leavetypes/delete/{id:int}")]
-        public async Task<IActionResult> DeleteLeaveTypesAsync(int id)
+        [HttpPost("leavetypes/delete")]
+        public async Task<IActionResult> DeleteLeaveTypesAsync([FromQuery] Commands.DeleteLeaveTypeCommand command)
         {
-            return View();
+            var vm = await _mediator.Send(command);
+            return View("general", vm);
         }
 
         [HttpGet("company/integration-api")]
@@ -81,9 +84,18 @@ namespace Timeoff.Controllers
         }
 
         [HttpPost("company/delete")]
-        public async Task<IActionResult> CompanyDeleteAsync()
+        public async Task<IActionResult> CompanyDeleteAsync(Commands.DeleteCompanyCommand command)
         {
-            return View();
+            var vm = await _mediator.Send(command);
+
+            if (vm != null)
+            {
+                return View("general", vm);
+            }
+            else
+            {
+                return RedirectToAction("Logout", "Account");
+            }
         }
     }
 }
