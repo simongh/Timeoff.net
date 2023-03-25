@@ -6,12 +6,13 @@ namespace Timeoff
 {
     public interface IDataContext
     {
-        DbSet<Audit> Audits { get; set; }
-        DbSet<BankHoliday> BankHolidays { get; set; }
-        DbSet<Comment> Comments { get; set; }
+        //DbSet<Audit> Audits { get; set; }
+        DbSet<PublicHoliday> BankHolidays { get; set; }
+
+        //DbSet<Comment> Comments { get; set; }
         DbSet<Company> Companies { get; set; }
+
         DbSet<Department> Departments { get; set; }
-        DbSet<DepartmentSupervisor> DepartmentsSupervisors { get; set; }
         DbSet<EmailAudit> EmailAudits { get; set; }
         DbSet<UserFeed> Feeds { get; set; }
         DbSet<Leave> Leaves { get; set; }

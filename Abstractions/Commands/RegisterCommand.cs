@@ -46,11 +46,11 @@ namespace Timeoff.Commands
 
             var user = new Entities.User
             {
-                Name = request.FirstName!,
+                FirstName = request.FirstName!,
                 LastName = request.LastName!,
                 Email = request.Email!,
                 Password = _usersService.HashPassword(request.Password!),
-                Admin = true,
+                IsAdmin = true,
             };
 
             var company = new Entities.Company

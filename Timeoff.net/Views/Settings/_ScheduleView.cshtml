@@ -15,6 +15,6 @@
     public void Day(string name, int index)
     {
         var isActive = Model[index] ? " active" : "";
-        <label class="btn btn-default @isActive" id="schedule_item_@name.ToLower()">    <input name="@name.ToLower()" type="checkbox" autocomplete="off" checked="@Model[index]">@name.Substring(0,3)</label>
+        <label class="btn btn-default @isActive" id="schedule_item_@name.ToLower()">    <input name="@name" type="checkbox" autocomplete="off" checked="@Model[index]" value="true"/>@name.Substring(0,3)</label>
     }
 }

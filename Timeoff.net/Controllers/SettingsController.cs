@@ -15,8 +15,8 @@ namespace Timeoff.Controllers
             _mediator = mediator;
         }
 
-        [HttpGet("general")]
-        public async Task<IActionResult> GeneralAsync()
+        [HttpGet("")]
+        public async Task<IActionResult> IndexAsync()
         {
             return View(await _mediator.Send(new Commands.GetSettingsCommand()));
         }
@@ -24,7 +24,7 @@ namespace Timeoff.Controllers
         [HttpPost("company")]
         public async Task<IActionResult> UpdateCompanyAsync(Commands.UpdateSettingsCommand command)
         {
-            return View("general", await _mediator.Send(command));
+            return View("index", await _mediator.Send(command));
         }
 
         [HttpPost("carryOverUnusedAllowance")]
@@ -34,16 +34,16 @@ namespace Timeoff.Controllers
         }
 
         [HttpPost("schedule")]
-        public async Task<IActionResult> ScheduleAsync()
+        public async Task<IActionResult> ScheduleAsync(Commands.UpdateScheduleCommand command)
         {
-            return View();
+            return View("index", await _mediator.Send(command));
         }
 
         [HttpPost("leavetypes")]
         public async Task<IActionResult> UpdateLeaveTypesAsync(Commands.UpdateLeaveTypesCommand command)
         {
             var vm = await _mediator.Send(command);
-            return View("general", vm);
+            return View("index", vm);
         }
 
         [HttpPost("leavetypes/delete")]
@@ -90,7 +90,7 @@ namespace Timeoff.Controllers
 
             if (vm != null)
             {
-                return View("general", vm);
+                return View("index", vm);
             }
             else
             {

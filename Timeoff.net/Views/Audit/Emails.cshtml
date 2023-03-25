@@ -20,7 +20,7 @@
                 <tbody>
                     <tr>
                         <td>
-                            <form asp-controller="Audit" asp-action="Email" method="GET">
+                            <form asp-controller="Audit" asp-action="Emails" method="GET">
                                 <div class="form-group input-group">
                                     <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
                                     <input type="text" asp-for="Start" class="form-control" placeholder="Start Date"
@@ -46,7 +46,7 @@
                                 <button type="submit" class="btn btn-info single-click">Filter</button>
                                 @if (Model.ShowReset)
                                 {
-                                    <a asp-action="Email" class="btn btn-default">Reset</a>
+                                    <a asp-action="Emails" class="btn btn-default">Reset</a>
                                 }
                             </form>
                         </td>
@@ -67,37 +67,37 @@
                 <tbody>
                     @if (!Model.Emails.Any())
                     {
-                    <tr>
-                        <td colspan="3">
-                            <div class="text-center">No emails recorded yet</div>
-                        </td>
-                    </tr>
+                        <tr>
+                            <td colspan="3">
+                                <div class="text-center">No emails recorded yet</div>
+                            </td>
+                        </tr>
                     }
 
                     @foreach (var item in Model.Emails)
                     {
-                    <tr id="heading_@item.Id" class="vpp-email-audit-entry-header">
-                        <td class="user-link-cell">
-                            <a asp-action="Email" asp-route-userid="@item.UserId">@item.Name</a>
-                        </td>
-                        <td>
-                            <a class="collapsed" data-toggle="collapse" data-parent="#email_list" href="#collapse_@item.Id">
-                                @item.Subject
-                            </a>
-                        </td>
-                        <td>
-                            @item.CreatedAt.ToString($"{Model.DateFormat} HH:mm:ss")
-                        </td>
-                    </tr>
-                    <tr id="collapse_@item.Id" class="collapse">
-                        <td colspan=3>
-                            <address>
-                                <strong>To Email:</strong>
-                                <a href="mailto:#">@item.Email</a>
-                            </address>
-                            <html-to-text>@Html.Raw(item.Body)</html-to-text>
-                        </td>
-                    </tr>
+                        <tr id="heading_@item.Id" class="vpp-email-audit-entry-header">
+                            <td class="user-link-cell">
+                                <a asp-action="Emails" asp-route-userid="@item.UserId">@item.Name</a>
+                            </td>
+                            <td>
+                                <a class="collapsed" data-toggle="collapse" data-parent="#email_list" href="#collapse_@item.Id">
+                                    @item.Subject
+                                </a>
+                            </td>
+                            <td>
+                                @item.CreatedAt.ToString($"{Model.DateFormat} HH:mm:ss")
+                            </td>
+                        </tr>
+                        <tr id="collapse_@item.Id" class="collapse">
+                            <td colspan=3>
+                                <address>
+                                    <strong>To Email:</strong>
+                                    <a href="mailto:#">@item.Email</a>
+                                </address>
+                                <html-to-text>@Html.Raw(item.Body)</html-to-text>
+                            </td>
+                        </tr>
                     }
                 </tbody>
             </table>
@@ -105,7 +105,7 @@
             <div class="text-center">
                 @if (Model.Emails.Any())
                 {
-                    <partial name="_Pager" model="Model.Pager"/>
+                    <partial name="_Pager" model="Model.Pager" />
                 }
             </div>
 

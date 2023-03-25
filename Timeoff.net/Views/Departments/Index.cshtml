@@ -58,7 +58,7 @@
                 {
                     
                 <tr data-vpp-department-list-mode="readonly">
-                    <td><a asp-controller="Departments" asp-action="GetForUpdate" asp-route-id="@item.Id" data-vpp-department-name=1>@item.Name</a></td>
+                    <td><a asp-controller="Departments" asp-action="Edit" asp-route-id="@item.Id" data-vpp-department-name=1>@item.Name</a></td>
                     <td><a asp-controller="Users" asp-action="Edit" asp-route-id="@item.ManagerId">@Model.GetName(item.ManagerId)</a></td>
                     <td>
                         @item.Allowance.ToString("0")
@@ -66,7 +66,7 @@
                     <td><a asp-controller="Users" asp-action="Index" asp-route-department="@item.Id">@item.EmployeeCount</a></td>
                     <td>@(item.IncludePublicHolidays ? "Yes":"")</td>
                     <td>@(item.IsAccruedAllowance ? "Yes":"")</td>
-                    <td><a asp-controller="Departments" asp-action="GetForUpdate" asp-route-id="@item.Id" class="btn btn-link btn-xs pull-right"><span class="fa fa-chevron-right"></span></a></td>
+                    <td><a asp-controller="Departments" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-link btn-xs pull-right"><span class="fa fa-chevron-right"></span></a></td>
                 </tr>
                 }
             </tbody>

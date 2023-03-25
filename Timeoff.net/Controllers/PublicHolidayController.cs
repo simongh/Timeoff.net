@@ -6,11 +6,11 @@ namespace Timeoff.Controllers
 {
     [Route("settings/bankholidays")]
     [Authorize(Roles = "Admin")]
-    public class BankHolidayController : Controller
+    public class PublicHolidayController : Controller
     {
         private readonly IMediator _mediator;
 
-        public BankHolidayController(IMediator mediator)
+        public PublicHolidayController(IMediator mediator)
         {
             _mediator = mediator;
         }
@@ -23,7 +23,7 @@ namespace Timeoff.Controllers
         }
 
         [HttpPost()]
-        public async Task<IActionResult> NewAsync(Commands.UpdateBankHolidayCommand command)
+        public async Task<IActionResult> CreateAsync(Commands.UpdateBankHolidayCommand command)
         {
             var vm = await _mediator.Send(command);
             return View("Index", vm);

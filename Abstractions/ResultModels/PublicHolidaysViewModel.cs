@@ -1,6 +1,6 @@
 ﻿namespace Timeoff.ResultModels
 {
-    public record BankHolidaysViewModel
+    public record PublicHolidaysViewModel
     {
         public int CurrentYear { get; init; }
 
@@ -14,7 +14,7 @@
 
         public IEnumerable<CalendarMonthResult> Calendar { get; init; }
 
-        public BankHolidayResult[] BankHolidays { get; init; }
+        public PublicHolidayResult[] BankHolidays { get; init; }
 
         public FlashResult Result { get; set; } = new();
     }

@@ -15,7 +15,7 @@ namespace Timeoff
 
             var content = _confirmRegistration(new
             {
-                user.Name,
+                user.FirstName,
                 templateService.Options.SiteUrl,
             });
 
@@ -27,7 +27,7 @@ namespace Timeoff
             _resetPassword ??= templateService.CreateWrapper("ResetPassword");
             var content = _resetPassword(new
             {
-                user.Name,
+                user.FirstName,
                 templateService.Options.SiteUrl,
             });
 
@@ -40,7 +40,7 @@ namespace Timeoff
 
             var content = _forgotPassword(new
             {
-                user.Name,
+                user.FirstName,
                 user.Company.LdapAuthEnabled,
                 templateService.Options.SiteUrl,
                 user.Token,

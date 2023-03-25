@@ -8,6 +8,13 @@ namespace Timeoff.Data
         public void Configure(EntityTypeBuilder<Entities.Department> builder)
         {
             builder.ToTable("Departments");
+
+            builder.HasMany(p => p.Supervisors)
+                .WithMany(p => p.DepartmentsSupervised)
+                .UsingEntity(j => j.ToTable("DepartmentSupervisors"));
+
+            builder.HasMany(p => p.Users)
+                .WithOne(p => p.Department);
         }
     }
 }

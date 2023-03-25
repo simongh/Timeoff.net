@@ -44,7 +44,7 @@ namespace Timeoff
             };
         }
 
-        public static async Task<ResultModels.BankHolidaysViewModel> GetBankHolidaysAsync(this IQueryable<Entities.Company> companies,
+        public static async Task<ResultModels.PublicHolidaysViewModel> GetPublicHolidaysAsync(this IQueryable<Entities.Company> companies,
             int companyId,
             int year)
         {
@@ -54,11 +54,11 @@ namespace Timeoff
                 {
                     c.Name,
                     c.DateFormat,
-                    BankHolidays = c.BankHolidays
+                    BankHolidays = c.PublicHolidays
                         .Where(h => h.Date.Year == year)
-                        .Select(h => new ResultModels.BankHolidayResult
+                        .Select(h => new ResultModels.PublicHolidayResult
                         {
-                            Id = h.BankHolidayId,
+                            Id = h.PublicHolidayId,
                             Date = h.Date,
                             Name = h.Name,
                         }),
@@ -106,12 +106,12 @@ namespace Timeoff
 
             var users = await dataContext.Users
                 .Where(u => u.CompanyId == companyId)
-                .OrderBy(u => u.Name)
+                .OrderBy(u => u.FirstName)
                 .ThenBy(u => u.LastName)
                 .Select(u => new ResultModels.ListItem
                 {
                     Id = u.UserId,
-                    Value = u.Name + " " + u.LastName,
+                    Value = u.FirstName + " " + u.LastName,
                 })
                 .ToArrayAsync();
 

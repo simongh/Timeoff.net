@@ -40,15 +40,15 @@
                         <li asp-authorise asp-roles="Admin" class="dropdown hidden-xs">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><span class="fa fa-gears"></span> <span class="caret"></span></a>
                             <ul class="dropdown-menu" role="menu">
-                                <li><a asp-controller="Settings" asp-action="General">General</a></li>
+                                <li><a asp-controller="Settings" asp-action="Index">General</a></li>
                                 <li role="separator" class="divider"></li>
                                 <li><a asp-controller="Departments" asp-action="Index">Departments</a></li>
-                                <li><a asp-controller="BankHoliday" asp-action="Index">Bank Holidays</a></li>
-                                <li><a asp-controller="Settings" asp-action="CompanyAuthentication">LDAP configuration</a></li>
+                                <li><a asp-controller="PublicHoliday" asp-action="Index">Public Holidays</a></li>
+                               @* <li><a asp-controller="Settings" asp-action="CompanyAuthentication">LDAP configuration</a></li>*@
                                 <li><a asp-controller="Settings" asp-action="CompanyIntegrationApi">API configuration</a></li>
                                 <li><a asp-controller="Users" asp-action="Import">Import employees</a></li>
                                 <li role="separator" class="divider"></li>
-                                <li><a asp-controller="Audit" asp-action="Email">Emails audit</a></li>
+                                <li><a asp-controller="Audit" asp-action="Emails">Emails audit</a></li>
                                 <li><a asp-controller="Reports" asp-action="Index">Reports</a></li>
                             </ul>
                         </li>
