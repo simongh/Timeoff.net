@@ -1,6 +1,6 @@
 ﻿namespace Timeoff.RequestModels
 {
-    public record PublicHolidayRequest : Types.BankHolidayModel
+    public record PublicHolidayRequest : Types.PublicHolidayModel
     {
     }
 }

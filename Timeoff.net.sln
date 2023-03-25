@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33205.214
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Timeoff.net", "Timeoff.net\Timeoff.net.csproj", "{664D0A0E-2E54-444A-A5D2-7DBCB6AECA61}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Timeoff.net", "Timeoff.net\Timeoff.net.csproj", "{664D0A0E-2E54-444A-A5D2-7DBCB6AECA61}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Abstractions", "Abstractions\Abstractions.csproj", "{6CBF538F-8136-4561-A0FD-3DE97FE4C067}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Abstractions", "Abstractions\Abstractions.csproj", "{6CBF538F-8136-4561-A0FD-3DE97FE4C067}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application", "Application\Application.csproj", "{1011C4B9-43CA-4B71-8919-F11884CEFA32}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{6CBF538F-8136-4561-A0FD-3DE97FE4C067}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6CBF538F-8136-4561-A0FD-3DE97FE4C067}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6CBF538F-8136-4561-A0FD-3DE97FE4C067}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1011C4B9-43CA-4B71-8919-F11884CEFA32}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1011C4B9-43CA-4B71-8919-F11884CEFA32}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1011C4B9-43CA-4B71-8919-F11884CEFA32}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1011C4B9-43CA-4B71-8919-F11884CEFA32}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

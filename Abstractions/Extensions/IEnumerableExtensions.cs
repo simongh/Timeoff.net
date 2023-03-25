@@ -3,7 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace Timeoff
 {
-    internal static class IEnumerableExtensions
+    public static class IEnumerableExtensions
     {
         public static ResultModels.FlashResult ToFlashResult(this IEnumerable<ValidationFailure> failures)
         {

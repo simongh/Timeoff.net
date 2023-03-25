@@ -2,7 +2,7 @@
 
 namespace Timeoff.Validators
 {
-    internal class LeaveTypeRequestValidator : AbstractValidator<RequestModels.LeaveTypeRequest>
+    public class LeaveTypeRequestValidator : AbstractValidator<RequestModels.LeaveTypeRequest>
     {
         public LeaveTypeRequestValidator()
         {

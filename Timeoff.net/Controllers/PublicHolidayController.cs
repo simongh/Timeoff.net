@@ -16,14 +16,14 @@ namespace Timeoff.Controllers
         }
 
         [HttpGet()]
-        public async Task<IActionResult> IndexAsync([FromQuery] Commands.GetBankHolidaysQuery query)
+        public async Task<IActionResult> IndexAsync([FromQuery] Application.PublicHoliday.PublicHolidaysQuery query)
         {
             var vm = await _mediator.Send(query);
             return View(vm);
         }
 
         [HttpPost()]
-        public async Task<IActionResult> CreateAsync(Commands.UpdateBankHolidayCommand command)
+        public async Task<IActionResult> CreateAsync(Application.PublicHoliday.UpdatePublicHolidayCommand command)
         {
             var vm = await _mediator.Send(command);
             return View("Index", vm);
@@ -36,7 +36,7 @@ namespace Timeoff.Controllers
         }
 
         [HttpPost("delete")]
-        public async Task<IActionResult> DeleteAsync(Commands.DeleteHolidayCommand command)
+        public async Task<IActionResult> DeleteAsync(Application.PublicHoliday.DeleteHolidayCommand command)
         {
             var vm = await _mediator.Send(command);
             return View("index", vm);

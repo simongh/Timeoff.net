@@ -1,6 +1,6 @@
 ﻿namespace Timeoff.Services
 {
-    internal class TimeZoneService
+    public class TimeZoneService
     {
         private static readonly Lazy<IEnumerable<(string, string)>> _instance = new(Get);
 

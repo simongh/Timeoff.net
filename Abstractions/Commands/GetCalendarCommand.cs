@@ -61,7 +61,7 @@ namespace Timeoff.Commands
                 .Where(a => a.UserId == userId & a.DateStart >= startDate && a.DateStart < startDate.AddMonths(months + 1))
                 .ToArrayAsync();
 
-            var holidays = await _dataContext.BankHolidays
+            var holidays = await _dataContext.PublicHolidays
                 .Where(h => h.CompanyId == companyId && h.Date >= startDate && h.Date < startDate.AddMonths(months + 1))
                 .Select(h => new ResultModels.PublicHolidayResult
                 {

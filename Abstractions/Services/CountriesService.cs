@@ -2,7 +2,7 @@
 
 namespace Timeoff.Services
 {
-    internal class CountriesService
+    public class CountriesService
     {
         private static readonly Lazy<IEnumerable<ResultModels.CountryResult>> _instance = new(Get);
 

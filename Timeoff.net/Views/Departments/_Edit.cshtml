@@ -1,4 +1,4 @@
-﻿@model Timeoff.ResultModels.EditDepartmentViewModel
+﻿@model Timeoff.Application.Departments.EditDepartmentViewModel
 <form method="POST" asp-controller="Departments" asp-action="Update" asp-route-id="@Model.Id" id="department_edit_form">
 
     <div class="col-md-7">
@@ -69,7 +69,7 @@
                 <input class="" type="checkbox" asp-for="IncludePublicHolidays" checked="@Model.IncludePublicHolidays" value="true">
                 Include public holidays
             </label>
-            <span class="help-block">Determine if employees from @Model.Name have <a asp-controller="settings" asp-action="general" />bank holidays</a> in addition to their allowance</span>
+            <span class="help-block">Determine if employees from @Model.Name have <a asp-controller="settings" asp-action="general" />public holidays</a> in addition to their allowance</span>
         </div>
 
         <div class="form-group">

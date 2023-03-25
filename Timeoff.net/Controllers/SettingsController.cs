@@ -18,11 +18,11 @@ namespace Timeoff.Controllers
         [HttpGet("")]
         public async Task<IActionResult> IndexAsync()
         {
-            return View(await _mediator.Send(new Commands.GetSettingsCommand()));
+            return View(await _mediator.Send(new Application.Settings.GetSettingsCommand()));
         }
 
         [HttpPost("company")]
-        public async Task<IActionResult> UpdateCompanyAsync(Commands.UpdateSettingsCommand command)
+        public async Task<IActionResult> UpdateCompanyAsync(Application.Settings.UpdateSettingsCommand command)
         {
             return View("index", await _mediator.Send(command));
         }
@@ -34,20 +34,20 @@ namespace Timeoff.Controllers
         }
 
         [HttpPost("schedule")]
-        public async Task<IActionResult> ScheduleAsync(Commands.UpdateScheduleCommand command)
+        public async Task<IActionResult> ScheduleAsync(Application.Settings.UpdateScheduleCommand command)
         {
             return View("index", await _mediator.Send(command));
         }
 
         [HttpPost("leavetypes")]
-        public async Task<IActionResult> UpdateLeaveTypesAsync(Commands.UpdateLeaveTypesCommand command)
+        public async Task<IActionResult> UpdateLeaveTypesAsync(Application.Settings.UpdateLeaveTypesCommand command)
         {
             var vm = await _mediator.Send(command);
             return View("index", vm);
         }
 
         [HttpPost("leavetypes/delete")]
-        public async Task<IActionResult> DeleteLeaveTypesAsync([FromQuery] Commands.DeleteLeaveTypeCommand command)
+        public async Task<IActionResult> DeleteLeaveTypesAsync([FromQuery] Application.Settings.DeleteLeaveTypeCommand command)
         {
             var vm = await _mediator.Send(command);
             return View("general", vm);
@@ -56,11 +56,11 @@ namespace Timeoff.Controllers
         [HttpGet("company/integration-api")]
         public async Task<IActionResult> CompanyIntegrationApiAsync()
         {
-            return View(await _mediator.Send(new Commands.GetIntegrationApiCommand()));
+            return View(await _mediator.Send(new Application.Settings.GetIntegrationApiCommand()));
         }
 
         [HttpPost("company/integration-api")]
-        public async Task<IActionResult> UpdateCompanyIntegrationApiAsync(Commands.UpdateIntegrationApiCommand command)
+        public async Task<IActionResult> UpdateCompanyIntegrationApiAsync(Application.Settings.UpdateIntegrationApiCommand command)
         {
             return View("CompanyIntegrationApi", await _mediator.Send(command));
         }
@@ -84,7 +84,7 @@ namespace Timeoff.Controllers
         }
 
         [HttpPost("company/delete")]
-        public async Task<IActionResult> CompanyDeleteAsync(Commands.DeleteCompanyCommand command)
+        public async Task<IActionResult> CompanyDeleteAsync(Application.Settings.DeleteCompanyCommand command)
         {
             var vm = await _mediator.Send(command);
 

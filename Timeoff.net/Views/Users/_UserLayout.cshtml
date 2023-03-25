@@ -1,0 +1,44 @@
+﻿@model Timeoff.Types.UserModel
+@{
+    Layout = "_Layout";
+}
+<h1>@Model.Name's details @if (!Model.IsActive)
+    {
+        <span class="badge alert-warning">Deactivated</span>
+    }
+</h1>
+
+<div class="row">
+    <div class="col-md-3 lead">Employee details</div>
+    <form id="add_new_user_frm" method="post"asp-controller="users" asp-action="delete" asp-route-id="@Model.Id" onsubmit="return confirm('Do you really want to delete the user @Model.Name?');">
+        <div class="col-md-1 col-md-offset-8">
+            <button id="remove_btn" type="submit" class="pull-right btn btn-danger single-click" data-toggle="tooltip" data-placement="top" title="Remove employee"><i class="fa fa-trash"></i> Delete</button>
+        </div>
+    </form>
+</div>
+
+<div class="row">&nbsp;</div>
+
+{{> show_flash_messages }}
+
+<div class="col-md-3 list-group">
+    <a asp-controller="users" asp-action="edit" asp-route-id="@Model.Id" class="list-group-item @IsSelected("main")">General details</a>
+    <a asp-controller="users" asp-action="schedule" asp-route-id="@Model.Id" class="list-group-item @IsSelected("schedule")">Schedule</a>
+    <a asp-controller="users" asp-action="calendar" asp-route-id="@Model.Id" class="list-group-item @IsSelected("calendar")">Calendar</a>
+    <a asp-controller="users" asp-action="absences" asp-route-id="@Model.Id" class="list-group-item @IsSelected("absences")">Absences</a>
+</div>
+
+@RenderBody()
+
+<div class="row">&nbsp;</div>
+
+@functions{
+
+    public string IsSelected(string section)
+    {
+        if (ViewBag.Section == section)
+            return "selected-item";
+        else
+            return "";
+    }
+}

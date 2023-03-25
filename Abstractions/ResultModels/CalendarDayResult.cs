@@ -4,7 +4,7 @@
     {
         public string Day { get; init; }
 
-        public bool IsBankHoliday => HolidayName != null;
+        public bool IsPublicHoliday => HolidayName != null;
 
         public bool IsWeekend { get; init; }
 
