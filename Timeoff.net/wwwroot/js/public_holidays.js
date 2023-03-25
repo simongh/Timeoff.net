@@ -1,5 +1,5 @@
 $(document).ready(function () {
-	$('button.pubicholiday-remove-btn').on('click', function (e) {
+	$('button.publicholiday-remove-btn').on('click', function (e) {
 		e.stopPropagation();
 
 		$('#deleteid').attr('value', $(this).attr('value'));

@@ -1,8 +1,9 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
+using Timeoff.Application;
 
-namespace Timeoff.net
+namespace Timeoff
 {
     public class Program
     {
@@ -16,6 +17,7 @@ namespace Timeoff.net
                 {
                     options.UseSqlite(builder.Configuration.GetConnectionString("timeoff"));
                 })
+                .ConfigureApplication()
                 .AddWebServices();
 
             builder.Services

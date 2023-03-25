@@ -7,7 +7,7 @@ namespace Timeoff
     {
         //public DbSet<Entities.Audit> Audits { get; set; }
 
-        public DbSet<Entities.PublicHoliday> BankHolidays { get; set; }
+        public DbSet<Entities.PublicHoliday> PublicHolidays { get; set; }
 
         //public DbSet<Entities.Comment> Comments { get; set; }
 

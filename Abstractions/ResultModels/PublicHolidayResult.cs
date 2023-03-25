@@ -1,6 +1,6 @@
 ﻿namespace Timeoff.ResultModels
 {
-    public record PublicHolidayResult : Types.BankHolidayModel
+    public record PublicHolidayResult : Types.PublicHolidayModel
     {
     }
 }

@@ -46,7 +46,12 @@ namespace Timeoff.Controllers
         [HttpGet("edit/{id:int}")]
         public async Task<IActionResult> EditAsync(int id)
         {
-            return View();
+            return View(new ResultModels.UserInfoResult
+            {
+                Id = id,
+                FirstName = "",
+                LastName = ""
+            });
         }
 
         [HttpGet("edit/{id:int}/absences")]
@@ -87,7 +92,7 @@ namespace Timeoff.Controllers
         }
 
         [HttpGet("")]
-        public async Task<IActionResult> IndexAsync([FromQuery] Commands.UsersQuery query)
+        public async Task<IActionResult> IndexAsync([FromQuery] Application.Users.UsersQuery query)
         {
             return View(await _mediator.Send(query));
         }

@@ -14,9 +14,9 @@
             @:weekend_cell
         }
 
-        if (Model.IsBankHoliday)
+        if (Model.IsPublicHoliday)
         {
-            @:bank_holiday_cell
+            @:public_holiday_cell
         }
 
         if (isLeave)
@@ -39,9 +39,9 @@
 
     public void ShowLabel()
     {
-        if (Model.IsBankHoliday)
+        if (Model.IsPublicHoliday)
         {
-            ToolTip($"Bank holiday: {Model.HolidayName}");
+            ToolTip($"Public holiday: {Model.HolidayName}");
         }
         else if (Model.IsToday)
         {

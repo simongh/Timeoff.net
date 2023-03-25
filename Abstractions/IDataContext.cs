@@ -7,7 +7,7 @@ namespace Timeoff
     public interface IDataContext
     {
         //DbSet<Audit> Audits { get; set; }
-        DbSet<PublicHoliday> BankHolidays { get; set; }
+        DbSet<PublicHoliday> PublicHolidays { get; set; }
 
         //DbSet<Comment> Comments { get; set; }
         DbSet<Company> Companies { get; set; }
