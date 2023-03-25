@@ -18,19 +18,21 @@
 
         public LeavePart DayPartEnd { get; set; } = LeavePart.All;
 
+        public double Days { get; set; }
+
         public int LeaveId { get; private set; }
 
         public int UserId { get; set; }
 
-        public User User { get; set; }
+        public User User { get; set; } = null!;
 
         public int ApproverId { get; set; }
 
-        public User Approver { get; set; }
+        public User Approver { get; set; } = null!;
 
         public int LeaveTypeId { get; set; }
 
-        public LeaveType LeaveType { get; set; }
+        public LeaveType LeaveType { get; set; } = null!;
 
         //public ICollection<Comment> Comments { get; set; }
     }

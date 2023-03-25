@@ -2,7 +2,7 @@
 {
     public class Department
     {
-        public string Name { get; set; }
+        public string Name { get; set; } = null!;
 
         public double Allowance { get; set; } = 20;
 
@@ -18,10 +18,10 @@
 
         public int CompanyId { get; set; }
 
-        public Company Company { get; set; }
+        public Company Company { get; set; } = null!;
 
         public ICollection<User> Users { get; set; } = new HashSet<User>();
 
-        public ICollection<DepartmentSupervisor> Supervisors { get; set; } = new HashSet<DepartmentSupervisor>();
+        public ICollection<User> Supervisors { get; set; } = new HashSet<User>();
     }
 }

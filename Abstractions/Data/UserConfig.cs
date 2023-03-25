@@ -16,6 +16,11 @@ namespace Timeoff.Data
             builder
                 .HasOne(p => p.Schedule)
                 .WithOne(p => p.User);
+
+            builder
+                .HasMany(p => p.DepartmentsSupervised)
+                .WithMany(p => p.Supervisors)
+                .UsingEntity(p => p.ToTable("DepartmentSupervisors"));
         }
     }
 }

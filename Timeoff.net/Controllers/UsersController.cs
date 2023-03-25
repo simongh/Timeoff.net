@@ -1,12 +1,20 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using MediatR;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Timeoff.Controllers
 {
     [Route("users")]
     public class UsersController : Controller
     {
+        private readonly IMediator _mediator;
+
+        public UsersController(IMediator mediator)
+        {
+            _mediator = mediator;
+        }
+
         [HttpGet("add")]
-        public async Task<IActionResult> AddAsync()
+        public async Task<IActionResult> CreateAsync()
         {
             return View();
         }
@@ -79,9 +87,9 @@ namespace Timeoff.Controllers
         }
 
         [HttpGet("")]
-        public async Task<IActionResult> IndexAsync(int? department)
+        public async Task<IActionResult> IndexAsync([FromQuery] Commands.UsersQuery query)
         {
-            return View();
+            return View(await _mediator.Send(query));
         }
     }
 }

@@ -137,7 +137,7 @@
                         </div>
 
                         <form class="form-horizontal" method="POST" asp-controller="Settings" asp-action="Schedule" id="company_schedule_form">
-                            <input type="hidden" name="company_wide" value="1">
+                            <input type="hidden" name="companywide" value="true">
                             <div class="form-group">
                                 <label for="" class="col-md-6 control-label">Company week schedule</label>
                             </div>
@@ -274,11 +274,11 @@
     <div class="col-md-5 setting-general-2nd-column">
         <div class="panel panel-default">
             <div class="panel-heading">
-                Bank Holidays
+                Public Holidays
             </div>
             <div class="panel-body">
                 <div class="row">
-                    <div class="col-md-12 tst-no-bank-holidays">Bank holidays could be found <a asp-controller="BankHoliday" asp-action="Index">here</a></div>
+                    <div class="col-md-12 tst-no-bank-holidays">Public holidays could be found <a asp-controller="PublicHoliday" asp-action="Index">here</a></div>
                 </div>
             </div>
         </div>

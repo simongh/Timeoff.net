@@ -9,7 +9,7 @@
         public static CalendarMonthResult FromDate(
             DateTime date,
             IEnumerable<Entities.Leave> absences,
-            IEnumerable<BankHolidayResult> holidays)
+            IEnumerable<PublicHolidayResult> holidays)
         {
             var weeks = new List<CalendarDayResult>();
             var offset = ((int)date.DayOfWeek + 6) % 7;

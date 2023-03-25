@@ -2,7 +2,7 @@
 
 namespace Timeoff.Validators
 {
-    internal class BankHolidayRequestValidator : AbstractValidator<RequestModels.BankHolidayRequest>
+    internal class BankHolidayRequestValidator : AbstractValidator<RequestModels.PublicHolidayRequest>
     {
         public BankHolidayRequestValidator()
         {

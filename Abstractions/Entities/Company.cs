@@ -26,23 +26,23 @@
 
         public bool IntegrationApiEnabled { get; set; }
 
-        public Guid IntegrationApiToken { get; set; }
+        public Guid IntegrationApiToken { get; set; } = Guid.NewGuid();
 
         public int CarryOver { get; set; }
 
         public int CompanyId { get; private set; }
 
-        public Schedule Schedule { get; set; }
+        public Schedule Schedule { get; set; } = null!;
 
         public ICollection<Department> Departments { get; set; } = new HashSet<Department>();
 
         public ICollection<User> Users { get; set; } = new HashSet<User>();
 
-        public ICollection<BankHoliday> BankHolidays { get; set; } = new HashSet<BankHoliday>();
+        public ICollection<PublicHoliday> PublicHolidays { get; set; } = new HashSet<PublicHoliday>();
 
         public ICollection<EmailAudit> EmailAudits { get; set; } = new HashSet<EmailAudit>();
 
-        public ICollection<Audit> Audits { get; set; } = new HashSet<Audit>();
+        //public ICollection<Audit> Audits { get; set; } = new HashSet<Audit>();
 
         public ICollection<LeaveType> LeaveTypes { get; set; } = new HashSet<LeaveType>();
     }

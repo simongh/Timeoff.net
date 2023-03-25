@@ -2,7 +2,7 @@
 {
     public class LeaveType
     {
-        public string Name { get; set; }
+        public string Name { get; set; } = null!;
 
         public string Colour { get; set; } = "#ffffff";
 
@@ -18,7 +18,7 @@
 
         public int CompanyId { get; set; }
 
-        public Company Company { get; set; }
+        public Company Company { get; set; } = null!;
         public ICollection<Leave> Leaves { get; set; } = new HashSet<Leave>();
     }
 }

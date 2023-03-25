@@ -69,7 +69,7 @@ namespace Timeoff.Commands
                     Id = e.EmailAuditId,
                     Subject = e.Subject,
                     Body = e.Body,
-                    Name = e.User.Name + " " + e.User.LastName,
+                    Name = e.User.FirstName + " " + e.User.LastName,
                     UserId = e.UserId,
                     CreatedAt = e.CreatedAt,
                     Email = e.User.Email,
@@ -78,12 +78,12 @@ namespace Timeoff.Commands
 
             var users = await _dataContext.Users
                 .Where(u => u.CompanyId == _currentUserService.CompanyId)
-                .OrderBy(u => u.Name)
+                .OrderBy(u => u.FirstName)
                 .ThenBy(u => u.LastName)
                 .Select(u => new ResultModels.ListItem
                 {
                     Id = u.UserId,
-                    Value = u.Name + " " + u.LastName,
+                    Value = u.FirstName + " " + u.LastName,
                 })
                 .ToArrayAsync();
 

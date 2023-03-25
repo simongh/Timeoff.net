@@ -17,10 +17,10 @@
 <partial name="_Flash" model="Model.Result" />
 
 <div class="col-md-3 list-group">
-  <a asp-controller="Departments" asp-action="GetForUpdate" asp-route-id="@Model.Id" class="list-group-item selected-item">General details</a>
+  <a asp-controller="Departments" asp-action="Edit" asp-route-id="@Model.Id" class="list-group-item selected-item">General details</a>
   <a asp-controller="Users" asp-action="Index" asp-route-department="@Model.Id" class="list-group-item">Employees from department</a>
 </div>
 
-<partial name="_General" />
+<partial name="_Edit" />
 
 <div class="row">&nbsp;</div>

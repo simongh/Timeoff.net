@@ -1,6 +1,6 @@
 ﻿@using Timeoff;
-@model Timeoff.ResultModels.BankHolidaysViewModel
-<h1>Bank holidays</h1>
+@model Timeoff.ResultModels.PublicHolidaysViewModel
+<h1>Public holidays</h1>
 
 <div class="row">
     <div class="col-md-6 lead">
@@ -14,8 +14,8 @@
                 <span class="sr-only">Toggle Dropdown</span>
             </button>
             <ul class="dropdown-menu">
-                <li><a href="#" id="bankholiday-import-btn">Import default holidays for @Model.CurrentYear</a></li>
-                <li><a href="#" id="add_new_department" data-toggle="modal" data-target="#add_new_bank_holiday_modal">Add new bank holiday</a></li>
+                <li><a href="#" id="publicholiday-import-btn">Import default holidays for @Model.CurrentYear</a></li>
+                <li><a href="#" id="add_new_department" data-toggle="modal" data-target="#add_new_public_holiday_modal">Add new public holiday</a></li>
             </ul>
         </div>
     </div>
@@ -96,16 +96,16 @@
         @if (!Model.BankHolidays.Any())
         {
             <div class="row">
-                <div class="col-md-12 tst-no-bank-holidays text-center">No Bank holiday records</div>
+                <div class="col-md-12 tst-no-public-holidays text-center">No public holiday records</div>
             </div>
         }
 
-        <form id="delete_bankholiday_form" method="post" asp-action="Delete" asp-controller="BankHoliday">
+        <form id="delete_publicholiday_form" method="post" asp-action="Delete" asp-controller="PublicHoliday">
             <input name="year" value="@Model.CurrentYear" type="hidden">
             <input id="deleteid" name="id" value="" type="hidden">
         </form>
-        <form id="import_bankholiday_form" method="post" asp-action="import" asp-controller="BankHoliday" asp-route-year="@Model.CurrentYear"></form>
-        <form id="update_bankholiday_form" method="post" asp-action="New" asp-asp-controller="BankHoliday" asp-route-year="@Model.CurrentYear">
+        <form id="import_publicholiday_form" method="post" asp-action="import" asp-controller="PublicHoliday" asp-route-year="@Model.CurrentYear"></form>
+        <form id="update_publicholiday_form" method="post" asp-action="Create" asp-controller="PublicHoliday" asp-route-year="@Model.CurrentYear">
             @for (int i = 0; i < Model.BankHolidays.Length; i++)
             {
                 <input type="hidden" asp-for="BankHolidays[i].Id"/>
@@ -120,7 +120,7 @@
                         <input type="text" class="form-control" asp-for="BankHolidays[i].Name" tom-test-hook="name__@i">
                     </div>
                     <div class="col-md-2">
-                        <button class="btn btn-default pull-right bankholiday-remove-btn" type="button" value="@Model.BankHolidays[i].Id" tom-test-hook="remove__@i"><span class="fa fa-remove"></span></button>
+                        <button class="btn btn-default pull-right publicholiday-remove-btn" type="button" value="@Model.BankHolidays[i].Id" tom-test-hook="remove__@i"><span class="fa fa-remove"></span></button>
                     </div>
                 </div>
 
@@ -132,8 +132,8 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="pull-right">
-                        @*<button id="bankholiday-import-btn" class="btn btn-default" type="button">Import default holidays</button>*@
-                        <button class="btn btn-default" type="button" data-toggle="modal" data-target="#add_new_bank_holiday_modal" id="add_new_bank_holiday_btn">Add new</button>
+                        @*<button id="publicholiday-import-btn" class="btn btn-default" type="button">Import default holidays</button>*@
+                        <button class="btn btn-default" type="button" data-toggle="modal" data-target="#add_new_public_holiday_modal" id="add_new_public_holiday_btn">Add new</button>
                         @if (Model.BankHolidays.Any())
                         {
                             <button type="submit" class="btn btn-success single-click">Save changes</button>
@@ -152,5 +152,5 @@
 <partial name="_AddNewModal" />
 
 @section Scripts {
-<script src="~/js/bank_holidays.js"></script>
+<script src="~/js/pubilc_holidays.js"></script>
 }

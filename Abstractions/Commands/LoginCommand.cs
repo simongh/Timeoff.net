@@ -57,7 +57,7 @@ namespace Timeoff.Commands
                     {
                         new ("userid",user.UserId.ToString()),
                         new ("companyid",user.CompanyId.ToString()),
-                        new (ClaimTypes.Role, user.Admin ? "Admin" : "User")
+                        new (ClaimTypes.Role, user.IsAdmin ? "Admin" : "User")
                     }, _currentUserService.AuthenticationScheme);
 
                     await _currentUserService.SignInAsync(new(userId));

@@ -39,7 +39,7 @@ namespace Timeoff.Commands
                     Users = d.Company.Users.Select(u => new ResultModels.ListItem
                     {
                         Id = u.UserId,
-                        Value = u.Name + " " + u.LastName,
+                        Value = u.FirstName + " " + u.LastName,
                     })
                 })
                 .FirstOrDefaultAsync();

@@ -63,9 +63,9 @@ namespace Timeoff.Commands
 
             var holidays = await _dataContext.BankHolidays
                 .Where(h => h.CompanyId == companyId && h.Date >= startDate && h.Date < startDate.AddMonths(months + 1))
-                .Select(h => new ResultModels.BankHolidayResult
+                .Select(h => new ResultModels.PublicHolidayResult
                 {
-                    Id = h.BankHolidayId,
+                    Id = h.PublicHolidayId,
                     Date = h.Date,
                     Name = h.Name,
                 })

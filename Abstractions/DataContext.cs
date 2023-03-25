@@ -5,17 +5,15 @@ namespace Timeoff
 {
     internal class DataContext : DbContext, IDataContext
     {
-        public DbSet<Entities.Audit> Audits { get; set; }
+        //public DbSet<Entities.Audit> Audits { get; set; }
 
-        public DbSet<Entities.BankHoliday> BankHolidays { get; set; }
+        public DbSet<Entities.PublicHoliday> BankHolidays { get; set; }
 
-        public DbSet<Entities.Comment> Comments { get; set; }
+        //public DbSet<Entities.Comment> Comments { get; set; }
 
         public DbSet<Entities.Company> Companies { get; set; }
 
         public DbSet<Entities.Department> Departments { get; set; }
-
-        public DbSet<Entities.DepartmentSupervisor> DepartmentsSupervisors { get; set; }
 
         public DbSet<Entities.EmailAudit> EmailAudits { get; set; }
 

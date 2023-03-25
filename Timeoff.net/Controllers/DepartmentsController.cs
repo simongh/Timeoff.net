@@ -37,7 +37,7 @@ namespace Timeoff.Controllers
         }
 
         [HttpGet("departments/edit/{id:int}")]
-        public async Task<IActionResult> GetForUpdateAsync([FromRoute] Commands.GetDepartmentCommand command)
+        public async Task<IActionResult> EditAsync([FromRoute] Commands.GetDepartmentCommand command)
         {
             var vm = await _mediator.Send(command);
             return View(vm);
