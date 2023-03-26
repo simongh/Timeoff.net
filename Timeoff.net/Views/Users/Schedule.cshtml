@@ -1,0 +1,50 @@
+﻿@model Timeoff.Application.Users.UserScheduleViewModel
+@{
+    ViewBag.Section = "schedule";
+    Layout = "_userLayout";
+}
+<div class="col-md-9">
+
+    <form method="POST" asp-controller="users" asp-action="setschedule" id="company_schedule_form">
+        <input type="hidden" @Html.NameFor(m=>m.Id) value="@Model.Id">
+
+        <partial name="_Breadcrumb" />
+
+        <div class="form-group">
+            <label for="" class="control-label">Schedule</label>
+
+            <p class="help-block">
+                @if (Model.UserSpecific)
+                {
+                    @:Current employee has <strong data-vpp="declare-user-specific-schedule">custom</strong> schedule.
+                    
+                }
+                else
+                {
+                    <text>
+                    Current employee uses <strong><a data-vpp="link-to-company-schedule" asp-controller="settings" asp-action="index">company wide</a></strong> schedule.
+                    </text>
+                }
+            </p>
+
+            <div class="input-group">
+                <partial name="_ScheduleView" model="Model.Schedule"/>
+            </div>
+
+        </div>
+        <div class="form-group">
+            <div class="pull-right">
+                @if(Model.UserSpecific)
+                {
+                    <button type="submit" name="revoke_user_specific_schedule" class="btn btn-default">Move employee to company wide schedule</button>
+                    <button type="submit" name="save_user_specific_schedule" class="btn btn-success">Save employee specific schedule</button>
+                }
+                else
+                {
+                <button type="submit" name="save_user_specific_schedule" class="btn btn-success">Override company wide schedule</button>
+                }
+            </div>
+        </div>
+    </form>
+
+</div>
