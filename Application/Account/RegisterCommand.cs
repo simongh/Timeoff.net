@@ -52,6 +52,7 @@ namespace Timeoff.Application.Account
                 Password = _usersService.HashPassword(request.Password!),
                 IsAdmin = true,
                 IsActivated = true,
+                StartDate = DateTime.Today,
             };
 
             var company = new Entities.Company
