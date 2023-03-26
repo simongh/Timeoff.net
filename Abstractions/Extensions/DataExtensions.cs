@@ -43,5 +43,19 @@ namespace Timeoff
                 Used = used,
             };
         }
+
+        public static IEnumerable<bool> ToEnumerable(this Entities.Schedule schedule)
+        {
+            return new[]
+            {
+                schedule.Monday == WorkingDay.WholeDay,
+                schedule.Tuesday == WorkingDay.WholeDay,
+                schedule.Wednesday == WorkingDay.WholeDay,
+                schedule.Thursday == WorkingDay.WholeDay,
+                schedule.Friday == WorkingDay.WholeDay,
+                schedule.Saturday == WorkingDay.WholeDay,
+                schedule.Sunday == WorkingDay.WholeDay,
+            };
+        }
     }
 }

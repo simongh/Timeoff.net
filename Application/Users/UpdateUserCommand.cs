@@ -44,7 +44,7 @@ namespace Timeoff.Application.Users
                 .FirstOrDefaultAsync();
             if (user == null)
             {
-                errors.Add(new(nameof(request.Id), "The user could not be located"));
+                throw new NotFoundException();
             }
             else
             {

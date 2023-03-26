@@ -96,16 +96,7 @@ namespace Timeoff.Application
                     TimeZone = c.TimeZone,
                     HideTeamView = c.IsTeamViewHidden,
                     ShowHoliday = c.ShareAllAbsences,
-                    Schedule = new[]
-                    {
-                        c.Schedule.Monday == WorkingDay.WholeDay,
-                        c.Schedule.Tuesday == WorkingDay.WholeDay,
-                        c.Schedule.Wednesday == WorkingDay.WholeDay,
-                        c.Schedule.Thursday == WorkingDay.WholeDay,
-                        c.Schedule.Friday == WorkingDay.WholeDay,
-                        c.Schedule.Saturday == WorkingDay.WholeDay,
-                        c.Schedule.Sunday == WorkingDay.WholeDay,
-                    },
+                    Schedule = c.Schedule.ToEnumerable(),
                     LeaveTypes = c.LeaveTypes
                         .OrderBy(t => t.Name)
                         .Select(l => new ResultModels.LeaveTypeResult
@@ -154,7 +145,7 @@ namespace Timeoff.Application
                     StartDate = u.StartDate,
                     EndDate = u.EndDate,
                     AutoApprove = u.AutoApprove,
-                    IsActive = u.IsActive,
+                    IsActive = u.IsActivated,
                     IsAdmin = u.IsAdmin,
                     DepartmentId = u.DepartmentId,
                     Email = u.Email,

@@ -61,9 +61,10 @@ namespace Timeoff.Controllers
         }
 
         [HttpGet("edit/{id:int}/schedule")]
-        public async Task<IActionResult> ScheduleAsync(int id)
+        public async Task<IActionResult> ScheduleAsync([FromRoute] Application.Users.GetUserScheduleCommand command)
         {
-            return View();
+            var vm = await _mediator.Send(command);
+            return View(vm);
         }
 
         [HttpGet("edit/{id:int}/calendar")]
@@ -98,6 +99,19 @@ namespace Timeoff.Controllers
         public async Task<IActionResult> IndexAsync([FromQuery] Application.Users.UsersQuery query)
         {
             return View(await _mediator.Send(query));
+        }
+
+        [HttpPost("edit/reset-password/{id:int}")]
+        public async Task<IActionResult> ResetPasswordAsync([FromRoute] Application.Users.ResetPasswordCommand command)
+        {
+            var vm = await _mediator.Send(command);
+
+            if (vm == null)
+            {
+                return RedirectToAction(nameof(IndexAsync));
+            }
+
+            return View("Edit", vm);
         }
     }
 }

@@ -22,7 +22,9 @@ namespace Timeoff.Application.Users
 
         public async Task<UserDetailsViewModel> Handle(GetUserDetailsCommand request, CancellationToken cancellationToken)
         {
-            return await _dataContext.GetUserDetailsAsync(_currentUserService.CompanyId, request.Id);
+            var result = await _dataContext.GetUserDetailsAsync(_currentUserService.CompanyId, request.Id)
+                ?? throw new NotFoundException();
+            return result;
         }
     }
 }
