@@ -2,7 +2,7 @@
 {
     public abstract record UserModel
     {
-        public int Id { get; init; }
+        public int Id { get; set; }
 
         public string FirstName { get; init; } = null!;
 

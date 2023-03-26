@@ -44,14 +44,14 @@ namespace Timeoff.Controllers
         }
 
         [HttpGet("edit/{id:int}")]
-        public async Task<IActionResult> EditAsync(int id)
+        public async Task<IActionResult> EditAsync([FromRoute] Application.Users.GetUserDetailsCommand command)
         {
-            return View(new ResultModels.UserInfoResult
-            {
-                Id = id,
-                FirstName = "",
-                LastName = ""
-            });
+            var vm = await _mediator.Send(command);
+
+            if (vm == null)
+                return RedirectToAction(nameof(IndexAsync));
+
+            return View(vm);
         }
 
         [HttpGet("edit/{id:int}/absences")]
@@ -73,9 +73,12 @@ namespace Timeoff.Controllers
         }
 
         [HttpPost("edit/{id:int}")]
-        public async Task<IActionResult> UpdateAsync(int id)
+        public async Task<IActionResult> UpdateAsync(int id, Application.Users.UpdateUserCommand command)
         {
-            return View();
+            command.Id = id;
+            var vm = await _mediator.Send(command);
+
+            return View("edit", vm);
         }
 
         [HttpPost("delete/{id:int}")]

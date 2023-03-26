@@ -19,7 +19,7 @@
 
 <div class="row">&nbsp;</div>
 
-{{> show_flash_messages }}
+@RenderSection(name:"Messages", required:false)
 
 <div class="col-md-3 list-group">
     <a asp-controller="users" asp-action="edit" asp-route-id="@Model.Id" class="list-group-item @IsSelected("main")">General details</a>

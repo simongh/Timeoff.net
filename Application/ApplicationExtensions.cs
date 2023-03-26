@@ -20,8 +20,11 @@ namespace Timeoff.Application
 
             services.AddTransient<IValidator<PublicHoliday.UpdatePublicHolidayCommand>, PublicHoliday.UpdatePublicHolidayCommandValidator>();
             services.AddTransient<IValidator<Departments.UpdateDepartmentCommand>, Departments.UpdateDepartmentCommandValidator>();
+
             services.AddTransient<IValidator<Settings.UpdateSettingsCommand>, Settings.UpdateSettingsCommandValidator>();
             services.AddTransient<IValidator<Settings.UpdateLeaveTypesCommand>, Settings.UpdateLeaveTypesCommandValidator>();
+
+            services.AddTransient<IValidator<Users.UpdateUserCommand>, Users.UpdateUserCommandValidator>();
 
             return services;
         }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Timeoff.Application.Users;
 
 namespace Timeoff.Application
 {
@@ -138,6 +139,36 @@ namespace Timeoff.Application
                     Enabled = c.IntegrationApiEnabled,
                 })
                 .FirstAsync();
+        }
+
+        public static async Task<Users.UserDetailsViewModel?> GetUserDetailsAsync(this IDataContext dataContext, int companyId, int userId)
+        {
+            return await dataContext.Users
+                .Where(u => u.CompanyId == companyId)
+                .Where(u => u.UserId == userId)
+                .Select(u => new UserDetailsViewModel
+                {
+                    Id = u.UserId,
+                    FirstName = u.FirstName,
+                    LastName = u.LastName,
+                    StartDate = u.StartDate,
+                    EndDate = u.EndDate,
+                    AutoApprove = u.AutoApprove,
+                    IsActive = u.IsActive,
+                    IsAdmin = u.IsAdmin,
+                    DepartmentId = u.DepartmentId,
+                    Email = u.Email,
+                    CompanyName = u.Company.Name,
+                    DateFormat = u.Company.DateFormat,
+                    Departments = u.Company.Departments
+                    .OrderBy(d => d.Name)
+                    .Select(d => new ResultModels.ListItem
+                    {
+                        Id = d.DepartmentId,
+                        Value = d.Name,
+                    }),
+                })
+                .FirstOrDefaultAsync();
         }
     }
 }
