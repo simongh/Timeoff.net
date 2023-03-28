@@ -1,0 +1,113 @@
+﻿@model Timeoff.Application.Users.CalendarViewModel
+@{
+    ViewBag.Section = "calendar";
+    Layout = "_userLayout";
+}
+<div class="col-md-9">
+
+    <partial name="_Breadcrumb" />
+
+    <div class="row">
+        <div class="col-xs-2">
+            <a class="btn btn-default" asp-controller="users" asp-action="calendar" asp-route-id="@Model.Id" asp-route-year="@Model.PreviousYear"><span aria-hidden="true" class="fa fa-chevron-left"></span> @Model.PreviousYear </a>
+        </div>
+        <div class="col-xs-8 calendar-section-caption">
+            <h3>@Model.CurrentYear</h3>
+        </div>
+        <div class="col-xs-2">
+            <a class="btn btn-default pull-right" asp-controller="users" asp-action="calendar" asp-route-id="@Model.Id" asp-route-year="@Model.NextYear">@Model.NextYear <span aria-hidden="true" class="fa fa-chevron-right"></span></a>
+        </div>
+    </div>
+
+    <div class="row main-row_header">
+        <div class="col-md-12"><hr /></div>
+    </div>
+
+    <div class="row">
+
+        <div class="col-md-4 top-leave-type-statistics">
+            <dl>
+                <dt data-tom-days-available-in-allowance>@Model.Available</dt>
+                <dd>Days available</dd>
+                <dd>out of <span data-tom-total-days-in-allowance>@Model.Total</span> in allowance</dd>
+            </dl>
+        </div>
+
+        <div class="col-md-4 secondary-leave-type-statistics hidden-xs">
+            <partial name="_AllowanceBreakdown"/>
+        </div>
+
+        <div class="col-md-4 secondary-leave-type-statistics hidden-xs">
+            <dl>
+                <dt>Used</dt>
+
+                @foreach (var item in Model.Leaves)
+                {
+                    <dd>
+                        <em>@item.Name:</em> <span class="pull-right">
+                            @item.Total@if (item.Allowance > 0)
+                            {
+                                @:out of @item.Allowance
+                            }
+                        </span>
+                    </dd>
+
+                }
+
+                @if (!Model.Leaves.Any())
+                {
+                    <dd class="text-muted">No approved requests so far.</dd>
+                }
+            </dl>
+        </div>
+
+    </div>
+
+
+    <div class="row main-row_header">
+        <div class="col-md-12"><hr /></div>
+    </div>
+
+    <div class="row clearfix">
+        @foreach (var month in Model.Calendar)
+        {
+                   <div class="col-md-4 month_container">
+                <table class="calendar_month month_@month.Date.ToString("MMMM")">
+                <thead>
+                    <tr>
+                            <td colspan="14">@month.Date.ToString("MMMM")</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">M</td>
+                        <td colspan="2">T</td>
+                        <td colspan="2">W</td>
+                        <td colspan="2">T</td>
+                        <td colspan="2">F</td>
+                        <td colspan="2">S</td>
+                        <td colspan="2">S</td>
+                    </tr>
+                </thead>
+                <tbody>
+                @{
+                    var count = 0;
+                }
+                @foreach (var item in month.Days)
+                    {
+                        if (count %7 == 0)
+                        {
+                            @:<tr>
+                        }
+                        <partial name="_CalendarCell" model="item"/>
+                        @if (count %7 == 7)
+                        {
+                            @:</tr>
+                        }
+                        count++;
+                    }
+                </tbody>
+            </table>
+        </div>
+        }
+    </div>
+
+</div>

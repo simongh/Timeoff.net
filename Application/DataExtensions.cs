@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Timeoff.Application.Users;
 
 namespace Timeoff.Application
 {
@@ -132,12 +131,12 @@ namespace Timeoff.Application
                 .FirstAsync();
         }
 
-        public static async Task<Users.UserDetailsViewModel?> GetUserDetailsAsync(this IDataContext dataContext, int companyId, int userId)
+        public static async Task<Users.DetailsViewModel?> GetUserDetailsAsync(this IDataContext dataContext, int companyId, int userId)
         {
             return await dataContext.Users
                 .Where(u => u.CompanyId == companyId)
                 .Where(u => u.UserId == userId)
-                .Select(u => new UserDetailsViewModel
+                .Select(u => new Users.DetailsViewModel
                 {
                     Id = u.UserId,
                     FirstName = u.FirstName,
@@ -160,6 +159,36 @@ namespace Timeoff.Application
                     }),
                 })
                 .FirstOrDefaultAsync();
+        }
+
+        public static async Task<Users.ScheduleViewModel> GetUserScheduleAsync(this IDataContext dataContext, int companyId, int userId)
+        {
+            var schedule = await dataContext.Users
+                .Where(u => u.CompanyId == companyId && u.UserId == userId)
+                .Select(u => new
+                {
+                    User = u.Schedule,
+                    Company = u.Company.Schedule,
+                    u.FirstName,
+                    u.LastName,
+                    u.IsActivated,
+                })
+                 .FirstOrDefaultAsync();
+
+            if (schedule == null)
+            {
+                throw new NotFoundException();
+            }
+
+            return new()
+            {
+                Schedule = (schedule.User ?? schedule.Company).ToEnumerable(),
+                Id = userId,
+                FirstName = schedule.FirstName,
+                LastName = schedule.LastName,
+                IsActive = schedule.IsActivated,
+                UserSpecific = schedule.User != null,
+            };
         }
     }
 }
