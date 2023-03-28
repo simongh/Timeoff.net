@@ -4,12 +4,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Timeoff.Application.Users
 {
-    public record UpdateUserCommand : UserDetailsModelBase, IRequest<UserDetailsViewModel?>, Commands.IValidated
+    public record UpdateUserCommand : UserDetailsModelBase, IRequest<DetailsViewModel?>, Commands.IValidated
     {
         public IEnumerable<ValidationFailure>? Failures { get; set; }
     }
 
-    internal class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand, UserDetailsViewModel?>
+    internal class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand, DetailsViewModel?>
     {
         private readonly IDataContext _dataContext;
         private readonly Services.ICurrentUserService _currentUserService;
@@ -22,7 +22,7 @@ namespace Timeoff.Application.Users
             _currentUserService = currentUserService;
         }
 
-        public async Task<UserDetailsViewModel?> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
+        public async Task<DetailsViewModel?> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
         {
             var errors = new List<ValidationFailure>();
             if (request.Failures != null)

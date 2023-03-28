@@ -1,11 +1,11 @@
-﻿@model Timeoff.Application.Users.UserScheduleViewModel
+﻿@model Timeoff.Application.Users.ScheduleViewModel
 @{
     ViewBag.Section = "schedule";
     Layout = "_userLayout";
 }
 <div class="col-md-9">
 
-    <form method="POST" asp-controller="users" asp-action="setschedule" id="company_schedule_form">
+    <form method="POST" asp-controller="users" asp-action="setschedule" asp-route-id="@Model.Id" id="company_schedule_form">
         <input type="hidden" @Html.NameFor(m=>m.Id) value="@Model.Id">
 
         <partial name="_Breadcrumb" />
@@ -36,15 +36,19 @@
             <div class="pull-right">
                 @if(Model.UserSpecific)
                 {
-                    <button type="submit" name="revoke_user_specific_schedule" class="btn btn-default">Move employee to company wide schedule</button>
-                    <button type="submit" name="save_user_specific_schedule" class="btn btn-success">Save employee specific schedule</button>
+                    <button type="submit" name="action" class="btn btn-default" value="reset">Move employee to company wide schedule</button>
+                    <button type="submit" class="btn btn-success">Save employee specific schedule</button>
                 }
                 else
                 {
-                <button type="submit" name="save_user_specific_schedule" class="btn btn-success">Override company wide schedule</button>
+                <button type="submit" class="btn btn-success">Override company wide schedule</button>
                 }
             </div>
         </div>
     </form>
 
 </div>
+
+@section Messages {
+    <partial name="_Flash" model="Model.Messages" />
+}

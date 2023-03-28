@@ -3,12 +3,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Timeoff.Application.Users
 {
-    public record ResetPasswordCommand : IRequest<UserDetailsViewModel?>
+    public record ResetPasswordCommand : IRequest<DetailsViewModel?>
     {
         public int Id { get; init; }
     }
 
-    internal class ResetPasswordCommandHandler : IRequestHandler<ResetPasswordCommand, UserDetailsViewModel?>
+    internal class ResetPasswordCommandHandler : IRequestHandler<ResetPasswordCommand, DetailsViewModel?>
     {
         private readonly IDataContext _dataContext;
         private readonly Services.ICurrentUserService _currentUserService;
@@ -27,7 +27,7 @@ namespace Timeoff.Application.Users
             _emailTemplateService = emailTemplateService;
         }
 
-        public async Task<UserDetailsViewModel?> Handle(ResetPasswordCommand request, CancellationToken cancellationToken)
+        public async Task<DetailsViewModel?> Handle(ResetPasswordCommand request, CancellationToken cancellationToken)
         {
             var user = await _dataContext.Users
                 .Where(u => u.CompanyId == _currentUserService.CompanyId && u.UserId == request.Id)

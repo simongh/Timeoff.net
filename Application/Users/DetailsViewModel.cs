@@ -1,6 +1,6 @@
 ﻿namespace Timeoff.Application.Users
 {
-    public record UserDetailsViewModel : UserDetailsModelBase
+    public record DetailsViewModel : UserDetailsModelBase
     {
         public IEnumerable<ResultModels.ListItem> Departments { get; init; } = null!;
 

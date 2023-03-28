@@ -44,7 +44,7 @@ namespace Timeoff.Controllers
         }
 
         [HttpGet("edit/{id:int}")]
-        public async Task<IActionResult> EditAsync([FromRoute] Application.Users.GetUserDetailsCommand command)
+        public async Task<IActionResult> EditAsync([FromRoute] Application.Users.GetDetailsCommand command)
         {
             var vm = await _mediator.Send(command);
 
@@ -61,10 +61,19 @@ namespace Timeoff.Controllers
         }
 
         [HttpGet("edit/{id:int}/schedule")]
-        public async Task<IActionResult> ScheduleAsync([FromRoute] Application.Users.GetUserScheduleCommand command)
+        public async Task<IActionResult> ScheduleAsync([FromRoute] Application.Users.GetScheduleCommand command)
         {
             var vm = await _mediator.Send(command);
             return View(vm);
+        }
+
+        [HttpPost("edit/{id:int}/schedule")]
+        public async Task<IActionResult> SetScheduleAsync(int id, Application.Users.UpdateScheduleCommand command)
+        {
+            command.Id = id;
+            var vm = await _mediator.Send(command);
+
+            return View("Schedule", vm);
         }
 
         [HttpGet("edit/{id:int}/calendar")]
