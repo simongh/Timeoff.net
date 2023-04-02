@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Timeoff.Controllers
 {
-    [Route("settings/bankholidays")]
+    [Route("settings/publicholidays")]
     [Authorize(Roles = "Admin")]
     public class PublicHolidayController : Controller
     {
