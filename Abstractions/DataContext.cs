@@ -13,7 +13,7 @@ namespace Timeoff
 
         public DbSet<Entities.Company> Companies { get; set; }
 
-        public DbSet<Entities.Department> Departments { get; set; }
+        public DbSet<Entities.Team> Teams { get; set; }
 
         public DbSet<Entities.EmailAudit> EmailAudits { get; set; }
 

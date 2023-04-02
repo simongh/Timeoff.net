@@ -34,13 +34,13 @@
 
         public int DepartmentId { get; set; }
 
-        public Department Department { get; set; } = null!;
+        public Team Department { get; set; } = null!;
 
         public Schedule? Schedule { get; set; }
 
-        public ICollection<Department> ManagedDepartments { get; set; } = new HashSet<Department>();
+        public ICollection<Team> ManagedDepartments { get; set; } = new HashSet<Team>();
 
-        public ICollection<Department> DepartmentsSupervised { get; set; } = new HashSet<Department>();
+        public ICollection<Team> DepartmentsSupervised { get; set; } = new HashSet<Team>();
 
         public ICollection<Leave> Leave { get; set; } = new HashSet<Leave>();
 

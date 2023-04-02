@@ -30,7 +30,7 @@ namespace Timeoff.Application.Users
                 errors.AddRange(request.Failures);
             }
 
-            var teamValid = await _dataContext.Departments
+            var teamValid = await _dataContext.Teams
                 .Where(d => d.CompanyId == _currentUserService.CompanyId && d.DepartmentId == request.TeamId)
                 .AnyAsync();
             if (!teamValid)

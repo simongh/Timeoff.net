@@ -58,7 +58,7 @@ namespace Timeoff.Application.Settings
                     .ToArrayAsync();
                 _dataContext.LeaveTypes.RemoveRange(leaveTypes);
 
-                var teams = await _dataContext.Departments
+                var teams = await _dataContext.Teams
                     .Where(d => d.CompanyId == _currentUserService.CompanyId)
                     .ToArrayAsync();
                 foreach (var d in teams)
@@ -72,7 +72,7 @@ namespace Timeoff.Application.Settings
                     .ToArrayAsync();
                 _dataContext.Users.RemoveRange(users);
 
-                _dataContext.Departments.RemoveRange(teams);
+                _dataContext.Teams.RemoveRange(teams);
 
                 var holidays = await _dataContext.PublicHolidays
                     .Where(h => h.CompanyId == _currentUserService.CompanyId)

@@ -23,7 +23,7 @@ namespace Timeoff.Application.Teams
 
         public async Task<TeamsViewModel> Handle(DeleteTeamCommand request, CancellationToken cancellationToken)
         {
-            var team = await _dataContext.Departments
+            var team = await _dataContext.Teams
                 .Where(d => d.DepartmentId == request.Id && d.CompanyId == _currentUserService.CompanyId)
                 .Select(d => new
                 {
@@ -43,7 +43,7 @@ namespace Timeoff.Application.Teams
             }
             else
             {
-                _dataContext.Departments.Remove(team.Department);
+                _dataContext.Teams.Remove(team.Department);
                 await _dataContext.SaveChangesAsync();
 
                 messages = ResultModels.FlashResult.Success($"Team '{team.Department.Name}' was successfully removed");

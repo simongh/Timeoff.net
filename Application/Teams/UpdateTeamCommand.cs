@@ -29,18 +29,18 @@ namespace Timeoff.Application.Teams
 
             if (request.Failures.IsValid())
             {
-                Entities.Department? team;
+                Entities.Team? team;
                 if (request.Id == null)
                 {
                     team = new()
                     {
                         CompanyId = _currentUserService.CompanyId,
                     };
-                    _dataContext.Departments.Add(team);
+                    _dataContext.Teams.Add(team);
                 }
                 else
                 {
-                    team = await _dataContext.Departments
+                    team = await _dataContext.Teams
                         .Where(d => d.DepartmentId == request.Id.Value && d.CompanyId == _currentUserService.CompanyId)
                         .FirstOrDefaultAsync();
 

@@ -78,7 +78,7 @@ namespace Timeoff.Application.Account
                 Schedule = new(),
                 Departments = new[]
                 {
-                    new Entities.Department
+                    new Entities.Team
                     {
                         Name = "General",
                         Users = new[]

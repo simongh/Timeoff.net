@@ -49,7 +49,7 @@ namespace Timeoff.Application
 
         public static async Task<Teams.TeamsViewModel> QueryDepartments(this IDataContext dataContext, int companyId)
         {
-            var departments = await dataContext.Departments
+            var departments = await dataContext.Teams
                  .Where(d => d.CompanyId == companyId)
                  .OrderBy(d => d.Name)
                  .Select(d => new ResultModels.TeamResult
