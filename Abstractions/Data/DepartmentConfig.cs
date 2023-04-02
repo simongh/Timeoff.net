@@ -3,9 +3,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Timeoff.Data
 {
-    internal class DepartmentConfig : IEntityTypeConfiguration<Entities.Department>
+    internal class DepartmentConfig : IEntityTypeConfiguration<Entities.Team>
     {
-        public void Configure(EntityTypeBuilder<Entities.Department> builder)
+        public void Configure(EntityTypeBuilder<Entities.Team> builder)
         {
             builder.ToTable("Departments");
 

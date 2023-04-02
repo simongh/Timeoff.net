@@ -12,7 +12,7 @@ namespace Timeoff
         //DbSet<Comment> Comments { get; set; }
         DbSet<Company> Companies { get; set; }
 
-        DbSet<Department> Departments { get; set; }
+        DbSet<Team> Teams { get; set; }
         DbSet<EmailAudit> EmailAudits { get; set; }
         DbSet<UserFeed> Feeds { get; set; }
         DbSet<Leave> Leaves { get; set; }

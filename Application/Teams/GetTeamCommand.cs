@@ -26,7 +26,7 @@ namespace Timeoff.Application.Teams
 
         public async Task<EditTeamViewModel?> Handle(GetTeamCommand request, CancellationToken cancellationToken)
         {
-            var team = await _dataContext.Departments
+            var team = await _dataContext.Teams
                 .Where(d => d.DepartmentId == request.Id && d.CompanyId == _currentUserService.CompanyId)
                 .Select(d => new EditTeamViewModel
                 {

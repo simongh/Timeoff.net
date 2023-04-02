@@ -1,6 +1,6 @@
 ﻿namespace Timeoff.Entities
 {
-    public class Department
+    public class Team
     {
         public string Name { get; set; } = null!;
 
