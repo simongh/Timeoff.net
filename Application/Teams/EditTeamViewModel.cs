@@ -1,6 +1,6 @@
-﻿namespace Timeoff.Application.Departments
+﻿namespace Timeoff.Application.Teams
 {
-    public record EditDepartmentViewModel : Types.DepartmentModel
+    public record EditTeamViewModel : Types.TeamModel
     {
         public int Id { get; init; }
 

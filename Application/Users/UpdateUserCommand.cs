@@ -30,12 +30,12 @@ namespace Timeoff.Application.Users
                 errors.AddRange(request.Failures);
             }
 
-            var deptValid = await _dataContext.Departments
-                .Where(d => d.CompanyId == _currentUserService.CompanyId && d.DepartmentId == request.DepartmentId)
+            var teamValid = await _dataContext.Departments
+                .Where(d => d.CompanyId == _currentUserService.CompanyId && d.DepartmentId == request.TeamId)
                 .AnyAsync();
-            if (!deptValid)
+            if (!teamValid)
             {
-                errors.Add(new(nameof(request.DepartmentId), "Department could not be found"));
+                errors.Add(new(nameof(request.TeamId), "Department could not be found"));
             }
 
             var user = await _dataContext.Users
@@ -83,7 +83,7 @@ namespace Timeoff.Application.Users
                 user.IsActivated = request.IsActive;
                 user.IsAdmin = request.IsAdmin;
                 user.AutoApprove = request.AutoApprove;
-                user.DepartmentId = request.DepartmentId;
+                user.DepartmentId = request.TeamId;
 
                 await _dataContext.SaveChangesAsync();
 

@@ -19,7 +19,7 @@ namespace Timeoff.Application
             services.AddTransient<IValidator<Account.ResetPasswordCommand>, Account.ResetPasswordCommandValidator>();
 
             services.AddTransient<IValidator<PublicHoliday.UpdatePublicHolidayCommand>, PublicHoliday.UpdatePublicHolidayCommandValidator>();
-            services.AddTransient<IValidator<Departments.UpdateDepartmentCommand>, Departments.UpdateDepartmentCommandValidator>();
+            services.AddTransient<IValidator<Teams.UpdateTeamCommand>, Teams.UpdateTeamCommandValidator>();
 
             services.AddTransient<IValidator<Settings.UpdateSettingsCommand>, Settings.UpdateSettingsCommandValidator>();
             services.AddTransient<IValidator<Settings.UpdateLeaveTypesCommand>, Settings.UpdateLeaveTypesCommandValidator>();

@@ -47,12 +47,12 @@ namespace Timeoff.Application
             };
         }
 
-        public static async Task<Departments.DepartmentsViewModel> QueryDepartments(this IDataContext dataContext, int companyId)
+        public static async Task<Teams.TeamsViewModel> QueryDepartments(this IDataContext dataContext, int companyId)
         {
             var departments = await dataContext.Departments
                  .Where(d => d.CompanyId == companyId)
                  .OrderBy(d => d.Name)
-                 .Select(d => new ResultModels.DepartmentResult
+                 .Select(d => new ResultModels.TeamResult
                  {
                      Id = d.DepartmentId,
                      Name = d.Name,
@@ -77,7 +77,7 @@ namespace Timeoff.Application
 
             return new()
             {
-                Departments = departments,
+                Teams = departments,
                 Users = users,
             };
         }
@@ -146,11 +146,11 @@ namespace Timeoff.Application
                     AutoApprove = u.AutoApprove,
                     IsActive = u.IsActivated,
                     IsAdmin = u.IsAdmin,
-                    DepartmentId = u.DepartmentId,
+                    TeamId = u.DepartmentId,
                     Email = u.Email,
                     CompanyName = u.Company.Name,
                     DateFormat = u.Company.DateFormat,
-                    Departments = u.Company.Departments
+                    Teams = u.Company.Departments
                     .OrderBy(d => d.Name)
                     .Select(d => new ResultModels.ListItem
                     {

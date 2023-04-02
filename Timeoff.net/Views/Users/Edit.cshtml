@@ -28,15 +28,15 @@
         </div>
 
         <div class="form-group">
-            <label asp-for="DepartmentId" class="control-label">Department</label>
-            <select class="form-control" asp-for="DepartmentId" aria-describedby="department_help">
-                @foreach (var item in Model.Departments)
+            <label asp-for="TeamId" class="control-label">Team</label>
+            <select class="form-control" asp-for="TeamId" aria-describedby="team_help">
+                @foreach (var item in Model.Teams)
                 {
-                    <option value="@item.Id" selected="@(item.Id == Model.DepartmentId)">@item.Value</option>
+                    <option value="@item.Id" selected="@(item.Id == Model.TeamId)">@item.Value</option>
 
                 }
             </select>
-            <span id="department_help" class="help-block">Department current user is part of. <a asp-controller="departments" asp-action="edit" asp-route-id="@Model.DepartmentId">More details <i class="fa fa-angle-double-right"></i></a></span>
+            <span id="team_help" class="help-block">Team current user is part of. <a asp-controller="Teams" asp-action="edit" asp-route-id="@Model.TeamId">More details <i class="fa fa-angle-double-right"></i></a></span>
         </div>
 
         <div class="form-group">

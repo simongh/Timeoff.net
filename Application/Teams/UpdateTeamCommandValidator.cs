@@ -1,10 +1,10 @@
 ﻿using FluentValidation;
 
-namespace Timeoff.Application.Departments
+namespace Timeoff.Application.Teams
 {
-    internal class UpdateDepartmentCommandValidator : AbstractValidator<UpdateDepartmentCommand>
+    internal class UpdateTeamCommandValidator : AbstractValidator<UpdateTeamCommand>
     {
-        public UpdateDepartmentCommandValidator()
+        public UpdateTeamCommandValidator()
         {
             RuleFor(m => m.Name)
                 .NotEmpty();

@@ -1,20 +1,20 @@
-﻿@model Timeoff.Application.Departments.DepartmentsViewModel
+﻿@model Timeoff.Application.Teams.TeamsViewModel
 <h1>Departments</h1>
 <partial name="_Flash" model="Model.Result" />
 <div class="row">
-    <div class="col-md-4 lead">All departments</div>
+    <div class="col-md-4 lead">All teams</div>
     <div class="col-md-4 col-md-offset-4">
-        <button class="btn btn-info pull-right" data-toggle="modal" data-target="#add_new_department_modal" type="button" id="add_new_department_btn">Add new department</button>
+        <button class="btn btn-info pull-right" data-toggle="modal" data-target="#add_new_team_modal" type="button" id="add_new_team_btn">Add new department</button>
     </div>
 </div>
 
 
 <div class="row">&nbsp;</div>
 
-@if(!Model.Departments.Any())
+@if(!Model.Teams.Any())
 {
 <div class="row">
-    <div class="col-md-4">No department records</div>
+    <div class="col-md-4">No team records</div>
 </div>
 }
 
@@ -32,7 +32,7 @@
                         Public Holidays
                         <button type="button"
                                 class="btn btn-xs btn-link"
-                                data-content="If set to YES, employees from department have public holidays added on top of their allowance"
+                                data-content="If set to YES, employees from team have public holidays added on top of their allowance"
                                 data-placement="top"
                                 data-toggle="popover"
                                 data-trigger="focus hover">
@@ -54,19 +54,19 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var item in Model.Departments)
+                @foreach (var item in Model.Teams)
                 {
                     
-                <tr data-vpp-department-list-mode="readonly">
-                    <td><a asp-controller="Departments" asp-action="Edit" asp-route-id="@item.Id" data-vpp-department-name=1>@item.Name</a></td>
+                <tr data-vpp-team-list-mode="readonly">
+                    <td><a asp-controller="Teams" asp-action="Edit" asp-route-id="@item.Id" data-vpp-team-name=1>@item.Name</a></td>
                     <td><a asp-controller="Users" asp-action="Edit" asp-route-id="@item.ManagerId">@Model.GetName(item.ManagerId)</a></td>
                     <td>
                         @item.Allowance.ToString("0")
                     </td>
-                    <td><a asp-controller="Users" asp-action="Index" asp-route-department="@item.Id">@item.EmployeeCount</a></td>
+                    <td><a asp-controller="Users" asp-action="Index" asp-route-team="@item.Id">@item.EmployeeCount</a></td>
                     <td>@(item.IncludePublicHolidays ? "Yes":"")</td>
                     <td>@(item.IsAccruedAllowance ? "Yes":"")</td>
-                    <td><a asp-controller="Departments" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-link btn-xs pull-right"><span class="fa fa-chevron-right"></span></a></td>
+                    <td><a asp-controller="Teams" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-link btn-xs pull-right"><span class="fa fa-chevron-right"></span></a></td>
                 </tr>
                 }
             </tbody>
@@ -75,8 +75,8 @@
 
 </div>
 
-<partial name="_AddNewDepartmentModal" />
+<partial name="_AddNewTeamModal" />
 
 @section Scripts {
-    <script src="~/js/departments.js"></script>
+    <script src="~/js/teams.js"></script>
 }
