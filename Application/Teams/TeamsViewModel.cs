@@ -1,8 +1,8 @@
-﻿namespace Timeoff.Application.Departments
+﻿namespace Timeoff.Application.Teams
 {
-    public record DepartmentsViewModel
+    public record TeamsViewModel
     {
-        public IEnumerable<ResultModels.DepartmentResult> Departments { get; init; } = null!;
+        public IEnumerable<ResultModels.TeamResult> Teams { get; init; } = null!;
 
         public IEnumerable<ResultModels.ListItem> Users { get; init; } = null!;
 

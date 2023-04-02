@@ -1,6 +1,6 @@
 ﻿namespace Timeoff.ResultModels
 {
-    public record DepartmentResult : Types.DepartmentModel
+    public record TeamResult : Types.TeamModel
     {
         public int Id { get; init; }
 

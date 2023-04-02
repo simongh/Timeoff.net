@@ -6,51 +6,51 @@ namespace Timeoff.Controllers
 {
     [Route("settings")]
     [Authorize(Roles = "Admin")]
-    public class DepartmentsController : Controller
+    public class TeamsController : Controller
     {
         private readonly IMediator _mediator;
 
-        public DepartmentsController(IMediator mediator)
+        public TeamsController(IMediator mediator)
         {
             _mediator = mediator;
         }
 
-        [HttpGet("departments")]
+        [HttpGet("teams")]
         public async Task<IActionResult> IndexAsync()
         {
-            var vm = await _mediator.Send(new Application.Departments.DepartmentsQuery());
+            var vm = await _mediator.Send(new Application.Teams.TeamsQuery());
             return View(vm);
         }
 
-        [HttpPost("departments")]
-        public async Task<IActionResult> CreateAsync(Application.Departments.UpdateDepartmentCommand command)
+        [HttpPost("teams")]
+        public async Task<IActionResult> CreateAsync(Application.Teams.UpdateTeamCommand command)
         {
             var vm = await _mediator.Send(command);
             return View("Index", vm);
         }
 
-        [HttpPost("departments/delete/{id:int}")]
-        public async Task<IActionResult> DeleteAsync([FromRoute] Application.Departments.DeleteDepartmentCommand command)
+        [HttpPost("teams/delete/{id:int}")]
+        public async Task<IActionResult> DeleteAsync([FromRoute] Application.Teams.DeleteTeamCommand command)
         {
             var vm = await _mediator.Send(command);
             return View("index", vm);
         }
 
-        [HttpGet("departments/edit/{id:int}")]
-        public async Task<IActionResult> EditAsync([FromRoute] Application.Departments.GetDepartmentCommand command)
+        [HttpGet("teams/edit/{id:int}")]
+        public async Task<IActionResult> EditAsync([FromRoute] Application.Teams.GetTeamCommand command)
         {
             var vm = await _mediator.Send(command);
             return View(vm);
         }
 
-        [HttpPost("departments/edit/{id:int}")]
-        public async Task<IActionResult> UpdateAsync(Application.Departments.UpdateDepartmentCommand command)
+        [HttpPost("teams/edit/{id:int}")]
+        public async Task<IActionResult> UpdateAsync(Application.Teams.UpdateTeamCommand command)
         {
             var vm = await _mediator.Send(command);
             return View("Index", vm);
         }
 
-        [HttpGet("departments/available-supervisors/{id:int}")]
+        [HttpGet("teams/available-supervisors/{id:int}")]
         public async Task<IActionResult> AvailableSupervisorsAsync(int id)
         {
             return View();

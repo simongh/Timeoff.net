@@ -2,15 +2,15 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Timeoff.Application.Departments
+namespace Timeoff.Application.Teams
 {
-    public record UpdateDepartmentCommand : Types.DepartmentModel, IRequest<DepartmentsViewModel?>, Commands.IValidated
+    public record UpdateTeamCommand : Types.TeamModel, IRequest<TeamsViewModel?>, Commands.IValidated
     {
         public int? Id { get; init; }
         public IEnumerable<ValidationFailure>? Failures { get; set; }
     }
 
-    internal class NewDepartmentCommandHandler : IRequestHandler<UpdateDepartmentCommand, DepartmentsViewModel?>
+    internal class NewDepartmentCommandHandler : IRequestHandler<UpdateTeamCommand, TeamsViewModel?>
     {
         private readonly IDataContext _dataContext;
         private readonly Services.ICurrentUserService _currentUserService;
@@ -23,43 +23,43 @@ namespace Timeoff.Application.Departments
             _currentUserService = currentUserService;
         }
 
-        public async Task<DepartmentsViewModel?> Handle(UpdateDepartmentCommand request, CancellationToken cancellationToken)
+        public async Task<TeamsViewModel?> Handle(UpdateTeamCommand request, CancellationToken cancellationToken)
         {
             ResultModels.FlashResult messages;
 
             if (request.Failures.IsValid())
             {
-                Entities.Department? dept;
+                Entities.Department? team;
                 if (request.Id == null)
                 {
-                    dept = new()
+                    team = new()
                     {
                         CompanyId = _currentUserService.CompanyId,
                     };
-                    _dataContext.Departments.Add(dept);
+                    _dataContext.Departments.Add(team);
                 }
                 else
                 {
-                    dept = await _dataContext.Departments
+                    team = await _dataContext.Departments
                         .Where(d => d.DepartmentId == request.Id.Value && d.CompanyId == _currentUserService.CompanyId)
                         .FirstOrDefaultAsync();
 
-                    if (dept == null)
+                    if (team == null)
                         return null;
                 }
 
-                dept.Name = request.Name;
-                dept.Allowance = request.Allowance;
-                dept.IsAccrued = request.IsAccruedAllowance;
-                dept.IncludeBankHolidays = request.IncludePublicHolidays;
-                dept.ManagerId = request.ManagerId;
+                team.Name = request.Name;
+                team.Allowance = request.Allowance;
+                team.IsAccrued = request.IsAccruedAllowance;
+                team.IncludeBankHolidays = request.IncludePublicHolidays;
+                team.ManagerId = request.ManagerId;
 
                 await _dataContext.SaveChangesAsync();
 
                 if (request.Id == null)
-                    messages = ResultModels.FlashResult.Success("Departments added");
+                    messages = ResultModels.FlashResult.Success("Team added");
                 else
-                    messages = ResultModels.FlashResult.Success($"Department {dept.Name} was updated");
+                    messages = ResultModels.FlashResult.Success($"Team {team.Name} was updated");
             }
             else
             {

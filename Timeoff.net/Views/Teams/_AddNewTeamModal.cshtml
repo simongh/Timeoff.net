@@ -1,0 +1,59 @@
+﻿@model Timeoff.Application.Teams.TeamsViewModel
+<div class="modal fade" id="add_new_team_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form method="POST" asp-controller="Teams" asp-action="Create" id="add_new_team_form">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Add new Team</h4>
+                </div>
+
+                <div class="modal-body">
+
+                    <div class="form-group">
+                        <label for="team_name_new" class="control-label">Name:</label>
+                        <input type="text" class="form-control" id="team_name_new" name="name" required placeholder="New team name">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="team_allowance_new" class="control-label">Allowance:</label>
+                        <select class="form-control" id="team_allowance_new" name="allowance">
+                            @foreach (var item in Model.Allowances)
+                            {
+                            <option value="@item" selected="@(item == 20)">@(item == 0 ? "None" : item)</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <input type="checkbox" id="team_include_public_holiday_new" name="includePublicHolidays" checked="checked" value="true">&nbsp;
+                        <label for="team_include_public_holiday_new" class="control-label">Include Public Holidays?</label>
+                    </div>
+
+                    <div class="form-group">
+                        <input type="checkbox" id="team_is_accrued_allowance_new" name="isAccruedAllowance" value="true">&nbsp;
+                        <label for="team_is_accrued_allowance_new" class="control-label">Accrued Allowance?</label>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="team_manager" class="control-label">Manager</label>
+                        <select class="form-control" id="team_manager" name="ManagerId">
+                            @foreach (var item in Model.Users)
+                            {
+                            <option value="@item.Id">@item.Value</option>
+                                
+                            }
+                        </select>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-link" data-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-success single-click">Create</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+

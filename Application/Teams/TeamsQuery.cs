@@ -1,12 +1,12 @@
 ﻿using MediatR;
 
-namespace Timeoff.Application.Departments
+namespace Timeoff.Application.Teams
 {
-    public record DepartmentsQuery : IRequest<DepartmentsViewModel>
+    public record TeamsQuery : IRequest<TeamsViewModel>
     {
     }
 
-    internal class DepartmentsQueryHandler : IRequestHandler<DepartmentsQuery, DepartmentsViewModel>
+    internal class DepartmentsQueryHandler : IRequestHandler<TeamsQuery, TeamsViewModel>
     {
         private readonly IDataContext _dataContext;
         private readonly Services.ICurrentUserService _currentUserService;
@@ -19,7 +19,7 @@ namespace Timeoff.Application.Departments
             _currentUserService = currentUserService;
         }
 
-        public async Task<DepartmentsViewModel> Handle(DepartmentsQuery request, CancellationToken cancellationToken)
+        public async Task<TeamsViewModel> Handle(TeamsQuery request, CancellationToken cancellationToken)
         {
             return await _dataContext.QueryDepartments(_currentUserService.CompanyId);
         }

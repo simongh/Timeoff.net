@@ -1,14 +1,14 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Timeoff.Application.Departments
+namespace Timeoff.Application.Teams
 {
-    public record DeleteDepartmentCommand : IRequest<DepartmentsViewModel>
+    public record DeleteTeamCommand : IRequest<TeamsViewModel>
     {
         public int Id { get; init; }
     }
 
-    internal class DeleteDepartmentCommandHandler : IRequestHandler<DeleteDepartmentCommand, DepartmentsViewModel>
+    internal class DeleteDepartmentCommandHandler : IRequestHandler<DeleteTeamCommand, TeamsViewModel>
     {
         private readonly IDataContext _dataContext;
         private readonly Services.ICurrentUserService _currentUserService;
@@ -21,9 +21,9 @@ namespace Timeoff.Application.Departments
             _currentUserService = currentUserService;
         }
 
-        public async Task<DepartmentsViewModel> Handle(DeleteDepartmentCommand request, CancellationToken cancellationToken)
+        public async Task<TeamsViewModel> Handle(DeleteTeamCommand request, CancellationToken cancellationToken)
         {
-            var dept = await _dataContext.Departments
+            var team = await _dataContext.Departments
                 .Where(d => d.DepartmentId == request.Id && d.CompanyId == _currentUserService.CompanyId)
                 .Select(d => new
                 {
@@ -33,20 +33,20 @@ namespace Timeoff.Application.Departments
                 .FirstOrDefaultAsync();
 
             ResultModels.FlashResult messages;
-            if (dept == null)
+            if (team == null)
             {
-                messages = ResultModels.FlashResult.WithError("Unable to find department");
+                throw new NotFoundException();
             }
-            else if (dept.Users > 0)
+            else if (team.Users > 0)
             {
-                messages = ResultModels.FlashResult.WithError($"Department '{dept.Department.Name}' cannot be removed as it still has {dept.Users} employee(s)");
+                messages = ResultModels.FlashResult.WithError($"Team '{team.Department.Name}' cannot be removed as it still has {team.Users} employee(s)");
             }
             else
             {
-                _dataContext.Departments.Remove(dept.Department);
+                _dataContext.Departments.Remove(team.Department);
                 await _dataContext.SaveChangesAsync();
 
-                messages = ResultModels.FlashResult.Success($"Department '{dept.Department.Name}' was successfully removed");
+                messages = ResultModels.FlashResult.Success($"Team '{team.Department.Name}' was successfully removed");
             }
 
             var vm = await _dataContext.QueryDepartments(_currentUserService.CompanyId);

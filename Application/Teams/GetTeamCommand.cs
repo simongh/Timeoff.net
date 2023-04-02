@@ -2,16 +2,16 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Timeoff.Application.Departments
+namespace Timeoff.Application.Teams
 {
-    public record GetDepartmentCommand : IRequest<EditDepartmentViewModel?>, Commands.IValidated
+    public record GetTeamCommand : IRequest<EditTeamViewModel?>, Commands.IValidated
     {
         public int Id { get; init; }
 
         public IEnumerable<ValidationFailure>? Failures { get; set; }
     }
 
-    internal class GetDepartmentCommandHandler : IRequestHandler<GetDepartmentCommand, EditDepartmentViewModel?>
+    internal class GetDepartmentCommandHandler : IRequestHandler<GetTeamCommand, EditTeamViewModel?>
     {
         private readonly IDataContext _dataContext;
         private readonly Services.ICurrentUserService _currentUserService;
@@ -24,11 +24,11 @@ namespace Timeoff.Application.Departments
             _currentUserService = currentUserService;
         }
 
-        public async Task<EditDepartmentViewModel?> Handle(GetDepartmentCommand request, CancellationToken cancellationToken)
+        public async Task<EditTeamViewModel?> Handle(GetTeamCommand request, CancellationToken cancellationToken)
         {
-            var dept = await _dataContext.Departments
+            var team = await _dataContext.Departments
                 .Where(d => d.DepartmentId == request.Id && d.CompanyId == _currentUserService.CompanyId)
-                .Select(d => new EditDepartmentViewModel
+                .Select(d => new EditTeamViewModel
                 {
                     Id = d.DepartmentId,
                     Name = d.Name,
@@ -44,7 +44,7 @@ namespace Timeoff.Application.Departments
                 })
                 .FirstOrDefaultAsync();
 
-            return dept;
+            return team;
         }
     }
 }

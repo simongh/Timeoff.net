@@ -5,7 +5,7 @@ namespace Timeoff.Application.Users
 {
     public record UsersQuery : IRequest<UsersViewModel>
     {
-        public int? Department { get; init; }
+        public int? Team { get; init; }
 
         public bool AsCsv { get; init; }
     }
@@ -28,9 +28,9 @@ namespace Timeoff.Application.Users
             var query = _dataContext.Users
                 .Where(u => u.CompanyId == _currentUserService.CompanyId);
 
-            if (request.Department.HasValue)
+            if (request.Team.HasValue)
             {
-                query = query.Where(u => u.DepartmentId == request.Department.Value);
+                query = query.Where(u => u.DepartmentId == request.Team.Value);
             }
             var year = DateTime.Today.Year;
 
@@ -81,8 +81,8 @@ namespace Timeoff.Application.Users
             return new()
             {
                 CompanyName = company.Name,
-                DepartmentId = request.Department,
-                Departments = company.Departments,
+                TeamId = request.Team,
+                Teams = company.Departments,
                 Users = users,
             };
         }
