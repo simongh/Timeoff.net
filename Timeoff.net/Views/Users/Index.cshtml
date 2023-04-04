@@ -35,9 +35,9 @@
 <div class="row">&nbsp;</div>
 
 <div class="col-md-3 list-group all-departments">
-    <a asp-controller="users" asp-action="index" class="list-group-item @IsSelected(null)">All departments</a>
+    <a asp-controller="users" asp-action="index" class="list-group-item @IsSelected(null)">All teams</a>
     @foreach (var item in Model.Teams) {
-        <a class="list-group-item @IsSelected(item.Id)" asp-action="index" asp-controller="users" asp-route-department="@item.Id">@item.Value</a>
+        <a class="list-group-item @IsSelected(item.Id)" asp-action="index" asp-controller="users" asp-route-team="@item.Id">@item.Value</a>
     }
 </div>
 
@@ -46,7 +46,7 @@
         <thead>
             <tr>
                 <th>Name</th>
-                <th>Department</th>
+                <th>Team</th>
                 <th>Is Administrator?</th>
                 <th>Available allowance</th>
                 <th>Days used</th>
@@ -68,7 +68,7 @@
                             }
                         </a>
                     </td>
-                    <td class="user_department"><a asp-controller="departments" asp-action="Edit" asp-route-id="@item.Id">@item.DepartmentName</a></td>
+                    <td class="user_department"><a asp-controller="Teams" asp-action="Edit" asp-route-id="@item.Id">@item.DepartmentName</a></td>
                     <td>@IsAdmin(item.IsAdmin)</td>
                     <td class="vpp-days-remaining">@item.AvailableAllowance</td>
                     <td class="vpp-days-used">@item.DaysUsed</td>

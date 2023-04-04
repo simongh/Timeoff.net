@@ -7,5 +7,7 @@
         public string SiteUrl { get; set; } = null!;
 
         public EmailOptions Email { get; set; } = new();
+
+        public bool SelectLeaveType { get; set; }
     }
 }

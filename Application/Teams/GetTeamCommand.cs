@@ -27,13 +27,13 @@ namespace Timeoff.Application.Teams
         public async Task<EditTeamViewModel?> Handle(GetTeamCommand request, CancellationToken cancellationToken)
         {
             var team = await _dataContext.Teams
-                .Where(d => d.DepartmentId == request.Id && d.CompanyId == _currentUserService.CompanyId)
+                .Where(d => d.TeamId == request.Id && d.CompanyId == _currentUserService.CompanyId)
                 .Select(d => new EditTeamViewModel
                 {
-                    Id = d.DepartmentId,
+                    Id = d.TeamId,
                     Name = d.Name,
                     Allowance = d.Allowance,
-                    IncludePublicHolidays = d.IncludeBankHolidays,
+                    IncludePublicHolidays = d.IncludePublicHolidays,
                     IsAccruedAllowance = d.IsAccrued,
                     ManagerId = d.ManagerId!.Value,
                     Users = d.Company.Users.Select(u => new ResultModels.ListItem

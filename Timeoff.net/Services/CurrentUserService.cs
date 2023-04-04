@@ -31,6 +31,8 @@ namespace Timeoff.Services
             }
         }
 
+        public string DateFormat => _httpContextAccessor.HttpContext!.User.FindFirstValue("dateformat");
+
         public bool IsAuthenticated => _httpContextAccessor.HttpContext?.User?.Identity?.IsAuthenticated ?? false;
 
         public string AuthenticationScheme => CookieAuthenticationDefaults.AuthenticationScheme;

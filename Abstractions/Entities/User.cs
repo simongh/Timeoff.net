@@ -32,15 +32,15 @@
 
         public Company Company { get; set; } = null!;
 
-        public int DepartmentId { get; set; }
+        public int TeamId { get; set; }
 
-        public Team Department { get; set; } = null!;
+        public Team Team { get; set; } = null!;
 
         public Schedule? Schedule { get; set; }
 
-        public ICollection<Team> ManagedDepartments { get; set; } = new HashSet<Team>();
+        public ICollection<Team> ManagedTeams { get; set; } = new HashSet<Team>();
 
-        public ICollection<Team> DepartmentsSupervised { get; set; } = new HashSet<Team>();
+        public ICollection<Team> TeamApprover { get; set; } = new HashSet<Team>();
 
         public ICollection<Leave> Leave { get; set; } = new HashSet<Leave>();
 

@@ -54,12 +54,12 @@ namespace Timeoff.Application
                  .OrderBy(d => d.Name)
                  .Select(d => new ResultModels.TeamResult
                  {
-                     Id = d.DepartmentId,
+                     Id = d.TeamId,
                      Name = d.Name,
                      Allowance = d.Allowance,
                      EmployeeCount = d.Users.Count(),
                      IsAccruedAllowance = d.IsAccrued,
-                     IncludePublicHolidays = d.IncludeBankHolidays,
+                     IncludePublicHolidays = d.IncludePublicHolidays,
                      ManagerId = d.ManagerId!.Value,
                  })
                  .ToArrayAsync();
@@ -146,7 +146,7 @@ namespace Timeoff.Application
                     AutoApprove = u.AutoApprove,
                     IsActive = u.IsActivated,
                     IsAdmin = u.IsAdmin,
-                    TeamId = u.DepartmentId,
+                    TeamId = u.TeamId,
                     Email = u.Email,
                     CompanyName = u.Company.Name,
                     DateFormat = u.Company.DateFormat,
@@ -154,7 +154,7 @@ namespace Timeoff.Application
                     .OrderBy(d => d.Name)
                     .Select(d => new ResultModels.ListItem
                     {
-                        Id = d.DepartmentId,
+                        Id = d.TeamId,
                         Value = d.Name,
                     }),
                 })

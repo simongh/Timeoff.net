@@ -8,6 +8,8 @@ namespace Timeoff.Services
 
         int CompanyId { get; }
 
+        string DateFormat { get; }
+
         bool IsAuthenticated { get; }
         string AuthenticationScheme { get; }
 
