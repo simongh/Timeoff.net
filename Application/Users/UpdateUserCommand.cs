@@ -13,13 +13,16 @@ namespace Timeoff.Application.Users
     {
         private readonly IDataContext _dataContext;
         private readonly Services.ICurrentUserService _currentUserService;
+        private readonly Services.INewLeaveService _leaveService;
 
         public UpdateUserCommandHandler(
             IDataContext dataContext,
-            Services.ICurrentUserService currentUserService)
+            Services.ICurrentUserService currentUserService,
+            Services.INewLeaveService leaveService)
         {
             _dataContext = dataContext;
             _currentUserService = currentUserService;
+            _leaveService = leaveService;
         }
 
         public async Task<DetailsViewModel?> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
@@ -31,7 +34,7 @@ namespace Timeoff.Application.Users
             }
 
             var teamValid = await _dataContext.Teams
-                .Where(d => d.CompanyId == _currentUserService.CompanyId && d.DepartmentId == request.TeamId)
+                .Where(d => d.CompanyId == _currentUserService.CompanyId && d.TeamId == request.TeamId)
                 .AnyAsync();
             if (!teamValid)
             {
@@ -83,9 +86,10 @@ namespace Timeoff.Application.Users
                 user.IsActivated = request.IsActive;
                 user.IsAdmin = request.IsAdmin;
                 user.AutoApprove = request.AutoApprove;
-                user.DepartmentId = request.TeamId;
+                user.TeamId = request.TeamId;
 
                 await _dataContext.SaveChangesAsync();
+                _leaveService.ClearEmployeeCache();
 
                 messages = ResultModels.FlashResult.Success($"Details for {request.Name} were updated");
             }

@@ -41,7 +41,7 @@ namespace Timeoff.Application.Teams
                 else
                 {
                     team = await _dataContext.Teams
-                        .Where(d => d.DepartmentId == request.Id.Value && d.CompanyId == _currentUserService.CompanyId)
+                        .Where(d => d.TeamId == request.Id.Value && d.CompanyId == _currentUserService.CompanyId)
                         .FirstOrDefaultAsync();
 
                     if (team == null)
@@ -51,7 +51,7 @@ namespace Timeoff.Application.Teams
                 team.Name = request.Name;
                 team.Allowance = request.Allowance;
                 team.IsAccrued = request.IsAccruedAllowance;
-                team.IncludeBankHolidays = request.IncludePublicHolidays;
+                team.IncludePublicHolidays = request.IncludePublicHolidays;
                 team.ManagerId = request.ManagerId;
 
                 await _dataContext.SaveChangesAsync();

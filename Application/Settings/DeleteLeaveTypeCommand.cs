@@ -12,13 +12,16 @@ namespace Timeoff.Application.Settings
     {
         private readonly IDataContext _dataContext;
         private readonly Services.ICurrentUserService _currentUserService;
+        private readonly Services.INewLeaveService _leaveService;
 
         public DeleteLeaveTypeCommandHandler(
             IDataContext dataContext,
-            Services.ICurrentUserService currentUserService)
+            Services.ICurrentUserService currentUserService,
+            Services.INewLeaveService leaveService)
         {
             _dataContext = dataContext;
             _currentUserService = currentUserService;
+            _leaveService = leaveService;
         }
 
         public async Task<SettingsViewModel> Handle(DeleteLeaveTypeCommand request, CancellationToken cancellationToken)
@@ -36,7 +39,7 @@ namespace Timeoff.Application.Settings
 
             if (leave == null)
             {
-                messages = ResultModels.FlashResult.WithError("Unable to find the specified leave type");
+                throw new NotFoundException();
             }
             else if (leave.inUse)
             {
@@ -46,6 +49,7 @@ namespace Timeoff.Application.Settings
             {
                 _dataContext.LeaveTypes.Remove(leave.leave);
                 await _dataContext.SaveChangesAsync();
+                _leaveService.ClearLeaveTypes();
 
                 messages = ResultModels.FlashResult.Success("Leave type was successfully removed");
             }

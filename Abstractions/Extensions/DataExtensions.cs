@@ -33,7 +33,7 @@ namespace Timeoff
 
             var allowance = await dataContext.Users
                 .Where(u => u.UserId == userId)
-                .Select(u => u.Department.Allowance + u.Adjustments
+                .Select(u => u.Team.Allowance + u.Adjustments
                     .Where(a => a.Year == year).Sum(a => a.CarriedOverAllowance + a.Adjustment))
                 .FirstAsync();
 

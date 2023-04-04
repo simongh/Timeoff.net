@@ -19,9 +19,6 @@
     <link rel='stylesheet' href='/css/style.css' />
     <link rel="stylesheet" href="/css/bootstrap-datepicker3.standalone.css" />
     @RenderSection("Css", false)
-   @* {{#each custom_css}}
-    <link rel="stylesheet" href="{{this}}" />
-    {{/each}}*@
 </head>
 
 <body>
@@ -38,9 +35,6 @@
     <script src="/js/bootstrap-datepicker.js"></script>
     <script src="~/js/global.js"></script>
     @RenderSection("Scripts", false)
-   @* {{~#each custom_java_script~}}
-    <script src="{{this}}"></script>
-    {{~/each~}}*@
 
    @* {{~# is_ga_analitics_on ~}}
     <script>

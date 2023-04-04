@@ -38,27 +38,6 @@ namespace Timeoff.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "BankHolidays",
-                columns: table => new
-                {
-                    BankHolidayId = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(type: "TEXT", nullable: false),
-                    Date = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    CompanyId = table.Column<int>(type: "INTEGER", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_BankHolidays", x => x.BankHolidayId);
-                    table.ForeignKey(
-                        name: "FK_BankHolidays_Companies_CompanyId",
-                        column: x => x.CompanyId,
-                        principalTable: "Companies",
-                        principalColumn: "CompanyId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "LeaveTypes",
                 columns: table => new
                 {
@@ -84,137 +63,23 @@ namespace Timeoff.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Audits",
+                name: "PublicHolidays",
                 columns: table => new
                 {
-                    AuditId = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    EntityType = table.Column<string>(type: "TEXT", nullable: false),
-                    EntityId = table.Column<int>(type: "INTEGER", nullable: false),
-                    Attribute = table.Column<string>(type: "TEXT", nullable: false),
-                    OldValue = table.Column<string>(type: "TEXT", nullable: true),
-                    NewValue = table.Column<string>(type: "TEXT", nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    CompanyId = table.Column<int>(type: "INTEGER", nullable: false),
-                    UserId = table.Column<int>(type: "INTEGER", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Audits", x => x.AuditId);
-                    table.ForeignKey(
-                        name: "FK_Audits_Companies_CompanyId",
-                        column: x => x.CompanyId,
-                        principalTable: "Companies",
-                        principalColumn: "CompanyId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Comments",
-                columns: table => new
-                {
-                    CommentId = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    EntityType = table.Column<string>(type: "TEXT", nullable: false),
-                    EntityId = table.Column<int>(type: "INTEGER", nullable: false),
-                    Value = table.Column<string>(type: "TEXT", nullable: false),
-                    CreatedAt = table.Column<DateTimeOffset>(type: "TEXT", nullable: false),
-                    CompanyId = table.Column<int>(type: "INTEGER", nullable: false),
-                    UserId = table.Column<int>(type: "INTEGER", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Comments", x => x.CommentId);
-                    table.ForeignKey(
-                        name: "FK_Comments_Companies_CompanyId",
-                        column: x => x.CompanyId,
-                        principalTable: "Companies",
-                        principalColumn: "CompanyId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Departments",
-                columns: table => new
-                {
-                    DepartmentId = table.Column<int>(type: "INTEGER", nullable: false)
+                    PublicHolidayId = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Name = table.Column<string>(type: "TEXT", nullable: false),
-                    Allowance = table.Column<double>(type: "REAL", nullable: false),
-                    IncludeBankHolidays = table.Column<bool>(type: "INTEGER", nullable: false),
-                    IsAccrued = table.Column<bool>(type: "INTEGER", nullable: false),
-                    ManagerId = table.Column<int>(type: "INTEGER", nullable: true),
+                    Date = table.Column<DateTime>(type: "TEXT", nullable: false),
                     CompanyId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Departments", x => x.DepartmentId);
+                    table.PrimaryKey("PK_PublicHolidays", x => x.PublicHolidayId);
                     table.ForeignKey(
-                        name: "FK_Departments_Companies_CompanyId",
+                        name: "FK_PublicHolidays_Companies_CompanyId",
                         column: x => x.CompanyId,
                         principalTable: "Companies",
                         principalColumn: "CompanyId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Users",
-                columns: table => new
-                {
-                    UserId = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Email = table.Column<string>(type: "TEXT", nullable: false),
-                    Password = table.Column<string>(type: "TEXT", nullable: false),
-                    Token = table.Column<string>(type: "TEXT", nullable: true),
-                    Name = table.Column<string>(type: "TEXT", nullable: false),
-                    LastName = table.Column<string>(type: "TEXT", nullable: false),
-                    Activated = table.Column<bool>(type: "INTEGER", nullable: false),
-                    Admin = table.Column<bool>(type: "INTEGER", nullable: false),
-                    AutoApprove = table.Column<bool>(type: "INTEGER", nullable: false),
-                    StartDate = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    EndDate = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    CompanyId = table.Column<int>(type: "INTEGER", nullable: false),
-                    DepartmentId = table.Column<int>(type: "INTEGER", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Users", x => x.UserId);
-                    table.ForeignKey(
-                        name: "FK_Users_Companies_CompanyId",
-                        column: x => x.CompanyId,
-                        principalTable: "Companies",
-                        principalColumn: "CompanyId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Users_Departments_DepartmentId",
-                        column: x => x.DepartmentId,
-                        principalTable: "Departments",
-                        principalColumn: "DepartmentId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "DepartmentSupervisors",
-                columns: table => new
-                {
-                    DepartmentId = table.Column<int>(type: "INTEGER", nullable: false),
-                    UserId = table.Column<int>(type: "INTEGER", nullable: false),
-                    CreatedAt = table.Column<DateTimeOffset>(type: "TEXT", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_DepartmentSupervisors", x => new { x.UserId, x.DepartmentId });
-                    table.ForeignKey(
-                        name: "FK_DepartmentSupervisors_Departments_DepartmentId",
-                        column: x => x.DepartmentId,
-                        principalTable: "Departments",
-                        principalColumn: "DepartmentId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_DepartmentSupervisors_Users_UserId",
-                        column: x => x.UserId,
-                        principalTable: "Users",
-                        principalColumn: "UserId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -227,7 +92,7 @@ namespace Timeoff.Migrations
                     Email = table.Column<string>(type: "TEXT", nullable: false),
                     Subject = table.Column<string>(type: "TEXT", nullable: false),
                     Body = table.Column<string>(type: "TEXT", nullable: false),
-                    CreatedAt = table.Column<DateTimeOffset>(type: "TEXT", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
                     CompanyId = table.Column<int>(type: "INTEGER", nullable: false),
                     UserId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
@@ -239,12 +104,6 @@ namespace Timeoff.Migrations
                         column: x => x.CompanyId,
                         principalTable: "Companies",
                         principalColumn: "CompanyId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_EmailAudits_Users_UserId",
-                        column: x => x.UserId,
-                        principalTable: "Users",
-                        principalColumn: "UserId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -262,6 +121,7 @@ namespace Timeoff.Migrations
                     DayPartStart = table.Column<byte>(type: "INTEGER", nullable: false),
                     DateEnd = table.Column<DateTime>(type: "TEXT", nullable: false),
                     DayPartEnd = table.Column<byte>(type: "INTEGER", nullable: false),
+                    Days = table.Column<double>(type: "REAL", nullable: false),
                     UserId = table.Column<int>(type: "INTEGER", nullable: false),
                     ApproverId = table.Column<int>(type: "INTEGER", nullable: false),
                     LeaveTypeId = table.Column<int>(type: "INTEGER", nullable: false)
@@ -274,18 +134,6 @@ namespace Timeoff.Migrations
                         column: x => x.LeaveTypeId,
                         principalTable: "LeaveTypes",
                         principalColumn: "LeaveTypeId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Leaves_Users_ApproverId",
-                        column: x => x.ApproverId,
-                        principalTable: "Users",
-                        principalColumn: "UserId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Leaves_Users_UserId",
-                        column: x => x.UserId,
-                        principalTable: "Users",
-                        principalColumn: "UserId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -313,11 +161,78 @@ namespace Timeoff.Migrations
                         column: x => x.CompanyId,
                         principalTable: "Companies",
                         principalColumn: "CompanyId");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "TeamApprovers",
+                columns: table => new
+                {
+                    ApproversUserId = table.Column<int>(type: "INTEGER", nullable: false),
+                    TeamApproverTeamId = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TeamApprovers", x => new { x.ApproversUserId, x.TeamApproverTeamId });
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Teams",
+                columns: table => new
+                {
+                    TeamId = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Name = table.Column<string>(type: "TEXT", nullable: false),
+                    Allowance = table.Column<double>(type: "REAL", nullable: false),
+                    IncludePublicHolidays = table.Column<bool>(type: "INTEGER", nullable: false),
+                    IsAccrued = table.Column<bool>(type: "INTEGER", nullable: false),
+                    ManagerId = table.Column<int>(type: "INTEGER", nullable: true),
+                    CompanyId = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Teams", x => x.TeamId);
                     table.ForeignKey(
-                        name: "FK_Schedules_Users_UserId",
-                        column: x => x.UserId,
-                        principalTable: "Users",
-                        principalColumn: "UserId");
+                        name: "FK_Teams_Companies_CompanyId",
+                        column: x => x.CompanyId,
+                        principalTable: "Companies",
+                        principalColumn: "CompanyId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Users",
+                columns: table => new
+                {
+                    UserId = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Email = table.Column<string>(type: "TEXT", nullable: false),
+                    Password = table.Column<string>(type: "TEXT", nullable: false),
+                    Token = table.Column<string>(type: "TEXT", nullable: true),
+                    FirstName = table.Column<string>(type: "TEXT", nullable: false),
+                    LastName = table.Column<string>(type: "TEXT", nullable: false),
+                    IsActivated = table.Column<bool>(type: "INTEGER", nullable: false),
+                    IsAdmin = table.Column<bool>(type: "INTEGER", nullable: false),
+                    AutoApprove = table.Column<bool>(type: "INTEGER", nullable: false),
+                    StartDate = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    EndDate = table.Column<DateTime>(type: "TEXT", nullable: true),
+                    CompanyId = table.Column<int>(type: "INTEGER", nullable: false),
+                    TeamId = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Users", x => x.UserId);
+                    table.ForeignKey(
+                        name: "FK_Users_Companies_CompanyId",
+                        column: x => x.CompanyId,
+                        principalTable: "Companies",
+                        principalColumn: "CompanyId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Users_Teams_TeamId",
+                        column: x => x.TeamId,
+                        principalTable: "Teams",
+                        principalColumn: "TeamId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -366,46 +281,6 @@ namespace Timeoff.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Audits_CompanyId",
-                table: "Audits",
-                column: "CompanyId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Audits_UserId",
-                table: "Audits",
-                column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_BankHolidays_CompanyId",
-                table: "BankHolidays",
-                column: "CompanyId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Comments_CompanyId",
-                table: "Comments",
-                column: "CompanyId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Comments_UserId",
-                table: "Comments",
-                column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Departments_CompanyId",
-                table: "Departments",
-                column: "CompanyId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Departments_ManagerId",
-                table: "Departments",
-                column: "ManagerId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_DepartmentSupervisors_DepartmentId",
-                table: "DepartmentSupervisors",
-                column: "DepartmentId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_EmailAudits_CompanyId",
                 table: "EmailAudits",
                 column: "CompanyId");
@@ -436,6 +311,11 @@ namespace Timeoff.Migrations
                 column: "CompanyId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_PublicHolidays_CompanyId",
+                table: "PublicHolidays",
+                column: "CompanyId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Schedules_CompanyId",
                 table: "Schedules",
                 column: "CompanyId",
@@ -446,6 +326,21 @@ namespace Timeoff.Migrations
                 table: "Schedules",
                 column: "UserId",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TeamApprovers_TeamApproverTeamId",
+                table: "TeamApprovers",
+                column: "TeamApproverTeamId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Teams_CompanyId",
+                table: "Teams",
+                column: "CompanyId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Teams_ManagerId",
+                table: "Teams",
+                column: "ManagerId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserAllowanceAdjustments_UserId",
@@ -463,29 +358,60 @@ namespace Timeoff.Migrations
                 column: "CompanyId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Users_DepartmentId",
+                name: "IX_Users_TeamId",
                 table: "Users",
-                column: "DepartmentId");
+                column: "TeamId");
 
             migrationBuilder.AddForeignKey(
-                name: "FK_Audits_Users_UserId",
-                table: "Audits",
+                name: "FK_EmailAudits_Users_UserId",
+                table: "EmailAudits",
                 column: "UserId",
                 principalTable: "Users",
                 principalColumn: "UserId",
                 onDelete: ReferentialAction.Cascade);
 
             migrationBuilder.AddForeignKey(
-                name: "FK_Comments_Users_UserId",
-                table: "Comments",
+                name: "FK_Leaves_Users_ApproverId",
+                table: "Leaves",
+                column: "ApproverId",
+                principalTable: "Users",
+                principalColumn: "UserId",
+                onDelete: ReferentialAction.Cascade);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Leaves_Users_UserId",
+                table: "Leaves",
                 column: "UserId",
                 principalTable: "Users",
                 principalColumn: "UserId",
                 onDelete: ReferentialAction.Cascade);
 
             migrationBuilder.AddForeignKey(
-                name: "FK_Departments_Users_ManagerId",
-                table: "Departments",
+                name: "FK_Schedules_Users_UserId",
+                table: "Schedules",
+                column: "UserId",
+                principalTable: "Users",
+                principalColumn: "UserId");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_TeamApprovers_Teams_TeamApproverTeamId",
+                table: "TeamApprovers",
+                column: "TeamApproverTeamId",
+                principalTable: "Teams",
+                principalColumn: "TeamId",
+                onDelete: ReferentialAction.Cascade);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_TeamApprovers_Users_ApproversUserId",
+                table: "TeamApprovers",
+                column: "ApproversUserId",
+                principalTable: "Users",
+                principalColumn: "UserId",
+                onDelete: ReferentialAction.Cascade);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Teams_Users_ManagerId",
+                table: "Teams",
                 column: "ManagerId",
                 principalTable: "Users",
                 principalColumn: "UserId");
@@ -495,28 +421,16 @@ namespace Timeoff.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_Departments_Companies_CompanyId",
-                table: "Departments");
+                name: "FK_Teams_Companies_CompanyId",
+                table: "Teams");
 
             migrationBuilder.DropForeignKey(
                 name: "FK_Users_Companies_CompanyId",
                 table: "Users");
 
             migrationBuilder.DropForeignKey(
-                name: "FK_Departments_Users_ManagerId",
-                table: "Departments");
-
-            migrationBuilder.DropTable(
-                name: "Audits");
-
-            migrationBuilder.DropTable(
-                name: "BankHolidays");
-
-            migrationBuilder.DropTable(
-                name: "Comments");
-
-            migrationBuilder.DropTable(
-                name: "DepartmentSupervisors");
+                name: "FK_Teams_Users_ManagerId",
+                table: "Teams");
 
             migrationBuilder.DropTable(
                 name: "EmailAudits");
@@ -525,7 +439,13 @@ namespace Timeoff.Migrations
                 name: "Leaves");
 
             migrationBuilder.DropTable(
+                name: "PublicHolidays");
+
+            migrationBuilder.DropTable(
                 name: "Schedules");
+
+            migrationBuilder.DropTable(
+                name: "TeamApprovers");
 
             migrationBuilder.DropTable(
                 name: "UserAllowanceAdjustments");
@@ -543,7 +463,7 @@ namespace Timeoff.Migrations
                 name: "Users");
 
             migrationBuilder.DropTable(
-                name: "Departments");
+                name: "Teams");
         }
     }
 }

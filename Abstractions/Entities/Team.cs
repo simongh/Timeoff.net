@@ -6,11 +6,11 @@
 
         public double Allowance { get; set; } = 20;
 
-        public bool IncludeBankHolidays { get; set; } = true;
+        public bool IncludePublicHolidays { get; set; } = true;
 
         public bool IsAccrued { get; set; }
 
-        public int DepartmentId { get; private set; }
+        public int TeamId { get; private set; }
 
         public int? ManagerId { get; set; }
 
@@ -22,6 +22,6 @@
 
         public ICollection<User> Users { get; set; } = new HashSet<User>();
 
-        public ICollection<User> Supervisors { get; set; } = new HashSet<User>();
+        public ICollection<User> Approvers { get; set; } = new HashSet<User>();
     }
 }

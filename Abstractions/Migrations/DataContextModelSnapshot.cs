@@ -17,19 +17,19 @@ namespace Timeoff.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.3");
 
-            modelBuilder.Entity("DepartmentUser", b =>
+            modelBuilder.Entity("TeamUser", b =>
                 {
-                    b.Property<int>("DepartmentsSupervisedDepartmentId")
+                    b.Property<int>("ApproversUserId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("SupervisorsUserId")
+                    b.Property<int>("TeamApproverTeamId")
                         .HasColumnType("INTEGER");
 
-                    b.HasKey("DepartmentsSupervisedDepartmentId", "SupervisorsUserId");
+                    b.HasKey("ApproversUserId", "TeamApproverTeamId");
 
-                    b.HasIndex("SupervisorsUserId");
+                    b.HasIndex("TeamApproverTeamId");
 
-                    b.ToTable("DepartmentSupervisors", (string)null);
+                    b.ToTable("TeamApprovers", (string)null);
                 });
 
             modelBuilder.Entity("Timeoff.Entities.Company", b =>
@@ -87,40 +87,6 @@ namespace Timeoff.Migrations
                     b.HasKey("CompanyId");
 
                     b.ToTable("Companies", (string)null);
-                });
-
-            modelBuilder.Entity("Timeoff.Entities.Department", b =>
-                {
-                    b.Property<int>("DepartmentId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<double>("Allowance")
-                        .HasColumnType("REAL");
-
-                    b.Property<int>("CompanyId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<bool>("IncludeBankHolidays")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<bool>("IsAccrued")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int?>("ManagerId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("DepartmentId");
-
-                    b.HasIndex("CompanyId");
-
-                    b.HasIndex("ManagerId");
-
-                    b.ToTable("Departments", (string)null);
                 });
 
             modelBuilder.Entity("Timeoff.Entities.EmailAudit", b =>
@@ -315,6 +281,40 @@ namespace Timeoff.Migrations
                     b.ToTable("Schedules", (string)null);
                 });
 
+            modelBuilder.Entity("Timeoff.Entities.Team", b =>
+                {
+                    b.Property<int>("TeamId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<double>("Allowance")
+                        .HasColumnType("REAL");
+
+                    b.Property<int>("CompanyId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("IncludePublicHolidays")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("IsAccrued")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("ManagerId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("TeamId");
+
+                    b.HasIndex("CompanyId");
+
+                    b.HasIndex("ManagerId");
+
+                    b.ToTable("Teams", (string)null);
+                });
+
             modelBuilder.Entity("Timeoff.Entities.User", b =>
                 {
                     b.Property<int>("UserId")
@@ -325,9 +325,6 @@ namespace Timeoff.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("CompanyId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("DepartmentId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Email")
@@ -358,6 +355,9 @@ namespace Timeoff.Migrations
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("TeamId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Token")
                         .HasColumnType("TEXT");
 
@@ -365,7 +365,7 @@ namespace Timeoff.Migrations
 
                     b.HasIndex("CompanyId");
 
-                    b.HasIndex("DepartmentId");
+                    b.HasIndex("TeamId");
 
                     b.ToTable("Users", (string)null);
                 });
@@ -425,36 +425,19 @@ namespace Timeoff.Migrations
                     b.ToTable("UserFeeds", (string)null);
                 });
 
-            modelBuilder.Entity("DepartmentUser", b =>
+            modelBuilder.Entity("TeamUser", b =>
                 {
-                    b.HasOne("Timeoff.Entities.Department", null)
-                        .WithMany()
-                        .HasForeignKey("DepartmentsSupervisedDepartmentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Timeoff.Entities.User", null)
                         .WithMany()
-                        .HasForeignKey("SupervisorsUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Timeoff.Entities.Department", b =>
-                {
-                    b.HasOne("Timeoff.Entities.Company", "Company")
-                        .WithMany("Departments")
-                        .HasForeignKey("CompanyId")
+                        .HasForeignKey("ApproversUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Timeoff.Entities.User", "Manager")
-                        .WithMany("ManagedDepartments")
-                        .HasForeignKey("ManagerId");
-
-                    b.Navigation("Company");
-
-                    b.Navigation("Manager");
+                    b.HasOne("Timeoff.Entities.Team", null)
+                        .WithMany()
+                        .HasForeignKey("TeamApproverTeamId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Timeoff.Entities.EmailAudit", b =>
@@ -540,6 +523,23 @@ namespace Timeoff.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Timeoff.Entities.Team", b =>
+                {
+                    b.HasOne("Timeoff.Entities.Company", "Company")
+                        .WithMany("Departments")
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Timeoff.Entities.User", "Manager")
+                        .WithMany("ManagedTeams")
+                        .HasForeignKey("ManagerId");
+
+                    b.Navigation("Company");
+
+                    b.Navigation("Manager");
+                });
+
             modelBuilder.Entity("Timeoff.Entities.User", b =>
                 {
                     b.HasOne("Timeoff.Entities.Company", "Company")
@@ -548,15 +548,15 @@ namespace Timeoff.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Timeoff.Entities.Department", "Department")
+                    b.HasOne("Timeoff.Entities.Team", "Team")
                         .WithMany("Users")
-                        .HasForeignKey("DepartmentId")
+                        .HasForeignKey("TeamId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Company");
 
-                    b.Navigation("Department");
+                    b.Navigation("Team");
                 });
 
             modelBuilder.Entity("Timeoff.Entities.UserAllowanceAdjustment", b =>
@@ -597,14 +597,14 @@ namespace Timeoff.Migrations
                     b.Navigation("Users");
                 });
 
-            modelBuilder.Entity("Timeoff.Entities.Department", b =>
-                {
-                    b.Navigation("Users");
-                });
-
             modelBuilder.Entity("Timeoff.Entities.LeaveType", b =>
                 {
                     b.Navigation("Leaves");
+                });
+
+            modelBuilder.Entity("Timeoff.Entities.Team", b =>
+                {
+                    b.Navigation("Users");
                 });
 
             modelBuilder.Entity("Timeoff.Entities.User", b =>
@@ -615,7 +615,7 @@ namespace Timeoff.Migrations
 
                     b.Navigation("Leave");
 
-                    b.Navigation("ManagedDepartments");
+                    b.Navigation("ManagedTeams");
 
                     b.Navigation("Schedule");
                 });

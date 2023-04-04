@@ -30,7 +30,7 @@ namespace Timeoff.Application.Users
 
             if (request.Team.HasValue)
             {
-                query = query.Where(u => u.DepartmentId == request.Team.Value);
+                query = query.Where(u => u.TeamId == request.Team.Value);
             }
             var year = DateTime.Today.Year;
 
@@ -42,8 +42,8 @@ namespace Timeoff.Application.Users
                     Id = u.UserId,
                     FirstName = u.FirstName,
                     LastName = u.LastName,
-                    DepartmentId = u.DepartmentId,
-                    DepartmentName = u.Department.Name,
+                    DepartmentId = u.TeamId,
+                    DepartmentName = u.Team.Name,
                     IsActive = u.IsActive,
                     IsAdmin = u.IsAdmin,
                     AllowanceCalculator = new()
@@ -54,11 +54,11 @@ namespace Timeoff.Application.Users
                             .Sum(a => a.Days),
                         Start = u.StartDate,
                         End = u.EndDate,
-                        Acrrue = u.Department.IsAccrued,
+                        Acrrue = u.Team.IsAccrued,
                         Adjustment = u.Adjustments
                             .Where(a => a.Year == year)
                             .FirstOrDefault()!,
-                        Allowance = u.Department.Allowance,
+                        Allowance = u.Team.Allowance,
                     }
                 })
                 .ToArrayAsync();
@@ -72,7 +72,7 @@ namespace Timeoff.Application.Users
                         .OrderBy(d => d.Name)
                         .Select(d => new ResultModels.ListItem
                         {
-                            Id = d.DepartmentId,
+                            Id = d.TeamId,
                             Value = d.Name,
                         })
                 })

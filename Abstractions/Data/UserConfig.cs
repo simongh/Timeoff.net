@@ -10,7 +10,7 @@ namespace Timeoff.Data
             builder.ToTable("Users");
 
             builder
-                .HasMany(p => p.ManagedDepartments)
+                .HasMany(p => p.ManagedTeams)
                 .WithOne(p => p.Manager);
 
             builder
@@ -18,9 +18,9 @@ namespace Timeoff.Data
                 .WithOne(p => p.User);
 
             builder
-                .HasMany(p => p.DepartmentsSupervised)
-                .WithMany(p => p.Supervisors)
-                .UsingEntity(p => p.ToTable("DepartmentSupervisors"));
+                .HasMany(p => p.TeamApprover)
+                .WithMany(p => p.Approvers)
+                .UsingEntity(p => p.ToTable("TeamApprovers"));
         }
     }
 }

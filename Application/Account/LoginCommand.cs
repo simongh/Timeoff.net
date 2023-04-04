@@ -43,6 +43,7 @@ namespace Timeoff.Application.Account
                 var user = await _dataContext.Users
                 .FindByEmail(request.Username)
                 .Where(u => u.IsActivated)
+                .Include(u => u.Company)
                 .FirstOrDefaultAsync(cancellationToken);
 
                 if (user != null && _usersService.Authenticate(user.Password, request.Password))
@@ -59,6 +60,7 @@ namespace Timeoff.Application.Account
                     {
                         new ("userid",user.UserId.ToString()),
                         new ("companyid",user.CompanyId.ToString()),
+                        new ("dateformat",user.Company.DateFormat),
                         new (ClaimTypes.Role, user.IsAdmin ? "Admin" : "User")
                     }, _currentUserService.AuthenticationScheme);
 

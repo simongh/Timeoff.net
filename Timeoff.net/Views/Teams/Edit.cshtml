@@ -4,7 +4,7 @@
 <form method="post" asp-controller="Teams" asp-action="Delete" asp-route-id="@Model.Id">
   <div class="row">
     <div class="col-md-3 lead">
-      Department details
+      Team details
     </div>
     <div class="col-md-1 col-md-offset-8">
       <button id="remove_btn" type="submit" class="pull-right btn btn-danger single-click" data-toggle="tooltip" data-placement="top" title="Remove team"><i class="fa fa-trash"></i> Delete</button>
@@ -18,7 +18,7 @@
 
 <div class="col-md-3 list-group">
   <a asp-controller="Teams" asp-action="Edit" asp-route-id="@Model.Id" class="list-group-item selected-item">General details</a>
-  <a asp-controller="Users" asp-action="Index" asp-route-department="@Model.Id" class="list-group-item">Employees from team</a>
+  <a asp-controller="Users" asp-action="Index" asp-route-team="@Model.Id" class="list-group-item">Employees from team</a>
 </div>
 
 <partial name="_Edit" />
