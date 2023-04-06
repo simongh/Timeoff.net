@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Timeoff.Application.Users;
 
 namespace Timeoff.Application
 {
@@ -47,9 +48,9 @@ namespace Timeoff.Application
             };
         }
 
-        public static async Task<Teams.TeamsViewModel> QueryDepartments(this IDataContext dataContext, int companyId)
+        public static async Task<Teams.TeamsViewModel> QueryTeams(this IDataContext dataContext, int companyId)
         {
-            var departments = await dataContext.Teams
+            var teams = await dataContext.Teams
                  .Where(d => d.CompanyId == companyId)
                  .OrderBy(d => d.Name)
                  .Select(d => new ResultModels.TeamResult
@@ -77,7 +78,7 @@ namespace Timeoff.Application
 
             return new()
             {
-                Teams = departments,
+                Teams = teams,
                 Users = users,
             };
         }
@@ -189,6 +190,25 @@ namespace Timeoff.Application
                 IsActive = schedule.IsActivated,
                 UserSpecific = schedule.User != null,
             };
+        }
+
+        public static async Task<Users.CreateViewModel> GetCreateViewModelAsync(this IDataContext dataContext, int companyId)
+        {
+            return await dataContext.Companies
+                .Where(c => c.CompanyId == companyId)
+                .Select(c => new CreateViewModel
+                {
+                    CompanyName = c.Name,
+                    DateFormat = c.DateFormat,
+                    Teams = c.Departments
+                        .OrderBy(t => t.Name)
+                        .Select(t => new ResultModels.ListItem
+                        {
+                            Id = t.TeamId,
+                            Value = t.Name,
+                        })
+                })
+                .FirstAsync();
         }
     }
 }

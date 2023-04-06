@@ -69,12 +69,12 @@ $(function () {
 
 $('#add_secondary_supervisers_modal').on('show.bs.modal', function (event) {
 	var button = $(event.relatedTarget),
-		department_name = button.data('department_name'),
-		department_id = button.data('department_id');
+		team_name = button.data('team_name'),
+		team_id = button.data('team_id');
 
 	var modal = $(this);
 
-	modal.find('.modal-title strong').text(department_name);
+	modal.find('.modal-title strong').text(team_name);
 
 	// Make modal window to be no hiegher then window and its content
 	// scrollable

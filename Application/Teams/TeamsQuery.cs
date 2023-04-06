@@ -6,12 +6,12 @@ namespace Timeoff.Application.Teams
     {
     }
 
-    internal class DepartmentsQueryHandler : IRequestHandler<TeamsQuery, TeamsViewModel>
+    internal class TeamsQueryHandler : IRequestHandler<TeamsQuery, TeamsViewModel>
     {
         private readonly IDataContext _dataContext;
         private readonly Services.ICurrentUserService _currentUserService;
 
-        public DepartmentsQueryHandler(
+        public TeamsQueryHandler(
             IDataContext dataContext,
             Services.ICurrentUserService currentUserService)
         {
@@ -21,7 +21,7 @@ namespace Timeoff.Application.Teams
 
         public async Task<TeamsViewModel> Handle(TeamsQuery request, CancellationToken cancellationToken)
         {
-            return await _dataContext.QueryDepartments(_currentUserService.CompanyId);
+            return await _dataContext.QueryTeams(_currentUserService.CompanyId);
         }
     }
 }

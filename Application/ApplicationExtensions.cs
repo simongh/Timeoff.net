@@ -24,7 +24,9 @@ namespace Timeoff.Application
             services.AddTransient<IValidator<Settings.UpdateSettingsCommand>, Settings.UpdateSettingsCommandValidator>();
             services.AddTransient<IValidator<Settings.UpdateLeaveTypesCommand>, Settings.UpdateLeaveTypesCommandValidator>();
 
+            services.AddTransient<Application.Users.UserDetailsBaseValidator>();
             services.AddTransient<IValidator<Users.UpdateUserCommand>, Users.UpdateUserCommandValidator>();
+            services.AddTransient<IValidator<Users.CreateCommand>, Users.CreateCommandValidator>();
 
             return services;
         }

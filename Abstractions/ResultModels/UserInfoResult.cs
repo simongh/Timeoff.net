@@ -2,9 +2,9 @@
 {
     public record UserInfoResult : Types.UserModel
     {
-        public int DepartmentId { get; init; }
+        public int TeamId { get; init; }
 
-        public string DepartmentName { get; init; } = null!;
+        public string TeamName { get; init; } = null!;
 
         public bool IsAdmin { get; init; }
 

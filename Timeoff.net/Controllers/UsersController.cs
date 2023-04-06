@@ -18,17 +18,24 @@ namespace Timeoff.Controllers
         [HttpGet("add")]
         public async Task<IActionResult> CreateAsync()
         {
-            return View();
+            return View(await _mediator.Send(new Application.Users.GetCreateCommand()));
         }
 
         [HttpPost("add")]
-        public async Task<IActionResult> AddPostAsync()
+        public async Task<IActionResult> AddPostAsync(Application.Users.CreateCommand command)
         {
-            return View();
+            var vm = await _mediator.Send(command);
+            if (vm.Messages!.Errors == null)
+            {
+                var usersVm = await _mediator.Send(new Application.Users.UsersQuery());
+                return View("Index", usersVm);
+            }
+
+            return View("Create", vm);
         }
 
         [HttpGet("import")]
-        public async Task<IActionResult> ImportAsync()
+        public IActionResult Import()
         {
             return View();
         }

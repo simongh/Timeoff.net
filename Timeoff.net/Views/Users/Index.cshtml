@@ -14,11 +14,11 @@
             </button>
             <ul class="dropdown-menu">
                 <li><a asp-controller="users" asp-action="import" id="import_users_btn">Import employees</a></li>
-                <li><a asp-controller="users" asp-action="add" id="add_new_department">Add single employee</a></li>
+                <li><a asp-controller="users" asp-action="create" id="add_new_user">Add single employee</a></li>
             </ul>
         </div>
         <form asp-action="index" method="GET">
-            <input type="hidden" name="department" value="@Model.TeamId">
+            <input type="hidden" name="team" value="@Model.TeamId">
             <input type="hidden" name="ascsv" value="true">
             <button class="btn btn-link pull-right single-click"
                     type="submit"
@@ -34,7 +34,7 @@
 
 <div class="row">&nbsp;</div>
 
-<div class="col-md-3 list-group all-departments">
+<div class="col-md-3 list-group all-teams">
     <a asp-controller="users" asp-action="index" class="list-group-item @IsSelected(null)">All teams</a>
     @foreach (var item in Model.Teams) {
         <a class="list-group-item @IsSelected(item.Id)" asp-action="index" asp-controller="users" asp-route-team="@item.Id">@item.Value</a>
@@ -68,7 +68,7 @@
                             }
                         </a>
                     </td>
-                    <td class="user_department"><a asp-controller="Teams" asp-action="Edit" asp-route-id="@item.Id">@item.DepartmentName</a></td>
+                    <td class="user_team"><a asp-controller="Teams" asp-action="Edit" asp-route-id="@item.Id">@item.TeamName</a></td>
                     <td>@IsAdmin(item.IsAdmin)</td>
                     <td class="vpp-days-remaining">@item.AvailableAllowance</td>
                     <td class="vpp-days-used">@item.DaysUsed</td>
