@@ -2,9 +2,9 @@
 
 namespace Timeoff.Application.Users
 {
-    internal class UpdateUserCommandValidator : AbstractValidator<UpdateUserCommand>
+    internal class CreateCommandValidator : AbstractValidator<CreateCommand>
     {
-        public UpdateUserCommandValidator(
+        public CreateCommandValidator(
             UserDetailsBaseValidator baseValidator)
         {
             Include(baseValidator);

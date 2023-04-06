@@ -1,0 +1,13 @@
+New TimeOff.Management account for {{Name}}
+=====
+<p>Hello <strong>{{Name}}</strong>,</p>
+
+<p><strong>{{ThisUser}}</strong> just registered new account for you as an employee of <strong>{{CompanyName}}</strong>.</p>
+
+<p>
+	Please follow the link below to set a new password:
+
+	{{> link href=(concatenate (SiteUrl) '/reset-password/?t=' (Token)) text='Set new password'}}
+</p>
+
+<p>Thanks</p>

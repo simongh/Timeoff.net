@@ -8,6 +8,7 @@ namespace Timeoff.Application
         private static HandlebarsTemplate<object, object>? _confirmRegistration;
         private static HandlebarsTemplate<object, object>? _resetPassword;
         private static HandlebarsTemplate<object, object>? _forgotPassword;
+        private static HandlebarsTemplate<object, object>? _newUser;
 
         public static Entities.EmailAudit ConfirmRegistration(this IEmailTemplateService templateService, Entities.User user)
         {
@@ -44,6 +45,23 @@ namespace Timeoff.Application
                 user.Company.LdapAuthEnabled,
                 templateService.Options.SiteUrl,
                 user.Token,
+            });
+
+            return templateService.Wrap(content, user);
+        }
+
+        public static Entities.EmailAudit NewUser(this IEmailTemplateService templateService,
+            Entities.User user,
+            Entities.User thisUser)
+        {
+            _newUser ??= templateService.CreateWrapper("NewUser");
+
+            var content = _newUser(new
+            {
+                Name = user.FirstName,
+                user.Token,
+                templateService.Options.SiteUrl,
+                ThisUser = thisUser.FirstName,
             });
 
             return templateService.Wrap(content, user);

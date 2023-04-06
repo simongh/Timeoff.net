@@ -58,7 +58,7 @@
             <label asp-for="StartDate" class="control-label">Started on</label>
             <div class="input-group col-md-4">
                 <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                <input class="form-control" asp-for="StartDate" type="text" required data-date-autoclose="1" data-provide="datepicker" data-date-format="@Model.DateFormat.ToJsFormat()" data-date-week-start="1" value="@Model.StartDate.ToString(Model.DateFormat)" aria-describedby="start_date_help">
+                <input class="form-control" asp-for="StartDate" type="text" required data-date-autoclose="1" data-provide="datepicker" data-date-format="@Model.DateFormat.ToJsFormat()" data-date-week-start="1" value="@Model.StartDate?.ToString(Model.DateFormat)" aria-describedby="start_date_help">
             </div>
             <span id="start_date_help" class="help-block">Date when employee started (inclusive)</span>
         </div>

@@ -10,12 +10,12 @@ namespace Timeoff.Application.Teams
         public IEnumerable<ValidationFailure>? Failures { get; set; }
     }
 
-    internal class NewDepartmentCommandHandler : IRequestHandler<UpdateTeamCommand, TeamsViewModel?>
+    internal class UpdateTeamCommandHandler : IRequestHandler<UpdateTeamCommand, TeamsViewModel?>
     {
         private readonly IDataContext _dataContext;
         private readonly Services.ICurrentUserService _currentUserService;
 
-        public NewDepartmentCommandHandler(
+        public UpdateTeamCommandHandler(
             IDataContext dataContext,
             Services.ICurrentUserService currentUserService)
         {
@@ -66,7 +66,7 @@ namespace Timeoff.Application.Teams
                 messages = request.Failures.ToFlashResult();
             }
 
-            var result = await _dataContext.QueryDepartments(_currentUserService.CompanyId);
+            var result = await _dataContext.QueryTeams(_currentUserService.CompanyId);
             result.Result = messages;
             return result;
         }

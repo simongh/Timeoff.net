@@ -38,7 +38,7 @@ namespace Timeoff.Application.Users
                 .AnyAsync();
             if (!teamValid)
             {
-                errors.Add(new(nameof(request.TeamId), "Department could not be found"));
+                errors.Add(new(nameof(request.TeamId), "Team could not be found"));
             }
 
             var user = await _dataContext.Users
@@ -81,7 +81,7 @@ namespace Timeoff.Application.Users
                 user!.FirstName = request.FirstName;
                 user.LastName = request.LastName;
                 user.Email = request.Email;
-                user.StartDate = request.StartDate;
+                user.StartDate = request.StartDate!.Value;
                 user.EndDate = request.EndDate;
                 user.IsActivated = request.IsActive;
                 user.IsAdmin = request.IsAdmin;

@@ -11,12 +11,12 @@ namespace Timeoff.Application.Teams
         public IEnumerable<ValidationFailure>? Failures { get; set; }
     }
 
-    internal class GetDepartmentCommandHandler : IRequestHandler<GetTeamCommand, EditTeamViewModel?>
+    internal class GetTeamCommandHandler : IRequestHandler<GetTeamCommand, EditTeamViewModel?>
     {
         private readonly IDataContext _dataContext;
         private readonly Services.ICurrentUserService _currentUserService;
 
-        public GetDepartmentCommandHandler(
+        public GetTeamCommandHandler(
             IDataContext dataContext,
             Services.ICurrentUserService currentUserService)
         {

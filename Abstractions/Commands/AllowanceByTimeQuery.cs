@@ -8,7 +8,7 @@ namespace Timeoff.Commands
 
         public DateTime EndDate { get; init; } = DateTime.Today.AddMonths(1).AddDays(-DateTime.Today.Day + 1);
 
-        public int? Department { get; init; }
+        public int? Team { get; init; }
     }
 
     internal class AllowanceByTimeQueryHandler : IRequestHandler<AllowanceByTimeQuery, ResultModels.AllowanceByTimeViewModel>

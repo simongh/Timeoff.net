@@ -42,8 +42,8 @@ namespace Timeoff.Application.Users
                     Id = u.UserId,
                     FirstName = u.FirstName,
                     LastName = u.LastName,
-                    DepartmentId = u.TeamId,
-                    DepartmentName = u.Team.Name,
+                    TeamId = u.TeamId,
+                    TeamName = u.Team.Name,
                     IsActive = u.IsActive,
                     IsAdmin = u.IsAdmin,
                     AllowanceCalculator = new()
@@ -68,7 +68,7 @@ namespace Timeoff.Application.Users
                 .Select(c => new
                 {
                     c.Name,
-                    Departments = c.Departments
+                    Teams = c.Departments
                         .OrderBy(d => d.Name)
                         .Select(d => new ResultModels.ListItem
                         {
@@ -82,7 +82,7 @@ namespace Timeoff.Application.Users
             {
                 CompanyName = company.Name,
                 TeamId = request.Team,
-                Teams = company.Departments,
+                Teams = company.Teams,
                 Users = users,
             };
         }
