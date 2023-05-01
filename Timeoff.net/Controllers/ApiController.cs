@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using MediatR;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Timeoff.Controllers
 {
@@ -6,10 +7,19 @@ namespace Timeoff.Controllers
     [ApiController]
     public class ApiController : ControllerBase
     {
+        private readonly IMediator _mediator;
+
+        public ApiController(IMediator mediator)
+        {
+            _mediator = mediator;
+        }
+
         [HttpGet("notifications")]
         public async Task<IActionResult> NotificationsAsync()
         {
-            throw new NotImplementedException();
+            var result = await _mediator.Send(new Application.Absences.NotificationCommand());
+
+            return Ok(result);
         }
     }
 }
