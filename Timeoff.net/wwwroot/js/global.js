@@ -257,7 +257,7 @@ $(document).ready(function () {
 					for (var i = 0; i < data.length; i++) {
 						const notification = data[i];
 						dropDown.append(
-							'<li><a href="' + notification.link + '">' + notification.label + '</a></li>'
+							'<li><a href="/requests/">' + notification.count + ' requests to process</a></li>'
 						);
 					}
 				}
