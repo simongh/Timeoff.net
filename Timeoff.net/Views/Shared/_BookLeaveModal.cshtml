@@ -18,7 +18,7 @@
 
                         <div class="form-group">
                             <label for="employee" class="control-label">For employee:</label>
-                            <select class="form-control" id="employee" name="user">
+                            <select class="form-control" id="employee" name="employee">
                                 @foreach (var item in employees)
                                 {
                                     <option value="@item.Id" selected="@(item.Id == NewLeaveService.MyId)">@item.Value</option>
@@ -28,8 +28,8 @@
                     }
 
                     <div class="form-group">
-                        <label for="leave_type" class="control-label">Leave type:</label>
-                        <select class="form-control" id="leave_type" name="leave_type" required>
+                        <label for="leavetype" class="control-label">Leave type:</label>
+                        <select class="form-control" id="leavetype" name="leavetype" required>
                             <option disabled="disabled" selected="selected" value="">-- select an option --</option>
                             @foreach (var item in await NewLeaveService.LeaveTypesAsync())
                             {
@@ -42,7 +42,7 @@
                         <label for="from" class="control-label">From:</label>
                         <div class="row">
                             <div class="col-md-5">
-                                <select class="form-control" name="from_date_part">
+                                <select class="form-control" name="frompart">
                                     <option value="@Timeoff.LeavePart.All" selected="selected">All day</option>
                                     <option value="@Timeoff.LeavePart.Morning">Morning</option>
                                     <option value="@Timeoff.LeavePart.Afternoon">Afternoon</option>
@@ -51,7 +51,7 @@
                             <div class="col-md-7">
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                                    <input type="text" class="form-control book-leave-from-input" id="from" data-provide="datepicker" data-date-autoclose="1" data-date-format="@NewLeaveService.DateFormat.ToJsFormat()" data-date-week-start="1" value="@DateTime.Today.ToString(NewLeaveService.DateFormat)" name="from_date">
+                                    <input type="text" class="form-control book-leave-from-input" id="from" data-provide="datepicker" data-date-autoclose="1" data-date-format="@NewLeaveService.DateFormat.ToJsFormat()" data-date-week-start="1" value="@DateTime.Today.ToString(NewLeaveService.DateFormat)" name="from">
                                 </div>
                             </div>
                         </div>
@@ -61,7 +61,7 @@
                         <label for="to" class="control-label">To:</label>
                         <div class="row">
                             <div class="col-md-5">
-                                <select class="form-control" name="to_date_part">
+                                <select class="form-control" name="topart">
                                     <option value="@Timeoff.LeavePart.All" selected="selected">All day</option>
                                     <option value="@Timeoff.LeavePart.Morning">Morning</option>
                                     <option value="@Timeoff.LeavePart.Afternoon">Afternoon</option>
@@ -70,15 +70,15 @@
                             <div class="col-md-7">
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                                    <input type="text" class="form-control book-leave-to-input" id="to" data-provide="datepicker" data-date-autoclose="1" data-date-format="@NewLeaveService.DateFormat.ToJsFormat()" data-date-week-start="1" value="@DateTime.Today.ToString(NewLeaveService.DateFormat)" name="to_date">
+                                    <input type="text" class="form-control book-leave-to-input" id="to" data-provide="datepicker" data-date-autoclose="1" data-date-format="@NewLeaveService.DateFormat.ToJsFormat()" data-date-week-start="1" value="@DateTime.Today.ToString(NewLeaveService.DateFormat)" name="to">
                                 </div>
                             </div>
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label for="leave_type" class="control-label">Comment (optional):</label>
-                        <textarea class="form-control" id="leave_reason" name="reason"></textarea>
+                        <label for="comment" class="control-label">Comment (optional):</label>
+                        <textarea class="form-control" id="comment" name="comment"></textarea>
                     </div>
 
                 </div>
