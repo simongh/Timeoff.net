@@ -29,6 +29,8 @@ namespace Timeoff.Application.Absences
         private readonly Services.ICurrentUserService _currentUserService;
         private readonly Services.INewLeaveService _leaveService;
 
+        private int UserId { get; set; }
+
         public BookCommandHandler(
             IDataContext dataContext,
             Services.ICurrentUserService currentUserService,
@@ -60,6 +62,13 @@ namespace Timeoff.Application.Absences
                 return;
             }
 
+            UserId = request.Employee ?? _currentUserService.UserId;
+
+            if (!await CheckOverlappingBookingsAsync(request))
+            {
+                return;
+            }
+
             var days = 0d;
             if (leaveType.UseAllowance)
                 days = await AdjustForCalendarAsync(request);
@@ -73,9 +82,9 @@ namespace Timeoff.Application.Absences
                 LeaveTypeId = request.LeaveType,
                 Days = days,
                 EmployeeComment = request.Comment,
-                UserId = request.Employee ?? _currentUserService.UserId,
+                UserId = UserId,
                 Status = LeaveStatus.New,
-                ApproverId = await GetApproverAsync(request.Employee ?? _currentUserService.UserId),
+                ApproverId = await GetApproverAsync(),
             };
 
             if (absence.ApproverId == absence.UserId)
@@ -90,10 +99,9 @@ namespace Timeoff.Application.Absences
 
         private async Task<double> AdjustForCalendarAsync(BookCommand request)
         {
-            var userid = request.Employee ?? _currentUserService.UserId;
             var schedule = await _dataContext.Users
                 .Where(u => u.CompanyId == _currentUserService.CompanyId)
-                .Where(u => u.UserId == userid)
+                .Where(u => u.UserId == UserId)
                 .Select(u => new
                 {
                     UserSchedule = u.Schedule,
@@ -157,10 +165,10 @@ namespace Timeoff.Application.Absences
             };
         }
 
-        private async Task<int> GetApproverAsync(int userId)
+        private async Task<int> GetApproverAsync()
         {
             var user = await _dataContext.Users
-                 .Where(u => u.UserId == userId)
+                 .Where(u => u.UserId == UserId)
                  .Select(u => new
                  {
                      u.AutoApprove,
@@ -169,9 +177,31 @@ namespace Timeoff.Application.Absences
                  .FirstAsync();
 
             if (user.AutoApprove)
-                return userId;
+                return UserId;
             else
                 return user.ManagerId!.Value;
+        }
+
+        private async Task<bool> CheckOverlappingBookingsAsync(BookCommand request)
+        {
+            var matching = await _dataContext.Leaves
+                .Where(a => a.UserId == UserId)
+                .Where(a =>
+                    (a.DateStart >= request.From && a.DateStart <= request.To)
+                    || (a.DateEnd >= request.From && a.DateEnd <= request.To)
+                    )
+                .ToArrayAsync();
+
+            foreach (var item in matching)
+            {
+                if (item.DayPartStart != LeavePart.Afternoon && request.ToPart != LeavePart.Morning)
+                    return false;
+
+                if (item.DayPartEnd != LeavePart.Morning && request.FromPart != LeavePart.Afternoon)
+                    return false;
+            }
+
+            return true;
         }
     }
 }
