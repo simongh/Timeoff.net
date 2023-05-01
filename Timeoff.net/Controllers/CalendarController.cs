@@ -14,9 +14,13 @@ namespace Timeoff.Controllers
         }
 
         [HttpPost("bookleave")]
-        public async Task<IActionResult> BookAsync()
+        public async Task<IActionResult> BookAsync(Application.Absences.BookCommand command)
         {
-            return View();
+            await _mediator.Send(command);
+
+            var result = _mediator.Send(new Commands.GetCalendarCommand());
+
+            return View("Index", result);
         }
 
         [HttpGet]
