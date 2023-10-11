@@ -1,4 +1,6 @@
-﻿<div class="header">
+﻿@using Timeoff
+
+<div class="header">
     <nav class="navbar navbar-default">
         <div class="container-fluid">
             <!-- Brand and toggle get grouped for better mobile display -->
@@ -16,9 +18,10 @@
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav navbar-left" asp-authorise>
                     <li><a asp-controller="Calendar" asp-action="Index">Calendar</a></li>
-                    @*{{# unless keep_team_view_hidden }}
+                    @if (User.ShowTeamView())
+                    {
                     <li><a asp-controller="Calendar" asp-action="TeamView">Team View</a></li>
-                    {{/ unless }}*@
+                    }
                     <li asp-authorise asp-roles="Admin" class="hidden-xs"><a asp-controller="Users" asp-action="Index">Employees</a></li>
                     <li class="navbar-form navbar-left">
                         <div class="form-group">

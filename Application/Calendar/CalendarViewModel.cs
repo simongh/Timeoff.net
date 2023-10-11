@@ -1,4 +1,4 @@
-﻿namespace Timeoff.ResultModels
+﻿namespace Timeoff.Application.Calendar
 {
     public record CalendarViewModel
     {
@@ -12,8 +12,8 @@
 
         public int LastYear => CurrentYear - 1;
 
-        public IEnumerable<CalendarMonthResult> Calendar { get; init; }
+        public IEnumerable<ResultModels.CalendarMonthResult> Calendar { get; init; }
 
-        public AllowanceSummaryResult AllowanceSummary { get; init; }
+        public ResultModels.AllowanceSummaryResult AllowanceSummary { get; init; }
     }
 }

@@ -1,17 +1,12 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
-
+﻿@model Timeoff.Application.Calendar.TeamViewModel
 <h1>Team View</h1>
 
 <div class="row">
-    <div class="col-md-6 lead">{{logged_user.name}} {{logged_user.lastname}}'s team <a asp-controller="Calendar" asp-action="Feeds" data-toggle="tooltip" data-placement="right" title="Export Team View to external calendars"><span class="fa fa-rss"></span></a></div>
+    <div class="col-md-6 lead">@Model.Name's team <a asp-controller="Calendar" asp-action="Feeds" data-toggle="tooltip" data-placement="right" title="Export Team View to external calendars"><span class="fa fa-rss"></span></a></div>
     <div class="col-md-3 col-md-offset-3">
         <div class="btn-group btn-group-sm pull-right" role="group">
-            <a href="/calendar/teamview/?{{> team_view_url_parameters grouped_mode = 0 save_grouped_mode = 1 save_current_department = 1 }}" class="btn btn-default" {{#unless grouped_mode}}disabled=disabled{{/unless}}>All</a>
-            <a href="/calendar/teamview/?{{> team_view_url_parameters grouped_mode = 1 save_grouped_mode = 1 save_current_department = 1 }}" class="btn btn-default" {{#if grouped_mode}}disabled=disabled{{/if}}>By department</a>
+            <a asp-controller="calendar" asp-action="teamview" class="btn btn-default" disabled="@(!Model.Grouped)">All</a>
+            <a asp-controller="calendar" asp-action="teamview" asp-route-grouped="true" class="btn btn-default" disabled="@Model.Grouped">By department</a>
         </div>
     </div>
 </div>
@@ -23,24 +18,24 @@
 <nav>
     <div class="row">
         <div class="col-xs-2">
-            <a class="btn btn-link btn-lg" href="/calendar/teamview/?{{> team_view_url_parameters base_date = prev_date }}"><span aria-hidden="true" class="fa fa-chevron-left"></span> {{as_date_formatted prev_date 'MMM' }}</a>
+            <a class="btn btn-link btn-lg" asp-controller="calendar" asp-action="teamview" asp-route-year="@Model.Previous.Year" asp-route-month="@Model.Previous.Month"><span aria-hidden="true" class="fa fa-chevron-left"></span> @Model.Previous.ToString("MMM")</a>
         </div>
 
         <div class="col-xs-8 calendar-section-caption">
-            <button id="team_view_month_select_btn" class="btn btn-link btn-lg" data-tom="/calendar/teamview/?{{> team_view_url_parameters base_date=0 }}" data-provide="datepicker" data-date-format="yyyy-mm" data-date-autoclose="1" data-date-min-view-mode="months">{{as_date_formatted base_date 'MMMM, YYYY' }} <i class="fa fa-angle-down"></i></button>
+            <button id="team_view_month_select_btn" class="btn btn-link btn-lg" data-tom="@Url.Action(controller:"calendar", action:"teamview")" data-provide="datepicker" data-date-format="yyyy-mm" data-date-autoclose="1" data-date-min-view-mode="months">@Model.CurrentDate.ToString("MMMM, yyyy") <i class="fa fa-angle-down"></i></button>
         </div>
 
         <div class="col-xs-2">
-            <a class="btn btn-link btn-lg pull-right" href="/calendar/teamview/?{{> team_view_url_parameters base_date = next_date }}">{{as_date_formatted next_date 'MMM'}} <span aria-hidden="true" class="fa fa-chevron-right"></span></a>
+            <a class="btn btn-link btn-lg pull-right" asp-controller="calendar" asp-action="teamview" asp-route-year="@Model.Next.Year" asp-route-month="@Model.Next.Month">@Model.Next.ToString("MMM") <span aria-hidden="true" class="fa fa-chevron-right"></span></a>
         </div>
     </div>
 </nav>
 
 <div class="row">&nbsp;</div>
 
-{{#if grouped_mode}}
-
-{{#each users_and_leaves_by_departments}}
+@if (Model.Grouped)
+{
+    @* { {#each users_and_leaves_by_departments}} *@
 
 @*{{#if @index}}
 <div class="row">
@@ -90,9 +85,10 @@
     </div>
 </div>
 
-{{/each}}
-
-{{else}}
+@* { {/ each} } *@
+    }
+    else
+    {
 
 
 <div class="row clearfix">
@@ -116,37 +112,48 @@
                         </div>
                     </td>
 
-                    {{#each users_and_leaves.0.days }}
-                    <td colspan="2" class="team-view-header"><b>{{as_date_formatted this.moment 'dd'}}</b></td>
-                    {{/each}}
+                    @for (int i = 0; Model.CurrentDate.AddDays(i).Month == Model.CurrentDate.Month; i++)
+                    {
+                        <td colspan="2" class="team-view-header"><b>@Model.CurrentDate.AddDays(i).ToString("ddd")</b></td>
+                    }
+
                 </tr>
             </thead>
 
             <tbody>
                 {{#each users_and_leaves}}
                 <tr class="teamview-user-list-row" data-vpp-user-list-row={{this.user.id}}>
-                    <td class="left-column-cell cross-link user-details-summary-trigger" data-user-id={{this.user.id}}>{{#if ../logged_user.admin}} {{#with this.user }}<a href="/users/edit/{{this.id}}/">{{ this.full_name }}</a>{{/with}}{{else}}{{#with this.user }}<span>{{ this.full_name }}</span>{{/with}}{{/if}}</td>
-                    <td>
-                        <span class="teamview-deducted-days"
-                              {{#if statistics }}
-                              data-content="In {{as_date_formatted ../base_date 'MMMM, YYYY' }} {{# with this.user }}{{this.full_name}} used {{../statistics.deducted_days }} days from allowance{{/with}}"
-                              data-placement="right"
-                              data-toggle="popover"
-                              data-trigger="focus hover"
-                              {{ /if}}>
-                            {{#if statistics }}{{ statistics.deducted_days }}{{/if}}
-                        </span>
-                    </td>
-                    {{#each this.days}}
-                    {{> calendar_cell day = this}}
-                    {{/each}}
-                </tr>
+                    <td class="left-column-cell cross-link user-details-summary-trigger" data-user-id={{this.user.id}}>
+                        @if (this.User.IsInRole("Admin"))
+                            {
+                                <a asp-controller="users" asp-action="edit" asp-route-id="">{{ this.full_name }}</a>
+                            }else{
+                                <span>{{ this.full_name }}</span>
+                            }</td>
+                            <td>
+                                <span class="teamview-deducted-days"
+                                {{#if statistics }}
+                                data-content="In {{as_date_formatted ../base_date 'MMMM, YYYY' }} {{# with this.user }}{{this.full_name}} used {{../statistics.deducted_days }} days from allowance{{/with}}"
+                                data-placement="right"
+                                data-toggle="popover"
+                                data-trigger="focus hover"
+                                {{ /if}}>
+                                    {{#if statistics }}{{ statistics.deducted_days }}{{/if}}
+                                </span>
+                            </td>
+                            @for (int i = 0; Model.CurrentDate.AddDays(i).Month == Model.CurrentDate.Month; i++)
+                            {
+                                <partial name="_CalendarCell" model="new Timeoff.ResultModels.CalendarDayResult{
+Day = i.ToString(),
+}" />
+                            }
+                    </tr>
                 {{/each}}
             </tbody>
         </table>
     </div>
 </div>
 
-{{/if}}
+}
 
 <div class="row clearfix">&nbsp;</div>

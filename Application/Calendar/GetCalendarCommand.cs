@@ -1,16 +1,16 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Timeoff.Commands
+namespace Timeoff.Application.Calendar
 {
-    public record GetCalendarCommand : IRequest<ResultModels.CalendarViewModel>
+    public record GetCalendarCommand : IRequest<CalendarViewModel>
     {
         public int Year { get; init; } = DateTime.Today.Year;
 
         public bool ShowFullYear { get; init; }
     }
 
-    internal class GetCalendarCommandHandler : IRequestHandler<GetCalendarCommand, ResultModels.CalendarViewModel>
+    internal class GetCalendarCommandHandler : IRequestHandler<GetCalendarCommand, CalendarViewModel>
     {
         private readonly IDataContext _dataContext;
         private readonly Services.ICurrentUserService _currentUserService;
@@ -23,7 +23,7 @@ namespace Timeoff.Commands
             _currentUserService = currentUserService;
         }
 
-        public async Task<ResultModels.CalendarViewModel> Handle(GetCalendarCommand request, CancellationToken cancellationToken)
+        public async Task<CalendarViewModel> Handle(GetCalendarCommand request, CancellationToken cancellationToken)
         {
             var user = await _dataContext.Users
                  .FindById(_currentUserService.UserId)

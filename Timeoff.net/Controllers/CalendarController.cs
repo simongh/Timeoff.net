@@ -18,23 +18,24 @@ namespace Timeoff.Controllers
         {
             await _mediator.Send(command);
 
-            var result = _mediator.Send(new Commands.GetCalendarCommand());
+            var result = _mediator.Send(new Application.Calendar.GetCalendarCommand());
 
             return View("Index", result);
         }
 
         [HttpGet]
         [Route("~/")]
-        public async Task<IActionResult> IndexAsync([FromQuery] Commands.GetCalendarCommand command)
+        public async Task<IActionResult> IndexAsync([FromQuery] Application.Calendar.GetCalendarCommand command)
         {
             var vm = await _mediator.Send(command);
             return View(vm);
         }
 
         [HttpGet("teamview")]
-        public async Task<IActionResult> TeamViewAsync()
+        public async Task<IActionResult> TeamViewAsync([FromQuery] Application.Calendar.GetTeamViewCommand command)
         {
-            return View();
+            var vm = await _mediator.Send(command);
+            return View(vm);
         }
 
         [HttpGet("feeds")]

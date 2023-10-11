@@ -98,6 +98,10 @@ function getUrlVars(url) {
 		url = window.location.href;
 	}
 	var vars = {}, hash;
+
+	if (url.indexOf('?') == -1)
+		return vars;
+
 	var hashes = url.slice(url.indexOf('?') + 1).split('&');
 	for (var i = 0; i < hashes.length; i++) {
 		hash = hashes[i].split('=');
@@ -122,7 +126,8 @@ $(document).ready(function () {
 			form.action = url;
 
 			var url_params = getUrlVars(url);
-			url_params['date'] = e.format('yyyy-mm');
+			url_params['year'] = e.format('yyyy');
+			url_params['month'] = e.format('mm');
 
 			// Move query parameters into the form
 			$.each(url_params, function (key, val) {
