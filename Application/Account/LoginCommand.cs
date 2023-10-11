@@ -61,6 +61,7 @@ namespace Timeoff.Application.Account
                         new ("userid",user.UserId.ToString()),
                         new ("companyid",user.CompanyId.ToString()),
                         new ("dateformat",user.Company.DateFormat),
+                        new ("showTeamView",(!user.Company.IsTeamViewHidden).ToString()),
                         new (ClaimTypes.Role, user.IsAdmin ? "Admin" : "User")
                     }, _currentUserService.AuthenticationScheme);
 

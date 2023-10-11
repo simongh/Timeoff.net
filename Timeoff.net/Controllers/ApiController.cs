@@ -5,11 +5,11 @@ namespace Timeoff.Controllers
 {
     [Route("api/v1")]
     [ApiController]
-    public class ApiController : ControllerBase
+    public class NotificationApiController : ControllerBase
     {
         private readonly IMediator _mediator;
 
-        public ApiController(IMediator mediator)
+        public NotificationApiController(IMediator mediator)
         {
             _mediator = mediator;
         }

@@ -4,7 +4,7 @@ namespace Timeoff.Controllers
 {
     [Route("integration/v1")]
     [ApiController]
-    public class IntegrationController : ApiController
+    public class IntegrationController : ControllerBase
     {
         [HttpGet("report/allowance")]
         public async Task<IActionResult> AllowanceReportAsync()
