@@ -6,9 +6,9 @@ namespace Timeoff
     {
         public static bool ShowTeamView(this ClaimsPrincipal principal)
         {
-            var claim = principal.Claims.FirstOrDefault(c => c.Type == "showTeamView");
+            bool.TryParse(principal.FindFirst("showTeamView")?.Value, out bool result);
 
-            return claim?.Value == true.ToString();
+            return result;
         }
     }
 }

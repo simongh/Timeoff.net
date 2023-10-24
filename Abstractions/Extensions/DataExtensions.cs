@@ -70,5 +70,13 @@ namespace Timeoff
             schedule.Saturday = ToWorkingDay(model.Saturday);
             schedule.Sunday = ToWorkingDay(model.Sunday);
         }
+
+        public static IQueryable<Entities.User> ActiveUsers(this DbSet<Entities.User> users, int companyId)
+        {
+            return users
+                .Where(u => u.CompanyId == companyId)
+                .Where(u => u.StartDate <= DateTime.Today)
+                .Where(u => u.EndDate == null || u.EndDate >= DateTime.Today);
+        }
     }
 }

@@ -37,6 +37,8 @@ namespace Timeoff.Services
 
         public string AuthenticationScheme => CookieAuthenticationDefaults.AuthenticationScheme;
 
+        public bool IsAdmin => _httpContextAccessor.HttpContext!.User.IsInRole("Admin");
+
         public Task SignInAsync(ClaimsPrincipal principal)
         {
             return _httpContextAccessor.HttpContext?.SignInAsync(principal) ?? Task.CompletedTask;

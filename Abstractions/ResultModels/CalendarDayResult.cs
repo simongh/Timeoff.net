@@ -2,11 +2,15 @@
 {
     public class CalendarDayResult
     {
-        public string Day { get; init; }
+        public int UserId { get; init; }
+
+        public DateTime? Date { get; init; }
+
+        public string Day => Date?.Day.ToString() ?? "";
 
         public bool IsPublicHoliday => HolidayName != null;
 
-        public bool IsWeekend { get; init; }
+        public bool IsWeekend => Date?.DayOfWeek == DayOfWeek.Sunday || Date?.DayOfWeek == DayOfWeek.Saturday;
 
         public bool IsLeave => LeaveId.HasValue;
 
@@ -14,7 +18,7 @@
 
         public bool IsAfternoon { get; init; }
 
-        public bool IsToday { get; init; }
+        public bool IsToday => Date == DateTime.Today;
 
         public bool IsPending => LeaveStatus.HasValue && LeaveStatus.Value == Timeoff.LeaveStatus.New;
 

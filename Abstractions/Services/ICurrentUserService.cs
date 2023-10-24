@@ -13,6 +13,8 @@ namespace Timeoff.Services
         bool IsAuthenticated { get; }
         string AuthenticationScheme { get; }
 
+        bool IsAdmin { get; }
+
         Task SignInAsync(ClaimsPrincipal principal);
     }
 }
