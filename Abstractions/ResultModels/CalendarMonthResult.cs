@@ -20,9 +20,7 @@
             {
                 if (day.Ticks < date.Ticks)
                     weeks.Add(new()
-                    {
-                        Day = ""
-                    });
+                    { });
                 else
                 {
                     var leave = absences.FirstOrDefault(a => a.DateStart >= day && a.DateEnd <= day);
@@ -30,9 +28,7 @@
 
                     weeks.Add(new()
                     {
-                        Day = day.Day.ToString(),
-                        IsWeekend = day.DayOfWeek == DayOfWeek.Sunday || day.DayOfWeek == DayOfWeek.Saturday,
-                        IsToday = day == DateTime.Today,
+                        Date = day,
                         HolidayName = holiday?.Name,
                         LeaveMessage = leave?.EmployeeComment,
                         LeaveStatus = leave?.Status,

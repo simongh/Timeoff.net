@@ -1,32 +1,31 @@
 ﻿@model Timeoff.Application.Calendar.TeamViewModel
+@using Timeoff;
 <h1>Team View</h1>
 
 <div class="row">
     <div class="col-md-6 lead">@Model.Name's team <a asp-controller="Calendar" asp-action="Feeds" data-toggle="tooltip" data-placement="right" title="Export Team View to external calendars"><span class="fa fa-rss"></span></a></div>
     <div class="col-md-3 col-md-offset-3">
         <div class="btn-group btn-group-sm pull-right" role="group">
-            <a asp-controller="calendar" asp-action="teamview" class="btn btn-default" disabled="@(!Model.Grouped)">All</a>
-            <a asp-controller="calendar" asp-action="teamview" asp-route-grouped="true" class="btn btn-default" disabled="@Model.Grouped">By department</a>
+            <a asp-controller="calendar" asp-action="teamview" asp-route-year="@Model.CurrentDate.Year" asp-route-month="@Model.CurrentDate.Month" class="btn btn-default" disabled="@(!Model.Grouped)">All</a>
+            <a asp-controller="calendar" asp-action="teamview" asp-route-grouped="true" asp-route-year="@Model.CurrentDate.Year" asp-route-month="@Model.CurrentDate.Month" class="btn btn-default" disabled="@Model.Grouped">By team</a>
         </div>
     </div>
 </div>
-
-{{> show_flash_messages }}
 
 <div class="row">&nbsp;</div>
 
 <nav>
     <div class="row">
         <div class="col-xs-2">
-            <a class="btn btn-link btn-lg" asp-controller="calendar" asp-action="teamview" asp-route-year="@Model.Previous.Year" asp-route-month="@Model.Previous.Month"><span aria-hidden="true" class="fa fa-chevron-left"></span> @Model.Previous.ToString("MMM")</a>
+            <a class="btn btn-link btn-lg" asp-route-year="@Model.Previous.Year" asp-route-month="@Model.Previous.Month" asp-route-team="@Model.SelectedTeam" asp-route-grouped="@Model.Grouped"><span aria-hidden="true" class="fa fa-chevron-left"></span> @Model.Previous.ToString("MMM")</a>
         </div>
 
         <div class="col-xs-8 calendar-section-caption">
-            <button id="team_view_month_select_btn" class="btn btn-link btn-lg" data-tom="@Url.Action(controller:"calendar", action:"teamview")" data-provide="datepicker" data-date-format="yyyy-mm" data-date-autoclose="1" data-date-min-view-mode="months">@Model.CurrentDate.ToString("MMMM, yyyy") <i class="fa fa-angle-down"></i></button>
+            <button id="team_view_month_select_btn" class="btn btn-link btn-lg" data-tom="@Url.Action(controller:"calendar", action:"teamview",values:new{dept= Model.SelectedTeam})" data-provide="datepicker" data-date-format="yyyy-mm" data-date-autoclose="1" data-date-min-view-mode="months">@Model.CurrentDate.ToString("MMMM, yyyy") <i class="fa fa-angle-down"></i></button>
         </div>
 
         <div class="col-xs-2">
-            <a class="btn btn-link btn-lg pull-right" asp-controller="calendar" asp-action="teamview" asp-route-year="@Model.Next.Year" asp-route-month="@Model.Next.Month">@Model.Next.ToString("MMM") <span aria-hidden="true" class="fa fa-chevron-right"></span></a>
+            <a class="btn btn-link btn-lg pull-right" asp-route-year="@Model.Next.Year" asp-route-month="@Model.Next.Month" asp-route-team="@Model.SelectedTeam" asp-route-grouped="@Model.Grouped">@Model.Next.ToString("MMM") <span aria-hidden="true" class="fa fa-chevron-right"></span></a>
         </div>
     </div>
 </nav>
@@ -35,125 +34,118 @@
 
 @if (Model.Grouped)
 {
-    @* { {#each users_and_leaves_by_departments}} *@
-
-@*{{#if @index}}
-<div class="row">
-    <div class="col-md-12">&nbsp;</div>
-</div>
-{{/if}}*@
-
-<div class="row clearfix">
-    <div class="col-md-12">
-        <table class="team-view-table table-hover">
-            <thead>
-                <tr>
-                    <td class="team-view-header" colspan="2">
-                        <div class="pull-left">
-                            <h3>{{this.departmentName}}</h3>
-                        </div>
-                    </td>
-
-                    {{#each this.users_and_leaves.0.days }}
-                    <td colspan="2" class="team-view-header"><b>{{as_date_formatted this.moment 'dd'}}</b></td>
-                    {{/each}}
-                </tr>
-            </thead>
-
-            <tbody>
-                {{#each this.users_and_leaves}}
-                <tr class="teamview-user-list-row" data-vpp-user-list-row={{this.user.id}}>
-                    <td class="left-column-cell cross-link user-details-summary-trigger" data-user-id={{this.user.id}}>{{#if ../../logged_user.admin}} {{#with this.user }}<a href="/users/edit/{{this.id}}/">{{ this.full_name }}</a>{{/with}}{{else}}{{#with this.user }}<span>{{ this.full_name }}</span>{{/with}}{{/if}}</td>
-                    <td>
-                        <span class="teamview-deducted-days"
-                              {{#if statistics }}
-                              data-content="In {{as_date_formatted ../../base_date 'MMMM, YYYY' }} {{#with this.user }}{{this.full_name}} used {{../../statistics.deducted_days }} days from allowance{{/with}}"
-                              data-placement="right"
-                              data-toggle="popover"
-                              data-trigger="focus hover"
-                              {{ /if}}>
-                            {{#if statistics }}{{ statistics.deducted_days }}{{/if}}
-                        </span>
-                    </td>
-                    {{#each this.days}}
-                    {{> calendar_cell day = this}}
-                    {{/each}}
-                </tr>
-                {{/each}}
-            </tbody>
-        </table>
-    </div>
-</div>
-
-@* { {/ each} } *@
-    }
-    else
+    var index = 0;
+    @foreach (var team in Model.Teams)
     {
+        if (index > 0)
+        {
+            <div class="row">
+                <div class="col-md-12">&nbsp;</div>
+            </div>
 
-
-<div class="row clearfix">
-    <div class="col-md-12">
-        <table class="team-view-table table-hover">
-            <thead>
-                <tr>
-                    <td class="team-view-header" colspan="2">
-                        <div class="dropdown pull-left">
-                            <button class="btn btn-default dropdown-toggle left-column-cell" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                {{#if current_department }}{{current_department.name}}{{else}}All departments{{/if}}
-                                <span class="caret"></span>
-                            </button>
-                            <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                                <li><a href="?{{> team_view_url_parameters current_department = null save_current_department = 1 }}">All</a></li>
-                                <li role="separator" class="divider"></li>
-                                {{#each related_departments}}
-                                <li><a href="?{{> team_view_url_parameters base_date = ../base_date current_department = this save_current_department = 1 }}">{{this.name}}</a></li>
-                                {{/each}}
-                            </ul>
-                        </div>
-                    </td>
-
-                    @for (int i = 0; Model.CurrentDate.AddDays(i).Month == Model.CurrentDate.Month; i++)
-                    {
-                        <td colspan="2" class="team-view-header"><b>@Model.CurrentDate.AddDays(i).ToString("ddd")</b></td>
-                    }
-
-                </tr>
-            </thead>
-
-            <tbody>
-                {{#each users_and_leaves}}
-                <tr class="teamview-user-list-row" data-vpp-user-list-row={{this.user.id}}>
-                    <td class="left-column-cell cross-link user-details-summary-trigger" data-user-id={{this.user.id}}>
-                        @if (this.User.IsInRole("Admin"))
-                            {
-                                <a asp-controller="users" asp-action="edit" asp-route-id="">{{ this.full_name }}</a>
-                            }else{
-                                <span>{{ this.full_name }}</span>
-                            }</td>
-                            <td>
-                                <span class="teamview-deducted-days"
-                                {{#if statistics }}
-                                data-content="In {{as_date_formatted ../base_date 'MMMM, YYYY' }} {{# with this.user }}{{this.full_name}} used {{../statistics.deducted_days }} days from allowance{{/with}}"
-                                data-placement="right"
-                                data-toggle="popover"
-                                data-trigger="focus hover"
-                                {{ /if}}>
-                                    {{#if statistics }}{{ statistics.deducted_days }}{{/if}}
-                                </span>
-                            </td>
-                            @for (int i = 0; Model.CurrentDate.AddDays(i).Month == Model.CurrentDate.Month; i++)
-                            {
-                                <partial name="_CalendarCell" model="new Timeoff.ResultModels.CalendarDayResult{
-Day = i.ToString(),
-}" />
-                            }
-                    </tr>
-                {{/each}}
-            </tbody>
-        </table>
-    </div>
-</div>
-
+        }
+        await TeamView(team.Id);
+        index++;
+    }
+}
+else
+{
+    await TeamView(null);
 }
 
 <div class="row clearfix">&nbsp;</div>
+
+@functions{
+    public async Task TeamView(int? teamId)
+    {
+        <div class="row clearfix">
+            <div class="col-md-12">
+                <table class="team-view-table table-hover">
+                    <thead>
+                        <tr>
+                            <td class="team-view-header" colspan="2">
+                                    @if (teamId == null)
+                                    {
+                                        <div class="dropdown pull-left">
+                                            <button class="btn btn-default dropdown-toggle left-column-cell" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                @if (Model.SelectedTeam.HasValue)
+                                                {
+                                                    @Model.Teams.FirstOrDefault(d => d.Id == Model.SelectedTeam.Value)?.Value
+                                                }
+                                                else
+                                                {
+                                                    @:All teams
+                                                }
+                                                <span class="caret"></span>
+                                            </button>
+                                        <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                                            <li><a asp-route-year="@Model.CurrentDate.Year" asp-route-month="@Model.CurrentDate.Month">All</a></li>
+                                            <li role="separator" class="divider"></li>
+                                            @foreach (var item in Model.Teams)
+                                            {
+                                                <li><a asp-route-year="@Model.CurrentDate.Year" asp-route-month="@Model.CurrentDate.Month" asp-route-team="@item.Id">@item.Value</a></li>
+                                            }
+                                            @* {{#each related_departments}}
+                                    <li><a href="?{{> team_view_url_parameters base_date = ../base_date current_department = this save_current_department = 1 }}">{{this.name}}</a></li>
+                                    {{/each}} *@
+                                        </ul>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="pull-left">
+                                        <h3>@Model.Teams.First(t=>t.Id == teamId.Value).Value</h3>
+                                    </div>
+                                }
+
+                            </td>
+
+                            @for (int i = 0; Model.CurrentDate.AddDays(i).Month == Model.CurrentDate.Month; i++)
+                            {
+                                <td colspan="2" class="team-view-header"><b>@Model.CurrentDate.AddDays(i).ToString("ddd")</b></td>
+                            }
+
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach (var user in Model.Users.Where(u => teamId == null ? true : u.TeamId ==  teamId.Value))
+                        {
+                            <tr class="teamview-user-list-row" data-vpp-user-list-row="@user.UserId">
+                                <td class="left-column-cell cross-link user-details-summary-trigger" data-user-id="@user.UserId">
+                                    @if (this.User.IsInRole("Admin"))
+                                    {
+                                        <a asp-controller="users" asp-action="edit" asp-route-id="@user.UserId">@user.Name</a>
+                                    }
+                                    else
+                                    {
+                                        <span>@user.Name</span>
+                                    }
+                                </td>
+                                <td>
+                                    @{
+                                        var days = Model.DaysDeducted(user.UserId);
+                                    }
+                                    <span class="teamview-deducted-days"
+                                        data-content="In @Model.CurrentDate.ToString("MMMM, yyyy") @user.Name used @days days from allowance"
+                                        data-placement="right"
+                                        data-toggle="popover"
+                                        data-trigger="focus hover">@days</span>
+                                </td>
+                                @for (DateTime i = Model.CurrentDate; i.Month == Model.CurrentDate.Month; i = i.AddDays(1))
+                                {
+                                    var day = Model.CalendarDays.FirstOrDefault(d => d.Date == i && d.UserId == user.UserId) ?? new()
+                                    {
+                                        Date = i
+                                    };
+                                    <partial name="_CalendarCell" model="day" />
+                                }
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    }
+}
