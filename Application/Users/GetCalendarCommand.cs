@@ -8,4 +8,12 @@ namespace Timeoff.Application.Users
 
         public int Year { get; init; } = DateTime.Today.Year;
     }
+
+    public class GetCalendarComamndHandler : IRequestHandler<GetCalendarCommand, CalendarViewModel>
+    {
+        public Task<CalendarViewModel> Handle(GetCalendarCommand request, CancellationToken cancellationToken)
+        {
+            return Task.FromResult(new CalendarViewModel());
+        }
+    }
 }

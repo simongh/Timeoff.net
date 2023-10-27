@@ -12,8 +12,10 @@
 
         public int LastYear => CurrentYear - 1;
 
-        public IEnumerable<ResultModels.CalendarMonthResult> Calendar { get; init; }
+        public IEnumerable<ResultModels.CalendarMonthResult> Calendar { get; init; } = null!;
 
         public ResultModels.AllowanceSummaryResult AllowanceSummary { get; init; }
+
+        public StatsResult Statistics { get; init; } = null!;
     }
 }
