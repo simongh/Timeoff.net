@@ -86,9 +86,10 @@ namespace Timeoff.Controllers
         }
 
         [HttpGet("edit/{id:int}/calendar")]
-        public async Task<IActionResult> CalendarAsync(int id)
+        public async Task<IActionResult> CalendarAsync([FromRoute] Application.Users.GetCalendarCommand command)
         {
-            return View();
+            var vm = await _mediator.Send(command);
+            return View(vm);
         }
 
         [HttpPost("edit/{id:int}")]

@@ -30,13 +30,35 @@ namespace Timeoff.Application.Calendar
                  .AsNoTracking()
                  .FirstOrDefaultAsync();
 
+            var team = await _dataContext.Teams
+                .Where(t => t.TeamId == user.TeamId)
+                .Select(t => new
+                {
+                    Team = new ResultModels.ListItem
+                    {
+                        Id = t.TeamId,
+                        Value = t.Name,
+                    },
+                    Manager = new ManagerResult
+                    {
+                        Name = t.Manager!.FirstName + " " + t.Manager.LastName,
+                        Email = t.Manager.Email,
+                    },
+                })
+                .FirstAsync();
+
             return new()
             {
                 CurrentYear = request.Year,
                 ShowFullYear = request.ShowFullYear,
                 Name = user.Fullname,
                 Calendar = await GetCalendarAsync(user.UserId, user.CompanyId, request.Year, request.ShowFullYear),
-                AllowanceSummary = await _dataContext.GetAllowanceAsync(user.UserId, request.Year)
+                AllowanceSummary = await _dataContext.GetAllowanceAsync(user.UserId, request.Year),
+                Statistics = new()
+                {
+                    Team = team.Team,
+                    Manager = team.Manager,
+                },
             };
         }
 

@@ -49,14 +49,12 @@
     <div class="col-md-3 secondary-leave-type-statistics hidden-xs">
         <dl>
             <dt>Details</dt>
-            {{~# each supervisors  ~}}
             <dd>
-                <em>{{# if  @@first }} Supervisor: {{ else   }}  &nbsp;   {{/ if  }}</em>
-                <span class="pull-right"><a href="mailto:{{this.email}}">{{ this.full_name }}</a></span>
+                <em>Supervisor:&nbsp;</em>
+                <span class="pull-right"><a href="mailto:@Model.Statistics.Manager.Email">@Model.Statistics.Manager.Name</a></span>
             </dd>
-            {{~/ each ~}}
-            <dd><em>Team:</em> <span class="pull-right"><a href="/calendar/teamview/?department={{ current_user.department.id }}">{{ current_user.department.name }}</a></span></dd>
-            <dd><em>Allowance in @Model.CurrentYear:</em><span class="pull-right"> {{ user_allowance.total_number_of_days_in_allowance }} days</span>
+            <dd><em>Team:</em> <span class="pull-right"><a asp-controller="calendar" asp-action="teamview" asp-route-team="@Model.Statistics.Team.Id">@Model.Statistics.Team.Value</a></span></dd>
+            <dd><em>Allowance in @Model.CurrentYear:</em><span class="pull-right"> @Model.AllowanceSummary.TotalAllowance days</span>
             <dd>
         </dl>
     </div>
