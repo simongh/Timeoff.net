@@ -64,9 +64,11 @@ namespace Timeoff.Controllers
         }
 
         [HttpGet("edit/{id:int}/absences")]
-        public async Task<IActionResult> AbsencesAsync(int id)
+        public async Task<IActionResult> AbsencesAsync(Application.Users.GetAbsencesCommand command)
         {
-            return View();
+            var vm = await _mediator.Send(command);
+
+            return View(vm);
         }
 
         [HttpGet("edit/{id:int}/schedule")]
@@ -86,7 +88,7 @@ namespace Timeoff.Controllers
         }
 
         [HttpGet("edit/{id:int}/calendar")]
-        public async Task<IActionResult> CalendarAsync([FromRoute] Application.Users.GetCalendarCommand command)
+        public async Task<IActionResult> CalendarAsync(Application.Users.GetCalendarCommand command)
         {
             var vm = await _mediator.Send(command);
             return View(vm);

@@ -3,19 +3,17 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Timeoff.Application.Users
 {
-    public record GetCalendarCommand : IRequest<CalendarViewModel>
+    public record GetAbsencesCommand : IRequest<AbsencesViewModel>
     {
         public int Id { get; init; }
-
-        public int Year { get; init; } = DateTime.Today.Year;
     }
 
-    public class GetCalendarComamndHandler : IRequestHandler<GetCalendarCommand, CalendarViewModel>
+    internal class GetAbsencesCommandHandler : IRequestHandler<GetAbsencesCommand, AbsencesViewModel>
     {
         private readonly IDataContext _dataContext;
         private readonly Services.ICurrentUserService _currentUserService;
 
-        public GetCalendarComamndHandler(
+        public GetAbsencesCommandHandler(
             IDataContext dataContext,
             Services.ICurrentUserService currentUserService)
         {
@@ -23,30 +21,35 @@ namespace Timeoff.Application.Users
             _currentUserService = currentUserService;
         }
 
-        public async Task<CalendarViewModel> Handle(GetCalendarCommand request, CancellationToken cancellationToken)
+        public async Task<AbsencesViewModel> Handle(GetAbsencesCommand request, CancellationToken cancellationToken)
         {
-            var user = (await _dataContext.Users
-                .FindById(request.Id)
+            var user = await _dataContext.Users
+                .Where(u => u.CompanyId == _currentUserService.CompanyId && u.UserId == request.Id)
                 .Select(u => new
                 {
+                    User = u.Schedule,
+                    Company = u.Company.Schedule,
                     u.FirstName,
                     u.LastName,
+                    u.TeamId,
                     u.IsActivated,
                     u.EndDate,
                 })
-                .AsNoTracking()
-                .FirstOrDefaultAsync())
-                ?? throw new NotFoundException();
+                 .FirstOrDefaultAsync();
+
+            if (user == null)
+            {
+                throw new NotFoundException();
+            }
 
             return new()
             {
                 Id = request.Id,
                 FirstName = user.FirstName,
                 LastName = user.LastName,
-                CurrentYear = request.Year,
+                TeamId = user.TeamId,
                 IsActive = user.IsActivated && (user.EndDate == null || user.EndDate > DateTime.Today),
-                Calendar = await _dataContext.GetCalendarAsync(_currentUserService.UserId, _currentUserService.CompanyId, request.Year, true),
-                Summary = await _dataContext.GetAllowanceAsync(request.Id, request.Year),
+                Summary = await _dataContext.GetAllowanceAsync(request.Id, DateTime.Today.Year),
             };
         }
     }

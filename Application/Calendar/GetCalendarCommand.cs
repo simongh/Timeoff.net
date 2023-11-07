@@ -52,7 +52,7 @@ namespace Timeoff.Application.Calendar
                 CurrentYear = request.Year,
                 ShowFullYear = request.ShowFullYear,
                 Name = user.Fullname,
-                Calendar = await GetCalendarAsync(user.UserId, user.CompanyId, request.Year, request.ShowFullYear),
+                Calendar = await _dataContext.GetCalendarAsync(user.UserId, user.CompanyId, request.Year, request.ShowFullYear),
                 AllowanceSummary = await _dataContext.GetAllowanceAsync(user.UserId, request.Year),
                 Statistics = new()
                 {
@@ -60,45 +60,6 @@ namespace Timeoff.Application.Calendar
                     Manager = team.Manager,
                 },
             };
-        }
-
-        private async Task<IEnumerable<ResultModels.CalendarMonthResult>> GetCalendarAsync(int userId, int companyId, int year, bool fullYear)
-        {
-            var calendar = new List<ResultModels.CalendarMonthResult>();
-            int months;
-            DateTime startDate;
-
-            if (fullYear)
-            {
-                startDate = new DateTime(year, 1, 1);
-                months = 12;
-            }
-            else
-            {
-                startDate = new DateTime(year, DateTime.Today.Month, 1);
-                months = 4;
-            }
-
-            var absences = await _dataContext.Leaves
-                .Where(a => a.UserId == userId & a.DateStart >= startDate && a.DateStart < startDate.AddMonths(months + 1))
-                .ToArrayAsync();
-
-            var holidays = await _dataContext.PublicHolidays
-                .Where(h => h.CompanyId == companyId && h.Date >= startDate && h.Date < startDate.AddMonths(months + 1))
-                .Select(h => new ResultModels.PublicHolidayResult
-                {
-                    Id = h.PublicHolidayId,
-                    Date = h.Date,
-                    Name = h.Name,
-                })
-                .ToArrayAsync();
-
-            for (int i = 0; i < months; i++)
-            {
-                calendar.Add(ResultModels.CalendarMonthResult.FromDate(startDate.AddMonths(i), absences, holidays));
-            }
-
-            return calendar;
         }
     }
 }
