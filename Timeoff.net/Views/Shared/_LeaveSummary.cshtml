@@ -1,0 +1,22 @@
+﻿@model Timeoff.ResultModels.AllowanceSummaryResult
+
+<dl>
+    <dt>Used</dt>
+    @foreach (var item in Model.LeaveSummary)
+    {
+        <dd>
+            <em>@item.Name:</em>
+            <span class="pull-right">
+                @item.Total@if (item.Allowance > 0)
+                {
+                    @:out of @item.Allowance
+                }
+            </span>
+        </dd>
+    }
+
+    @if (!Model.LeaveSummary.Any())
+    {
+        <dd class="text-muted">No approved requests so far.</dd>
+    }
+</dl>

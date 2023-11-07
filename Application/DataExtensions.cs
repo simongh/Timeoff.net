@@ -145,7 +145,7 @@ namespace Timeoff.Application
                     StartDate = u.StartDate,
                     EndDate = u.EndDate,
                     AutoApprove = u.AutoApprove,
-                    IsActive = u.IsActivated,
+                    IsActive = u.IsActivated && (u.EndDate == null || u.EndDate > DateTime.Today),
                     IsAdmin = u.IsAdmin,
                     TeamId = u.TeamId,
                     Email = u.Email,
@@ -173,6 +173,7 @@ namespace Timeoff.Application
                     u.FirstName,
                     u.LastName,
                     u.IsActivated,
+                    u.EndDate,
                 })
                  .FirstOrDefaultAsync();
 
@@ -187,7 +188,7 @@ namespace Timeoff.Application
                 Id = userId,
                 FirstName = schedule.FirstName,
                 LastName = schedule.LastName,
-                IsActive = schedule.IsActivated,
+                IsActive = schedule.IsActivated && (schedule.EndDate == null || schedule.EndDate > DateTime.Today),
                 UserSpecific = schedule.User != null,
             };
         }

@@ -27,38 +27,18 @@
 
         <div class="col-md-4 top-leave-type-statistics">
             <dl>
-                <dt data-tom-days-available-in-allowance>@Model.Available</dt>
+                <dt data-tom-days-available-in-allowance>@Model.Summary.Available</dt>
                 <dd>Days available</dd>
-                <dd>out of <span data-tom-total-days-in-allowance>@Model.Total</span> in allowance</dd>
+                <dd>out of <span data-tom-total-days-in-allowance>@Model.Summary.Total</span> in allowance</dd>
             </dl>
         </div>
 
         <div class="col-md-4 secondary-leave-type-statistics hidden-xs">
-            <partial name="_AllowanceBreakdown"/>
+            <partial name="_AllowanceBreakdown" model="Model.Summary"/>
         </div>
 
         <div class="col-md-4 secondary-leave-type-statistics hidden-xs">
-            <dl>
-                <dt>Used</dt>
-
-                @foreach (var item in Model.Leaves)
-                {
-                    <dd>
-                        <em>@item.Name:</em> <span class="pull-right">
-                            @item.Total@if (item.Allowance > 0)
-                            {
-                                @:out of @item.Allowance
-                            }
-                        </span>
-                    </dd>
-
-                }
-
-                @if (!Model.Leaves.Any())
-                {
-                    <dd class="text-muted">No approved requests so far.</dd>
-                }
-            </dl>
+            <partial name="_LeaveSummary" model="Model.Summary"/>
         </div>
 
     </div>
