@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Timeoff.Application.Users;
 
 namespace Timeoff.Application
 {
@@ -197,7 +196,7 @@ namespace Timeoff.Application
         {
             return await dataContext.Companies
                 .Where(c => c.CompanyId == companyId)
-                .Select(c => new CreateViewModel
+                .Select(c => new Users.CreateViewModel
                 {
                     CompanyName = c.Name,
                     DateFormat = c.DateFormat,
@@ -210,6 +209,102 @@ namespace Timeoff.Application
                         })
                 })
                 .FirstAsync();
+        }
+
+        public static async Task<Users.AbsencesViewModel> GetAbsencesAync(this IDataContext dataContext, int companyId, int userId)
+        {
+            var user = await dataContext.Users
+                .Where(u => u.CompanyId == companyId && u.UserId == userId)
+                .Select(u => new
+                {
+                    u.FirstName,
+                    u.LastName,
+                    u.TeamId,
+                    u.IsActivated,
+                    u.EndDate,
+                    u.Team.IsAccrued,
+                })
+                .FirstOrDefaultAsync();
+
+            if (user == null)
+            {
+                throw new NotFoundException();
+            }
+
+            return new()
+            {
+                Id = userId,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                TeamId = user.TeamId,
+                IsActive = user.IsActivated && (user.EndDate == null || user.EndDate > DateTime.Today),
+                IsAccrued = user.IsAccrued,
+                Summary = await dataContext.GetAllowanceAsync(userId, DateTime.Today.Year),
+            };
+        }
+
+        public static async Task<Users.UsersViewModel> QueryUsers(this IDataContext dataContext, int companyId, int? team)
+        {
+            var query = dataContext.Users
+                .Where(u => u.CompanyId == companyId);
+
+            if (team.HasValue)
+            {
+                query = query.Where(u => u.TeamId == team.Value);
+            }
+            var year = DateTime.Today.Year;
+
+            var users = await query
+                .OrderBy(u => u.FirstName)
+                .ThenBy(u => u.LastName)
+                .Select(u => new ResultModels.UserInfoResult
+                {
+                    Id = u.UserId,
+                    FirstName = u.FirstName,
+                    LastName = u.LastName,
+                    TeamId = u.TeamId,
+                    TeamName = u.Team.Name,
+                    IsActive = u.IsActive,
+                    IsAdmin = u.IsAdmin,
+                    AllowanceCalculator = new()
+                    {
+                        DaysUsed = u.Leave
+                            .Where(a => a.DateStart.Year == year && a.DateEnd.Year == year)
+                            .Where(a => a.Status == LeaveStatus.Approved)
+                            .Sum(a => a.Days),
+                        Start = u.StartDate,
+                        End = u.EndDate,
+                        Acrrue = u.Team.IsAccrued,
+                        Adjustment = u.Adjustments
+                            .Where(a => a.Year == year)
+                            .FirstOrDefault()!,
+                        Allowance = u.Team.Allowance,
+                    }
+                })
+                .ToArrayAsync();
+
+            var company = await dataContext.Companies
+                .Where(c => c.CompanyId == companyId)
+                .Select(c => new
+                {
+                    c.Name,
+                    Teams = c.Departments
+                        .OrderBy(d => d.Name)
+                        .Select(d => new ResultModels.ListItem
+                        {
+                            Id = d.TeamId,
+                            Value = d.Name,
+                        })
+                })
+                .FirstAsync();
+
+            return new()
+            {
+                CompanyName = company.Name,
+                TeamId = team,
+                Teams = company.Teams,
+                Users = users,
+            };
         }
     }
 }

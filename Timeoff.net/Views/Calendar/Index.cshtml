@@ -22,7 +22,7 @@
         <dl>
             <dt data-tom-days-available-in-allowance>@Model.AllowanceSummary.Remaining</dt>
             <dd>Days available</dd>
-            <dd>out of <span data-tom-total-days-in-allowance>@Model.AllowanceSummary.TotalAllowance</span> in allowance</dd>
+            <dd>out of <span data-tom-total-days-in-allowance>@Model.AllowanceSummary.Total</span> in allowance</dd>
         </dl>
     </div>
 
@@ -42,7 +42,7 @@
                 <span class="pull-right"><a href="mailto:@Model.Statistics.Manager.Email">@Model.Statistics.Manager.Name</a></span>
             </dd>
             <dd><em>Team:</em> <span class="pull-right"><a asp-controller="calendar" asp-action="teamview" asp-route-team="@Model.Statistics.Team.Id">@Model.Statistics.Team.Value</a></span></dd>
-            <dd><em>Allowance in @Model.CurrentYear:</em><span class="pull-right"> @Model.AllowanceSummary.TotalAllowance days</span>
+            <dd><em>Allowance in @Model.CurrentYear:</em><span class="pull-right"> @Model.AllowanceSummary.Total days</span>
             <dd>
         </dl>
     </div>

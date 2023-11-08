@@ -4,7 +4,7 @@
     {
         public int PreviousYear { get; init; }
 
-        public double TotalAllowance { get; init; }
+        public double Allowance { get; init; }
 
         public double CarryOver { get; init; }
 
@@ -20,8 +20,8 @@
 
         public double Used => LeaveSummary.Where(l => l.AffectsAllowance).Sum(l => l.Total);
 
-        public double Remaining => TotalAllowance - Used;
-        public double Total => TotalAllowance + CarryOver + Adjustment + EmploymentAdjustment + AccruedAdjustment;
+        public double Remaining => Total - Used;
+        public double Total => Allowance + CarryOver + Adjustment + EmploymentAdjustment + AccruedAdjustment;
 
         public double Available => Total - Used;
     }

@@ -71,6 +71,13 @@ namespace Timeoff.Controllers
             return View(vm);
         }
 
+        [HttpPost("edit/{id:int}/absences")]
+        public async Task<IActionResult> UpdateAbsencesAsync(Application.Users.UpdateAbsencesCommand command)
+        {
+            var vm = await _mediator.Send(command);
+            return View("Absences", vm);
+        }
+
         [HttpGet("edit/{id:int}/schedule")]
         public async Task<IActionResult> ScheduleAsync([FromRoute] Application.Users.GetScheduleCommand command)
         {
@@ -79,9 +86,8 @@ namespace Timeoff.Controllers
         }
 
         [HttpPost("edit/{id:int}/schedule")]
-        public async Task<IActionResult> SetScheduleAsync(int id, Application.Users.UpdateScheduleCommand command)
+        public async Task<IActionResult> SetScheduleAsync(Application.Users.UpdateScheduleCommand command)
         {
-            command.Id = id;
             var vm = await _mediator.Send(command);
 
             return View("Schedule", vm);
@@ -95,18 +101,19 @@ namespace Timeoff.Controllers
         }
 
         [HttpPost("edit/{id:int}")]
-        public async Task<IActionResult> UpdateAsync(int id, Application.Users.UpdateUserCommand command)
+        public async Task<IActionResult> UpdateAsync(Application.Users.UpdateUserCommand command)
         {
-            command.Id = id;
             var vm = await _mediator.Send(command);
 
             return View("edit", vm);
         }
 
         [HttpPost("delete/{id:int}")]
-        public async Task<IActionResult> DeleteAsync(int id)
+        public async Task<IActionResult> DeleteAsync([FromRoute] Application.Users.DeleteUserCommand command)
         {
-            return View();
+            var vm = await _mediator.Send(command);
+
+            return View("Index", vm);
         }
 
         [HttpGet("search")]
