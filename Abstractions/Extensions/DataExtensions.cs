@@ -49,7 +49,7 @@ namespace Timeoff
 
             return new()
             {
-                TotalAllowance = allowance.Allowance,
+                Allowance = allowance.Allowance,
                 CarryOver = allowance.Adjustment?.CarriedOverAllowance ?? 0,
                 Adjustment = allowance.Adjustment?.Adjustment ?? 0,
                 PreviousYear = year - 1,

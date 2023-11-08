@@ -6,8 +6,12 @@
 
         public int TeamId { get; init; }
 
-        public double UsedPercent => (Summary.Used / Summary.TotalAllowance) * 100;
+        public bool IsAccrued { get; init; }
 
-        public double RemainingPercent => (Summary.Remaining / Summary.TotalAllowance) * 100;
+        public double UsedPercent => (Summary.Used / Summary.Total) * 100;
+
+        public double RemainingPercent => (Summary.Remaining / Summary.Total) * 100;
+
+        public ResultModels.FlashResult? Messages { get; set; }
     }
 }
