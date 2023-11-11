@@ -45,8 +45,9 @@ namespace Timeoff.Application.Users
                 LastName = user.LastName,
                 CurrentYear = request.Year,
                 IsActive = user.IsActivated && (user.EndDate == null || user.EndDate > DateTime.Today),
-                Calendar = await _dataContext.GetCalendarAsync(_currentUserService.UserId, _currentUserService.CompanyId, request.Year, true),
+                Calendar = await _dataContext.GetCalendarAsync(_currentUserService.CompanyId, request.Year, true),
                 Summary = await _dataContext.GetAllowanceAsync(request.Id, request.Year),
+                LeaveRequested = await _dataContext.Leaves.GetRequested(request.Id, request.Year),
             };
         }
     }

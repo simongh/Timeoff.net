@@ -13,5 +13,7 @@
         public double RemainingPercent => (Summary.Remaining / Summary.Total) * 100;
 
         public ResultModels.FlashResult? Messages { get; set; }
+
+        public IEnumerable<ResultModels.LeaveRequestedResult> LeaveRequested { get; set; } = null!;
     }
 }

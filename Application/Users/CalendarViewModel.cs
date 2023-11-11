@@ -1,4 +1,6 @@
-﻿namespace Timeoff.Application.Users
+﻿using Timeoff.ResultModels;
+
+namespace Timeoff.Application.Users
 {
     public record CalendarViewModel : Types.UserModel
     {
@@ -10,6 +12,8 @@
 
         public ResultModels.AllowanceSummaryResult Summary { get; init; } = null!;
 
-        public IEnumerable<ResultModels.CalendarMonthResult> Calendar { get; init; } = null!;
+        public ResultModels.CalendarResult Calendar { get; init; } = null!;
+
+        public IEnumerable<LeaveRequestedResult> LeaveRequested { get; init; } = null!;
     }
 }

@@ -92,9 +92,11 @@ namespace Timeoff
                 .Where(u => u.EndDate == null || u.EndDate >= DateTime.Today);
         }
 
-        public static async Task<IEnumerable<ResultModels.CalendarMonthResult>> GetCalendarAsync(this IDataContext dataContext, int userId, int companyId, int year, bool fullYear)
+        public static async Task<ResultModels.CalendarResult> GetCalendarAsync(this IDataContext dataContext,
+            int companyId,
+            int year,
+            bool fullYear)
         {
-            var calendar = new List<ResultModels.CalendarMonthResult>();
             int months;
             DateTime startDate;
 
@@ -109,10 +111,6 @@ namespace Timeoff
                 months = 4;
             }
 
-            var absences = await dataContext.Leaves
-                .Where(a => a.UserId == userId & a.DateStart >= startDate && a.DateStart < startDate.AddMonths(months + 1))
-                .ToArrayAsync();
-
             var holidays = await dataContext.PublicHolidays
                 .Where(h => h.CompanyId == companyId && h.Date >= startDate && h.Date < startDate.AddMonths(months + 1))
                 .Select(h => new ResultModels.PublicHolidayResult
@@ -123,12 +121,12 @@ namespace Timeoff
                 })
                 .ToArrayAsync();
 
-            for (int i = 0; i < months; i++)
+            return new ResultModels.CalendarResult
             {
-                calendar.Add(ResultModels.CalendarMonthResult.FromDate(startDate.AddMonths(i), absences, holidays));
-            }
-
-            return calendar;
+                StartDate = startDate,
+                Months = months,
+                Holidays = holidays,
+            };
         }
     }
 }

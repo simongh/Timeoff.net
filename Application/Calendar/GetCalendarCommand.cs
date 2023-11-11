@@ -52,13 +52,14 @@ namespace Timeoff.Application.Calendar
                 CurrentYear = request.Year,
                 ShowFullYear = request.ShowFullYear,
                 Name = user.Fullname,
-                Calendar = await _dataContext.GetCalendarAsync(user.UserId, user.CompanyId, request.Year, request.ShowFullYear),
+                Calendar = await _dataContext.GetCalendarAsync(user.CompanyId, request.Year, request.ShowFullYear),
                 AllowanceSummary = await _dataContext.GetAllowanceAsync(user.UserId, request.Year),
                 Statistics = new()
                 {
                     Team = team.Team,
                     Manager = team.Manager,
                 },
+                LeaveRequested = await _dataContext.Leaves.GetRequested(_currentUserService.UserId, request.Year),
             };
         }
     }

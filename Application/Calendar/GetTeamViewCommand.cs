@@ -105,8 +105,8 @@ namespace Timeoff.Application.Calendar
                         Date = current,
                         HolidayName = holiday?.Name,
                         LeaveStatus = a.Status,
-                        IsMorning = a.DayPartStart == LeavePart.Morning,
-                        IsAfternoon = a.DayPartEnd == LeavePart.Afternoon,
+                        IsMorning = a.DayPartStart != LeavePart.Afternoon,
+                        IsAfternoon = a.DayPartEnd != LeavePart.Morning,
                         LeaveId = a.LeaveId,
                         UserId = a.UserId,
                     });

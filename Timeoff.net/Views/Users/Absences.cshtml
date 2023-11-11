@@ -5,93 +5,89 @@
 }
 
 <div class="col-md-9">
-  <form method="POST" asp-action="UpdateAbsences" asp-route-id="@Model.Id">
+    <form method="POST" asp-action="UpdateAbsences" asp-route-id="@Model.Id">
 
-  <partial name="_Breadcrumb" />
+        <partial name="_Breadcrumb" />
 
-  <div class="form-group">
-    <label class="control-label">Overview</label>
-    <div class="progress bigger">
-      <div
-        class="progress-bar progress-bar-success"
-        style="width: @Model.UsedPercent%"
-        data-content="@Model.Name in current year used @Model.Summary.Used days from allowance"
-        data-placement="top"
-        data-toggle="popover"
-        data-trigger="focus hover">
-        @Model.Summary.Used days used so far
-      </div>
-      <div
-        class="progress-bar progress-bar-warning"
-        style="width: @Model.RemainingPercent%"
-        data-content="@Model.Name in current year has @Model.Summary.Remaining remaining days in allowance"
-        data-placement="top"
-        data-toggle="popover"
-        data-trigger="focus hover">
-        @Model.Summary.Remaining days remaining in current year
-      </div>
-    </div>
-  </div>
+        <div class="form-group">
+            <label class="control-label">Overview</label>
+            <div class="progress bigger">
+                <div class="progress-bar progress-bar-success"
+                     style="width: @Model.UsedPercent%"
+                     data-content="@Model.Name in current year used @Model.Summary.Used days from allowance"
+                     data-placement="top"
+                     data-toggle="popover"
+                     data-trigger="focus hover">
+                    @Model.Summary.Used days used so far
+                </div>
+                <div class="progress-bar progress-bar-warning"
+                     style="width: @Model.RemainingPercent%"
+                     data-content="@Model.Name in current year has @Model.Summary.Remaining remaining days in allowance"
+                     data-placement="top"
+                     data-toggle="popover"
+                     data-trigger="focus hover">
+                    @Model.Summary.Remaining days remaining in current year
+                </div>
+            </div>
+        </div>
 
-  <div class="form-group">
-    <label class="control-label">Days available for @Model.FirstName to take this year</label>
-    <p>@Model.Summary.Remaining out of @Model.Summary.Total in allowance</p>
-  </div>
+        <div class="form-group">
+            <label class="control-label">Days available for @Model.FirstName to take this year</label>
+            <p>@Model.Summary.Remaining out of @Model.Summary.Total in allowance</p>
+        </div>
 
-  <div class="form-group">
-    <label class="control-label">Is Accrued Allowance?</label>
-    <p>@(Model.IsAccrued ? "Yes" : "No")</p>
-    <span class="help-block">
-      The way of available allowance calculation is defined on team level. <a asp-controller="teams" asp-action="edit" asp-route-id="@Model.TeamId">More details <i class="fa fa-angle-double-right"></i></a>
-    </span>
-  </div>
+        <div class="form-group">
+            <label class="control-label">Is Accrued Allowance?</label>
+            <p>@(Model.IsAccrued ? "Yes" : "No")</p>
+            <span class="help-block">
+                The way of available allowance calculation is defined on team level. <a asp-controller="teams" asp-action="edit" asp-route-id="@Model.TeamId">More details <i class="fa fa-angle-double-right"></i></a>
+            </span>
+        </div>
 
-  <div class="row">
-    <div class="col-md-5">
-      <partial name="_LeaveSummary" model="Model.Summary" />
-    </div>
+        <div class="row">
+            <div class="col-md-5">
+                <partial name="_LeaveSummary" model="Model.Summary" />
+            </div>
 
-    <div class="col-md-5 col-md-offset-2">
-      <partial name="_AllowanceBreakdown" model="Model.Summary"/>
-    </div>
-  </div>
+            <div class="col-md-5 col-md-offset-2">
+                <partial name="_AllowanceBreakdown" model="Model.Summary" />
+            </div>
+        </div>
 
-  <div class="form-group">
-    <label for="carried_over_allowance_inp" class="control-label">Allowance carried over from previous year</label>
-    <div class="input-group col-md-4">
-      <input class="form-control" readonly id="carried_over_allowance_inp" type="number" step="0.5" name="carried_over_allowance" value="@Model.Summary.CarryOver" aria-describedby="carried_over_allowance_help">
-      <span class="input-group-addon">working days</span>
-    </div>
-    <div id="carried_over_allowance_help" class="help-block">
-      <div>Allowance adjustment based on unused holidays from previous year.</div>
-      <div>It is calculated at the beginning of current year.</div>
-    </div>
-  </div>
+        <div class="form-group">
+            <label for="carried_over_allowance_inp" class="control-label">Allowance carried over from previous year</label>
+            <div class="input-group col-md-4">
+                <input class="form-control" readonly id="carried_over_allowance_inp" type="number" step="0.5" name="carried_over_allowance" value="@Model.Summary.CarryOver" aria-describedby="carried_over_allowance_help">
+                <span class="input-group-addon">working days</span>
+            </div>
+            <div id="carried_over_allowance_help" class="help-block">
+                <div>Allowance adjustment based on unused holidays from previous year.</div>
+                <div>It is calculated at the beginning of current year.</div>
+            </div>
+        </div>
 
-  <div class="form-group">
-    <label for="adjustment_inp" class="control-label">Allowance adjustment in current year</label>
-    <div class="input-group col-md-4">
-      <input class="form-control" id="adjustment" type="number" step="0.5" name="adjustment" value="@Model.Summary.Adjustment" aria-describedby="adjustment_help">
-      <span class="input-group-addon">working days</span>
-    </div>
-    <div id="adjustment_help" class="help-block">
-      <div>Tune allowance for this user in current year.</div>
-      <div>Could be negative as well.</div>
-      <div>The value is valid during current year. Next year it needs to be re-confirmed.</div>
-    </div>
-  </div>
+        <div class="form-group">
+            <label for="adjustment_inp" class="control-label">Allowance adjustment in current year</label>
+            <div class="input-group col-md-4">
+                <input class="form-control" id="adjustment" type="number" step="0.5" name="adjustment" value="@Model.Summary.Adjustment" aria-describedby="adjustment_help">
+                <span class="input-group-addon">working days</span>
+            </div>
+            <div id="adjustment_help" class="help-block">
+                <div>Tune allowance for this user in current year.</div>
+                <div>Could be negative as well.</div>
+                <div>The value is valid during current year. Next year it needs to be re-confirmed.</div>
+            </div>
+        </div>
 
-  <div class="form-group">
-    <div class="col-md-12">
-      <button id="save_changes_btn" type="submit" class="btn btn-success pull-right single-click">Save changes</button>
-    </div>
-  </div>
-  </form>
+        <div class="form-group">
+            <div class="col-md-12">
+                <button id="save_changes_btn" type="submit" class="btn btn-success pull-right single-click">Save changes</button>
+            </div>
+        </div>
+    </form>
 
-  <div class="main-row_header">&nbsp;</div>
-
-  {{> user_requests_grouped grouped_leaves=grouped_leaves logged_user=logged_user }}
-
+    <div class="main-row_header">&nbsp;</div>
+    <partial name="..\Request\_UserRequests" model="Model.LeaveRequested" />
 </div>
 
 @section Messages {

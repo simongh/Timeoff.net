@@ -12,10 +12,10 @@
 
         public string DateFormat { get; init; } = null!;
 
-        public IEnumerable<ResultModels.CalendarMonthResult> Calendar { get; init; } = null!;
-
-        public ResultModels.PublicHolidayResult[] PublicHolidays { get; init; } = null!;
+        public ResultModels.CalendarResult Calendar { get; init; } = null!;
 
         public ResultModels.FlashResult Result { get; set; } = new();
+
+        public ResultModels.PublicHolidayResult[] PublicHolidays => Calendar.Holidays.ToArray();
     }
 }
