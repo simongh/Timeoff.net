@@ -41,13 +41,13 @@
 <div class="row clearfix">
     <div class="col-md-8">
         <div class="row">
-            @foreach (var month in Model.Calendar)
+            @for (int i = 0; i < Model.Calendar.Months; i++)
             {
                 <div class="col-md-4 month_container">
-                    <table class="calendar_month month_@month.Date.ToString("MMMM")">
+                    <table class="calendar_month month_@Model.Calendar.CurrentMonth(i).ToString("MMMM")">
                         <thead>
                             <tr>
-                                <td colspan="14">@month.Date.ToString("MMMM")</td>
+                                <td colspan="14">@Model.Calendar.CurrentMonth(i).Date.ToString("MMMM")</td>
                             </tr>
                             <tr>
                                 <td colspan="2">M</td>
@@ -63,7 +63,7 @@
                             @{
                                 var count = 0;
                             }
-                            @foreach (var item in month.Days)
+                            @foreach (var item in Model.Calendar.GetWeeks(i))
                             {
                                 @if (count % 7 ==0)
                                 {
@@ -93,7 +93,7 @@
         <div class="row">&nbsp;</div>
 
 
-        @if (!Model.PublicHolidays.Any())
+        @if (!Model.Calendar.Holidays.Any())
         {
             <div class="row">
                 <div class="col-md-12 tst-no-public-holidays text-center">No public holiday records</div>

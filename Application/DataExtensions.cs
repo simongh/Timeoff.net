@@ -25,25 +25,17 @@ namespace Timeoff.Application
                 })
                 .FirstAsync();
 
-            var noLeave = Enumerable.Empty<Entities.Leave>();
-            var startDate = new DateTime(year, 1, 1);
-            var calendar = new List<ResultModels.CalendarMonthResult>();
-
-            for (int i = 0; i < 12; i++)
-            {
-                calendar.Add(ResultModels.CalendarMonthResult.FromDate(
-                    startDate.AddMonths(i),
-                    noLeave,
-                    company.Holidays.Where(h => h.Date.Month == startDate.AddMonths(i).Month)));
-            }
-
             return new()
             {
                 CompanyName = company.Name,
                 DateFormat = company.DateFormat,
                 CurrentYear = year,
-                Calendar = calendar,
-                PublicHolidays = company.Holidays.ToArray(),
+                Calendar = new()
+                {
+                    StartDate = new DateTime(year, 1, 1),
+                    Months = 12,
+                    Holidays = company.Holidays.ToArray(),
+                },
             };
         }
 
@@ -240,6 +232,7 @@ namespace Timeoff.Application
                 IsActive = user.IsActivated && (user.EndDate == null || user.EndDate > DateTime.Today),
                 IsAccrued = user.IsAccrued,
                 Summary = await dataContext.GetAllowanceAsync(userId, DateTime.Today.Year),
+                LeaveRequested = await dataContext.Leaves.GetRequested(userId, DateTime.Today.Year),
             };
         }
 
@@ -305,6 +298,29 @@ namespace Timeoff.Application
                 Teams = company.Teams,
                 Users = users,
             };
+        }
+
+        public static async Task<IEnumerable<ResultModels.LeaveRequestedResult>> GetRequested(this DbSet<Entities.Leave> leaves, int userId, int year)
+        {
+            return await leaves
+                .Where(l => l.UserId == userId && l.DateStart.Year == year)
+                .OrderBy(l => l.DateStart)
+                .AsNoTracking()
+                .Select(l => new ResultModels.LeaveRequestedResult
+                {
+                    StartDate = l.DateStart,
+                    StartPart = l.DayPartStart,
+                    EndDate = l.DateEnd,
+                    EndPart = l.DayPartEnd,
+                    Approver = l.Approver.FirstName + " " + l.Approver.LastName,
+                    Status = l.Status,
+                    Type = l.LeaveType.Name,
+                    Comment = l.EmployeeComment,
+                    Days = l.Days,
+                    Id = l.LeaveId,
+                    DateFormat = l.User.Company.DateFormat,
+                })
+                .ToArrayAsync();
         }
     }
 }

@@ -100,20 +100,20 @@
 
 <div class="row clearfix">
 
-    @foreach (var month in Model.Calendar)
+    @for (int i = 0; i < Model.Calendar.Months; i++)
     {
     <div class="col-md-3 month_container">
-        <table class="calendar_month month_@month.Date.ToString("MMMM")">
+        <table class="calendar_month month_@Model.Calendar.CurrentMonth(i).ToString("MMMM")">
             <thead>
                 <tr>
                     <td colspan="14">
                         @if (Model.ShowFullYear)
                         {
-                            @month.Date.ToString("MMMM")
+                            @Model.Calendar.CurrentMonth(i).ToString("MMMM")
                         }
                         else
                         {
-                            @month.Date.ToString("MMM, yyyy")
+                            @Model.Calendar.CurrentMonth(i).ToString("MMM, yyyy")
                         }
                     </td>
                 </tr>
@@ -131,7 +131,7 @@
                 @{
                     var count = 0;
                 }
-                @foreach (var item in month.Days)
+                @foreach (var item in Model.Calendar.GetWeeks(i,Model.LeaveRequested))
                     {
                         if (count %7 == 0)
                         {
@@ -157,6 +157,5 @@
         <p class="col-md-12">All my absences in @Model.CurrentYear</p>
     </div>
 
-    @:{{> user_requests leaves=current_user.my_leaves }}
-
+    <partial name="../Request/_UserRequests" model="Model.LeaveRequested"/>
 }

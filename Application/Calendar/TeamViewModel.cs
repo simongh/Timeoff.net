@@ -22,11 +22,11 @@ namespace Timeoff.Application.Calendar
 
         public IEnumerable<CalendarDayResult> CalendarDays { get; init; } = null!;
 
-        public int DaysDeducted(int userId)
+        public double DaysDeducted(int userId)
         {
             return (int)CalendarDays
                 .Where(d => d.UserId == userId && d.IsLeave && d.LeaveStatus == LeaveStatus.Approved)
-                .Sum(d => d.IsAfternoon || d.IsMorning ? 0.5 : 1);
+                .Sum(d => (d.IsMorning ? 0.5 : 0) + (d.IsAfternoon ? 0.5 : 0));
         }
     }
 }
