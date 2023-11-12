@@ -34,6 +34,8 @@
 
         public LeaveType LeaveType { get; set; } = null!;
 
+        public DateTime CreatedAt { get; init; }
+
         //public ICollection<Comment> Comments { get; set; }
     }
 }

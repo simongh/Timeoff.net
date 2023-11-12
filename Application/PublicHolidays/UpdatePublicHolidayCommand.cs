@@ -2,13 +2,13 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Timeoff.Application.PublicHoliday
+namespace Timeoff.Application.PublicHolidays
 {
     public record UpdatePublicHolidayCommand : IRequest<PublicHolidaysViewModel>, Commands.IValidated
     {
-        public RequestModels.PublicHolidayRequest[]? PublicHolidays { get; init; }
+        public PublicHolidayRequest[]? PublicHolidays { get; init; }
 
-        public RequestModels.PublicHolidayRequest? Add { get; init; }
+        public PublicHolidayRequest? Add { get; init; }
 
         public int Year { get; init; }
         public IEnumerable<ValidationFailure>? Failures { get; set; }

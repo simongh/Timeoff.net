@@ -1,4 +1,4 @@
-﻿namespace Timeoff.Application.PublicHoliday
+﻿namespace Timeoff.Application.PublicHolidays
 {
     public record PublicHolidaysViewModel
     {

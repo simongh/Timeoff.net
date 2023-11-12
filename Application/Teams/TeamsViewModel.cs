@@ -2,7 +2,7 @@
 {
     public record TeamsViewModel
     {
-        public IEnumerable<ResultModels.TeamResult> Teams { get; init; } = null!;
+        public IEnumerable<TeamResult> Teams { get; init; } = null!;
 
         public IEnumerable<ResultModels.ListItem> Users { get; init; } = null!;
 

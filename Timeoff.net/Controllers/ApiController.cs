@@ -17,7 +17,7 @@ namespace Timeoff.Controllers
         [HttpGet("notifications")]
         public async Task<IActionResult> NotificationsAsync()
         {
-            var result = await _mediator.Send(new Application.Absences.NotificationCommand());
+            var result = await _mediator.Send(new Application.Notification.NotificationCommand());
 
             return Ok(result);
         }

@@ -4,9 +4,9 @@
     {
         public int Year { get; set; }
 
-        public int Adjustment { get; set; }
+        public double Adjustment { get; set; }
 
-        public int CarriedOverAllowance { get; set; }
+        public double CarriedOverAllowance { get; set; }
 
         public DateTimeOffset CreatedAt { get; set; }
 

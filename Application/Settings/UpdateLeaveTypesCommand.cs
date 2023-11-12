@@ -6,9 +6,9 @@ namespace Timeoff.Application.Settings
 {
     public record UpdateLeaveTypesCommand : IRequest<SettingsViewModel>, Commands.IValidated
     {
-        public RequestModels.LeaveTypeRequest[]? LeaveTypes { get; init; }
+        public LeaveTypeRequest[]? LeaveTypes { get; init; }
 
-        public RequestModels.LeaveTypeRequest? Add { get; init; }
+        public LeaveTypeRequest? Add { get; init; }
 
         public int First { get; init; }
 

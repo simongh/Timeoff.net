@@ -8,6 +8,9 @@ namespace Timeoff.Data
         public void Configure(EntityTypeBuilder<Entities.UserAllowanceAdjustment> builder)
         {
             builder.ToTable("UserAllowanceAdjustments");
+
+            builder.Property(p => p.CreatedAt)
+                .HasDefaultValue(DateTime.UtcNow);
         }
     }
 }

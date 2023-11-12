@@ -12,6 +12,10 @@ namespace Timeoff.Data
             builder
                 .HasOne(p => p.Approver)
                 .WithMany();
+
+            builder
+                .Property(p => p.CreatedAt)
+                .HasDefaultValue(DateTime.UtcNow);
         }
     }
 }

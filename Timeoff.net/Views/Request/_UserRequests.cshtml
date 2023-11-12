@@ -1,4 +1,5 @@
 ﻿@model IEnumerable< Timeoff.ResultModels.LeaveRequestedResult>
+@using Timeoff
 <div class="row">
     @if (!Model.Any())
     {
@@ -65,7 +66,7 @@
                                 </td>
                                 <td>@item.Comment</td>
                                 <td>
-                                    <span class="pull-right leave-request-row-status">@Status(item.Status)</span>
+                                    <span class="pull-right leave-request-row-status">@item.Status.AsString()</span>
                                 </td>
                             </tr>
                         }
@@ -90,17 +91,6 @@
         {
             Timeoff.LeavePart.Morning => "(morning)",
             Timeoff.LeavePart.Afternoon => "(afternoon)",
-            _ => ""
-        };
-    }
-
-    public string Status(Timeoff.LeaveStatus status)
-    {
-        return status switch
-        {
-            Timeoff.LeaveStatus.New => "Pending",
-            Timeoff.LeaveStatus.Approved => "Approved",
-            Timeoff.LeaveStatus.Rejected => "Rejected",
             _ => ""
         };
     }

@@ -7,11 +7,11 @@ namespace Timeoff.Application.Settings
         public UpdateLeaveTypesCommandValidator()
         {
             RuleFor(m => m.Add)
-                .SetValidator(new Validators.LeaveTypeRequestValidator()!);
+                .SetValidator(new LeaveTypeRequestValidator()!);
 
             RuleForEach(m => m.LeaveTypes)
                 .NotNull()
-                .SetValidator(new Validators.LeaveTypeRequestValidator());
+                .SetValidator(new LeaveTypeRequestValidator());
         }
     }
 }

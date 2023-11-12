@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Timeoff.Application.Settings
 {
-    public record UpdateSettingsCommand : Types.SettingsModel, IRequest<SettingsViewModel>, Commands.IValidated
+    public record UpdateSettingsCommand : SettingsModel, IRequest<SettingsViewModel>, Commands.IValidated
     {
         public IEnumerable<ValidationFailure>? Failures { get; set; }
     }

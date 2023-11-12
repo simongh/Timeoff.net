@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Timeoff.Application.PublicHoliday
+namespace Timeoff.Application.PublicHolidays
 {
     public record DeleteHolidayCommand : IRequest<PublicHolidaysViewModel>
     {
