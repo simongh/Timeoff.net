@@ -1,92 +1,92 @@
-﻿@model Timeoff.Application.Account.RegisterViewModel
+﻿@model Timeoff.Application.Register.RegisterViewModel
 <h1>New company</h1>
 
 <partial name="_Flash" model="Model.Result" />
 
 <div class="row">
-  <div class="col-md-6 lead">Register new company account and supervisor user</div>
+    <div class="col-md-6 lead">Register new company account and supervisor user</div>
 </div>
 
 <div class="row">
-  <div class="col-md-9">
-    <form class="form-horizontal" asp-controller="Account" asp-action="RegisterPost" method="post">
+    <div class="col-md-9">
+        <form class="form-horizontal" asp-controller="Account" asp-action="RegisterPost" method="post">
 
-      <div class="form-group">
-        <label for="company_name_inp" class="col-md-2 control-label">Company name</label>
-        <div class="col-md-6">
-          <input class="form-control" placeholder="Company name" asp-for="CompanyName" required>
-        </div>
-      </div>
+            <div class="form-group">
+                <label for="company_name_inp" class="col-md-2 control-label">Company name</label>
+                <div class="col-md-6">
+                    <input class="form-control" placeholder="Company name" asp-for="CompanyName" required>
+                </div>
+            </div>
 
-      <div class="form-group">
-        <label for="name_inp" class="col-md-2 control-label">First Name</label>
-        <div class="col-md-6">
-          <input class="form-control" placeholder="First name" asp-for="FirstName" required>
-        </div>
-      </div>
+            <div class="form-group">
+                <label for="name_inp" class="col-md-2 control-label">First Name</label>
+                <div class="col-md-6">
+                    <input class="form-control" placeholder="First name" asp-for="FirstName" required>
+                </div>
+            </div>
 
-      <div class="form-group">
-        <label for="lastname_inp" class="col-md-2 control-label">Last Name</label>
-        <div class="col-md-6">
-          <input class="form-control" placeholder="Last Name" asp-for="LastName" required>
-        </div>
-      </div>
+            <div class="form-group">
+                <label for="lastname_inp" class="col-md-2 control-label">Last Name</label>
+                <div class="col-md-6">
+                    <input class="form-control" placeholder="Last Name" asp-for="LastName" required>
+                </div>
+            </div>
 
-      <div class="form-group">
-        <label for="email_inp" class="col-md-2 control-label">Email Address</label>
-        <div class="col-md-6">
-          <input class="form-control" type="email" placeholder="Email" asp-for="Email" required>
-        </div>
-      </div>
+            <div class="form-group">
+                <label for="email_inp" class="col-md-2 control-label">Email Address</label>
+                <div class="col-md-6">
+                    <input class="form-control" type="email" placeholder="Email" asp-for="Email" required>
+                </div>
+            </div>
 
-      <div class="form-group">
-        <label for="pass_inp" class="col-md-2 control-label">Password</label>
-        <div class="col-md-6">
-          <input class="form-control" type="password" placeholder="Password" asp-for="Password" required>
-        </div>
-      </div>
+            <div class="form-group">
+                <label for="pass_inp" class="col-md-2 control-label">Password</label>
+                <div class="col-md-6">
+                    <input class="form-control" type="password" placeholder="Password" asp-for="Password" required>
+                </div>
+            </div>
 
 
-      <div class="form-group">
-        <label for="confirm_pass_inp" class="col-md-2 control-label">Confirm Password</label>
-        <div class="col-md-6">
-          <input class="form-control" type="password" placeholder="Password" asp-for="ConfirmPassword" required>
-        </div>
-      </div>
+            <div class="form-group">
+                <label for="confirm_pass_inp" class="col-md-2 control-label">Confirm Password</label>
+                <div class="col-md-6">
+                    <input class="form-control" type="password" placeholder="Password" asp-for="ConfirmPassword" required>
+                </div>
+            </div>
 
-      <div class="form-group">
-        <label for="country_inp" class="col-md-2 control-label">Country</label>
-        <div class="col-md-6">
-          <select class="form-control" placeholder="Country name" asp-for="Country">
-            @foreach (var item in Model.Countries)
-            {
-                var selected = Model.Country == item.Code;
-                <option value="@item.Code" selected="@selected">@item.Code: @item.Name</option>
-            }
-          </select>
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label for="timezone_inp" class="col-md-2 control-label">Time zone</label>
-        <div class="col-md-6">
-          <select class="form-control" placeholder="Time zone" asp-for="TimeZone">
-              @foreach (var item in Model.TimeZones)
+            <div class="form-group">
+                <label for="country_inp" class="col-md-2 control-label">Country</label>
+                <div class="col-md-6">
+                    <select class="form-control" placeholder="Country name" asp-for="Country">
+                        @foreach (var item in Model.Countries)
                         {
-                            var selected = Model.TimeZone == item.Id;      
-               <option value="@item.Id" selected="@selected">@item.Name</option>
-                     }
-          </select>
-        </div>
-      </div>
+                            var selected = Model.Country == item.Code;
+                            <option value="@item.Code" selected="@selected">@item.Code: @item.Name</option>
+                        }
+                    </select>
+                </div>
+            </div>
 
-      <div class="form-group">
-        <div class="col-md-offset-2 col-md-6">
-          <button id="submit_registration" type="submit" class="btn btn-success">Create</button>
-        </div>
-      </div>
+            <div class="form-group">
+                <label for="timezone_inp" class="col-md-2 control-label">Time zone</label>
+                <div class="col-md-6">
+                    <select class="form-control" placeholder="Time zone" asp-for="TimeZone">
+                        @foreach (var item in Model.TimeZones)
+                        {
+                            var selected = Model.TimeZone == item.Id;
+                            <option value="@item.Id" selected="@selected">@item.Name</option>
+                        }
+                    </select>
+                </div>
+            </div>
 
-    </form>
-  </div>
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-6">
+                    <button id="submit_registration" type="submit" class="btn btn-success">Create</button>
+                </div>
+            </div>
+
+        </form>
+    </div>
 
 </div>

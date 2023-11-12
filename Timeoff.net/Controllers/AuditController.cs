@@ -16,7 +16,7 @@ namespace Timeoff.Controllers
         }
 
         [HttpGet("email")]
-        public async Task<IActionResult> EmailsAsync([FromQuery] Application.Reports.EmailAuditQuery command)
+        public async Task<IActionResult> EmailsAsync([FromQuery] Application.EmailAudit.EmailAuditQuery command)
         {
             return View(await _mediator.Send(command));
         }

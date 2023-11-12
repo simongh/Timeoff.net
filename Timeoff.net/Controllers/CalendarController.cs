@@ -14,7 +14,7 @@ namespace Timeoff.Controllers
         }
 
         [HttpPost("bookleave")]
-        public async Task<IActionResult> BookAsync(Application.Absences.BookCommand command)
+        public async Task<IActionResult> BookAsync(Application.BookAbsence.BookCommand command)
         {
             await _mediator.Send(command);
 
@@ -32,7 +32,7 @@ namespace Timeoff.Controllers
         }
 
         [HttpGet("teamview")]
-        public async Task<IActionResult> TeamViewAsync([FromQuery] Application.Calendar.GetTeamViewCommand command)
+        public async Task<IActionResult> TeamViewAsync([FromQuery] Application.TeamView.GetTeamViewCommand command)
         {
             var vm = await _mediator.Send(command);
             return View(vm);
@@ -50,10 +50,11 @@ namespace Timeoff.Controllers
             return View();
         }
 
-        [HttpGet("leave-summary/{int:int}")]
-        public async Task<IActionResult> SummaryAsync(int id)
+        [HttpGet("leave-summary/{id:int}")]
+        public async Task<IActionResult> SummaryAsync([FromRoute] Application.LeaveSummary.SummaryCommand command)
         {
-            return View();
+            var vm = await _mediator.Send(command);
+            return View(vm);
         }
     }
 }

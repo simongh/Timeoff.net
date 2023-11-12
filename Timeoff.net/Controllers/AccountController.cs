@@ -18,13 +18,13 @@ namespace Timeoff.Controllers
         [HttpGet("login")]
         public async Task<IActionResult> LoginAsync()
         {
-            var vm = await _mediator.Send(new Application.Account.GetLoginCommand());
+            var vm = await _mediator.Send(new Application.Login.GetLoginCommand());
             return View(vm);
         }
 
         [AllowAnonymous]
         [HttpPost("login")]
-        public async Task<IActionResult> LoginPostAsync(Application.Account.LoginCommand command)
+        public async Task<IActionResult> LoginPostAsync(Application.Login.LoginCommand command)
         {
             var vm = await _mediator.Send(command);
             if (vm.Success)
@@ -47,7 +47,7 @@ namespace Timeoff.Controllers
             if (User.Identity?.IsAuthenticated == true)
                 return Redirect("/");
 
-            var vm = await _mediator.Send(new Application.Account.GetRegisterCommand());
+            var vm = await _mediator.Send(new Application.Register.GetRegisterCommand());
 
             if (vm == null)
                 return Redirect("/");
@@ -57,7 +57,7 @@ namespace Timeoff.Controllers
 
         [AllowAnonymous]
         [HttpPost("register")]
-        public async Task<IActionResult> RegisterPostAsync(Application.Account.RegisterCommand command)
+        public async Task<IActionResult> RegisterPostAsync(Application.Register.RegisterCommand command)
         {
             if (User.Identity?.IsAuthenticated == true)
                 return Redirect("/");
@@ -81,15 +81,15 @@ namespace Timeoff.Controllers
 
         [AllowAnonymous]
         [HttpPost("forgot-password")]
-        public async Task<IActionResult> ForgotPasswordPostAsync(Application.Account.ForgotPasswordComand comand)
+        public async Task<IActionResult> ForgotPasswordPostAsync(Application.ForgotPassword.ForgotPasswordComand comand)
         {
             await _mediator.Send(comand);
-            return View("ForgotPassword", new Application.Account.ForgotPasswordViewModel { Success = true });
+            return View("ForgotPassword", new Application.ForgotPassword.ForgotPasswordViewModel { Success = true });
         }
 
         [AllowAnonymous]
         [HttpGet("reset-password")]
-        public async Task<IActionResult> ResetPasswordAsync([FromQuery] Application.Account.GetResetPasswordCommand command)
+        public async Task<IActionResult> ResetPasswordAsync([FromQuery] Application.ResetPassword.GetResetPasswordCommand command)
         {
             var vm = await _mediator.Send(command);
             return View(vm);
@@ -97,7 +97,7 @@ namespace Timeoff.Controllers
 
         [AllowAnonymous]
         [HttpPost("reset-password")]
-        public async Task<IActionResult> RestPasswordPostAsync(Application.Account.ResetPasswordCommand command)
+        public async Task<IActionResult> RestPasswordPostAsync(Application.ResetPassword.ResetPasswordCommand command)
         {
             if (string.IsNullOrEmpty(command.Token) && User.Identity?.IsAuthenticated != true)
                 return await ResetPasswordAsync(new());

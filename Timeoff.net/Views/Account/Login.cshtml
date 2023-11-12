@@ -1,19 +1,16 @@
-﻿@model Timeoff.Application.Account.LoginViewModel
-
+﻿@model Timeoff.Application.Login.LoginViewModel
 @{
     Timeoff.ResultModels.FlashResult? flash = null;
-
-    var test = DateTime.Today;
 }
 @if (!Model.Success)
 {
     flash = new()
-    {
-        Errors = new[]
+                {
+                    Errors = new[]
         {
             "Invalid credentials"
         },
-    };
+                };
 }
 
 

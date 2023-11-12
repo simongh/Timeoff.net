@@ -4,38 +4,38 @@ namespace Timeoff.Application
 {
     internal static class DataExtensions
     {
-        public static async Task<PublicHoliday.PublicHolidaysViewModel> GetPublicHolidaysAsync(this IQueryable<Entities.Company> companies,
-            int companyId,
-            int year)
+        public static async Task<ResultModels.AllowanceSummaryResult> GetAllowanceAsync(this IDataContext dataContext, int userId, int year)
         {
-            var company = await companies
-                .FindById(companyId)
-                .Select(c => new
+            var allowance = await dataContext.Users
+                .Where(u => u.UserId == userId)
+                .Select(u => new
                 {
-                    c.Name,
-                    c.DateFormat,
-                    Holidays = c.PublicHolidays
-                        .Where(h => h.Date.Year == year)
-                        .Select(h => new ResultModels.PublicHolidayResult
-                        {
-                            Id = h.PublicHolidayId,
-                            Date = h.Date,
-                            Name = h.Name,
-                        }),
+                    u.Team.Allowance,
+                    u.CompanyId,
+                    Adjustment = u.Adjustments.Where(a => a.Year == year).FirstOrDefault(),
                 })
                 .FirstAsync();
 
+            var leaves = await dataContext.LeaveTypes
+               .Where(lt => lt.CompanyId == allowance.CompanyId)
+               .OrderBy(lt => lt.SortOrder)
+               .Select(lt => new ResultModels.LeaveSummaryResult
+               {
+                   AffectsAllowance = lt.UseAllowance,
+                   Name = lt.Name,
+                   Allowance = lt.Limit,
+                   Total = lt.Leaves.Where(l => l.UserId == userId).Sum(l => l.Days),
+               })
+               .Where(s => s.Total > 0)
+               .ToArrayAsync();
+
             return new()
             {
-                CompanyName = company.Name,
-                DateFormat = company.DateFormat,
-                CurrentYear = year,
-                Calendar = new()
-                {
-                    StartDate = new DateTime(year, 1, 1),
-                    Months = 12,
-                    Holidays = company.Holidays.ToArray(),
-                },
+                Allowance = allowance.Allowance,
+                CarryOver = allowance.Adjustment?.CarriedOverAllowance ?? 0,
+                Adjustment = allowance.Adjustment?.Adjustment ?? 0,
+                PreviousYear = year - 1,
+                LeaveSummary = leaves,
             };
         }
 
@@ -44,7 +44,7 @@ namespace Timeoff.Application
             var teams = await dataContext.Teams
                  .Where(d => d.CompanyId == companyId)
                  .OrderBy(d => d.Name)
-                 .Select(d => new ResultModels.TeamResult
+                 .Select(d => new Teams.TeamResult
                  {
                      Id = d.TeamId,
                      Name = d.Name,
@@ -90,7 +90,7 @@ namespace Timeoff.Application
                     Schedule = c.Schedule.ToEnumerable(),
                     LeaveTypes = c.LeaveTypes
                         .OrderBy(t => t.Name)
-                        .Select(l => new ResultModels.LeaveTypeResult
+                        .Select(l => new Settings.LeaveTypeResult
                         {
                             Name = l.Name,
                             First = l.SortOrder == 0,
@@ -110,25 +110,12 @@ namespace Timeoff.Application
             return settings;
         }
 
-        public static async Task<Settings.IntegrationApiViewModel> GetIntegrationApiAsync(this IDataContext dataContext, int companyId)
-        {
-            return await dataContext.Companies
-                .Where(c => c.CompanyId == companyId)
-                .Select(c => new Settings.IntegrationApiViewModel
-                {
-                    Name = c.Name,
-                    ApiKey = c.IntegrationApiToken.ToString(),
-                    Enabled = c.IntegrationApiEnabled,
-                })
-                .FirstAsync();
-        }
-
-        public static async Task<Users.DetailsViewModel?> GetUserDetailsAsync(this IDataContext dataContext, int companyId, int userId)
+        public static async Task<UserDetails.DetailsViewModel?> GetUserDetailsAsync(this IDataContext dataContext, int companyId, int userId)
         {
             return await dataContext.Users
                 .Where(u => u.CompanyId == companyId)
                 .Where(u => u.UserId == userId)
-                .Select(u => new Users.DetailsViewModel
+                .Select(u => new UserDetails.DetailsViewModel
                 {
                     Id = u.UserId,
                     FirstName = u.FirstName,
@@ -142,7 +129,7 @@ namespace Timeoff.Application
                     Email = u.Email,
                     CompanyName = u.Company.Name,
                     DateFormat = u.Company.DateFormat,
-                    Teams = u.Company.Departments
+                    Teams = u.Company.Teams
                     .OrderBy(d => d.Name)
                     .Select(d => new ResultModels.ListItem
                     {
@@ -151,89 +138,6 @@ namespace Timeoff.Application
                     }),
                 })
                 .FirstOrDefaultAsync();
-        }
-
-        public static async Task<Users.ScheduleViewModel> GetUserScheduleAsync(this IDataContext dataContext, int companyId, int userId)
-        {
-            var schedule = await dataContext.Users
-                .Where(u => u.CompanyId == companyId && u.UserId == userId)
-                .Select(u => new
-                {
-                    User = u.Schedule,
-                    Company = u.Company.Schedule,
-                    u.FirstName,
-                    u.LastName,
-                    u.IsActivated,
-                    u.EndDate,
-                })
-                 .FirstOrDefaultAsync();
-
-            if (schedule == null)
-            {
-                throw new NotFoundException();
-            }
-
-            return new()
-            {
-                Schedule = (schedule.User ?? schedule.Company).ToEnumerable(),
-                Id = userId,
-                FirstName = schedule.FirstName,
-                LastName = schedule.LastName,
-                IsActive = schedule.IsActivated && (schedule.EndDate == null || schedule.EndDate > DateTime.Today),
-                UserSpecific = schedule.User != null,
-            };
-        }
-
-        public static async Task<Users.CreateViewModel> GetCreateViewModelAsync(this IDataContext dataContext, int companyId)
-        {
-            return await dataContext.Companies
-                .Where(c => c.CompanyId == companyId)
-                .Select(c => new Users.CreateViewModel
-                {
-                    CompanyName = c.Name,
-                    DateFormat = c.DateFormat,
-                    Teams = c.Departments
-                        .OrderBy(t => t.Name)
-                        .Select(t => new ResultModels.ListItem
-                        {
-                            Id = t.TeamId,
-                            Value = t.Name,
-                        })
-                })
-                .FirstAsync();
-        }
-
-        public static async Task<Users.AbsencesViewModel> GetAbsencesAync(this IDataContext dataContext, int companyId, int userId)
-        {
-            var user = await dataContext.Users
-                .Where(u => u.CompanyId == companyId && u.UserId == userId)
-                .Select(u => new
-                {
-                    u.FirstName,
-                    u.LastName,
-                    u.TeamId,
-                    u.IsActivated,
-                    u.EndDate,
-                    u.Team.IsAccrued,
-                })
-                .FirstOrDefaultAsync();
-
-            if (user == null)
-            {
-                throw new NotFoundException();
-            }
-
-            return new()
-            {
-                Id = userId,
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                TeamId = user.TeamId,
-                IsActive = user.IsActivated && (user.EndDate == null || user.EndDate > DateTime.Today),
-                IsAccrued = user.IsAccrued,
-                Summary = await dataContext.GetAllowanceAsync(userId, DateTime.Today.Year),
-                LeaveRequested = await dataContext.Leaves.GetRequested(userId, DateTime.Today.Year),
-            };
         }
 
         public static async Task<Users.UsersViewModel> QueryUsers(this IDataContext dataContext, int companyId, int? team)
@@ -250,7 +154,7 @@ namespace Timeoff.Application
             var users = await query
                 .OrderBy(u => u.FirstName)
                 .ThenBy(u => u.LastName)
-                .Select(u => new ResultModels.UserInfoResult
+                .Select(u => new Users.UserInfoResult
                 {
                     Id = u.UserId,
                     FirstName = u.FirstName,
@@ -281,7 +185,7 @@ namespace Timeoff.Application
                 .Select(c => new
                 {
                     c.Name,
-                    Teams = c.Departments
+                    Teams = c.Teams
                         .OrderBy(d => d.Name)
                         .Select(d => new ResultModels.ListItem
                         {

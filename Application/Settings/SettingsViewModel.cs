@@ -1,9 +1,9 @@
 ﻿namespace Timeoff.Application.Settings
 {
-    public record SettingsViewModel : Types.SettingsModel
+    public record SettingsViewModel : SettingsModel
     {
         public IEnumerable<bool> Schedule { get; init; } = null!;
-        public ResultModels.LeaveTypeResult[] LeaveTypes { get; init; } = null!;
+        public LeaveTypeResult[] LeaveTypes { get; init; } = null!;
 
         public int CurrentYear => DateTime.Today.Year;
 

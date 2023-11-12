@@ -34,7 +34,7 @@
 
         public Schedule Schedule { get; set; } = null!;
 
-        public ICollection<Team> Departments { get; set; } = new HashSet<Team>();
+        public ICollection<Team> Teams { get; set; } = new HashSet<Team>();
 
         public ICollection<User> Users { get; set; } = new HashSet<User>();
 

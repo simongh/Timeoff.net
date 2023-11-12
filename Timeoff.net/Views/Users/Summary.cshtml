@@ -1,0 +1,22 @@
+﻿@model Timeoff.Application.UserSummary.SummaryViewModel
+@{
+    Layout = "";
+}
+<div>
+    <strong>Name:</strong> @Model.Name.
+</div>
+<div>
+    <strong>Team:</strong> @Model.Team.
+</div>
+@if (Model.ShowDetailed)
+{
+    <div>
+        <strong>Available:</strong> @(Model.Total - Model.Used) days out of @Model.Total.
+    </div>
+    <div>
+        <strong>Approvers:</strong>
+        <ul>
+            <li>@Model.Approver</li>
+        </ul>
+    </div>
+}

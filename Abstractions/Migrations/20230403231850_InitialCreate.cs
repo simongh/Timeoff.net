@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -124,7 +123,8 @@ namespace Timeoff.Migrations
                     Days = table.Column<double>(type: "REAL", nullable: false),
                     UserId = table.Column<int>(type: "INTEGER", nullable: false),
                     ApproverId = table.Column<int>(type: "INTEGER", nullable: false),
-                    LeaveTypeId = table.Column<int>(type: "INTEGER", nullable: false)
+                    LeaveTypeId = table.Column<int>(type: "INTEGER", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
                 },
                 constraints: table =>
                 {
@@ -242,8 +242,8 @@ namespace Timeoff.Migrations
                     UserAllowanceAdjustmentId = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Year = table.Column<int>(type: "INTEGER", nullable: false),
-                    Adjustment = table.Column<int>(type: "INTEGER", nullable: false),
-                    CarriedOverAllowance = table.Column<int>(type: "INTEGER", nullable: false),
+                    Adjustment = table.Column<double>(type: "REAL", nullable: false),
+                    CarriedOverAllowance = table.Column<double>(type: "REAL", nullable: false),
                     CreatedAt = table.Column<DateTimeOffset>(type: "TEXT", nullable: false),
                     UserId = table.Column<int>(type: "INTEGER", nullable: false)
                 },

@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Timeoff.Application.Schedule;
 
 namespace Timeoff.Controllers
 {
@@ -34,7 +35,7 @@ namespace Timeoff.Controllers
         }
 
         [HttpPost("schedule")]
-        public async Task<IActionResult> ScheduleAsync(Application.Settings.UpdateScheduleCommand command)
+        public async Task<IActionResult> ScheduleAsync(UpdateScheduleCommand command)
         {
             return View("index", await _mediator.Send(command));
         }
@@ -56,11 +57,11 @@ namespace Timeoff.Controllers
         [HttpGet("company/integration-api")]
         public async Task<IActionResult> CompanyIntegrationApiAsync()
         {
-            return View(await _mediator.Send(new Application.Settings.GetIntegrationApiCommand()));
+            return View(await _mediator.Send(new Application.IntegrationApi.GetIntegrationApiCommand()));
         }
 
         [HttpPost("company/integration-api")]
-        public async Task<IActionResult> UpdateCompanyIntegrationApiAsync(Application.Settings.UpdateIntegrationApiCommand command)
+        public async Task<IActionResult> UpdateCompanyIntegrationApiAsync(Application.IntegrationApi.UpdateIntegrationApiCommand command)
         {
             return View("CompanyIntegrationApi", await _mediator.Send(command));
         }
@@ -84,7 +85,7 @@ namespace Timeoff.Controllers
         }
 
         [HttpPost("company/delete")]
-        public async Task<IActionResult> CompanyDeleteAsync(Application.Settings.DeleteCompanyCommand command)
+        public async Task<IActionResult> CompanyDeleteAsync(Application.DeleteCompany.DeleteCompanyCommand command)
         {
             var vm = await _mediator.Send(command);
 

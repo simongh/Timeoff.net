@@ -13,22 +13,22 @@ namespace Timeoff.Application
                 options.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
             });
 
-            services.AddTransient<IValidator<Account.LoginCommand>, Account.LoginCommandValidator>();
-            services.AddTransient<IValidator<Account.RegisterCommand>, Account.RegisterCommandValidator>();
-            services.AddTransient<IValidator<Account.ForgotPasswordComand>, Account.ForgotPasswordCommandValidator>();
-            services.AddTransient<IValidator<Account.ResetPasswordCommand>, Account.ResetPasswordCommandValidator>();
+            services.AddTransient<IValidator<Login.LoginCommand>, Login.LoginCommandValidator>();
+            services.AddTransient<IValidator<Register.RegisterCommand>, Register.RegisterCommandValidator>();
+            services.AddTransient<IValidator<ForgotPassword.ForgotPasswordComand>, ForgotPassword.ForgotPasswordCommandValidator>();
+            services.AddTransient<IValidator<ResetPassword.ResetPasswordCommand>, ResetPassword.ResetPasswordCommandValidator>();
 
-            services.AddTransient<IValidator<PublicHoliday.UpdatePublicHolidayCommand>, PublicHoliday.UpdatePublicHolidayCommandValidator>();
-            services.AddTransient<IValidator<Teams.UpdateTeamCommand>, Teams.UpdateTeamCommandValidator>();
+            services.AddTransient<IValidator<PublicHolidays.UpdatePublicHolidayCommand>, PublicHolidays.UpdatePublicHolidayCommandValidator>();
+            services.AddTransient<IValidator<TeamDetails.UpdateTeamCommand>, TeamDetails.UpdateTeamCommandValidator>();
 
             services.AddTransient<IValidator<Settings.UpdateSettingsCommand>, Settings.UpdateSettingsCommandValidator>();
             services.AddTransient<IValidator<Settings.UpdateLeaveTypesCommand>, Settings.UpdateLeaveTypesCommandValidator>();
 
-            services.AddTransient<Users.UserDetailsBaseValidator>();
-            services.AddTransient<IValidator<Users.UpdateUserCommand>, Users.UpdateUserCommandValidator>();
-            services.AddTransient<IValidator<Users.CreateCommand>, Users.CreateCommandValidator>();
+            services.AddTransient<Validators.UserDetailsBaseValidator>();
+            services.AddTransient<IValidator<UserDetails.UpdateUserCommand>, UserDetails.UpdateUserCommandValidator>();
+            services.AddTransient<IValidator<CreateUser.CreateCommand>, CreateUser.CreateCommandValidator>();
 
-            services.AddTransient<IValidator<Absences.BookCommand>, Absences.BookCommandValidator>();
+            services.AddTransient<IValidator<BookAbsence.BookCommand>, BookAbsence.BookCommandValidator>();
 
             return services;
         }
