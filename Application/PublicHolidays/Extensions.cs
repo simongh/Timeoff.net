@@ -16,6 +16,7 @@ namespace Timeoff.Application.PublicHolidays
                     c.DateFormat,
                     Holidays = c.PublicHolidays
                         .Where(h => h.Date.Year == year)
+                        .OrderBy(h => h.Date)
                         .Select(h => new ResultModels.PublicHolidayResult
                         {
                             Id = h.PublicHolidayId,

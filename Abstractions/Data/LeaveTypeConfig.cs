@@ -8,6 +8,10 @@ namespace Timeoff.Data
         public void Configure(EntityTypeBuilder<Entities.LeaveType> builder)
         {
             builder.ToTable("LeaveTypes");
+
+            builder
+                .Property(p => p.RowVersion)
+                .IsRowVersion();
         }
     }
 }

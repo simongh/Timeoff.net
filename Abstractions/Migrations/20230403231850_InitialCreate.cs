@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
+using Timeoff.Extensions;
 
 #nullable disable
 
@@ -29,7 +30,8 @@ namespace Timeoff.Migrations
                     TimeZone = table.Column<string>(type: "TEXT", nullable: false),
                     IntegrationApiEnabled = table.Column<bool>(type: "INTEGER", nullable: false),
                     IntegrationApiToken = table.Column<Guid>(type: "TEXT", nullable: false),
-                    CarryOver = table.Column<int>(type: "INTEGER", nullable: false)
+                    CarryOver = table.Column<int>(type: "INTEGER", nullable: false),
+                    RowVersion = table.Column<byte[]>(rowVersion: true, nullable: true),
                 },
                 constraints: table =>
                 {
@@ -48,7 +50,8 @@ namespace Timeoff.Migrations
                     Limit = table.Column<int>(type: "INTEGER", nullable: false),
                     SortOrder = table.Column<int>(type: "INTEGER", nullable: false),
                     AutoApprove = table.Column<bool>(type: "INTEGER", nullable: false),
-                    CompanyId = table.Column<int>(type: "INTEGER", nullable: false)
+                    CompanyId = table.Column<int>(type: "INTEGER", nullable: false),
+                    RowVersion = table.Column<byte[]>(rowVersion: true, nullable: true),
                 },
                 constraints: table =>
                 {
@@ -69,7 +72,8 @@ namespace Timeoff.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     Name = table.Column<string>(type: "TEXT", nullable: false),
                     Date = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    CompanyId = table.Column<int>(type: "INTEGER", nullable: false)
+                    CompanyId = table.Column<int>(type: "INTEGER", nullable: false),
+                    RowVersion = table.Column<byte[]>(rowVersion: true, nullable: true),
                 },
                 constraints: table =>
                 {
@@ -124,7 +128,8 @@ namespace Timeoff.Migrations
                     UserId = table.Column<int>(type: "INTEGER", nullable: false),
                     ApproverId = table.Column<int>(type: "INTEGER", nullable: false),
                     LeaveTypeId = table.Column<int>(type: "INTEGER", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false, defaultValue: DateTime.UtcNow),
+                    RowVersion = table.Column<byte[]>(rowVersion: true, nullable: true),
                 },
                 constraints: table =>
                 {
@@ -151,7 +156,8 @@ namespace Timeoff.Migrations
                     Saturday = table.Column<byte>(type: "INTEGER", nullable: false),
                     Sunday = table.Column<byte>(type: "INTEGER", nullable: false),
                     UserId = table.Column<int>(type: "INTEGER", nullable: true),
-                    CompanyId = table.Column<int>(type: "INTEGER", nullable: true)
+                    CompanyId = table.Column<int>(type: "INTEGER", nullable: true),
+                    RowVersion = table.Column<byte[]>(rowVersion: true, nullable: true),
                 },
                 constraints: table =>
                 {
@@ -186,7 +192,8 @@ namespace Timeoff.Migrations
                     IncludePublicHolidays = table.Column<bool>(type: "INTEGER", nullable: false),
                     IsAccrued = table.Column<bool>(type: "INTEGER", nullable: false),
                     ManagerId = table.Column<int>(type: "INTEGER", nullable: true),
-                    CompanyId = table.Column<int>(type: "INTEGER", nullable: false)
+                    CompanyId = table.Column<int>(type: "INTEGER", nullable: false),
+                    RowVersion = table.Column<byte[]>(rowVersion: true, nullable: true),
                 },
                 constraints: table =>
                 {
@@ -216,7 +223,8 @@ namespace Timeoff.Migrations
                     StartDate = table.Column<DateTime>(type: "TEXT", nullable: false),
                     EndDate = table.Column<DateTime>(type: "TEXT", nullable: true),
                     CompanyId = table.Column<int>(type: "INTEGER", nullable: false),
-                    TeamId = table.Column<int>(type: "INTEGER", nullable: false)
+                    TeamId = table.Column<int>(type: "INTEGER", nullable: false),
+                    RowVersion = table.Column<byte[]>(rowVersion: true, nullable: true),
                 },
                 constraints: table =>
                 {
@@ -244,8 +252,9 @@ namespace Timeoff.Migrations
                     Year = table.Column<int>(type: "INTEGER", nullable: false),
                     Adjustment = table.Column<double>(type: "REAL", nullable: false),
                     CarriedOverAllowance = table.Column<double>(type: "REAL", nullable: false),
-                    CreatedAt = table.Column<DateTimeOffset>(type: "TEXT", nullable: false),
-                    UserId = table.Column<int>(type: "INTEGER", nullable: false)
+                    CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false, defaultValue: DateTime.UtcNow),
+                    UserId = table.Column<int>(type: "INTEGER", nullable: false),
+                    RowVersion = table.Column<byte[]>(rowVersion: true, nullable: true),
                 },
                 constraints: table =>
                 {
@@ -267,7 +276,8 @@ namespace Timeoff.Migrations
                     Name = table.Column<string>(type: "TEXT", nullable: false),
                     FeedToken = table.Column<string>(type: "TEXT", nullable: false),
                     Type = table.Column<byte>(type: "INTEGER", nullable: false),
-                    UserId = table.Column<int>(type: "INTEGER", nullable: false)
+                    UserId = table.Column<int>(type: "INTEGER", nullable: false),
+                    RowVersion = table.Column<byte[]>(rowVersion: true, nullable: true),
                 },
                 constraints: table =>
                 {
@@ -415,6 +425,15 @@ namespace Timeoff.Migrations
                 column: "ManagerId",
                 principalTable: "Users",
                 principalColumn: "UserId");
+
+            migrationBuilder.AddRowVersion("Companies");
+            migrationBuilder.AddRowVersion("Leaves");
+            migrationBuilder.AddRowVersion("LeaveTypes");
+            migrationBuilder.AddRowVersion("PublicHolidays");
+            migrationBuilder.AddRowVersion("Schedules");
+            migrationBuilder.AddRowVersion("Teams");
+            migrationBuilder.AddRowVersion("UserAllowanceAdjustments");
+            migrationBuilder.AddRowVersion("UserFeeds");
         }
 
         /// <inheritdoc />

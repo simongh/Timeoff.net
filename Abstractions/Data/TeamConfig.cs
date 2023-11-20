@@ -9,6 +9,10 @@ namespace Timeoff.Data
         {
             builder.ToTable("Teams");
 
+            builder
+                .Property(p => p.RowVersion)
+                .IsRowVersion();
+
             builder.HasMany(p => p.Approvers)
                 .WithMany(p => p.TeamApprover)
                 .UsingEntity(j => j.ToTable("TeamApprovers"));

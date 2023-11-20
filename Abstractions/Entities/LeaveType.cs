@@ -19,6 +19,8 @@
         public int CompanyId { get; set; }
 
         public Company Company { get; set; } = null!;
+
+        public byte[]? RowVersion { get; init; } = null!;
         public ICollection<Leave> Leaves { get; set; } = new HashSet<Leave>();
     }
 }

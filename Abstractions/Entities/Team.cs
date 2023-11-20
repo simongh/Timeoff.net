@@ -20,6 +20,7 @@
 
         public Company Company { get; set; } = null!;
 
+        public byte[]? RowVersion { get; init; } = null!;
         public ICollection<User> Users { get; set; } = new HashSet<User>();
 
         public ICollection<User> Approvers { get; set; } = new HashSet<User>();

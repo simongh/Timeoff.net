@@ -1,20 +1,16 @@
 ﻿namespace Timeoff.Types
 {
-    public class AllowanceCalculator
+    public record AllowanceCalculator
     {
-        private Entities.UserAllowanceAdjustment _adjustment;
-
         public double Allowance { get; init; }
 
-        public Entities.UserAllowanceAdjustment Adjustment
-        {
-            get => _adjustment;
-            init => _adjustment = value ?? new Entities.UserAllowanceAdjustment();
-        }
+        public double CarryOver { get; init; }
 
         public double DaysUsed { get; init; }
 
-        public bool Acrrue { get; init; }
+        public double Adjustment { get; init; }
+
+        public bool IsAccrued { get; init; }
 
         public int YearStart { get; init; }
 
@@ -22,35 +18,40 @@
 
         public DateTime? End { get; init; }
 
-        private int CurrentYear => DateTime.Today.Year;
+        public int Year { get; init; } = DateTime.Today.Year;
 
-        private DateTime CalculationStart => Start.Year == CurrentYear ? Start : new DateTime(CurrentYear, 1, 1);
+        private DateTime CalculationStart => Start.Year == Year ? Start : new DateTime(Year, 1, 1);
 
-        private DateTime CalculationEnd => End?.Year <= CurrentYear ? End.Value : YearEnd(CurrentYear);
+        private DateTime CalculationEnd => End?.Year <= Year ? End.Value : YearEnd(Year);
 
         private static DateTime YearEnd(int year) => new DateTime(year, 1, 1).AddYears(1).AddDays(-1);
 
-        private double EmploymentRangeAdjustment
+        public double EmploymentRangeAdjustment
         {
             get
             {
-                if (Start.Year != CurrentYear && (End == null || End.Value.Year > CurrentYear))
+                if (Start.Year != Year && (End == null || End.Value.Year != Year))
                     return 0;
 
-                return -(Allowance - (Allowance * (CalculationEnd - CalculationStart).TotalDays / 365));
+                return Math.Round(-(Allowance - (Allowance * (CalculationEnd - CalculationStart).TotalDays / 365)));
             }
         }
 
-        private double AccruedAdjustment
+        public double AccruedAdjustment
         {
             get
             {
-                var a = Allowance + Adjustment.CarriedOverAllowance + EmploymentRangeAdjustment;
+                if (!IsAccrued)
+                    return 0;
+
+                var a = Allowance + CarryOver + EmploymentRangeAdjustment;
                 var days = (CalculationEnd - CalculationStart).TotalDays;
                 var delta = a * (CalculationEnd - DateTime.Today).TotalDays / days;
 
-                return -((delta * 2) / 2);
+                return Math.Round(-((delta * 2) / 2));
             }
         }
+
+        public double Total => Allowance + CarryOver + Adjustment + EmploymentRangeAdjustment + AccruedAdjustment;
     }
 }

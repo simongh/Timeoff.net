@@ -1,28 +1,26 @@
 ﻿namespace Timeoff.ResultModels
 {
-    public record AllowanceSummaryResult
+    public record AllowanceSummaryResult : Types.AllowanceCalculator
     {
-        public int PreviousYear { get; init; }
-
-        public double Allowance { get; init; }
-
-        public double CarryOver { get; init; }
-
-        public double Adjustment { get; init; }
-
-        public double EmploymentAdjustment { get; init; }
-
-        public bool IsAccrued { get; init; }
-
-        public double AccruedAdjustment { get; init; }
+        public int PreviousYear => Year - 1;
 
         public IEnumerable<LeaveSummaryResult> LeaveSummary { get; init; } = null!;
 
         public double Used => LeaveSummary.Where(l => l.AffectsAllowance).Sum(l => l.Total);
 
         public double Remaining => Total - Used;
-        public double Total => Allowance + CarryOver + Adjustment + EmploymentAdjustment + AccruedAdjustment;
 
-        public double Available => Total - Used;
+        public double Available
+        {
+            get
+            {
+                if (Start.Year > Year || End?.Year < Year)
+                {
+                    return 0;
+                }
+
+                return Total - Used;
+            }
+        }
     }
 }

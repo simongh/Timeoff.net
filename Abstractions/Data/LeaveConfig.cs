@@ -16,6 +16,10 @@ namespace Timeoff.Data
             builder
                 .Property(p => p.CreatedAt)
                 .HasDefaultValue(DateTime.UtcNow);
+
+            builder
+                .Property(p => p.RowVersion)
+                .IsRowVersion();
         }
     }
 }

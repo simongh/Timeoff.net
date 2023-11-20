@@ -84,9 +84,6 @@ else
                                             {
                                                 <li><a asp-route-year="@Model.CurrentDate.Year" asp-route-month="@Model.CurrentDate.Month" asp-route-team="@item.Id">@item.Value</a></li>
                                             }
-                                            @* {{#each related_departments}}
-                                    <li><a href="?{{> team_view_url_parameters base_date = ../base_date current_department = this save_current_department = 1 }}">{{this.name}}</a></li>
-                                    {{/each}} *@
                                         </ul>
                                     </div>
                                 }

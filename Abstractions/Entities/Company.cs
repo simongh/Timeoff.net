@@ -32,6 +32,8 @@
 
         public int CompanyId { get; private set; }
 
+        public byte[]? RowVersion { get; init; } = null!;
+
         public Schedule Schedule { get; set; } = null!;
 
         public ICollection<Team> Teams { get; set; } = new HashSet<Team>();

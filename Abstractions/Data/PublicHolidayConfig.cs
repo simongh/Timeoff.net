@@ -8,6 +8,10 @@ namespace Timeoff.Data
         public void Configure(EntityTypeBuilder<Entities.PublicHoliday> builder)
         {
             builder.ToTable("PublicHolidays");
+
+            builder
+                .Property(p => p.RowVersion)
+                .IsRowVersion();
         }
     }
 }
