@@ -5,6 +5,7 @@
         public static IServiceCollection AddWebServices(this IServiceCollection services)
         {
             services.AddScoped<Services.ICurrentUserService, Services.CurrentUserService>();
+            services.AddScoped<Services.IFlashMessageService, Services.FlashMessageService>();
             services.AddHttpContextAccessor();
             services.AddMediatR(options =>
              {

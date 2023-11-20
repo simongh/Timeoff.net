@@ -10,7 +10,11 @@ namespace Timeoff.Data
             builder.ToTable("Users");
 
             builder
-                .HasMany(p => p.ManagedTeams)
+               .Property(p => p.RowVersion)
+               .IsRowVersion();
+
+            builder
+                 .HasMany(p => p.ManagedTeams)
                 .WithOne(p => p.Manager);
 
             builder

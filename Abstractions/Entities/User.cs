@@ -38,6 +38,8 @@
 
         public Schedule? Schedule { get; set; }
 
+        public byte[]? RowVersion { get; init; } = null!;
+
         public ICollection<Team> ManagedTeams { get; set; } = new HashSet<Team>();
 
         public ICollection<Team> TeamApprover { get; set; } = new HashSet<Team>();

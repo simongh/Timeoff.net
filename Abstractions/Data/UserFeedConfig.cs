@@ -8,6 +8,10 @@ namespace Timeoff.Data
         public void Configure(EntityTypeBuilder<Entities.UserFeed> builder)
         {
             builder.ToTable("UserFeeds");
+
+            builder
+                .Property(p => p.RowVersion)
+                .IsRowVersion();
         }
     }
 }

@@ -37,5 +37,7 @@
         public DateTime CreatedAt { get; init; }
 
         //public ICollection<Comment> Comments { get; set; }
+
+        public byte[]? RowVersion { get; init; } = null!;
     }
 }

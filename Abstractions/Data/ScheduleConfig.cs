@@ -10,6 +10,10 @@ namespace Timeoff.Data
         {
             builder.ToTable("Schedules");
 
+            builder
+                .Property(p => p.RowVersion)
+                .IsRowVersion();
+
             builder.HasOne(p => p.Company)
                 .WithOne(p => p.Schedule);
         }

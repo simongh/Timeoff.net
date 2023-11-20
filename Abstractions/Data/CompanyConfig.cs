@@ -8,6 +8,10 @@ namespace Timeoff.Data
         public void Configure(EntityTypeBuilder<Entities.Company> builder)
         {
             builder.ToTable("Companies");
+
+            builder
+                .Property(p => p.RowVersion)
+                .IsRowVersion();
         }
     }
 }

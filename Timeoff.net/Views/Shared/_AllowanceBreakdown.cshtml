@@ -18,7 +18,7 @@
               id='nominalAllowancePart'>@Model.Allowance</span>
     </dd>
     <dd>
-        <em>Carried over from @Model.CarryOver</em>
+        <em>Carried over from @Model.PreviousYear</em>
         <span class="pull-right"
               data-content="Allowance carried over from previous year. Note: this amount is calculated on the very first day of the year."
               data-placement="top"
@@ -40,7 +40,7 @@
               data-content="Automatic adjustment to allowance based on employee's start and end day of employment."
               data-placement="top"
               data-toggle="popover"
-              data-trigger="focus hover">@Model.EmploymentAdjustment</span>
+              data-trigger="focus hover">@Model.EmploymentRangeAdjustment</span>
     </dd>
     <dd>
         <em>Used so far</em>

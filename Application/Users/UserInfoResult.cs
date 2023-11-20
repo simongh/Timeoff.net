@@ -8,7 +8,7 @@
 
         public bool IsAdmin { get; init; }
 
-        public double AvailableAllowance => AllowanceCalculator.Allowance;
+        public double AvailableAllowance => AllowanceCalculator.Total;
 
         public double DaysUsed => AllowanceCalculator.DaysUsed;
 

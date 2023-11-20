@@ -6,6 +6,8 @@
 
         public IEnumerable<string>? Messages { get; init; }
 
+        public Guid Result { get; set; }
+
         public static FlashResult WithError(string error)
         {
             return new()

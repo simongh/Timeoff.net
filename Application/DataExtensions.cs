@@ -13,6 +13,9 @@ namespace Timeoff.Application
                     u.Team.Allowance,
                     u.CompanyId,
                     Adjustment = u.Adjustments.Where(a => a.Year == year).FirstOrDefault(),
+                    u.StartDate,
+                    u.EndDate,
+                    u.Team.IsAccrued,
                 })
                 .FirstAsync();
 
@@ -34,8 +37,11 @@ namespace Timeoff.Application
                 Allowance = allowance.Allowance,
                 CarryOver = allowance.Adjustment?.CarriedOverAllowance ?? 0,
                 Adjustment = allowance.Adjustment?.Adjustment ?? 0,
-                PreviousYear = year - 1,
+                Start = allowance.StartDate,
+                End = allowance.EndDate,
                 LeaveSummary = leaves,
+                IsAccrued = allowance.IsAccrued,
+                Year = year,
             };
         }
 
@@ -171,10 +177,15 @@ namespace Timeoff.Application
                             .Sum(a => a.Days),
                         Start = u.StartDate,
                         End = u.EndDate,
-                        Acrrue = u.Team.IsAccrued,
+                        IsAccrued = u.Team.IsAccrued,
                         Adjustment = u.Adjustments
                             .Where(a => a.Year == year)
-                            .FirstOrDefault()!,
+                            .Any()
+                            ? u.Adjustments
+                                .Where(a => a.Year == year)
+                                .FirstOrDefault()!
+                                .Adjustment
+                            : 0,
                         Allowance = u.Team.Allowance,
                     }
                 })
