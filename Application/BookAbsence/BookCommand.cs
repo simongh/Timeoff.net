@@ -28,17 +28,20 @@ namespace Timeoff.Application.BookAbsence
         private readonly IDataContext _dataContext;
         private readonly Services.ICurrentUserService _currentUserService;
         private readonly Services.INewLeaveService _leaveService;
+        private readonly Services.IDaysCalculator _daysCalculator;
 
         private int UserId { get; set; }
 
         public BookCommandHandler(
             IDataContext dataContext,
             Services.ICurrentUserService currentUserService,
-            Services.INewLeaveService leaveService)
+            Services.INewLeaveService leaveService,
+            Services.IDaysCalculator daysCalculator)
         {
             _dataContext = dataContext;
             _currentUserService = currentUserService;
             _leaveService = leaveService;
+            _daysCalculator = daysCalculator;
         }
 
         public async Task Handle(BookCommand request, CancellationToken cancellationToken)
@@ -62,7 +65,13 @@ namespace Timeoff.Application.BookAbsence
                 return;
             }
 
-            UserId = request.Employee ?? _currentUserService.UserId;
+            var user = (await _dataContext.Users
+                .FindById(request.Employee ?? _currentUserService.UserId)
+                .Include(u => u.Team)
+                .Include(u => u.Company.Schedule)
+                .Include(u => u.Schedule)
+                .FirstOrDefaultAsync())
+                ?? throw new NotFoundException();
 
             if (!await CheckOverlappingBookingsAsync(request))
             {
@@ -70,8 +79,6 @@ namespace Timeoff.Application.BookAbsence
             }
 
             var days = 0d;
-            if (leaveType.UseAllowance)
-                days = await AdjustForCalendarAsync(request);
 
             var absence = new Entities.Leave
             {
@@ -82,10 +89,13 @@ namespace Timeoff.Application.BookAbsence
                 LeaveTypeId = request.LeaveType,
                 Days = days,
                 EmployeeComment = request.Comment,
-                UserId = UserId,
+                User = user,
                 Status = LeaveStatus.New,
                 ApproverId = await GetApproverAsync(),
             };
+
+            if (leaveType.UseAllowance)
+                _daysCalculator.CalculateDays(absence);
 
             if (absence.ApproverId == absence.UserId)
             {
@@ -97,73 +107,73 @@ namespace Timeoff.Application.BookAbsence
             await _dataContext.SaveChangesAsync();
         }
 
-        private async Task<double> AdjustForCalendarAsync(BookCommand request)
-        {
-            var schedule = await _dataContext.Users
-                .Where(u => u.CompanyId == _currentUserService.CompanyId)
-                .Where(u => u.UserId == UserId)
-                .Select(u => new
-                {
-                    UserSchedule = u.Schedule,
-                    CustomerSchedule = u.Company.Schedule,
-                    Holidays = u.Team.IncludePublicHolidays
-                        ? u.Company.PublicHolidays.Select(h => h.Date)
-                        : new DateTime[0]
-                })
-                .FirstAsync();
+        //private async Task<double> AdjustForCalendarAsync(BookCommand request)
+        //{
+        //    var schedule = await _dataContext.Users
+        //        .Where(u => u.CompanyId == _currentUserService.CompanyId)
+        //        .Where(u => u.UserId == UserId)
+        //        .Select(u => new
+        //        {
+        //            UserSchedule = u.Schedule,
+        //            CustomerSchedule = u.Company.Schedule,
+        //            Holidays = u.Team.IncludePublicHolidays
+        //                ? u.Company.PublicHolidays.Select(h => h.Date)
+        //                : new DateTime[0]
+        //        })
+        //        .FirstAsync();
 
-            var days = 0d;
-            var when = request.From;
-            for (int i = 1; when <= request.To; i++)
-            {
-                var workday = FromSchedule(when, schedule.UserSchedule ?? schedule.CustomerSchedule);
+        //    var days = 0d;
+        //    var when = request.From;
+        //    for (int i = 1; when <= request.To; i++)
+        //    {
+        //        var workday = FromSchedule(when, schedule.UserSchedule ?? schedule.CustomerSchedule);
 
-                var toAdd = 1d;
+        //        var toAdd = 1d;
 
-                if (workday == WorkingDay.None || schedule.Holidays.Contains(when))
-                    toAdd = 0;
-                else
-                {
-                    if (i == 0 && request.FromPart == LeavePart.Afternoon)
-                    {
-                        if (workday == WorkingDay.Afternoon)
-                            toAdd = 0.5;
-                        else
-                            toAdd = 0;
-                    }
-                    else if (when == request.To && request.ToPart == LeavePart.Morning)
-                    {
-                        if (workday == WorkingDay.Morning)
-                            toAdd = 0.5;
-                        else
-                            toAdd = 0;
-                    }
-                    else if (workday != WorkingDay.WholeDay)
-                    {
-                        toAdd = 0.5;
-                    }
-                }
+        //        if (workday == WorkingDay.None || schedule.Holidays.Contains(when))
+        //            toAdd = 0;
+        //        else
+        //        {
+        //            if (i == 0 && request.FromPart == LeavePart.Afternoon)
+        //            {
+        //                if (workday == WorkingDay.Afternoon)
+        //                    toAdd = 0.5;
+        //                else
+        //                    toAdd = 0;
+        //            }
+        //            else if (when == request.To && request.ToPart == LeavePart.Morning)
+        //            {
+        //                if (workday == WorkingDay.Morning)
+        //                    toAdd = 0.5;
+        //                else
+        //                    toAdd = 0;
+        //            }
+        //            else if (workday != WorkingDay.WholeDay)
+        //            {
+        //                toAdd = 0.5;
+        //            }
+        //        }
 
-                days += toAdd;
-                when = request.From.AddDays(i);
-            }
+        //        days += toAdd;
+        //        when = request.From.AddDays(i);
+        //    }
 
-            return days;
-        }
+        //    return days;
+        //}
 
-        private WorkingDay FromSchedule(DateTime when, Entities.Schedule schedule)
-        {
-            return when.DayOfWeek switch
-            {
-                DayOfWeek.Monday => schedule.Monday,
-                DayOfWeek.Tuesday => schedule.Tuesday,
-                DayOfWeek.Wednesday => schedule.Wednesday,
-                DayOfWeek.Thursday => schedule.Thursday,
-                DayOfWeek.Friday => schedule.Friday,
-                DayOfWeek.Saturday => schedule.Saturday,
-                DayOfWeek.Sunday => schedule.Sunday,
-            };
-        }
+        //private WorkingDay FromSchedule(DateTime when, Entities.Schedule schedule)
+        //{
+        //    return when.DayOfWeek switch
+        //    {
+        //        DayOfWeek.Monday => schedule.Monday,
+        //        DayOfWeek.Tuesday => schedule.Tuesday,
+        //        DayOfWeek.Wednesday => schedule.Wednesday,
+        //        DayOfWeek.Thursday => schedule.Thursday,
+        //        DayOfWeek.Friday => schedule.Friday,
+        //        DayOfWeek.Saturday => schedule.Saturday,
+        //        DayOfWeek.Sunday => schedule.Sunday,
+        //    };
+        //}
 
         private async Task<int> GetApproverAsync()
         {

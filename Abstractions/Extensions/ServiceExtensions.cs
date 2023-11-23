@@ -15,6 +15,7 @@ namespace Timeoff
             services.AddDbContext<DataContext>(optionsActions);
             services.AddSingleton<Services.IEmailTemplateService, Services.EmailTemplateService>();
             services.AddTransient<Services.INewLeaveService, Services.NewLeaveService>();
+            services.AddTransient<Services.IDaysCalculator, Services.DaysCalculator>();
 
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(Behaviours.ValidationBehaviour<,>));
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(Behaviours.UnhandledExceptionBehaviour<,>));
