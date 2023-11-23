@@ -18,13 +18,17 @@ namespace Timeoff.Application.PublicHolidays
     {
         private readonly IDataContext _dataContext;
         private readonly Services.ICurrentUserService _currentUserService;
+        private readonly Services.IDaysCalculator _adjuster;
+        private List<(DateTime original, DateTime modified)> _changes = new();
 
         public UpdatePublicHolidayCommandHandler(
             IDataContext dataContext,
-            Services.ICurrentUserService currentUserService)
+            Services.ICurrentUserService currentUserService,
+            Services.IDaysCalculator adjuster)
         {
             _dataContext = dataContext;
             _currentUserService = currentUserService;
+            _adjuster = adjuster;
         }
 
         public async Task<PublicHolidaysViewModel> Handle(UpdatePublicHolidayCommand request, CancellationToken cancellationToken)
@@ -35,6 +39,9 @@ namespace Timeoff.Application.PublicHolidays
                 await UpdateAsync(request);
 
                 await _dataContext.SaveChangesAsync();
+
+                if (_changes.Any())
+                    await _adjuster.AdjustForHolidaysAsync(_changes, _currentUserService.CompanyId);
             }
 
             var result = await _dataContext.Companies.GetPublicHolidaysAsync(_currentUserService.CompanyId, request.Year);
@@ -59,6 +66,8 @@ namespace Timeoff.Application.PublicHolidays
                 Name = request.Add.Name,
                 CompanyId = _currentUserService.CompanyId,
             });
+
+            _changes.Add((request.Add.Date, request.Add.Date));
         }
 
         private async Task UpdateAsync(UpdatePublicHolidayCommand request)
@@ -77,6 +86,10 @@ namespace Timeoff.Application.PublicHolidays
             foreach (var item in items)
             {
                 var m = request.PublicHolidays.First(h => h.Id == item.PublicHolidayId);
+
+                if (m.Date != item.Date)
+                    _changes.Add((item.Date, m.Date));
+
                 item.Date = m.Date;
                 item.Name = m.Name;
             }
