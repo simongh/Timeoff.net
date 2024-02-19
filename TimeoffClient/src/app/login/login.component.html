@@ -1,0 +1,37 @@
+<h1>Login</h1>
+<flash-message/>
+<form class="form-horizontal" [formGroup]="loginForm">
+
+    <div class="row">&nbsp;</div>
+
+    <div class="form-group">
+        <label for="email" class="col-md-2 control-label col-md-offset-2">Employee email:</label>
+        <div class="col-md-5">
+            <input class="form-control" id="email" type="text" formControlName="email">
+            <small class="text-danger" *ngIf="loginForm.controls.email.touched && loginForm.controls.email.errors?.['required']">Email is required</small>
+            <small class="text-danger" *ngIf="loginForm.controls.email.touched && loginForm.controls.email.errors?.['email']">A valid email address is required</small>
+            </div>
+    </div>
+
+    <div class="form-group">
+        <label for="password" class="col-md-2 control-label col-md-offset-2">Password</label>
+        <div class="col-md-5">
+            <input class="form-control" id="password" type="password" formControlName="password">
+            <small class="text-danger" *ngIf="loginForm.controls.password.touched && loginForm.controls.password.errors?.['required']">Password is required</small>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-offset-4 col-md-1">
+            <button type="submit" class="btn btn-success single-click" id="submit_login" (click)="login()">Login</button>
+        </div>
+        <div class="col-md-4">
+            <p class="pull-right">
+                <a [routerLink]="['','forgot-password']">Forgot password?</a>&nbsp;
+                <a *ngIf="allowRegistrations" [routerLink]="['','register']">Register new company</a>
+            </p>
+        </div>
+    </div>
+</form>
+
+<div class="row">&nbsp;</div>

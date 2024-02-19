@@ -1,0 +1,73 @@
+<div class="header">
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/">TimeOff.Management</a>
+            </div>
+
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul *ngIf="isSignedIn" class="nav navbar-nav navbar-left">
+                    <li><a asp-controller="Calendar" asp-action="Index">Calendar</a></li>
+                    <li *ngIf="showTeamView"><a asp-controller="Calendar" asp-action="TeamView">Team View</a></li>
+                    <li *ngIf="isAdmin" class="hidden-xs"><a asp-controller="Users" asp-action="Index">Employees</a></li>
+                    <li class="navbar-form navbar-left">
+                        <div class="form-group">
+                            <button type="button" class="btn btn-info" data-toggle="modal" data-target="#book_leave_modal" id="book_time_off_btn">New absence</button>
+                        </div>
+                    </li>
+                </ul>
+
+                <ul class="nav navbar-nav navbar-right">
+                    <ng-container *ngIf="isSignedIn">
+                        <li class="dropdown" id="header-notification-dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                                <span class="fa fa-bell-o"></span>
+                                <span class="label label-info notification-badge hidden"></span>
+                            </a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li class="dropdown-header">No notifications</li>
+                            </ul>
+                        </li>
+                        <li *ngIf="isAdmin" class="dropdown hidden-xs">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><span class="fa fa-gears"></span> <span class="caret"></span></a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li><a asp-controller="Settings" asp-action="Index">General</a></li>
+                                <li role="separator" class="divider"></li>
+                                <li><a asp-controller="Teams" asp-action="Index">Teams</a></li>
+                                <li><a asp-controller="PublicHoliday" asp-action="Index">Public Holidays</a></li>
+                                <!-- <li><a asp-controller="Settings" asp-action="CompanyAuthentication">LDAP configuration</a></li> -->
+                                <li><a asp-controller="Settings" asp-action="CompanyIntegrationApi">API configuration</a></li>
+                                <li><a asp-controller="Users" asp-action="Import">Import employees</a></li>
+                                <li role="separator" class="divider"></li>
+                                <li><a asp-controller="Audit" asp-action="Emails">Emails audit</a></li>
+                                <li><a asp-controller="Reports" asp-action="Index">Reports</a></li>
+                            </ul>
+                        </li>
+                        <li class="visible-xs-block"><a asp-controller="Requests" asp-action="Index">Requests</a></li>
+                        <li class="visible-xs-block"><a asp-controller="Account" asp-action="Logout">Logout</a></li>
+                        <li class="dropdown hidden-xs">
+                            <a id="me_menu" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Me <span class="caret"></span></a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li><a asp-controller="Request" asp-action="Index">Requests</a></li>
+                                <li class="hidden-xs"><a asp-controller="Calendar" asp-action="Feeds">Feeds</a></li>
+                                <li><a [routerLink]="['','reset-password']">Change Password</a></li>
+                                <li role="separator" class="divider hidden-xs"></li>
+                                <li><a asp-controller="Account" asp-action="Logout">Logout</a></li>
+                            </ul>
+                        </li>
+                    </ng-container>
+                    <ng-container *ngIf="!isSignedIn">
+                        <li><a [routerLink]="['','login']">Login</a></li>
+                    </ng-container>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</div>
