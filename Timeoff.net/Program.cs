@@ -57,6 +57,7 @@ namespace Timeoff
             app.UseAuthentication();
             app.UseAuthorization();
             app.MapControllers().RequireAuthorization();
+            app.MapFallbackToFile("/index.html");
 
             app.Run();
         }

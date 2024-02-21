@@ -7,7 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Timeoff.net", "Timeoff.net\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Abstractions", "Abstractions\Abstractions.csproj", "{6CBF538F-8136-4561-A0FD-3DE97FE4C067}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application", "Application\Application.csproj", "{1011C4B9-43CA-4B71-8919-F11884CEFA32}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application", "Application\Application.csproj", "{1011C4B9-43CA-4B71-8919-F11884CEFA32}"
+EndProject
+Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "timeoff.ui", "timeoff.ui\timeoff.ui.esproj", "{A9F09D4B-DDAE-4974-B626-AC3C198BE9BE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,12 @@ Global
 		{1011C4B9-43CA-4B71-8919-F11884CEFA32}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1011C4B9-43CA-4B71-8919-F11884CEFA32}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1011C4B9-43CA-4B71-8919-F11884CEFA32}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A9F09D4B-DDAE-4974-B626-AC3C198BE9BE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A9F09D4B-DDAE-4974-B626-AC3C198BE9BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A9F09D4B-DDAE-4974-B626-AC3C198BE9BE}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{A9F09D4B-DDAE-4974-B626-AC3C198BE9BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A9F09D4B-DDAE-4974-B626-AC3C198BE9BE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A9F09D4B-DDAE-4974-B626-AC3C198BE9BE}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

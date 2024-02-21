@@ -6,11 +6,12 @@ import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
 import { FlashComponent } from "../components/flash/flash.component";
 import { LoginModel } from "../services/auth/login.model";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { ValidatorMessageComponent } from "../components/validator-message/validator-message.component";
 
 @Component({
     standalone: true,
     templateUrl: 'login.component.html',
-    imports: [RouterLink, CommonModule, ReactiveFormsModule, FlashComponent]
+    imports: [RouterLink, CommonModule, ReactiveFormsModule, FlashComponent,ValidatorMessageComponent ]
 })
 export class LoginComponent{
     public allowRegistrations: boolean = true;

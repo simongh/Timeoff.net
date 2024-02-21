@@ -8,8 +8,8 @@
         <label for="email" class="col-md-2 control-label col-md-offset-2">Employee email:</label>
         <div class="col-md-5">
             <input class="form-control" id="email" type="text" formControlName="email">
-            <small class="text-danger" *ngIf="loginForm.controls.email.touched && loginForm.controls.email.errors?.['required']">Email is required</small>
-            <small class="text-danger" *ngIf="loginForm.controls.email.touched && loginForm.controls.email.errors?.['email']">A valid email address is required</small>
+            <!-- <validator-message [formControl]="loginForm.controls.email" [validatorName]="'required'">Email is required</validator-message>
+            <validator-message [formControl]="loginForm.controls.email" [validatorName]="'email'">A valid email address is required</validator-message> -->
             </div>
     </div>
 
@@ -17,7 +17,7 @@
         <label for="password" class="col-md-2 control-label col-md-offset-2">Password</label>
         <div class="col-md-5">
             <input class="form-control" id="password" type="password" formControlName="password">
-            <small class="text-danger" *ngIf="loginForm.controls.password.touched && loginForm.controls.password.errors?.['required']">Password is required</small>
+            <!-- <validator-message [formControl]="loginForm.controls.password" [validatorName]="'required'">Password is required</validator-message> -->
         </div>
     </div>
 

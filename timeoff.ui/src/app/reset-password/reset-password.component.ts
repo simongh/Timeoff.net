@@ -12,7 +12,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
     standalone: true,
     templateUrl: './reset-password.component.html',
     styleUrl: './reset-password.component.sass',
-    imports: [FlashComponent,CommonModule,ReactiveFormsModule]
+    imports: [FlashComponent,CommonModule,ReactiveFormsModule,]
 })
 export class ResetPasswordComponent implements OnInit {
   public passwordForm = this.fb.group({
