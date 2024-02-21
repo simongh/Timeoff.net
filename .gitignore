@@ -366,9 +366,9 @@ FodyWeavers.xsd
 /Timeoff.net/Data
 
 # Compiled output
-/dist
+**/dist
 /tmp
-/out-tsc
+**/out-tsc
 /bazel-out
 
 # Node
@@ -386,15 +386,15 @@ yarn-error.log
 *.sublime-workspace
 
 # Visual Studio Code
-.vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
-.history/*
+**/.vscode/*
+**/!.vscode/settings.json
+**/!.vscode/tasks.json
+**/!.vscode/launch.json
+**/!.vscode/extensions.json
+**/.history/*
 
 # Miscellaneous
-/.angular/cache
+**/.angular/cache
 .sass-cache/
 /connect.lock
 /coverage
@@ -405,4 +405,3 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
-/TimeoffClient/.angular/cache/17.2.0

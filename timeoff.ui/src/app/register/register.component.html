@@ -14,7 +14,7 @@
                 <label for="companyName" class="col-md-2 control-label">Company name</label>
                 <div class="col-md-6">
                     <input class="form-control" placeholder="Company name" formControlName="companyName">
-                    <small class="text-danger" *ngIf="registerForm.controls.companyName.touched && registerForm.controls.companyName.errors?.['required']">A valid company name is required</small>
+                    <validator-message controlName="companyName" validatorName="required">A valid company name is required</validator-message>
                 </div>
             </div>
 
@@ -22,7 +22,7 @@
                 <label for="firstName" class="col-md-2 control-label">First Name</label>
                 <div class="col-md-6">
                     <input class="form-control" placeholder="First name" formControlName="firstName">
-                    <small class="text-danger" *ngIf="registerForm.controls.firstName.touched && registerForm.controls.firstName.errors?.['required']">A valid first name is required</small>
+                    <validator-message controlName="firstName" validatorName="required">A valid first name is required</validator-message>
                 </div>
             </div>
 
@@ -30,7 +30,7 @@
                 <label for="lastName" class="col-md-2 control-label">Last Name</label>
                 <div class="col-md-6">
                     <input class="form-control" placeholder="Last Name" formControlName="lastName">
-                    <small class="text-danger" *ngIf="registerForm.controls.lastName.touched && registerForm.controls.lastName.errors?.['required']">A valid last name is required</small>
+                    <validator-message controlName="lastName" validatorName="required">A valid last name is required</validator-message>
                 </div>
             </div>
 
@@ -38,7 +38,7 @@
                 <label for="email" class="col-md-2 control-label">Email Address</label>
                 <div class="col-md-6">
                     <input class="form-control" type="email" placeholder="Email" formControlName="email">
-                    <small class="text-danger" *ngIf="registerForm.controls.email.touched && registerForm.controls.email.errors">A valid email is required</small>
+                    <validator-message controlName="email">A valid email is required</validator-message>
                 </div>
             </div>
 
@@ -46,37 +46,36 @@
                 <label for="password" class="col-md-2 control-label">Password</label>
                 <div class="col-md-6">
                     <input class="form-control" type="password" placeholder="Password" formControlName="password">
-                    <small class="text-danger" *ngIf="registerForm.controls.password.touched && registerForm.controls.password.errors?.['required']">A valid password is required</small>
-                    <small class="text-danger" *ngIf="registerForm.controls.password.touched && registerForm.controls.password.errors?.['minlength']">Password must be at least 8 characters</small>
+                    <validator-message controlName="password" validatorName="required">A valid password is required</validator-message>
+                    <validator-message controlName="password" validatorName="minlength">Password must be at least 8 characters</validator-message>
                 </div>
             </div>
-
 
             <div class="form-group">
                 <label for="confirmPassword" class="col-md-2 control-label">Confirm Password</label>
                 <div class="col-md-6">
                     <input class="form-control" type="password" placeholder="Password" formControlName="confirmPassword">
-                    <small class="text-danger" *ngIf="registerForm.controls.confirmPassword.touched && registerForm.errors?.['notMatched']">The password must match</small>
+                    <validator-message controlName="confirmPassword" validatorName="notMatched">The password must match</validator-message>
                 </div>
             </div>
 
             <div class="form-group">
                 <label for="country" class="col-md-2 control-label">Country</label>
                 <div class="col-md-6">
-                    <select class="form-control" placeholder="Country name">
-                        <option *ngFor="let country of countries" value="country.code">{{country.code}}: {{ country.name }}</option>
+                    <select class="form-control" formControlName="country">
+                        <option *ngFor="let country of countries" [ngValue]="country.code">{{country.code}}: {{ country.name }}</option>
                     </select>
-                    <small class="text-danger" *ngIf="registerForm.controls.country.touched && registerForm.errors?.['invalidCountry']">Invalid country selected</small>
+                    <validator-message controlName="country" validatorName="invalidItem">Invalid country selected</validator-message>
                 </div>
             </div>
 
             <div class="form-group">
-                <label for="timezone_inp" class="col-md-2 control-label">Time zone</label>
+                <label for="timezone" class="col-md-2 control-label">Time zone</label>
                 <div class="col-md-6">
-                    <select class="form-control" placeholder="Time zone" asp-for="TimeZone">
-                        <option *ngFor="let tz of timezones" value="tz.name" selected="selected">{{ tz.description }}</option>
+                    <select class="form-control" formControlName="timezone">
+                        <option *ngFor="let tz of timezones" [ngValue]="tz.name">{{ tz.description }}</option>
                     </select>
-                    <small class="text-danger" *ngIf="registerForm.controls.timezone.touched && registerForm.errors?.['invalidTimezone']">Invalid timezone selected</small>
+                    <validator-message controlName="timezone" validatorName="invalidItem">Invalid timezone selected</validator-message>
                 </div>
             </div>
 

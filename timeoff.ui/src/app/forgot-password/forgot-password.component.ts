@@ -8,8 +8,8 @@ import { AuthService } from "../services/auth/auth.service";
 @Component({
     standalone: true,
     templateUrl: 'forgot-password.component.html',
-    imports: [FlashComponent,ReactiveFormsModule,NgIf],
-    providers: [AuthService]
+    providers: [AuthService],
+    imports: [FlashComponent, ReactiveFormsModule, NgIf,]
 })
 export class ForgotPasswordComponent {
     public passwordForm = this.fb.group({
