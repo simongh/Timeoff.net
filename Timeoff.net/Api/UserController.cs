@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace Timeoff.Controllers
+namespace Timeoff.Api
 {
     [Route("api/users")]
     [ApiController]
-    public class UserApiController : ControllerBase
+    public class UserController : ControllerBase
     {
         [HttpGet]
         public Task<IActionResult> GetUsersAsync()

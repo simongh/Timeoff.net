@@ -1,5 +1,6 @@
 export interface ResetPasswordModel{
-    current: string | null;
-    password: string;
+    password: string | null;
+    newPassword: string;
+    confirmPassword: string;
     token: string | null;
 }

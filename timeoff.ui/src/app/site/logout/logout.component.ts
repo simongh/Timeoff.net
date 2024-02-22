@@ -1,20 +1,18 @@
-import { Component } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { AuthService } from "../../services/auth/auth.service";
 import { Router } from "@angular/router";
 
 @Component({
     standalone: true,
-    templateUrl: 'logout.component.html',
+    template: ''
 })
-export class LogoutComponent {
+export class LogoutComponent implements OnInit {
     constructor(
         private authService: AuthService,
         private router: Router)
     {}
 
-    public logout() {
-        this.authService.logout();
-
-        this.router.navigate(['']);
+    public ngOnInit(): void {
+        this.authService.logout().subscribe(()=> this.router.navigateByUrl('/'));
     }
 }

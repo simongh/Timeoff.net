@@ -11,26 +11,26 @@ import { ValidatorMessageComponent } from "../components/validator-message/valid
 @Component({
     standalone: true,
     templateUrl: 'login.component.html',
-    imports: [RouterLink, CommonModule, ReactiveFormsModule, FlashComponent,ValidatorMessageComponent ]
+    imports: [RouterLink, CommonModule, ReactiveFormsModule, FlashComponent,ValidatorMessageComponent ],
+    providers:[]
 })
 export class LoginComponent{
     public allowRegistrations: boolean = true;
+
+    public submitting = false;
+    
+    public errors: string[] = [];
 
     public loginForm = this.fb.group({
         email:['', [Validators.required, Validators.email]],
         password:['', Validators.required]
     });
 
-    public get hasErrors() {
-        return this.loginForm.invalid && (this.loginForm.touched)
-    }
-
-    private destroyed$ = inject(DestroyRef);
-
     constructor(
         private authService: AuthService,
         private router: Router,
-        private fb: FormBuilder)
+        private fb: FormBuilder,
+        private destroyed: DestroyRef)
     {}
 
     public login(){
@@ -39,12 +39,26 @@ export class LoginComponent{
         if (!this.loginForm.valid)
             return;
 
+        this.submitting = true;
         this.authService.login(this.loginForm.value as LoginModel)
-            .pipe(takeUntilDestroyed(this.destroyed$))
-            .subscribe();
+            .pipe(takeUntilDestroyed(this.destroyed))
+            .subscribe({
+                next: (r) => {
+                    if (this.authService.isUserLoggedIn) {
+                        this.router.navigate(['']);
+                    } else {
+                        this.errors = r ?? ["Invalid credentials"];
+                        this.loginForm.controls.password.setValue('');
+                        this.loginForm.markAsUntouched();
+                    }
 
-        this.router.navigate(['']);
+                    this.submitting = false;
+                },
+                error: () => {
+                    this.submitting = false;
+
+                    this.errors = ['Login failed'];
+                },
+            });
     }
-    
-
 }

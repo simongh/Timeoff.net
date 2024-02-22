@@ -1,5 +1,5 @@
 <h1>Login</h1>
-<flash-message/>
+<flash-message [errors]="errors"/>
 <form class="form-horizontal" [formGroup]="loginForm">
 
     <div class="row">&nbsp;</div>
@@ -8,8 +8,8 @@
         <label for="email" class="col-md-2 control-label col-md-offset-2">Employee email:</label>
         <div class="col-md-5">
             <input class="form-control" id="email" type="text" formControlName="email">
-            <!-- <validator-message [formControl]="loginForm.controls.email" [validatorName]="'required'">Email is required</validator-message>
-            <validator-message [formControl]="loginForm.controls.email" [validatorName]="'email'">A valid email address is required</validator-message> -->
+            <validator-message controlName="email" validatorName="required">Email is required</validator-message>
+            <validator-message controlName="email" validatorName="email">A valid email address is required</validator-message>
             </div>
     </div>
 
@@ -17,18 +17,18 @@
         <label for="password" class="col-md-2 control-label col-md-offset-2">Password</label>
         <div class="col-md-5">
             <input class="form-control" id="password" type="password" formControlName="password">
-            <!-- <validator-message [formControl]="loginForm.controls.password" [validatorName]="'required'">Password is required</validator-message> -->
+            <validator-message controlName="password" validatorName="required">Password is required</validator-message>
         </div>
     </div>
 
     <div class="form-group">
         <div class="col-md-offset-4 col-md-1">
-            <button type="submit" class="btn btn-success single-click" id="submit_login" (click)="login()">Login</button>
+            <button type="submit" class="btn btn-success single-click" id="submit_login" (click)="login()" [disabled]="submitting">Login</button>
         </div>
         <div class="col-md-4">
             <p class="pull-right">
-                <a [routerLink]="['','forgot-password']">Forgot password?</a>&nbsp;
-                <a *ngIf="allowRegistrations" [routerLink]="['','register']">Register new company</a>
+                <a routerLink="/forgot-password">Forgot password?</a>&nbsp;
+                <a *ngIf="allowRegistrations" routerLink="/register">Register new company</a>
             </p>
         </div>
     </div>

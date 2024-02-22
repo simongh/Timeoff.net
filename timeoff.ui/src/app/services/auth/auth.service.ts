@@ -1,7 +1,15 @@
 import { Injectable } from "@angular/core";
-import { of, tap } from "rxjs";
+import { catchError, map, of, tap } from "rxjs";
 import { ResetPasswordModel } from "./reset-password.model";
 import { LoginModel } from "./login.model";
+import { HttpClient, HttpErrorResponse } from "@angular/common/http";
+
+interface loginResult {
+    token: string,
+    success: boolean,
+    expires: Date,
+    errors: string[] | null,
+}
 
 @Injectable({
     providedIn:'root'
@@ -13,21 +21,36 @@ export class AuthService{
         return this.isLoggedIn;
     }
 
-    public login(model: LoginModel){
-        return of(true)
-            .pipe(tap(()=>this.isLoggedIn = true));
+    constructor(
+        private client: HttpClient) {}
+
+    public login(model: LoginModel) {
+        return this.client.post<loginResult>('/api/account/login',{
+            username: model.email,
+            password: model.password
+        }).pipe(
+            catchError((err: HttpErrorResponse) => {
+                if (err.status === 400) {
+                    return of({success: false, errors: ['Invalid credentials']})
+                } else {
+                    return of({success: false, errors: ['Unable to login. Please try again later']} as loginResult) 
+                }
+            }),
+            tap((r) => this.isLoggedIn = r.success),
+            map((r) => r.errors)
+        );
     }
 
-    public logout(){
-        this.isLoggedIn = false;
+    public logout() {
+        return this.client.post<void>('/api/account/logout',{})
+            .pipe(tap(() => this.isLoggedIn = false));
     }
 
     public resetPassword(model: ResetPasswordModel) {
-        return of(true);
+        return this.client.post<void>('/api/account/reset-password',model);
     }
 
     public forgotPassword(email: string) {
-        return of(true);
+        return this.client.post<void>('/api/account/forgot-password',{ email: email })
     }
-    
 }

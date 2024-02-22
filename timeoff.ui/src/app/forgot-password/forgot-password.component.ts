@@ -4,12 +4,13 @@ import { FlashComponent } from "../components/flash/flash.component";
 import { NgIf } from "@angular/common";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { AuthService } from "../services/auth/auth.service";
+import { ValidatorMessageComponent } from "../components/validator-message/validator-message.component";
 
 @Component({
     standalone: true,
     templateUrl: 'forgot-password.component.html',
     providers: [AuthService],
-    imports: [FlashComponent, ReactiveFormsModule, NgIf,]
+    imports: [FlashComponent, ReactiveFormsModule, NgIf, ValidatorMessageComponent]
 })
 export class ForgotPasswordComponent {
     public passwordForm = this.fb.group({
@@ -18,13 +19,14 @@ export class ForgotPasswordComponent {
 
     public messages: string[] = [];
 
-    public submitting = false;
+    public errors: string[] = [];
 
-    private destroyed$ = inject(DestroyRef);
+    public submitting = false;
 
     constructor(
         private fb: FormBuilder,
-        private passwordSvc: AuthService)
+        private passwordSvc: AuthService,
+        private destroyed: DestroyRef)
     {}
 
     public forgot(){
@@ -34,10 +36,18 @@ export class ForgotPasswordComponent {
         
         this.submitting = true;
         this.passwordSvc.forgotPassword(this.passwordForm.controls.email.value!)
-            .pipe(takeUntilDestroyed(this.destroyed$))
-            .subscribe(() => {
-                this.messages = [`Password reset email sent to ${this.passwordForm.controls.email.value}`];
-                this.submitting = false;
+            .pipe(takeUntilDestroyed(this.destroyed))
+            .subscribe({
+                next: () => {
+                    this.messages = [`Password reset email sent to ${this.passwordForm.controls.email.value}`];
+
+                    this.passwordForm.reset();
+                    this.submitting = false;
+                },
+                error: () => {
+                    this.errors = ['Unable to send reset email. Please try again later'];
+                    this.submitting = false;
+                }
             });
     }
 }
