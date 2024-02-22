@@ -18,7 +18,8 @@ namespace Timeoff
                     options.UseSqlite(builder.Configuration.GetConnectionString("timeoff"));
                 })
                 .ConfigureApplication()
-                .AddWebServices();
+                .AddWebServices()
+                .ConfigureJson();
 
             builder.Services
                 .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)

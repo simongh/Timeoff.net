@@ -1,44 +1,38 @@
 ﻿using MediatR;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Timeoff.Controllers
 {
-    public class AccountController : Controller
+    public class AccountController(IMediator mediator) : Controller
     {
-        private readonly IMediator _mediator;
+        private readonly IMediator _mediator = mediator;
 
-        public AccountController(IMediator mediator)
-        {
-            _mediator = mediator;
-        }
+        //[AllowAnonymous]
+        //[HttpGet("login")]
+        //public async Task<IActionResult> LoginAsync()
+        //{
+        //    var vm = await _mediator.Send(new Application.Login.GetLoginCommand());
+        //    return View(vm);
+        //}
 
-        [AllowAnonymous]
-        [HttpGet("login")]
-        public async Task<IActionResult> LoginAsync()
-        {
-            var vm = await _mediator.Send(new Application.Login.GetLoginCommand());
-            return View(vm);
-        }
+        //[AllowAnonymous]
+        //[HttpPost("login")]
+        //public async Task<IActionResult> LoginPostAsync(Application.Login.LoginCommand command)
+        //{
+        //    var vm = await _mediator.Send(command);
+        //    if (vm.Success)
+        //        return Redirect("/");
+        //    else
+        //        return View("Login", vm);
+        //}
 
-        [AllowAnonymous]
-        [HttpPost("login")]
-        public async Task<IActionResult> LoginPostAsync(Application.Login.LoginCommand command)
-        {
-            var vm = await _mediator.Send(command);
-            if (vm.Success)
-                return Redirect("/");
-            else
-                return View("Login", vm);
-        }
-
-        [HttpGet("logout")]
-        public async Task<IActionResult> LogoutAsync()
-        {
-            await HttpContext.SignOutAsync();
-            return Redirect("/");
-        }
+        //[HttpGet("logout")]
+        //public async Task<IActionResult> LogoutAsync()
+        //{
+        //    await HttpContext.SignOutAsync();
+        //    return Redirect("/");
+        //}
 
         [AllowAnonymous]
         [HttpGet("register")]
@@ -72,38 +66,38 @@ namespace Timeoff.Controllers
                 return View("Register", vm);
         }
 
-        [AllowAnonymous]
-        [HttpGet("forgot-password")]
-        public IActionResult ForgotPassword()
-        {
-            return View();
-        }
+        //[AllowAnonymous]
+        //[HttpGet("forgot-password")]
+        //public IActionResult ForgotPassword()
+        //{
+        //    return View();
+        //}
 
-        [AllowAnonymous]
-        [HttpPost("forgot-password")]
-        public async Task<IActionResult> ForgotPasswordPostAsync(Application.ForgotPassword.ForgotPasswordComand comand)
-        {
-            await _mediator.Send(comand);
-            return View("ForgotPassword", new Application.ForgotPassword.ForgotPasswordViewModel { Success = true });
-        }
+        //[AllowAnonymous]
+        //[HttpPost("forgot-password")]
+        //public async Task<IActionResult> ForgotPasswordPostAsync(Application.ForgotPassword.ForgotPasswordComand comand)
+        //{
+        //    await _mediator.Send(comand);
+        //    return View("ForgotPassword", new Application.ForgotPassword.ForgotPasswordViewModel { Success = true });
+        //}
 
-        [AllowAnonymous]
-        [HttpGet("reset-password")]
-        public async Task<IActionResult> ResetPasswordAsync([FromQuery] Application.ResetPassword.GetResetPasswordCommand command)
-        {
-            var vm = await _mediator.Send(command);
-            return View(vm);
-        }
+        //[AllowAnonymous]
+        //[HttpGet("reset-password")]
+        //public async Task<IActionResult> ResetPasswordAsync([FromQuery] Application.ResetPassword.GetResetPasswordCommand command)
+        //{
+        //    var vm = await _mediator.Send(command);
+        //    return View(vm);
+        //}
 
-        [AllowAnonymous]
-        [HttpPost("reset-password")]
-        public async Task<IActionResult> RestPasswordPostAsync(Application.ResetPassword.ResetPasswordCommand command)
-        {
-            if (string.IsNullOrEmpty(command.Token) && User.Identity?.IsAuthenticated != true)
-                return await ResetPasswordAsync(new());
+        //[AllowAnonymous]
+        //[HttpPost("reset-password")]
+        //public async Task<IActionResult> RestPasswordPostAsync(Application.ResetPassword.ResetPasswordCommand command)
+        //{
+        //    if (string.IsNullOrEmpty(command.Token) && User.Identity?.IsAuthenticated != true)
+        //        return await ResetPasswordAsync(new());
 
-            var vm = await _mediator.Send(command);
-            return View("ResetPassword", vm);
-        }
+        //    var vm = await _mediator.Send(command);
+        //    return View("ResetPassword", vm);
+        //}
     }
 }

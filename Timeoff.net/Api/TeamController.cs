@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace Timeoff.Controllers
+namespace Timeoff.Api
 {
-    [Route("api/absences")]
+    [Route("api/users")]
     [ApiController]
-    public class AbsencesApiController : ControllerBase
+    public class TeamController : ControllerBase
     {
         [HttpGet]
         public Task<IActionResult> ListAsync()
