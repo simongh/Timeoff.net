@@ -33,6 +33,15 @@ namespace Timeoff.Api
             }
         }
 
+        [HttpGet("token")]
+        public async Task<IActionResult> TokenAsync()
+        {
+            return Ok(new
+            {
+                Token = "token"
+            });
+        }
+
         [HttpPost("logout")]
         public async Task<IActionResult> LogoutAsync()
         {
@@ -57,6 +66,18 @@ namespace Timeoff.Api
             var result = await _mediator.Send(command);
 
             if (result.Result?.Messages?.Any() == true)
+                return NoContent();
+            else
+                return BadRequest(result.Result);
+        }
+
+        [AllowAnonymous]
+        [HttpPost("register")]
+        public async Task<IActionResult> RegisterAsync(Application.Register.RegisterCommand command)
+        {
+            var result = await _mediator.Send(command);
+
+            if (result!.Success)
                 return NoContent();
             else
                 return BadRequest(result.Result);

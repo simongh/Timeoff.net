@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 import { LoginComponent } from './login/login.component';
-import { authGuard } from './login/auth.guard';
+import { authGuard } from './services/auth/auth.guard';
 import { siteRoutes } from './site/site.routes';
 import { SiteComponent } from './site/site.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
@@ -18,7 +18,7 @@ export const routes: Routes = [
     },
     {
         path: 'register',
-        component: RegisterComponent
+        component: RegisterComponent,
     },
     {
         path: 'reset-password',

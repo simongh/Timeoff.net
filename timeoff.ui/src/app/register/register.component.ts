@@ -2,11 +2,12 @@ import { Component, DestroyRef, OnInit, inject } from '@angular/core';
 import { FlashComponent } from "../components/flash/flash.component";
 import { FormBuilder,ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { RegisterService } from '../services/register/register.service';
+import { RegisterService } from './register.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 import { compareValidator, listValidator } from '../components/validators';
-import { RegisterModel } from '../services/register/register.model';
+import { RegisterModel } from './register.model';
 import { ValidatorMessageComponent } from '../components/validator-message/validator-message.component';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
     standalone: true,
@@ -71,8 +72,14 @@ export class RegisterComponent implements OnInit {
     this.submitting = true;
     this.registerSvc.register(this.registerForm.value as RegisterModel)
       .pipe(takeUntilDestroyed(this.destroyed$))
-      .subscribe(()=>{
-        this.messages = ['Company registered successfully. Please login using the details you supplied']
+      .subscribe({
+        next: ()=>{
+          this.messages = ['Company registered successfully. Please login using the details you supplied'];
+          this.registerForm.reset();
+        },
+        error: (e: HttpErrorResponse) => {
+          this.errors = e.error.errors;
+        }
       });
   }
 }
