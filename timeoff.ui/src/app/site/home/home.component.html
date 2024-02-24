@@ -1,1 +1,136 @@
-Home page
+<h1>Employee calendar</h1>
+
+<div class="row">
+    <div class="col-md-6 lead">{{name}}'s calendar for {{currentYear}}</div>
+    <div class="col-md-6">
+    </div>
+</div>
+
+<flash-message/>
+
+<div class="row">&nbsp;</div>
+
+<div class="row main-row_header hidden-xs">
+    <div class="col-md-12">Statistics</div>
+</div>
+
+<div class="row">
+
+    <div class="col-md-3 top-leave-type-statistics">
+        <dl>
+            <dt data-tom-days-available-in-allowance>{{allowanceSummary.remaining}}</dt>
+            <dd>Days available</dd>
+            <dd>out of <span data-tom-total-days-in-allowance>{{allowanceSummary.total}}</span> in allowance</dd>
+        </dl>
+    </div>
+
+    <div class="col-md-3 secondary-leave-type-statistics hidden-xs">
+        <!-- <partial name="_AllowanceBreakdown" model="Model.AllowanceSummary" /> -->
+    </div>
+
+    <div class="col-md-3 secondary-leave-type-statistics hidden-xs">
+        <!-- <partial name="_LeaveSummary" model="Model.AllowanceSummary"/> -->
+    </div>
+
+    <div class="col-md-3 secondary-leave-type-statistics hidden-xs">
+        <dl>
+            <dt>Details</dt>
+            <dd>
+                <em>Supervisor:&nbsp;</em>
+                <span class="pull-right"><a href="mailto:{{managerEmail}}">{{managerName}}</a></span>
+            </dd>
+            <dd><em>Team:</em> <span class="pull-right"><a [routerLink]="['calendar','team',teamId]">{{teamName}}</a></span></dd>
+            <dd><em>Allowance in {{currentYear}}:</em><span class="pull-right"> {{allowanceSummary.total}} days</span>
+            <dd>
+        </dl>
+    </div>
+
+</div>
+
+<div class="row">
+</div>
+
+<div class="row main-row_header">
+    <div class="col-md-12">Calendar <a routerLink="/calendar/feeds" data-toggle="tooltip" data-placement="right" title="Export absences  to external calendars"><span class="fa fa-rss"></span></a></div>
+</div>
+
+<div class="row">
+    <div class="col-xs-2">
+        <a *ngIf="showFullYear" class="btn btn-default" routerLink="." [queryParams]="{year: lastYear, showFullYear: true}"><span aria-hidden="true" class="fa fa-chevron-left"></span> {{lastYear}} </a>
+    </div>
+    <div class="col-xs-8 calendar-section-caption">
+       
+        <strong *ngIf="showFullYear">January - December</strong>
+        <strong *ngIf="!showFullYear">Upcoming Months</strong>
+        &nbsp;
+
+        <a *ngIf="showFullYear" class="btn btn-default" routerLink=".">Less... &nbsp;<span class="fa fa-minus"></span></a>
+        <a *ngIf="!showFullYear" class="btn btn-default" routerLink="." [queryParams]="{showFullYear: true}">More... &nbsp;<span class="fa fa-plus"></span></a>
+    </div>
+    <div class="col-xs-2" *ngIf="showFullYear">
+        <a class="btn btn-default pull-right" routerLink="." [queryParams]="{year: nextYear, showFullYear: true}">{{nextYear}} <span aria-hidden="true" class="fa fa-chevron-right"></span></a>
+    </div>
+</div>
+
+<div class="row">&nbsp;</div>
+
+<div class="row clearfix">
+    <calendar [start]="start" [monthCount]="showFullYear ? 12 : 3" [monthFormat]="showFullYear ? 'MMMM' : 'MMM, yyyy'"/>
+    <!-- @for (int i = 0; i < Model.Calendar.Months; i++)
+    {
+    <div class="col-md-3 month_container">
+        <table class="calendar_month month_@Model.Calendar.CurrentMonth(i).ToString("MMMM")">
+            <thead>
+                <tr>
+                    <td colspan="14">
+                        @if (Model.ShowFullYear)
+                        {
+                            @Model.Calendar.CurrentMonth(i).ToString("MMMM")
+                        }
+                        else
+                        {
+                            @Model.Calendar.CurrentMonth(i).ToString("MMM, yyyy")
+                        }
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">M</td>
+                    <td colspan="2">T</td>
+                    <td colspan="2">W</td>
+                    <td colspan="2">T</td>
+                    <td colspan="2">F</td>
+                    <td colspan="2">S</td>
+                    <td colspan="2">S</td>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    var count = 0;
+                }
+                @foreach (var item in Model.Calendar.GetWeeks(i,Model.LeaveRequested))
+                    {
+                        if (count %7 == 0)
+                        {
+                            @:<tr>
+                        }
+                        <partial name="_CalendarCell" model="item"/>
+                        @if (count %7 == 7)
+                        {
+                            @:</tr>
+                        }
+                        count++;
+                    }
+            </tbody>
+        </table>
+    </div>
+    } -->
+
+</div>
+
+<ng-container *ngIf="!showFullYear">
+    <div class="row main-row_header">
+        <p class="col-md-12">All my absences in {{currentYear}}</p>
+    </div>
+
+    <!-- <partial name="../Request/_UserRequests" model="Model.LeaveRequested"/> -->
+</ng-container>

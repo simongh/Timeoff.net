@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Timeoff.Controllers
@@ -34,37 +33,37 @@ namespace Timeoff.Controllers
         //    return Redirect("/");
         //}
 
-        [AllowAnonymous]
-        [HttpGet("register")]
-        public async Task<IActionResult> RegisterAsync()
-        {
-            if (User.Identity?.IsAuthenticated == true)
-                return Redirect("/");
+        //[AllowAnonymous]
+        //[HttpGet("register")]
+        //public async Task<IActionResult> RegisterAsync()
+        //{
+        //    if (User.Identity?.IsAuthenticated == true)
+        //        return Redirect("/");
 
-            var vm = await _mediator.Send(new Application.Register.GetRegisterCommand());
+        //    var vm = await _mediator.Send(new Application.Register.GetRegisterCommand());
 
-            if (vm == null)
-                return Redirect("/");
-            else
-                return View(vm);
-        }
+        //    if (vm == null)
+        //        return Redirect("/");
+        //    else
+        //        return View(vm);
+        //}
 
-        [AllowAnonymous]
-        [HttpPost("register")]
-        public async Task<IActionResult> RegisterPostAsync(Application.Register.RegisterCommand command)
-        {
-            if (User.Identity?.IsAuthenticated == true)
-                return Redirect("/");
+        //[AllowAnonymous]
+        //[HttpPost("register")]
+        //public async Task<IActionResult> RegisterPostAsync(Application.Register.RegisterCommand command)
+        //{
+        //    if (User.Identity?.IsAuthenticated == true)
+        //        return Redirect("/");
 
-            var vm = await _mediator.Send(command);
+        //    var vm = await _mediator.Send(command);
 
-            if (vm == null)
-                return Redirect("/");
-            else if (vm.Success)
-                return Redirect("/");
-            else
-                return View("Register", vm);
-        }
+        //    if (vm == null)
+        //        return Redirect("/");
+        //    else if (vm.Success)
+        //        return Redirect("/");
+        //    else
+        //        return View("Register", vm);
+        //}
 
         //[AllowAnonymous]
         //[HttpGet("forgot-password")]

@@ -4,7 +4,7 @@ import { ResetPasswordModel } from "./reset-password.model";
 import { LoginModel } from "./login.model";
 import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 
-interface loginResult {
+interface LoginResult {
     token: string,
     success: boolean,
     expires: Date,
@@ -15,17 +15,27 @@ interface loginResult {
     providedIn:'root'
 })
 export class AuthService{
-    private isLoggedIn: boolean = false;
+    private token: string | null = null;
 
     public get isUserLoggedIn(){
-        return this.isLoggedIn;
+        return !!this.token;
     }
 
     constructor(
         private client: HttpClient) {}
 
+    public getToken() {
+        return of("token")
+            .pipe(
+                catchError((e)=>{
+                    this.token = null;
+                    throw e;
+                }),
+                tap(() => this.token = 'token'));
+    }
+
     public login(model: LoginModel) {
-        return this.client.post<loginResult>('/api/account/login',{
+        return this.client.post<LoginResult>('/api/account/login',{
             username: model.email,
             password: model.password
         }).pipe(
@@ -33,17 +43,17 @@ export class AuthService{
                 if (err.status === 400) {
                     return of({success: false, errors: ['Invalid credentials']})
                 } else {
-                    return of({success: false, errors: ['Unable to login. Please try again later']} as loginResult) 
+                    return of({success: false, errors: ['Unable to login. Please try again later']} as LoginResult) 
                 }
             }),
-            tap((r) => this.isLoggedIn = r.success),
+            tap((r) => this.token = 'token'),
             map((r) => r.errors)
         );
     }
 
     public logout() {
         return this.client.post<void>('/api/account/logout',{})
-            .pipe(tap(() => this.isLoggedIn = false));
+            .pipe(tap(() => this.token = null));
     }
 
     public resetPassword(model: ResetPasswordModel) {

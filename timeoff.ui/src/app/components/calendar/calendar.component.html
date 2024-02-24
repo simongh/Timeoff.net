@@ -1,0 +1,31 @@
+<div *ngFor="let month of weeks" class="col-md-3 month_container">
+    <table class="calendar_month month_{{month.date| date: 'MMMM'}}">
+        <thead>
+            <tr>
+                <td colspan="14">
+                    {{month.date| date: monthFormat}}
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">M</td>
+                <td colspan="2">T</td>
+                <td colspan="2">W</td>
+                <td colspan="2">T</td>
+                <td colspan="2">F</td>
+                <td colspan="2">S</td>
+                <td colspan="2">S</td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let week of month.weeks">
+                <td *ngIf="week.num == 0 && month.padding > 0" [attr.colspan]="2 * month.padding"></td>
+                <ng-container *ngFor="let day of week.days">
+                    <td class="calendar_cell half_1st">
+                        <span>{{day | date: 'd'}}</span>
+                    </td>
+                    <td class="calendar_cell half_2nd"></td>
+                </ng-container>
+            </tr>
+        </tbody>
+    </table>
+</div>
