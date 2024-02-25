@@ -7,14 +7,16 @@ import { TimezoneModel } from '../../../services/timezone.model';
 import { getTimezones } from '../../../services/timezones';
 import { SettingsService } from './settings-service';
 import { ReactiveFormsModule } from '@angular/forms';
+import { ColourPickerComponent } from "./colour-picker/colour-picker.component";
+import { LeaveTypeModalComponent } from "./leave-type-modal/leave-type-modal.component";
 
 @Component({
-  selector: 'app-home',
-  standalone: true,
-  imports: [CommonModule,ReactiveFormsModule],
-  providers:[SettingsService],
-  templateUrl: './home.component.html',
-  styleUrl: './home.component.sass'
+    selector: 'app-home',
+    standalone: true,
+    providers: [SettingsService],
+    templateUrl: './home.component.html',
+    styleUrl: './home.component.sass',
+    imports: [CommonModule, ReactiveFormsModule, ColourPickerComponent, LeaveTypeModalComponent]
 })
 export class HomeComponent implements OnInit {
   public countries!: Country[];
