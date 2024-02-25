@@ -5,6 +5,7 @@ import { Observable, map, of, pipe } from 'rxjs';
 import { RegisterModel } from './register.model';
 import { HttpClient } from '@angular/common/http';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { getTimezones } from '../services/timezones';
 
 @Injectable()
 export class RegisterService {
@@ -16,10 +17,7 @@ export class RegisterService {
   public getOptions(): RegisterOptions{
     return {
       countries: countries,
-      timezones: [{
-        name: 'GMT Standard Time',
-        description: '(UTC+00:00) Dublin, Edinburgh, Lisbon, London'
-      }],
+      timezones: getTimezones(),
     };
   }
 
