@@ -1,0 +1,285 @@
+<h1>General settings</h1>
+
+<p class="lead">Account main settings</p>
+
+<!-- <Partial name="_Flash" model="Model.Result" /> -->
+
+<div class="row">&nbsp;</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                Company
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-5">
+                        <form class="form-horizontal" [formGroup]="settingsForm" id="company_edit_form">
+                            <div class="form-group">
+                                <label for="name" class="col-md-4 control-label">Company name</label>
+                                <div class="col-md-8">
+                                    <input class="form-control" placeholder="Our company name" id="name" formControlName="name">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="country" class="col-md-4 control-label">Country</label>
+                                <div class="col-md-8">
+                                    <select class="form-control" id="country" formControlName="country">
+                                        <option *ngFor="let country of countries" [value]="country.code">{{ country.code}}: {{country.name}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="dateFormat" class="col-md-4 control-label">Date format</label>
+                                <div class="col-md-8">
+                                    <select class="form-control" id="dateFormat" formControlName="dateFormat">
+                                        <option *ngFor="let df of dateFormats" [value]="df">{{df}}</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="timeZone" class="col-md-4 control-label">Time zone</label>
+                                <div class="col-md-8">
+                                    <select class="form-control" id="timeZone" formControlName="timezone">
+                                        <option *ngFor="let tz of timezones" [value]="tz.name">{{tz.description}}</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="carryOver" class="col-md-4 control-label">Carried over days</label>
+                                <div class="col-md-8">
+                                    <select class="form-control" id="carryOver" formControlName="carryOver">
+                                        <option *ngFor="let d of carryOverDays" [value]="d">{{ d == 0 ? 'None' : d == 1000 ? 'All' : d}}</option>
+                                    </select>
+                                    <p>
+                                        <em>Number of days in employee allowance that are carried over to the next year.</em>
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-md-offset-4 col-md-8">
+                                    <div class="checkbox">
+                                        <label for="showHoliday">
+                                            <input type="checkbox" value="true" formControlName="showHoliday"/>Share absences between employees
+                                        </label>
+                                        <p>
+                                            <em>If enabled all employees can see information about everybody's absences regardless of team.</em>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-md-offset-4 col-md-8">
+                                    <div class="checkbox">
+                                        <label for="hideTeamView">
+                                            <input type="checkbox" value="true" formControlName="hideTeamView"/>Hide Team View page for non-admin users
+                                        </label>
+                                        <p>
+                                            <em>If marked Team view page is shown only to admin users.</em>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="form-group">
+                                <div class="col-md-offset-2 col-md-10">
+                                    <button type="submit" class="btn btn-success pull-right single-click">Save changes</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="col-md-offset-1 col-md-5">
+
+                        <div class="form-horizontal">
+                            <div class="form-group">
+                                <label for="" class="col-md-7 control-label">Backup employees' leave data</label>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-offset-2">
+                                    <em>Download the full list of employees with all their leave requests. The file is in <strong>.CSV</strong> format which is compatible with MS Excel.</em>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-offset-2 col-md-11">
+                                    <a class="btn btn-success pull-right" asp-controller="settings" asp-action="CompanyBackup"><i class="fa fa-download"></i> Download backup</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <form class="form-horizontal" method="POST" asp-controller="Settings" asp-action="Schedule" id="company_schedule_form">
+                            <input type="hidden" name="companywide" value="true">
+                            <div class="form-group">
+                                <label for="" class="col-md-6 control-label">Company week schedule</label>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-offset-2">
+                                    <!-- <partial name="_ScheduleView" model="Model.Schedule.ToArray()" /> -->
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-offset-2">
+                                    <em>Define company wide weekly schedule. Press correspondent button to toggle working/non-working day.</em>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-offset-2 col-md-11">
+                                    <button type="submit" class="btn btn-success pull-right single-click">Save schedule</button>
+                                </div>
+                            </div>
+                        </form>
+
+                        <div class="form-horizontal">
+                            <div class="form-group">
+                                <label for="" class="col-md-10 control-label">Calculate and carry over unused allowance</label>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-offset-2">
+                                    <p><em>This action will carry over unused allowance for each employee from <strong>{{lastYear}}</strong> to the current year, <strong>{{currentYear}}</strong>.</em></p>
+                                    <p><em>Please note, employees allowance is going to be updated.</em></p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <form class="col-md-offset-2 col-md-11" id="calculate_carry_over_form" method="post" asp-controller="Settings" asp-action="carryOverUnusedAllowance">
+                                    <button class="btn btn-success pull-right single-click" type="submit"><i class="fa fa-share"></i> Carry over allowance</button>
+                                </form>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="row">
+
+    <div class="col-md-7">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                Leave Types
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <label class="control-label">Leave Type Name</label>
+                        <p><em>Tick one to always be on top of the list</em></p>
+                    </div>
+                    <div class="col-md-offset-3 col-md-2">
+                        <label class="control-label">Limit</label>
+                        <p><em>Days/year</em></p>
+                    </div>
+                </div>
+
+                <div class="row">&nbsp;</div>
+
+                <div class="row" *ngIf="leaveTypes.length === 0">
+                    <div class="col-md-4">No Leave type records</div>
+                </div>
+                    <!--@for (int i = 0; i < Model.LeaveTypes.Length; i++)
+                    {
+                        <input type="hidden" asp-for="LeaveTypes[i].Id" value="@Model.LeaveTypes[i].Id"/>
+                    <div class="row">
+                        <div class="col-md-6">
+
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    <input type="radio" name="First" value="@Model.LeaveTypes[i].Id" checked="@(Model.LeaveTypes[i].First)">
+                                </span>
+                                <input type="text" class="form-control" asp-for="LeaveTypes[i].Name" value="@Model.LeaveTypes[i].Name" data-tom-leave-type-order="LeaveType[@i].Name">
+
+                                <div class="input-group-btn" data-tom-color-picker="1" data-tom-leave-type-order="LeaveType[@i].Colour">
+                                    <input type="hidden" asp-for="LeaveTypes[i].Colour" value="@Model.LeaveTypes[i].Colour">
+                                    <button type="button" class="btn btn-default dropdown-toggle @Model.LeaveTypes[i].Colour" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-paint-brush"></i></button>
+                                    <ul class="dropdown-menu">
+                                    <partial name="_OptionsForColourPicker"/>
+                                    </ul>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-3">
+                            <div>
+                                <input asp-for="LeaveTypes[i].UseAllowance" type="checkbox" checked="@Model.LeaveTypes[i].UseAllowance" data-tom-leave-type-order="LeaveTypes[@i].UseAllowance" value="true">
+                                <label asp-for="LeaveTypes[i].UseAllowance" class="control-label">Use allowance</label>
+                            </div>
+                            <div>
+                                <input asp-for="LeaveTypes[i].AutoApprove" type="checkbox" checked="@Model.LeaveTypes[i].AutoApprove" data-tom-leave-type-order="LeaveTypes[i].AutoApprove" value="true">
+                                <label asp-for="LeaveTypes[i].AutoApprove" class="control-label">Auto approve</label>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <input type="number" class="form-control" value="@Model.LeaveTypes[i].Limit" asp-for="LeaveTypes[i].Limit" data-tom-leave-type-order="LeaveTypes[@i].Limit">
+                        </div>
+                        <div class="col-md-1">
+                            <button class="btn btn-default pull-right leavetype-remove-btn" value="@Model.LeaveTypes[i].Id" data-tom-leave-type-order="LeaveTypes[@i].Id"><span class="fa fa-remove"></span></button>
+                        </div>
+                    </div>
+                    <div class="row">&nbsp;</div>
+                    } -->
+
+                        <div class="row">&nbsp;</div>
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="pull-right">
+                                    <button class="btn btn-default" data-toggle="modal" data-target="#add_new_leave_type_modal" type="button" id="add_new_leave_type_btn">Add new</button>
+                                    <button type="submit" class="btn btn-success single-click">Save changes</button>
+                                </div>
+                            </div>
+                        </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-5 setting-general-2nd-column">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                Public Holidays
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-12 tst-no-public-holidays">Public holidays could be found <a asp-controller="PublicHoliday" asp-action="Index">here</a></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-danger">
+            <div class="panel-heading">
+                <i class="fa fa-bomb"></i> Danger zone
+            </div>
+            <div class="panel-body">
+                <div class="col-md-12">
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            <label for="" class="control-label">Remove company account</label>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-6">
+                                <p><em>Completely erase data associated with {{companyName}}'s account.</em></p>
+                                <p><em> This is action cannot be reverted.</em></p>
+                                <p><em> It is strongly recommended to <a asp-controller="Settings" asp-action="CompanyBackup">download</a> employees leave data first.</em></p>
+                            </div>
+                            <div class="col-md-6">
+                                <button class="btn btn-danger pull-right" data-toggle="modal" data-target="#remove_company_modal" type="button"><i class="fa fa-remove"></i> Delete company account</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
