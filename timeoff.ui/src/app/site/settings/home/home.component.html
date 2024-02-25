@@ -184,24 +184,20 @@
                 <div class="row" *ngIf="leaveTypes.length === 0">
                     <div class="col-md-4">No Leave type records</div>
                 </div>
-                    <!--@for (int i = 0; i < Model.LeaveTypes.Length; i++)
-                    {
-                        <input type="hidden" asp-for="LeaveTypes[i].Id" value="@Model.LeaveTypes[i].Id"/>
-                    <div class="row">
+                <ng-container *ngFor="let leave of leaveTypes.controls; let i=index">
+                    <div class="row" [formGroup]="leave">
                         <div class="col-md-6">
+                        <input type="hidden" formControlName="id"/>
 
                             <div class="input-group">
                                 <span class="input-group-addon">
-                                    <input type="radio" name="First" value="@Model.LeaveTypes[i].Id" checked="@(Model.LeaveTypes[i].First)">
+                                    <input type="radio" [value]="leave.controls.id.value" formControlName="first">
                                 </span>
-                                <input type="text" class="form-control" asp-for="LeaveTypes[i].Name" value="@Model.LeaveTypes[i].Name" data-tom-leave-type-order="LeaveType[@i].Name">
+                                <input type="text" class="form-control" formControlName="name" [attr.data-tom-leave-type-order]="leave.controls.name.value">
 
                                 <div class="input-group-btn" data-tom-color-picker="1" data-tom-leave-type-order="LeaveType[@i].Colour">
-                                    <input type="hidden" asp-for="LeaveTypes[i].Colour" value="@Model.LeaveTypes[i].Colour">
-                                    <button type="button" class="btn btn-default dropdown-toggle @Model.LeaveTypes[i].Colour" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-paint-brush"></i></button>
-                                    <ul class="dropdown-menu">
-                                    <partial name="_OptionsForColourPicker"/>
-                                    </ul>
+                                    <input type="hidden" formControlName="colour" [value]="picker.colour">
+                                    <colour-picker #picker [colour]="leave.controls.colour.value"/>
                                 </div>
                             </div>
 
@@ -209,34 +205,33 @@
 
                         <div class="col-md-3">
                             <div>
-                                <input asp-for="LeaveTypes[i].UseAllowance" type="checkbox" checked="@Model.LeaveTypes[i].UseAllowance" data-tom-leave-type-order="LeaveTypes[@i].UseAllowance" value="true">
-                                <label asp-for="LeaveTypes[i].UseAllowance" class="control-label">Use allowance</label>
+                                <input type="checkbox" id="useAllowance-{{i}}" formControlName="useAllowance" value="true">
+                                <label for="useAllowance-{{i}}" class="control-label">Use allowance</label>
                             </div>
                             <div>
-                                <input asp-for="LeaveTypes[i].AutoApprove" type="checkbox" checked="@Model.LeaveTypes[i].AutoApprove" data-tom-leave-type-order="LeaveTypes[i].AutoApprove" value="true">
-                                <label asp-for="LeaveTypes[i].AutoApprove" class="control-label">Auto approve</label>
+                                <input type="checkbox" id="autoApprove-{{i}}" formControlName="autoApprove" value="true">
+                                <label for="autoApprove-{{i}}" class="control-label">Auto approve</label>
                             </div>
                         </div>
                         <div class="col-md-2">
-                            <input type="number" class="form-control" value="@Model.LeaveTypes[i].Limit" asp-for="LeaveTypes[i].Limit" data-tom-leave-type-order="LeaveTypes[@i].Limit">
+                            <input type="number" class="form-control" formControlName="limit">
                         </div>
                         <div class="col-md-1">
                             <button class="btn btn-default pull-right leavetype-remove-btn" value="@Model.LeaveTypes[i].Id" data-tom-leave-type-order="LeaveTypes[@i].Id"><span class="fa fa-remove"></span></button>
                         </div>
                     </div>
                     <div class="row">&nbsp;</div>
-                    } -->
+                </ng-container>
+                <div class="row">&nbsp;</div>
 
-                        <div class="row">&nbsp;</div>
-
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="pull-right">
-                                    <button class="btn btn-default" data-toggle="modal" data-target="#add_new_leave_type_modal" type="button" id="add_new_leave_type_btn">Add new</button>
-                                    <button type="submit" class="btn btn-success single-click">Save changes</button>
-                                </div>
-                            </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="pull-right">
+                            <button class="btn btn-default" data-toggle="modal" data-target="#add_new_leave_type_modal" type="button" id="add_new_leave_type_btn">Add new</button>
+                            <button type="submit" class="btn btn-success single-click">Save changes</button>
                         </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -283,3 +278,5 @@
         </div>
     </div>
 </div>
+
+<leave-type-modal/>

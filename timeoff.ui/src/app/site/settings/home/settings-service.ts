@@ -1,6 +1,16 @@
-import { FormBuilder, Validators } from "@angular/forms";
+import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 import { LeaveTypeModel } from "./leave-type.model";
 import { Injectable } from "@angular/core";
+
+export interface LeaveTypeControls{
+    id: FormControl<number|null>;
+    name: FormControl<string|null>;
+    colour: FormControl<string|null>;
+    useAllowance: FormControl<boolean|null>;
+    autoApprove: FormControl<boolean|null>;
+    limit: FormControl<number|null>;
+    first: FormControl<number|null>;
+}
 
 @Injectable()
 export class SettingsService {
@@ -21,9 +31,10 @@ export class SettingsService {
         useAllowance: [true],
         autoApprove: [false],
         limit: [0],
+        first: [null as number | null]
     });
 
-    public leaveTypes = this.fb.array([this.leaveTypeForm]);
+    public leaveTypes = this.fb.array<FormGroup<LeaveTypeControls>>([]);
 
     constructor(private readonly fb: FormBuilder)
     {}
