@@ -13,10 +13,13 @@ export class CalendarComponent {
     public monthCount: number = 0;
 
     @Input()
-    public monthFormat: string = ""
+    public monthFormat: string = ''
 
     @Input()
     public start: Date = new Date();
+
+    @Input()
+    public colStyle: string = 'col-md-3'
 
     public get weeks() {
         return eachMonthOfInterval({
