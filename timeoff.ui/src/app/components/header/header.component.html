@@ -14,7 +14,7 @@
 
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul *ngIf="isSignedIn" class="nav navbar-nav navbar-left">
-                    <li><a asp-controller="Calendar" asp-action="Index">Calendar</a></li>
+                    <li><a routerLink="/">Calendar</a></li>
                     <li *ngIf="showTeamView"><a asp-controller="Calendar" asp-action="TeamView">Team View</a></li>
                     <li *ngIf="isAdmin" class="hidden-xs"><a asp-controller="Users" asp-action="Index">Employees</a></li>
                     <li class="navbar-form navbar-left">
@@ -40,8 +40,8 @@
                             <ul class="dropdown-menu" role="menu">
                                 <li><a routerLink="/settings" asp-controller="Settings" asp-action="Index">General</a></li>
                                 <li role="separator" class="divider"></li>
-                                <li><a asp-controller="Teams" asp-action="Index">Teams</a></li>
-                                <li><a asp-controller="PublicHoliday" asp-action="Index">Public Holidays</a></li>
+                                <li><a routerLink="/settings/teams">Teams</a></li>
+                                <li><a routerLink="/settings/public-holidays">Public Holidays</a></li>
                                 <!-- <li><a asp-controller="Settings" asp-action="CompanyAuthentication">LDAP configuration</a></li> -->
                                 <li><a asp-controller="Settings" asp-action="CompanyIntegrationApi">API configuration</a></li>
                                 <li><a asp-controller="Users" asp-action="Import">Import employees</a></li>

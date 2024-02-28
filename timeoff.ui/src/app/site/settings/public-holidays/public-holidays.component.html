@@ -1,0 +1,151 @@
+<h1>Public holidays</h1>
+
+<div class="row">
+    <div class="col-md-6 lead">
+        Public holidays for {{companyName}}`s account in {{currentYear}}
+    </div>
+    <div class="col-md-3 col-md-offset-3">
+        <div class="btn-group pull-right">
+            <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <span aria-hidden="true" class="fa fa-plus"></span> Add new
+                <span class="caret"></span>
+                <span class="sr-only">Toggle Dropdown</span>
+            </button>
+            <ul class="dropdown-menu">
+                <li><a href="#" id="publicholiday-import-btn">Import default holidays for {{currentYear}}</a></li>
+                <li><a href="#" id="add_new_team" data-toggle="modal" data-target="#add_new_public_holiday_modal">Add new public holiday</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="row">&nbsp;</div>
+
+<flash-message/>
+<div class="row">
+    <div class="col-xs-2">
+        <a class="btn btn-default" routerLink="." [queryParams]="{year: lastYear}"><span aria-hidden="true" class="fa fa-chevron-left"></span> {{lastYear}} </a>
+    </div>
+    <div class="col-xs-8 calendar-section-caption">
+        <strong>January - December {{currentYear}}</strong>
+    </div>
+    <div class="col-xs-2">
+        <a class="btn btn-default pull-right" routerLink="." [queryParams]="{year:nextYear}">{{nextYear}} <span aria-hidden="true" class="fa fa-chevron-right"></span></a>
+    </div>
+</div>
+
+<div class="row">&nbsp;</div>
+
+<div class="row clearfix">
+    <div class="col-md-8">
+        <div class="row">
+            <calendar monthFormat="MMMM" [start]="start" [monthCount]="12" colStyle="col-md-4"/>
+            <!-- @for (int i = 0; i < Model.Calendar.Months; i++)
+            {
+                <div class="col-md-4 month_container">
+                    <table class="calendar_month month_@Model.Calendar.CurrentMonth(i).ToString("MMMM")">
+                        <thead>
+                            <tr>
+                                <td colspan="14">@Model.Calendar.CurrentMonth(i).Date.ToString("MMMM")</td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">M</td>
+                                <td colspan="2">T</td>
+                                <td colspan="2">W</td>
+                                <td colspan="2">T</td>
+                                <td colspan="2">F</td>
+                                <td colspan="2">S</td>
+                                <td colspan="2">S</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                var count = 0;
+                            }
+                            @foreach (var item in Model.Calendar.GetWeeks(i))
+                            {
+                                @if (count % 7 ==0)
+                                {
+                                    @:<tr>
+                                        }
+                                <partial name="_CalendarCell" model="item"/>
+                                if (count % 7 == 7)
+                                {
+                                    @:</tr>
+                                }
+                                count++;
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            } -->
+        </div>
+    </div>
+
+    <div class="col-md-4">
+
+        <div class="row">
+            <div class="col-md-4"><label class="control-label">Date</label></div>
+            <div class="col-md-6"><label class="control-label">Holiday Name</label></div>
+        </div>
+
+        <div class="row">&nbsp;</div>
+
+
+        <!-- @if (!Model.Calendar.Holidays.Any())
+        {
+            <div class="row">
+                <div class="col-md-12 tst-no-public-holidays text-center">No public holiday records</div>
+            </div>
+        } -->
+
+        <form id="delete_publicholiday_form" method="post" asp-action="Delete" asp-controller="PublicHoliday">
+            <input name="year" value="@Model.CurrentYear" type="hidden">
+            <input id="deleteid" name="id" value="" type="hidden">
+        </form>
+        <form id="import_publicholiday_form" method="post" asp-action="import" asp-controller="PublicHoliday" asp-route-year="@Model.CurrentYear"></form>
+        <form id="update_publicholiday_form" method="post" asp-action="Create" asp-controller="PublicHoliday" asp-route-year="@Model.CurrentYear">
+            <!-- @for (int i = 0; i < Model.PublicHolidays.Length; i++)
+            {
+                <input type="hidden" asp-for="PublicHolidays[i].Id"/>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="input-append date">
+                            <input type="text" class="form-control" asp-for="PublicHolidays[i].Date" asp-format="@($"{{0:{Model.DateFormat}}}")" tom-test-hook="date__@i" data-date-autoclose="1" data-provide="datepicker" data-date-format="@Model.DateFormat.ToJsFormat()" data-date-week-start="1">
+                            <span class="add-on"><i class="icon-th"></i></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <input type="text" class="form-control" asp-for="PublicHolidays[i].Name" tom-test-hook="name__@i">
+                    </div>
+                    <div class="col-md-2">
+                        <button class="btn btn-default pull-right publicholiday-remove-btn" type="button" value="@Model.PublicHolidays[i].Id" tom-test-hook="remove__@i"><span class="fa fa-remove"></span></button>
+                    </div>
+                </div>
+
+                <div class="row">&nbsp;</div>
+            } -->
+
+            <div class="row">&nbsp;</div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="pull-right">
+                        <!-- @*<button id="publicholiday-import-btn" class="btn btn-default" type="button">Import default holidays</button>*@
+                        <button class="btn btn-default" type="button" data-toggle="modal" data-target="#add_new_public_holiday_modal" id="add_new_public_holiday_btn">Add new</button>
+                        @if (Model.PublicHolidays.Any())
+                        {
+                            <button type="submit" class="btn btn-success single-click">Save changes</button>
+                        } -->
+                    </div>
+                </div>
+            </div>
+        </form>
+
+    </div>
+</div>
+
+
+<div class="row">&nbsp;</div>
+
+<!-- <partial name="_AddNewModal" /> -->

@@ -9,6 +9,7 @@ import { SettingsService } from './settings-service';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ColourPickerComponent } from "./colour-picker/colour-picker.component";
 import { LeaveTypeModalComponent } from "./leave-type-modal/leave-type-modal.component";
+import { RouterLink } from '@angular/router';
 
 @Component({
     selector: 'app-home',
@@ -16,7 +17,7 @@ import { LeaveTypeModalComponent } from "./leave-type-modal/leave-type-modal.com
     providers: [SettingsService],
     templateUrl: './home.component.html',
     styleUrl: './home.component.sass',
-    imports: [CommonModule, ReactiveFormsModule, ColourPickerComponent, LeaveTypeModalComponent]
+    imports: [CommonModule, ReactiveFormsModule, ColourPickerComponent, LeaveTypeModalComponent, RouterLink]
 })
 export class HomeComponent implements OnInit {
   public countries!: Country[];
