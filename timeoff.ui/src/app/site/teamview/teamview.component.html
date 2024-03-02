@@ -1,0 +1,62 @@
+<h1>Team View</h1>
+
+<div class="row">
+    <div class="col-md-6 lead">{{name}}'s team <a asp-controller="Calendar" asp-action="Feeds" data-toggle="tooltip" data-placement="right" title="Export Team View to external calendars"><span class="fa fa-rss"></span></a></div>
+    <div class="col-md-3 col-md-offset-3">
+        <div class="btn-group btn-group-sm pull-right" role="group">
+            <a routerLink="." [queryParams]="{year: year, month: month}" class="btn btn-default" [attr.disabled]="grouped ? null : 'disabled'">All</a>
+            <a routerLink="." [queryParams]="{year: year, month: month, grouped: true}" class="btn btn-default" [attr.disabled]="grouped ? 'disabled' : null">By team</a>
+        </div>
+    </div>
+</div>
+
+<div class="row">&nbsp;</div>
+
+<nav>
+    <div class="row">
+        <div class="col-xs-2">
+            <a routerLink="." [queryParams]="lastParams" class="btn btn-link btn-lg"><span aria-hidden="true" class="fa fa-chevron-left"></span>&nbsp;{{last | date: 'MMM'}}</a>
+        </div>
+
+        <div class="col-xs-8 calendar-section-caption">
+            <date-picker [date]="start" (selected)="dateselected($event)"/>
+        </div>
+
+        <div class="col-xs-2">
+            <a class="btn btn-link btn-lg pull-right" routerLink="." [queryParams]="nextParams">{{next | date: 'MMM'}}&nbsp;<span aria-hidden="true" class="fa fa-chevron-right"></span></a>
+        </div>
+    </div>
+</nav>
+
+<div class="row">&nbsp;</div>
+
+<ng-container *ngIf="grouped">
+    <month-view *ngFor="let t of teams" [team]="t" [selectedDate]="start" [selectedTeam]="team" [teams]="teams"/>
+</ng-container>
+
+<ng-container *ngIf="!grouped">
+    <month-view [selectedDate]="start" [selectedTeam]="team" [teams]="teams"/>
+</ng-container>
+
+<!-- @if (Model.Grouped)
+{
+    var index = 0;
+    @foreach (var team in Model.Teams)
+    {
+        if (index > 0)
+        {
+            <div class="row">
+                <div class="col-md-12">&nbsp;</div>
+            </div>
+
+        }
+        await TeamView(team.Id);
+        index++;
+    }
+}
+else
+{
+    await TeamView(null);
+} -->
+
+<div class="row clearfix">&nbsp;</div>

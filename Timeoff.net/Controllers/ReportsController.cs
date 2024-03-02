@@ -7,11 +7,11 @@ namespace Timeoff.Controllers
     [Authorize(Roles = "Admin")]
     public class ReportsController : Controller
     {
-        [HttpGet("")]
-        public IActionResult Index()
-        {
-            return View();
-        }
+        //[HttpGet("")]
+        //public IActionResult Index()
+        //{
+        //    return View();
+        //}
 
         [HttpGet("allowancebytime")]
         public async Task<IActionResult> AllowanceByTimeAsync()

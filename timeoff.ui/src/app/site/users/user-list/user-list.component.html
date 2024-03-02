@@ -1,0 +1,91 @@
+<h1>Staff</h1>
+<flash-message/>
+
+<div class="row">
+    <div class="col-md-3 lead">{{name}}'s staff</div>
+    <div class="col-md-3 col-md-offset-6">
+        <div class="btn-group pull-right">
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Add new employee
+                <span class="caret"></span>
+                <span class="sr-only">Toggle Dropdown</span>
+            </button>
+            <ul class="dropdown-menu">
+                <li><a routerLink="/users/import" id="import_users_btn">Import employees</a></li>
+                <li><a asp-controller="users" asp-action="create" id="add_new_user">Add single employee</a></li>
+            </ul>
+        </div>
+        <form asp-action="index" method="GET">
+            <input type="hidden" name="team" value="@Model.TeamId">
+            <input type="hidden" name="ascsv" value="true">
+            <button class="btn btn-link pull-right single-click"
+                    type="submit"
+                    data-content="Download current page as .CSV file"
+                    data-placement="top"
+                    data-toggle="popover"
+                    data-trigger="focus hover">
+                <i class="fa fa-download"></i> .csv
+            </button>
+        </form>
+    </div>
+</div>
+
+<div class="row">&nbsp;</div>
+
+<div class="col-md-3 list-group all-teams">
+    <a asp-controller="users" asp-action="index" class="list-group-item @IsSelected(null)">All teams</a>
+    <!-- @foreach (var item in Model.Teams) {
+        <a class="list-group-item @IsSelected(item.Id)" asp-action="index" asp-controller="users" asp-route-team="@item.Id">@item.Value</a>
+    } -->
+</div>
+
+<div class="col-md-9">
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Team</th>
+                <th>Is Administrator?</th>
+                <th>Available allowance</th>
+                <th>Days used</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- @foreach (var item in Model.Users)
+            {
+                <tr data-vpp-user-row="@item.Id">
+                    <td class="user-link-cell">
+                        <a asp-controller="users" asp-action="edit" asp-route-id="@item.Id">
+                            @if (!item.IsActive)
+                            {
+                                <s>@item.Name</s>
+                            }
+                            else
+                            {
+                                @item.Name
+                            }
+                        </a>
+                    </td>
+                    <td class="user_team"><a asp-controller="Teams" asp-action="Edit" asp-route-id="@item.Id">@item.TeamName</a></td>
+                    <td>@IsAdmin(item.IsAdmin)</td>
+                    <td class="vpp-days-remaining">@item.AvailableAllowance</td>
+                    <td class="vpp-days-used">@item.DaysUsed</td>
+                </tr>
+            } -->
+        </tbody>
+    </table>
+</div>
+
+<div class="row">&nbsp;</div>
+
+<!-- @functions {
+    public string IsSelected(int? id)
+    {
+        return Model.TeamId == id ? "selected-item" : "";
+    }
+
+    public string IsAdmin(bool value)
+    {
+        return value ? "Yes" : "";
+    }
+} -->

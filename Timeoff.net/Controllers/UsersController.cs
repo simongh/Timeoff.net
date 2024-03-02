@@ -57,8 +57,8 @@ namespace Timeoff.Controllers
         {
             var vm = await _mediator.Send(command);
 
-            if (vm == null)
-                return RedirectToAction(nameof(IndexAsync));
+            //if (vm == null)
+            //    return RedirectToAction(nameof(IndexAsync));
 
             return View(vm);
         }
@@ -123,11 +123,11 @@ namespace Timeoff.Controllers
             return View();
         }
 
-        [HttpGet("")]
-        public async Task<IActionResult> IndexAsync([FromQuery] Application.Users.UsersQuery query)
-        {
-            return View(await _mediator.Send(query));
-        }
+        //[HttpGet("")]
+        //public async Task<IActionResult> IndexAsync([FromQuery] Application.Users.UsersQuery query)
+        //{
+        //    return View(await _mediator.Send(query));
+        //}
 
         [HttpPost("edit/reset-password/{id:int}")]
         public async Task<IActionResult> ResetPasswordAsync([FromRoute] Application.ResetPassword.ResetUserPasswordCommand command)
@@ -136,7 +136,7 @@ namespace Timeoff.Controllers
 
             if (vm == null)
             {
-                return RedirectToAction(nameof(IndexAsync));
+                //return RedirectToAction(nameof(IndexAsync));
             }
 
             return View("Edit", vm);
