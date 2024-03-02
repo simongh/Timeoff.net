@@ -1,0 +1,67 @@
+<div class="row clearfix">
+    <div class="col-md-12">
+        <table class="team-view-table table-hover">
+            <thead>
+                <tr>
+                    <td class="team-view-header" colspan="2">
+                        <div class="dropdown pull-left" *ngIf="!team">
+                            <button class="btn btn-default dropdown-toggle left-column-cell" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                <ng-container *ngIf="!!selectedTeam">{{selectedTeamName}}</ng-container>
+                                <ng-container *ngIf="!selectedTeam">All teams</ng-container>
+                                &nbsp;<span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                                <li><a routerLink="." [queryParams]="{year: selectedDate.getFullYear(), month: selectedDate.getMonth() + 1}">All</a></li>
+                                <li role="separator" class="divider"></li>
+                                <li *ngFor="let t of teams"><a routerLink="." [queryParams]="{year: selectedDate.getFullYear(), month: selectedDate.getMonth() +1, team: t.id}">{{t.name}}</a></li>
+                            </ul>
+                        </div>
+                        
+                        <div class="pull-left" *ngIf="!!team">
+                            <h3>{{team.name}}</h3>
+                        </div>
+                    </td>
+
+                    <td *ngFor="let d of days" colspan="2" class="team-view-header"><b>{{d.getDate()}}</b></td>
+
+                </tr>
+            </thead>
+
+            <tbody>
+                <!-- @foreach (var user in Model.Users.Where(u => teamId == null ? true : u.TeamId ==  teamId.Value))
+                {
+                    <tr class="teamview-user-list-row" data-vpp-user-list-row="@user.UserId">
+                        <td class="left-column-cell cross-link user-details-summary-trigger" data-user-id="@user.UserId">
+                            @if (this.User.IsInRole("Admin"))
+                            {
+                                <a asp-controller="users" asp-action="edit" asp-route-id="@user.UserId">@user.Name</a>
+                            }
+                            else
+                            {
+                                <span>@user.Name</span>
+                            }
+                        </td>
+                        <td>
+                            @{
+                                var days = Model.DaysDeducted(user.UserId);
+                            }
+                            <span class="teamview-deducted-days"
+                                data-content="In @Model.CurrentDate.ToString("MMMM, yyyy") @user.Name used @days days from allowance"
+                                data-placement="right"
+                                data-toggle="popover"
+                                data-trigger="focus hover">@days</span>
+                        </td>
+                        @for (DateTime i = Model.CurrentDate; i.Month == Model.CurrentDate.Month; i = i.AddDays(1))
+                        {
+                            var day = Model.CalendarDays.FirstOrDefault(d => d.Date == i && d.UserId == user.UserId) ?? new()
+                            {
+                                Date = i
+                            };
+                            <partial name="_CalendarCell" model="day" />
+                        }
+                    </tr>
+                } -->
+            </tbody>
+        </table>
+    </div>
+</div>

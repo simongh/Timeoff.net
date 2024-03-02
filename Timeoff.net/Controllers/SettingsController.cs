@@ -16,11 +16,11 @@ namespace Timeoff.Controllers
             _mediator = mediator;
         }
 
-        [HttpGet("")]
-        public async Task<IActionResult> IndexAsync()
-        {
-            return View(await _mediator.Send(new Application.Settings.GetSettingsCommand()));
-        }
+        //[HttpGet("")]
+        //public async Task<IActionResult> IndexAsync()
+        //{
+        //    return View(await _mediator.Send(new Application.Settings.GetSettingsCommand()));
+        //}
 
         [HttpPost("company")]
         public async Task<IActionResult> UpdateCompanyAsync(Application.Settings.UpdateSettingsCommand command)

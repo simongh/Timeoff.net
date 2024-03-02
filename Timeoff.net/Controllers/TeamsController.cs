@@ -15,12 +15,12 @@ namespace Timeoff.Controllers
             _mediator = mediator;
         }
 
-        [HttpGet("teams")]
-        public async Task<IActionResult> IndexAsync()
-        {
-            var vm = await _mediator.Send(new Application.Teams.TeamsQuery());
-            return View(vm);
-        }
+        //[HttpGet("teams")]
+        //public async Task<IActionResult> IndexAsync()
+        //{
+        //    var vm = await _mediator.Send(new Application.Teams.TeamsQuery());
+        //    return View(vm);
+        //}
 
         [HttpPost("teams")]
         public async Task<IActionResult> CreateAsync(Application.TeamDetails.UpdateTeamCommand command)

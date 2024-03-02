@@ -15,12 +15,12 @@ namespace Timeoff.Controllers
             _mediator = mediator;
         }
 
-        [HttpGet()]
-        public async Task<IActionResult> IndexAsync([FromQuery] Application.PublicHolidays.PublicHolidaysQuery query)
-        {
-            var vm = await _mediator.Send(query);
-            return View(vm);
-        }
+        //[HttpGet()]
+        //public async Task<IActionResult> IndexAsync([FromQuery] Application.PublicHolidays.PublicHolidaysQuery query)
+        //{
+        //    var vm = await _mediator.Send(query);
+        //    return View(vm);
+        //}
 
         [HttpPost()]
         public async Task<IActionResult> CreateAsync(Application.PublicHolidays.UpdatePublicHolidayCommand command)
