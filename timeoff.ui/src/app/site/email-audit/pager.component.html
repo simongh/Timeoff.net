@@ -1,0 +1,17 @@
+<ul class="pagination">
+    <li [ngClass]="totalPages == 0 ? 'disabled' : ''">
+        <span>
+            <a *ngIf="previousPage > 0" routerLink="." [queryParams]="{page: previousPage}">&laquo; Prev</a>
+            <ng-container *ngIf="previousPage <= 0">&laquo; Prev</ng-container>
+        </span>
+    </li>
+    <li>
+        <span>{{currentPage}} of {{totalPages}}</span>
+    </li>
+    <li [ngClass]="totalPages == 0 ? 'disabled' : ''">
+        <span>
+            <a *ngIf="nextPage < totalPages" routerLink="." [queryParams]="{page: nextPage}">Next &raquo;</a>
+            <ng-container *ngIf="nextPage > totalPages">Next &raquo;</ng-container>
+        </span>
+    </li>
+</ul>

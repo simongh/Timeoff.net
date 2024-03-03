@@ -2,11 +2,11 @@
 
 namespace Timeoff.Application.IntegrationApi
 {
-    public record GetIntegrationApiCommand : IRequest<IntegrationApiViewModel>
+    public record GetIntegrationApiCommand : IRequest<IntegrationResult>
     {
     }
 
-    internal class GetIntegrationApiCommandHandler : IRequestHandler<GetIntegrationApiCommand, IntegrationApiViewModel>
+    internal class GetIntegrationApiCommandHandler : IRequestHandler<GetIntegrationApiCommand, IntegrationResult>
     {
         private readonly IDataContext _dataContext;
         private readonly Services.ICurrentUserService _currentUserService;
@@ -19,7 +19,7 @@ namespace Timeoff.Application.IntegrationApi
             _currentUserService = currentUserService;
         }
 
-        public async Task<IntegrationApiViewModel> Handle(GetIntegrationApiCommand request, CancellationToken cancellationToken)
+        public async Task<IntegrationResult> Handle(GetIntegrationApiCommand request, CancellationToken cancellationToken)
         {
             return await _dataContext.GetIntegrationApiAsync(_currentUserService.CompanyId);
         }

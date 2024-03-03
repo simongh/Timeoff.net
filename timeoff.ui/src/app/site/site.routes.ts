@@ -8,6 +8,8 @@ import { usersRoutes } from "./users/users.routes";
 import { UsersPageComponent } from "./users/users-page.component";
 import { ReportsPageComponent } from "./reports/reports-page.component";
 import { reportsRoutes } from "./reports/reports.routes";
+import { EmailAuditComponent } from "./email-audit/email-audit.component";
+import { FeedsComponent } from "./feeds/feeds.component";
 
 export const siteRoutes: Routes = [
     {
@@ -30,8 +32,16 @@ export const siteRoutes: Routes = [
         children: reportsRoutes
     },
     {
+        path: 'audit/emails',
+        component: EmailAuditComponent
+    },
+    {
         path: 'teamview',
         component: TeamviewComponent,
+    },
+    {
+        path: 'feeds',
+        component: FeedsComponent,
     },
     {
         path: 'logout',
