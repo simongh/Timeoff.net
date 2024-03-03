@@ -54,18 +54,6 @@ namespace Timeoff.Controllers
             return View("general", vm);
         }
 
-        [HttpGet("company/integration-api")]
-        public async Task<IActionResult> CompanyIntegrationApiAsync()
-        {
-            return View(await _mediator.Send(new Application.IntegrationApi.GetIntegrationApiCommand()));
-        }
-
-        [HttpPost("company/integration-api")]
-        public async Task<IActionResult> UpdateCompanyIntegrationApiAsync(Application.IntegrationApi.UpdateIntegrationApiCommand command)
-        {
-            return View("CompanyIntegrationApi", await _mediator.Send(command));
-        }
-
         [HttpGet("company/authentication")]
         public async Task<IActionResult> CompanyAuthenticateAsync()
         {

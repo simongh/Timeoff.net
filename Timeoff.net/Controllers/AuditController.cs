@@ -15,10 +15,10 @@ namespace Timeoff.Controllers
             _mediator = mediator;
         }
 
-        [HttpGet("email")]
-        public async Task<IActionResult> EmailsAsync([FromQuery] Application.EmailAudit.EmailAuditQuery command)
-        {
-            return View(await _mediator.Send(command));
-        }
+        //[HttpGet("email")]
+        //public async Task<IActionResult> EmailsAsync([FromQuery] Application.EmailAudit.EmailAuditQuery command)
+        //{
+        //    return View(await _mediator.Send(command));
+        //}
     }
 }

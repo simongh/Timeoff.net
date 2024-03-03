@@ -1,10 +1,9 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Timeoff.Services;
 
 namespace Timeoff.Application.EmailAudit
 {
-    public record EmailAuditQuery : IRequest<EmailAuditViewModel>
+    public record EmailAuditQuery : IRequest<QueryResult>
     {
         public DateTime? Start { get; init; }
 
@@ -15,20 +14,15 @@ namespace Timeoff.Application.EmailAudit
         public int Page { get; init; } = 1;
     }
 
-    internal class EmailAuditQueryHandler : IRequestHandler<EmailAuditQuery, EmailAuditViewModel>
+    internal class EmailAuditQueryHandler(
+        IDataContext dataContext,
+        Services.ICurrentUserService currentUserService)
+        : IRequestHandler<EmailAuditQuery, QueryResult>
     {
-        private readonly IDataContext _dataContext;
-        private readonly ICurrentUserService _currentUserService;
+        private readonly IDataContext _dataContext = dataContext;
+        private readonly Services.ICurrentUserService _currentUserService = currentUserService;
 
-        public EmailAuditQueryHandler(
-            IDataContext dataContext,
-            Services.ICurrentUserService currentUserService)
-        {
-            _dataContext = dataContext;
-            _currentUserService = currentUserService;
-        }
-
-        public async Task<EmailAuditViewModel> Handle(EmailAuditQuery request, CancellationToken cancellationToken)
+        public async Task<QueryResult> Handle(EmailAuditQuery request, CancellationToken cancellationToken)
         {
             var query = _dataContext.EmailAudits
                 .Where(e => e.CompanyId == _currentUserService.CompanyId);
@@ -52,55 +46,32 @@ namespace Timeoff.Application.EmailAudit
             {
                 CurrentPage = request.Page,
                 TotalRows = await query.CountAsync(),
-                QueryParameters = new
-                {
-                    request.UserId,
-                    request.Start,
-                    request.End,
-                },
             };
 
             var emails = await query
+                .AsNoTracking()
                 .OrderByDescending(e => e.CreatedAt)
                 .Skip((pager.CurrentPage - 1) * pager.PageSize)
                 .Take(pager.PageSize)
-                .Select(e => new ResultModels.EmailResult
+                .Select(e => new EmailResult
                 {
                     Id = e.EmailAuditId,
                     Subject = e.Subject,
-                    Body = e.Body,
-                    Name = e.User.FirstName + " " + e.User.LastName,
-                    UserId = e.UserId,
+                    Content = e.Body,
+                    User = new()
+                    {
+                        Id = e.UserId,
+                        Name = e.User.FirstName + " " + e.User.LastName,
+                    },
                     CreatedAt = e.CreatedAt,
                     Email = e.User.Email,
                 })
                 .ToArrayAsync();
 
-            var users = await _dataContext.Users
-                .Where(u => u.CompanyId == _currentUserService.CompanyId)
-                .OrderBy(u => u.FirstName)
-                .ThenBy(u => u.LastName)
-                .Select(u => new ResultModels.ListItem
-                {
-                    Id = u.UserId,
-                    Value = u.FirstName + " " + u.LastName,
-                })
-                .ToArrayAsync();
-
-            var dateFormat = await _dataContext.Companies
-                .Where(c => c.CompanyId == _currentUserService.CompanyId)
-                .Select(c => c.DateFormat)
-                .FirstAsync();
-
             return new()
             {
-                Start = request.Start,
-                End = request.End,
-                UserId = request.UserId,
-                Emails = emails,
-                Users = users,
-                Pager = pager,
-                DateFormat = dateFormat,
+                Results = emails,
+                Pages = pager.TotalPages,
             };
         }
     }
