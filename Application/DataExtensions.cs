@@ -59,6 +59,11 @@ namespace Timeoff.Application
                      IsAccruedAllowance = d.IsAccrued,
                      IncludePublicHolidays = d.IncludePublicHolidays,
                      ManagerId = d.ManagerId!.Value,
+                     Manager = new()
+                     {
+                         Id = d.ManagerId!.Value,
+                         Name = d.Manager!.FirstName + " " + d.Manager.LastName
+                     }
                  })
                  .ToArrayAsync();
 

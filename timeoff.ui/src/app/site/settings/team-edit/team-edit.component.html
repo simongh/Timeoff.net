@@ -1,0 +1,110 @@
+<h1>{{name}} details</h1>
+
+<div class="row">
+<div class="col-md-3 lead">
+    Team details
+</div>
+<div class="col-md-1 col-md-offset-8">
+    <button id="remove_btn" (click)="delete()" type="button" class="pull-right btn btn-danger single-click" data-toggle="tooltip" data-placement="top" title="Remove team"><i class="fa fa-trash"></i> Delete</button>
+</div>
+</div>
+
+<div class="row">&nbsp;</div>
+
+<flash-message/>
+
+<div class="col-md-3 list-group">
+  <a class="list-group-item selected-item">General details</a>
+  <a routerLink="/users" [queryParams]="{team: id}" class="list-group-item">Employees from team</a>
+</div>
+
+<form method="POST" [formGroup]="editForm" id="team_edit_form">
+
+    <div class="col-md-7">
+
+        <ol class="breadcrumb">
+            <li><a routerLink="/teams" data-vpp-all-teams-link="1">All teams</a></li>
+            <li class="active">{{name}}</li>
+        </ol>
+
+        <div class="form-group">
+            <label for="name" class="control-label">Name</label>
+            <input class="form-control" id="name" formControlName="name" required value="@Model.Name">
+            <validator-message controlName="name" validatorName="required">Name is required</validator-message>
+        </div>
+
+
+        <div class="form-group">
+            <label for="manager" class="control-label">Manager</label>
+            <select class="form-control" formControlName="manager" id="manager">
+                <option *ngFor="let u of users" value="{{u.id}}">{{u.name}}</option>
+            </select>
+            <span class="help-block">Head of {{name}} team. Main manager. <a asp-controller="users" asp-action="edit" asp-route-id="@Model.ManagerId">More details <i class="fa fa-angle-double-right"></i></a></span>
+        </div>
+
+        <!-- @*<div class="form-group">
+            <label class="control-label">Secondary supervisors (BETA)</label>
+            <ul class="list-group no-bottom-space">
+                {{# each department.supervisors }}
+
+                <li class="list-group-item">
+                    <span><a href='/users/edit/{{ this.id }}/'>{{ this.full_name }}</a> <button type="submit" name="remove_supervisor_id" value="{{this.id}}" class="pull-right btn btn-link btn-xs"><i class="fa fa-trash"></i> Remove</button><span>
+                </li>
+                {{/ each }}
+
+                <li class="list-group-item">
+                    <span>
+                        &nbsp;
+                        <a class="pull-right btn btn-link btn-xs"
+                           data-vpp-add-new-secondary-supervisor="1"
+                           data-toggle="modal"
+                           data-target="#add_secondary_supervisers_modal"
+                           data-department_id="{{department.id}}"
+                           data-department_name="{{department.name}}">
+                            <i class="fa fa-plus"></i> Add new secondary supervisor
+                        </a>
+                        <span>
+                </li>
+            </ul>
+            <span class="help-block">List of users who also could decide on leave requests from {{department.name}} department's employees.</span>
+        </div>*@ -->
+
+
+        <div class="form-group">
+            <label for="allowance">Allowance</label>
+
+            <select class="form-control" formControlName="allowance" id="allowance">
+                <option *ngFor="let a of allowances" value="{{a}}">{{a == 0 ? "None":a}}</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="includePublicHolidays" class="control-label">
+                <input class="" type="checkbox" formControlName="includePublicHolidays" id="includePublicHolidays" value="true">
+                Include public holidays
+            </label>
+            <span class="help-block">Determine if employees from {{name}} have <a routerLink="/settings/public-holidays">public holidays</a> in addition to their allowance</span>
+        </div>
+
+        <div class="form-group">
+            <label for="isAccruedAllowance" class="control-label">
+                <input class="" type="checkbox" formControlName="accruedAllowance" id="isAccruedAllowance" value="true">
+                Accrued allowance
+            </label>
+            <span class="help-block">If enabled, holiday allowance starts to build up - or accrue - from the first day of employment. It accrues in proportion to the annual entitlement. E.g. an employee in the ninth month of employment would have built up 9/12ths (or three-quarters) of annual entitlement.</span>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <button id="save_changes_btn" (click)="save()" type="button" class="btn btn-success pull-right single-click">Save changes to team</button>
+            <a class="btn btn-link pull-right" routerLink="/settings/teams">Cancel</a>
+        </div>
+    </div>
+
+</form>
+
+<!-- @*{{> department_details/supervisers_modal department=department }}
+<partial name="_SupervisorModal" />*@ -->
+
+<div class="row">&nbsp;</div>

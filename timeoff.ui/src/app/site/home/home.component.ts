@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, Input, OnInit } from "@angular/core";
 import { FlashComponent } from "../../components/flash/flash.component";
 import { AllowanceSummaryModel } from "./allowance-summary.model";
 import { CommonModule } from "@angular/common";
@@ -11,15 +11,24 @@ import { startOfYear } from "date-fns";
     templateUrl: 'home.component.html',
     imports: [FlashComponent, CommonModule, RouterLink, CalendarComponent]
 })
-export class HomeComponent implements OnInit{
+export class HomeComponent {
     public name: string = '';
 
-    public currentYear!: number;
+    @Input()
+    public set year(year: number | null) { 
+        if (!!year) {
+            this.start = startOfYear(year);
+        } else {
+            this.start = startOfYear(new Date());
+        }
+    }
+    public get year(): number { return this.start.getFullYear(); }
 
-    public get nextYear(): number { return this.currentYear +1; } 
+    public get nextYear(): number { return this.start.getFullYear() +1; } 
 
-    public get lastYear(): number { return this.currentYear -1; }
+    public get lastYear(): number { return this.start.getFullYear() -1; }
 
+    @Input()
     public showFullYear: boolean = false;
 
     public allowanceSummary: AllowanceSummaryModel = new AllowanceSummaryModel();
@@ -32,23 +41,7 @@ export class HomeComponent implements OnInit{
 
     public teamId: number = 0;
 
-    public start: Date = new Date();
+    public start!: Date;
 
-    constructor(private route: ActivatedRoute)
-    {}
-
-    public ngOnInit(): void {
-        this.route.queryParamMap
-            .subscribe((p) => {
-                if (p.has('year')) {
-                    this.currentYear = Number.parseInt(p.get('year')!);
-                } else {
-                    this.currentYear = new Date().getFullYear();
-                }
-
-                this.showFullYear =  !!p.get('showFullYear');
-
-                this.start = this.showFullYear ? new Date(this.currentYear,0,1) : new Date();
-            });
-    }
+    constructor() { }
 }

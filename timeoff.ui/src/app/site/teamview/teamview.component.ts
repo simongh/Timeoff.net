@@ -1,5 +1,5 @@
 import { CommonModule } from "@angular/common";
-import { Component, DestroyRef, ElementRef, OnInit } from "@angular/core";
+import { Component, DestroyRef, ElementRef, Input, OnInit } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { ActivatedRoute, Router, RouterLink } from "@angular/router";
 import { addMonths, startOfMonth, subMonths } from "date-fns";
@@ -31,8 +31,10 @@ export class TeamviewComponent implements OnInit {
         return this.toParams(this.next);
     }
 
+    @Input()
     public grouped: boolean = false;
 
+    @Input()
     public team!: number | null;
 
     public start!: Date;
@@ -56,14 +58,6 @@ export class TeamviewComponent implements OnInit {
                     this.setStart(new Date(`${p.get('year')}-${p.get('month')}-01`));
                 } else {
                     this.setStart(startOfMonth(new Date()));
-                }
-
-                this.grouped = !!p.get('grouped');
-
-                if (p.has('team')) {
-                    this.team = Number.parseInt(p.get('team')!);
-                } else {
-                    this.team = null;
                 }
             });
     }

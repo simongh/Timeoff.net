@@ -54,7 +54,7 @@ export class EmailAuditComponent {
     searchSvc.getUsers()
       .pipe(takeUntilDestroyed(destroyed))
       .subscribe((data) => {
-            this.users = data;
+        this.users = data;
       });
 
       this.find();
