@@ -1,4 +1,4 @@
-import { Component, DestroyRef, OnInit } from '@angular/core';
+import { Component, DestroyRef, Input, OnInit } from '@angular/core';
 import { FlashComponent } from "../components/flash/flash.component";
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { compareValidator } from '../components/validators';
@@ -25,6 +25,13 @@ export class ResetPasswordComponent implements OnInit {
     validators: [compareValidator('password','confirmPassword')]
   });
 
+  @Input()
+  public set t(value: string) {
+    if (!!value) {
+      this.token = value;
+    }
+  }
+
   public showCurrent!: boolean;
 
   public messages: string[] = [];
@@ -41,23 +48,17 @@ export class ResetPasswordComponent implements OnInit {
     private authSvc: AuthService,
     private destroyed: DestroyRef) {}
 
-  ngOnInit(): void {
-    this.route.queryParamMap
-    .pipe(takeUntilDestroyed(this.destroyed))
-      .subscribe((p)=>{
-        this.showCurrent = this.authSvc.isUserLoggedIn;
+  public ngOnInit(): void {
+    this.showCurrent = this.authSvc.isUserLoggedIn;
 
-          if (this.showCurrent){
-            this.passwordForm.controls.current.addValidators(Validators.required);
-          } else{
-            this.token = p.get('t');
-
-            if (!this.token){
-              this.errors = ['Invalid reset link'];
-              this.submitting = true;
-            }
-          }
-      })
+    if (this.showCurrent){
+      this.passwordForm.controls.current.addValidators(Validators.required);
+    } else{
+      if (!this.token){
+        this.errors = ['Invalid reset link'];
+        this.submitting = true;
+      }
+    }
   }
 
   public save() {

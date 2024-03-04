@@ -1,6 +1,6 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, Input, OnInit } from "@angular/core";
 import { FlashComponent } from "../../../components/flash/flash.component";
-import { ActivatedRoute, RouterLink } from "@angular/router";
+import { RouterLink } from "@angular/router";
 import { CalendarComponent } from "../../../components/calendar/calendar.component";
 import { startOfYear } from "date-fns";
 
@@ -9,8 +9,17 @@ import { startOfYear } from "date-fns";
     templateUrl: 'public-holidays.component.html',
     imports: [FlashComponent, RouterLink, CalendarComponent]
 })
-export class PublicHolidaysComponent implements OnInit{
+export class PublicHolidaysComponent {
     public companyName: string = '';
+
+    @Input()
+    public set year(value: number) {
+        if (!!value) {
+            this.start = startOfYear(value);
+        } else {
+            this.start = new Date();
+        }
+    }
 
     public get currentYear() {
         return this.start.getFullYear();
@@ -26,17 +35,5 @@ export class PublicHolidaysComponent implements OnInit{
 
     public start!: Date;
 
-    constructor(private route: ActivatedRoute)
-    {}
-    
-    public ngOnInit(): void {
-        this.route.queryParamMap
-            .subscribe((p) => {
-                if (p.has('year')) {
-                    this.start = startOfYear(new Date(Number.parseInt(p.get('year')!),0,1));
-                } else {
-                    this.start = startOfYear(new Date());
-                }
-            });
-    }
+    constructor() {}
 }

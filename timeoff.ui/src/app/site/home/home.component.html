@@ -1,7 +1,7 @@
 <h1>Employee calendar</h1>
 
 <div class="row">
-    <div class="col-md-6 lead">{{name}}'s calendar for {{currentYear}}</div>
+    <div class="col-md-6 lead">{{name}}'s calendar for {{year}}</div>
     <div class="col-md-6">
     </div>
 </div>
@@ -40,7 +40,7 @@
                 <span class="pull-right"><a href="mailto:{{managerEmail}}">{{managerName}}</a></span>
             </dd>
             <dd><em>Team:</em> <span class="pull-right"><a [routerLink]="['calendar','team',teamId]">{{teamName}}</a></span></dd>
-            <dd><em>Allowance in {{currentYear}}:</em><span class="pull-right"> {{allowanceSummary.total}} days</span>
+            <dd><em>Allowance in {{year}}:</em><span class="pull-right"> {{allowanceSummary.total}} days</span>
             <dd>
         </dl>
     </div>
@@ -129,7 +129,7 @@
 
 <ng-container *ngIf="!showFullYear">
     <div class="row main-row_header">
-        <p class="col-md-12">All my absences in {{currentYear}}</p>
+        <p class="col-md-12">All my absences in {{year}}</p>
     </div>
 
     <!-- <partial name="../Request/_UserRequests" model="Model.LeaveRequested"/> -->

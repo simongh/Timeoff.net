@@ -1,15 +1,18 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using MediatR;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Timeoff.Api
 {
-    [Route("api/users")]
+    [Route("api/[controller]")]
     [ApiController]
-    public class TeamController : ControllerBase
+    public class TeamsController(IMediator mediator) : ControllerBase
     {
+        private readonly IMediator _mediator = mediator;
+
         [HttpGet]
-        public Task<IActionResult> ListAsync()
+        public async Task<IActionResult> ListAsync()
         {
-            throw new NotImplementedException();
+            return Ok(await _mediator.Send(new Application.Teams.TeamsQuery()));
         }
 
         [HttpPost]
