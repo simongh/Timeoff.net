@@ -22,15 +22,28 @@ namespace Timeoff.Api
         }
 
         [HttpGet("{id:int}")]
-        public Task<IActionResult> GetAsync(int id)
+        public async Task<IActionResult> GetAsync(Application.TeamDetails.GetTeamCommand command)
         {
-            throw new NotImplementedException();
+            return Ok(await _mediator.Send(command));
         }
 
         [HttpPut("{id:int}")]
-        public Task<IActionResult> UpdateAsync(int id)
+        public async Task<IActionResult> UpdateAsync(Application.TeamDetails.UpdateTeamCommand command)
         {
-            throw new NotImplementedException();
+            if (command == null)
+                return BadRequest();
+
+            await _mediator.Send(command);
+
+            return NoContent();
+        }
+
+        [HttpDelete("{id:int}")]
+        public async Task<IActionResult> DeleteAsync([FromRoute] Application.DeleteTeam.DeleteTeamCommand command)
+        {
+            await _mediator.Send(command);
+
+            return NoContent();
         }
     }
 }

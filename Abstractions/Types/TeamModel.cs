@@ -1,6 +1,6 @@
 ﻿namespace Timeoff.Types
 {
-    public abstract record TeamModel
+    public record TeamModel
     {
         public string Name { get; init; } = null!;
         public double Allowance { get; init; }

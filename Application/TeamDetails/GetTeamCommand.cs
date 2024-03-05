@@ -4,45 +4,39 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Timeoff.Application.TeamDetails
 {
-    public record GetTeamCommand : IRequest<EditTeamViewModel?>, Commands.IValidated
+    public record GetTeamCommand : IRequest<Types.TeamModel>, Commands.IValidated
     {
         public int Id { get; init; }
 
         public IEnumerable<ValidationFailure>? Failures { get; set; }
     }
 
-    internal class GetTeamCommandHandler : IRequestHandler<GetTeamCommand, EditTeamViewModel?>
+    internal class GetTeamCommandHandler(
+        IDataContext dataContext,
+        Services.ICurrentUserService currentUserService)
+        : IRequestHandler<GetTeamCommand, Types.TeamModel>
     {
-        private readonly IDataContext _dataContext;
-        private readonly Services.ICurrentUserService _currentUserService;
+        private readonly IDataContext _dataContext = dataContext;
+        private readonly Services.ICurrentUserService _currentUserService = currentUserService;
 
-        public GetTeamCommandHandler(
-            IDataContext dataContext,
-            Services.ICurrentUserService currentUserService)
-        {
-            _dataContext = dataContext;
-            _currentUserService = currentUserService;
-        }
-
-        public async Task<EditTeamViewModel?> Handle(GetTeamCommand request, CancellationToken cancellationToken)
+        public async Task<Types.TeamModel> Handle(GetTeamCommand request, CancellationToken cancellationToken)
         {
             var team = await _dataContext.Teams
                 .Where(d => d.TeamId == request.Id && d.CompanyId == _currentUserService.CompanyId)
-                .Select(d => new EditTeamViewModel
+                .Select(d => new Types.TeamModel
                 {
-                    Id = d.TeamId,
                     Name = d.Name,
                     Allowance = d.Allowance,
                     IncludePublicHolidays = d.IncludePublicHolidays,
                     IsAccruedAllowance = d.IsAccrued,
-                    ManagerId = d.ManagerId!.Value,
-                    Users = d.Company.Users.Select(u => new ResultModels.ListItem
+                    Manager = new()
                     {
-                        Id = u.UserId,
-                        Value = u.FirstName + " " + u.LastName,
-                    })
+                        Id = d.ManagerId!.Value,
+                        Name = d.Manager!.FirstName + " " + d.Manager!.LastName,
+                    }
                 })
-                .FirstOrDefaultAsync();
+                .FirstOrDefaultAsync()
+                ?? throw new NotFoundException();
 
             return team;
         }

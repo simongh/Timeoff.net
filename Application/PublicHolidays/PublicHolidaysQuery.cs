@@ -2,12 +2,12 @@
 
 namespace Timeoff.Application.PublicHolidays
 {
-    public record PublicHolidaysQuery : IRequest<PublicHolidaysViewModel>
+    public record PublicHolidaysQuery : IRequest<IEnumerable<ResultModels.PublicHolidayResult>>
     {
         public int Year { get; init; } = DateTime.Today.Year;
     }
 
-    internal class PublicHolidaysQueryHandler : IRequestHandler<PublicHolidaysQuery, PublicHolidaysViewModel>
+    internal class PublicHolidaysQueryHandler : IRequestHandler<PublicHolidaysQuery, IEnumerable<ResultModels.PublicHolidayResult>>
     {
         private readonly IDataContext _dataContext;
         private readonly Services.ICurrentUserService _currentUserService;
@@ -20,11 +20,11 @@ namespace Timeoff.Application.PublicHolidays
             _currentUserService = currentUserService;
         }
 
-        public async Task<PublicHolidaysViewModel> Handle(PublicHolidaysQuery request, CancellationToken cancellationToken)
+        public async Task<IEnumerable<ResultModels.PublicHolidayResult>> Handle(PublicHolidaysQuery request, CancellationToken cancellationToken)
         {
-            return await _dataContext.Companies.GetPublicHolidaysAsync(
+            return (await _dataContext.Companies.GetPublicHolidaysAsync(
                 _currentUserService.CompanyId,
-                request.Year);
+                request.Year)).PublicHolidays;
         }
     }
 }

@@ -3,6 +3,7 @@
     "Timeoff.net": {
       "commandName": "Project",
       "launchBrowser": true,
+      "launchUrl": "https://localhost:7157/api/account/login",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
         "ASPNETCORE_HOSTINGSTARTUPASSEMBLIES": "Microsoft.AspNetCore.SpaProxy"
