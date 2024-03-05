@@ -3,6 +3,12 @@
 POST {{Timeoff.net_HostAddress}}/api/account/login
 Content-Type: application/json
 
-[]
+{
+    "username": "test@test",
+    "password": "password"
+}
 
 #####
+
+GET {{Timeoff.net_HostAddress}}/api/public-holidays/2023
+Cookie: .AspNetCore.Cookies=CfDJ8Drq5kw98ARKkmJDLQphWUd3I_nTtBFV0GiQtNHXVZdww7aIDPb3HXPFVVYrjnKmMqX67WK-lOp9v2dDi2puD1EkZZzMOTjEYANYnmI165pwe0O8Yy8C7N0xql1KHbz4wUaxmMgC_2mr920FZpjJwLJ6iCQGPuZu08ez62tyvfadbj0U9ulEoat9XPHsbemDNpeP2ZMRZfANc2SuRVnYu0N9Fl70f3NKfyT0zl3VBzyuslkvtyBAB7DMlGkBfKXNwcpxQKTVsMXRVvvQZeIb9S4p_P5mq7DDPLfmS-fag0Nple2sQD2fEKm3B2FsEWotbW1ju-IPtNgJIxgd_vmQ1C2s01JMBKu8tryio9VskmFlEcOzpATrN9b3Ylmyx5EOA1OttMAmH8nI1_CJrSw89NaHEdzfF6kTG8cREy4E2lTCdwwA_kwixVETKgwFIJA0871g1QZyTscyzX184Ns4OprGqFrumDwM_tstOLECEPlNWj0k4FEuHQ2tlBYWHxGWwQ;

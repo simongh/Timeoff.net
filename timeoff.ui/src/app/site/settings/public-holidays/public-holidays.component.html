@@ -91,43 +91,35 @@
 
         <div class="row">&nbsp;</div>
 
+        <div *ngIf="holidaysForm.length == 0" class="row">
+            <div class="col-md-12 tst-no-public-holidays text-center">No public holiday records</div>
+        </div>
 
-        <!-- @if (!Model.Calendar.Holidays.Any())
-        {
-            <div class="row">
-                <div class="col-md-12 tst-no-public-holidays text-center">No public holiday records</div>
-            </div>
-        } -->
-
-        <form id="delete_publicholiday_form" method="post" asp-action="Delete" asp-controller="PublicHoliday">
-            <input name="year" value="@Model.CurrentYear" type="hidden">
-            <input id="deleteid" name="id" value="" type="hidden">
-        </form>
-        <form id="import_publicholiday_form" method="post" asp-action="import" asp-controller="PublicHoliday" asp-route-year="@Model.CurrentYear"></form>
-        <form id="update_publicholiday_form" method="post" asp-action="Create" asp-controller="PublicHoliday" asp-route-year="@Model.CurrentYear">
-            <!-- @for (int i = 0; i < Model.PublicHolidays.Length; i++)
-            {
-                <input type="hidden" asp-for="PublicHolidays[i].Id"/>
-                <div class="row">
+        <!-- <form id="import_publicholiday_form" method="post" asp-action="import" asp-controller="PublicHoliday" asp-route-year="@Model.CurrentYear"></form> -->
+        <form id="update_publicholiday_form">
+            <ng-container *ngFor="let h of holidaysForm.controls">
+                <div class="row" [formGroup]="h">
+                    <input type="hidden" formControlName="id"/>
                     <div class="col-md-4">
                         <div class="input-append date">
-                            <input type="text" class="form-control" asp-for="PublicHolidays[i].Date" asp-format="@($"{{0:{Model.DateFormat}}}")" tom-test-hook="date__@i" data-date-autoclose="1" data-provide="datepicker" data-date-format="@Model.DateFormat.ToJsFormat()" data-date-week-start="1">
+                            <input type="text" class="form-control" formControlName="date" data-date-autoclose="1" data-provide="datepicker" [attr.data-date-format]="dateFormat" data-date-week-start="1">
                             <span class="add-on"><i class="icon-th"></i></span>
+                            <validator-message controlName="date" validatorName="invalidYear">The date must be in the selected year</validator-message>
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <input type="text" class="form-control" asp-for="PublicHolidays[i].Name" tom-test-hook="name__@i">
+                        <input type="text" class="form-control" formControlName="name">
+                        <validator-message controlName="name" validatorName="required">Name is required</validator-message>
                     </div>
                     <div class="col-md-2">
-                        <button class="btn btn-default pull-right publicholiday-remove-btn" type="button" value="@Model.PublicHolidays[i].Id" tom-test-hook="remove__@i"><span class="fa fa-remove"></span></button>
+                        <button class="btn btn-default pull-right publicholiday-remove-btn" type="button" (click)="remove(h.value.id)" tom-test-hook="remove__@i"><span class="fa fa-remove"></span></button>
                     </div>
                 </div>
 
                 <div class="row">&nbsp;</div>
-            } -->
+            </ng-container>
 
             <div class="row">&nbsp;</div>
-
             <div class="row">
                 <div class="col-md-12">
                     <div class="pull-right">

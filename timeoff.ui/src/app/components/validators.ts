@@ -15,3 +15,11 @@ export function listValidator(values: string[]): ValidatorFn {
         };
     };
 }
+
+export function yearValidator(year: number): ValidatorFn {
+  return (control: AbstractControl<Date>) : ValidationErrors | null => {
+    return new Date(control.value).getFullYear() == year ? null : {
+      invalidYear: true
+    };
+  };
+}
