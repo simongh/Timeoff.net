@@ -1,0 +1,41 @@
+<div class="modal fade" id="add_new_public_holiday_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form [formGroup]="form" id="add_new_public_holiday_form">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Add new public holiday</h4>
+                </div>
+
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="name" class="control-label">Name:</label>
+                        <input type="text" class="form-control" id="name" formControlName="name"/>
+                        <validator-message controlName="name" validatorName="required">Name is required</validator-message>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="date" class="control-label">Date:</label>
+                        <input type="text"
+                               class="form-control"
+                               id="date"
+                               date-picker
+                               formControlName="date"
+                               data-provide="datepicker"
+                               data-date-autoclose="1"
+                               [attr.data-date-format]="dateFormat"
+                               data-date-week-start="1"/>
+                               <validator-message controlName="date" validatorName="invalidYear">The date must be in the selected year</validator-message>
+                            </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-link" data-dismiss="modal" (click)="cancel()">Cancel</button>
+                    <button type="submit" class="btn btn-success single-click" (click)="create()">Create</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+

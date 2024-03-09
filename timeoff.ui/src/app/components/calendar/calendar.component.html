@@ -20,10 +20,11 @@
             <tr *ngFor="let week of month.weeks">
                 <td *ngIf="week.num == 0 && month.padding > 0" [attr.colspan]="2 * month.padding"></td>
                 <ng-container *ngFor="let day of week.days">
-                    <td class="calendar_cell half_1st">
-                        <span>{{day | date: 'd'}}</span>
+                    <td class="calendar_cell half_1st" [ngClass]="day.classes">
+                        <span *ngIf="!day.label">{{day.date| date: 'd'}}</span>
+                        <span *ngIf="!!day.label" data-toggle="tooltip" data-placement="top" [title]="day.label">{{day.date| date: 'd'}}</span>
                     </td>
-                    <td class="calendar_cell half_2nd"></td>
+                    <td class="calendar_cell half_2nd" [ngClass]="day.classes"></td>
                 </ng-container>
             </tr>
         </tbody>

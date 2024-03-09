@@ -10,12 +10,24 @@ import { CommonModule } from "@angular/common";
 import { ReactiveFormsModule } from "@angular/forms";
 import { switchMap } from "rxjs";
 import { ValidatorMessageComponent } from "../../../components/validator-message/validator-message.component";
+import { AddNewModalComponent } from "./add-new-modal.component";
+import { DatePickerDirective } from "./date-picker.directive";
+import { HttpErrorResponse } from "@angular/common/http";
 
 @Component({
     standalone: true,
     templateUrl: 'public-holidays.component.html',
     providers: [PublicHolidaysService],
-    imports: [FlashComponent, RouterLink, CalendarComponent, CommonModule, ReactiveFormsModule, ValidatorMessageComponent]
+    imports: [
+        FlashComponent,
+        RouterLink,
+        CalendarComponent,
+        CommonModule,
+        ReactiveFormsModule,
+        ValidatorMessageComponent,
+        AddNewModalComponent,
+        DatePickerDirective
+    ]
 })
 export class PublicHolidaysComponent implements OnInit {
     public companyName: string = '';
@@ -38,6 +50,10 @@ export class PublicHolidaysComponent implements OnInit {
 
     public holidays!: PublicHolidayModel[];
 
+    public messages: string[] = [];
+
+    public errors: string[] = [];
+
     public get holidaysForm() {
         return this.holidaySvc.holidays;
     }
@@ -49,6 +65,60 @@ export class PublicHolidaysComponent implements OnInit {
     ) {}
 
     public ngOnInit(): void {
+        this.getHolidays();
+    }
+
+    public remove(id?: number | null) {
+        if (!id) {
+            return;
+        }
+
+        this.holidaySvc.delete(id!)
+            .pipe(
+                takeUntilDestroyed(this.destroyed),
+                switchMap(() => {
+                    return this.holidaySvc.get(this.currentYear);
+                })
+            ).subscribe({
+                next: (data) => {
+                    this.loadHolidays(data);
+                    this.messages = ['Holiday was successfully removed']
+                },
+                error: (error: HttpErrorResponse) => {
+                    if (error.status == 400) {
+                        this.errors = error.error.errors;
+                    } else {
+                        this.errors = ['Unable to remove holiday'];
+                    }
+                }
+            });
+    }
+
+    public save() {
+        this.holidaySvc.update(this.holidaysForm.value as PublicHolidayModel[])
+            .pipe(
+                takeUntilDestroyed(this.destroyed),
+                switchMap(() => {
+                    return this.holidaySvc.get(this.currentYear);
+                })
+            ).subscribe({
+                next: (data) => {
+                    this.loadHolidays(data);
+                    this.messages = ['Holidays updated'];
+                    this.errors = [];
+                },
+                error: (e: HttpErrorResponse) => {
+                    this.messages = [];
+                    if (e.status == 400) {
+                        this.errors = e.error.errors
+                    } else {
+                        this.errors = ['Unable to update holidays'];
+                    }
+                } 
+            });
+    }
+
+    public getHolidays() {
         this.route.queryParamMap
             .pipe(
                 takeUntilDestroyed(this.destroyed),
@@ -61,20 +131,46 @@ export class PublicHolidaysComponent implements OnInit {
 
                     return this.holidaySvc.get(this.currentYear);
                 })
-            ).subscribe((data) => {
-                this.holidaysForm.clear();
-
-                data.map((h) => {
-                    this.holidaySvc.holidays.push(this.holidaySvc.newForm(h,this.currentYear))
-                });
-
-                this.holidays = data;          
+            ).subscribe({
+                next: (data) => {
+                    this.loadHolidays(data);
+                    this.errors = [];
+                    this.messages = [];
+                },
             });
     }
 
-    public remove(id?: number | null) {
-        this.holidaySvc.delete(id!)
-            .pipe(takeUntilDestroyed(this.destroyed))
-            .subscribe();
+    public create(model: PublicHolidayModel) {
+        this.holidaySvc.add(model)
+            .pipe(
+                takeUntilDestroyed(this.destroyed),
+                switchMap(() =>{
+                    return this.holidaySvc.get(this.currentYear);
+                })
+            ).subscribe({
+                next: (data) => {
+                    this.loadHolidays(data);
+                    this.messages = ['Holiday added'];
+                    this.errors = [];
+                },
+                error: (e: HttpErrorResponse) => {
+                    this.messages = [];
+                    if (e.status == 400) {
+                        this.errors = e.error.errors
+                    } else {
+                        this.errors = ['Unable to add holiday'];
+                    }
+                } 
+            });
+    }
+
+    private loadHolidays(data: PublicHolidayModel[]) {
+        this.holidaysForm.clear();
+
+        data.map((h) => {
+            this.holidaySvc.holidays.push(this.holidaySvc.newForm(h,this.currentYear))
+        });
+
+        this.holidays = data;          
     }
 }
