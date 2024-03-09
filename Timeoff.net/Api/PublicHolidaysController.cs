@@ -16,21 +16,49 @@ namespace Timeoff.Api
         }
 
         [HttpPost]
-        public Task<IActionResult> CreateAsync()
+        public async Task<IActionResult> CreateAsync(Application.PublicHolidays.UpdatePublicHolidayCommand model)
         {
-            throw new NotImplementedException();
+            if (model == null)
+            {
+                return BadRequest();
+            }
+
+            var result = await _mediator.Send(model);
+
+            if (result.Result.Errors?.Any() == true)
+            {
+                return BadRequest(result.Result.Errors);
+            }
+            else
+                return NoContent();
         }
 
         [HttpPut]
-        public Task<IActionResult> UpdateAsync()
+        public async Task<IActionResult> UpdateAsync(Application.PublicHolidays.UpdatePublicHolidayCommand model)
         {
-            throw new NotImplementedException();
+            if (model == null)
+            {
+                return BadRequest();
+            }
+            var result = await _mediator.Send(model);
+
+            if (result.Result.Errors?.Any() == true)
+            {
+                return BadRequest(result.Result.Errors);
+            }
+            else
+                return NoContent();
         }
 
         [HttpDelete("{id:int}")]
-        public Task<IActionResult> DeleteAsync(int id)
+        public async Task<IActionResult> DeleteAsync([FromRoute] Application.PublicHolidays.DeleteHolidayCommand command)
         {
-            throw new NotImplementedException();
+            var result = await _mediator.Send(command);
+
+            if (result.Result?.Errors?.Any() == true)
+                return BadRequest(result.Result.Errors);
+            else
+                return NoContent();
         }
     }
 }

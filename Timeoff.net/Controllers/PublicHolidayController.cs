@@ -22,12 +22,12 @@ namespace Timeoff.Controllers
         //    return View(vm);
         //}
 
-        [HttpPost()]
-        public async Task<IActionResult> CreateAsync(Application.PublicHolidays.UpdatePublicHolidayCommand command)
-        {
-            var vm = await _mediator.Send(command);
-            return View("Index", vm);
-        }
+        //[HttpPost()]
+        //public async Task<IActionResult> CreateAsync(Application.PublicHolidays.UpdatePublicHolidayCommand command)
+        //{
+        //    var vm = await _mediator.Send(command);
+        //    return View("Index", vm);
+        //}
 
         [HttpPost("import")]
         public async Task<IActionResult> ImportAsync()
@@ -35,11 +35,11 @@ namespace Timeoff.Controllers
             return View();
         }
 
-        [HttpPost("delete")]
-        public async Task<IActionResult> DeleteAsync(Application.PublicHolidays.DeleteHolidayCommand command)
-        {
-            var vm = await _mediator.Send(command);
-            return View("index", vm);
-        }
+        //[HttpPost("delete")]
+        //public async Task<IActionResult> DeleteAsync(Application.PublicHolidays.DeleteHolidayCommand command)
+        //{
+        //    var vm = await _mediator.Send(command);
+        //    return View("index", vm);
+        //}
     }
 }

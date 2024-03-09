@@ -6,30 +6,21 @@ namespace Timeoff.Application.PublicHolidays
 {
     public record UpdatePublicHolidayCommand : IRequest<PublicHolidaysViewModel>, Commands.IValidated
     {
-        public PublicHolidayRequest[]? PublicHolidays { get; init; }
+        public PublicHolidayRequest[] PublicHolidays { get; init; } = null!;
 
-        public PublicHolidayRequest? Add { get; init; }
-
-        public int Year { get; init; }
         public IEnumerable<ValidationFailure>? Failures { get; set; }
     }
 
-    internal class UpdatePublicHolidayCommandHandler : IRequestHandler<UpdatePublicHolidayCommand, PublicHolidaysViewModel>
+    internal class UpdatePublicHolidayCommandHandler(
+        IDataContext dataContext,
+        Services.ICurrentUserService currentUserService,
+        Services.IDaysCalculator adjuster)
+        : IRequestHandler<UpdatePublicHolidayCommand, PublicHolidaysViewModel>
     {
-        private readonly IDataContext _dataContext;
-        private readonly Services.ICurrentUserService _currentUserService;
-        private readonly Services.IDaysCalculator _adjuster;
+        private readonly IDataContext _dataContext = dataContext;
+        private readonly Services.ICurrentUserService _currentUserService = currentUserService;
+        private readonly Services.IDaysCalculator _adjuster = adjuster;
         private List<(DateTime original, DateTime modified)> _changes = new();
-
-        public UpdatePublicHolidayCommandHandler(
-            IDataContext dataContext,
-            Services.ICurrentUserService currentUserService,
-            Services.IDaysCalculator adjuster)
-        {
-            _dataContext = dataContext;
-            _currentUserService = currentUserService;
-            _adjuster = adjuster;
-        }
 
         public async Task<PublicHolidaysViewModel> Handle(UpdatePublicHolidayCommand request, CancellationToken cancellationToken)
         {
@@ -44,40 +35,43 @@ namespace Timeoff.Application.PublicHolidays
                     await _adjuster.AdjustForHolidaysAsync(_changes, _currentUserService.CompanyId);
             }
 
-            var result = await _dataContext.Companies.GetPublicHolidaysAsync(_currentUserService.CompanyId, request.Year);
-            result.Result = new()
+            return new()
             {
-                Errors = request.Failures?.Select(e => e.ErrorMessage)
+                Result = new()
+                {
+                    Errors = request.Failures?.Select(e => e.ErrorMessage)
+                }
             };
-
-            return result;
         }
 
         private void Insert(UpdatePublicHolidayCommand request)
         {
-            if (request.Add == null)
-            {
+            var toAdd = request.PublicHolidays.Where(h => h.Id == null);
+
+            if (!toAdd.Any())
                 return;
-            }
 
-            _dataContext.PublicHolidays.Add(new()
+            foreach (var item in toAdd)
             {
-                Date = request.Add.Date,
-                Name = request.Add.Name,
-                CompanyId = _currentUserService.CompanyId,
-            });
+                _dataContext.PublicHolidays.Add(new()
+                {
+                    Date = item.Date,
+                    Name = item.Name,
+                    CompanyId = _currentUserService.CompanyId,
+                });
 
-            _changes.Add((request.Add.Date, request.Add.Date));
+                _changes.Add((item.Date, item.Date));
+            }
         }
 
         private async Task UpdateAsync(UpdatePublicHolidayCommand request)
         {
-            if (request.PublicHolidays == null)
-                return;
-
             var ids = request.PublicHolidays
                 .Where(h => h.Id.HasValue)
                 .Select(h => h.Id!.Value);
+
+            if (!ids.Any())
+                return;
 
             var items = await _dataContext.PublicHolidays
                 .Where(h => ids.Contains(h.PublicHolidayId))
