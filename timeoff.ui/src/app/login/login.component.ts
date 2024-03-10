@@ -7,6 +7,7 @@ import { FlashComponent } from "../components/flash/flash.component";
 import { LoginModel } from "../services/auth/login.model";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { ValidatorMessageComponent } from "../components/validator-message/validator-message.component";
+import { FlashModel, hasErrors, isError } from "../components/flash/flash.model";
 
 @Component({
     standalone: true,
@@ -19,7 +20,7 @@ export class LoginComponent{
 
     public submitting = false;
     
-    public errors: string[] = [];
+    public messages = new FlashModel();
 
     public loginForm = this.fb.group({
         email:['', [Validators.required, Validators.email]],
@@ -47,7 +48,7 @@ export class LoginComponent{
                     if (this.authService.isUserLoggedIn) {
                         this.router.navigate(['']);
                     } else {
-                        this.errors = r ?? ["Invalid credentials"];
+                        this.messages = !!r ? hasErrors(r) : isError("Invalid credentials");
                         this.loginForm.controls.password.setValue('');
                         this.loginForm.markAsUntouched();
                     }
@@ -57,7 +58,7 @@ export class LoginComponent{
                 error: () => {
                     this.submitting = false;
 
-                    this.errors = ['Login failed'];
+                    this.messages = isError('Login failed');
                 },
             });
     }

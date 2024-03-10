@@ -5,6 +5,7 @@ import { NgIf } from "@angular/common";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { AuthService } from "../services/auth/auth.service";
 import { ValidatorMessageComponent } from "../components/validator-message/validator-message.component";
+import { FlashModel, isError, isSuccess } from "../components/flash/flash.model";
 
 @Component({
     standalone: true,
@@ -17,9 +18,7 @@ export class ForgotPasswordComponent {
         email: ['', [Validators.required, Validators.email]]
     })
 
-    public messages: string[] = [];
-
-    public errors: string[] = [];
+    public messages = new FlashModel();
 
     public submitting = false;
 
@@ -39,13 +38,13 @@ export class ForgotPasswordComponent {
             .pipe(takeUntilDestroyed(this.destroyed))
             .subscribe({
                 next: () => {
-                    this.messages = [`Password reset email sent to ${this.passwordForm.controls.email.value}`];
+                    this.messages = isSuccess(`Password reset email sent to ${this.passwordForm.controls.email.value}`);
 
                     this.passwordForm.reset();
                     this.submitting = false;
                 },
                 error: () => {
-                    this.errors = ['Unable to send reset email. Please try again later'];
+                    this.messages = isError('Unable to send reset email. Please try again later');
                     this.submitting = false;
                 }
             });

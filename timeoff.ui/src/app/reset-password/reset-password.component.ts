@@ -8,6 +8,7 @@ import { AuthService } from '../services/auth/auth.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ValidatorMessageComponent } from '../components/validator-message/validator-message.component';
 import { HttpErrorResponse } from '@angular/common/http';
+import { FlashModel, hasErrors, isError, isSuccess } from '../components/flash/flash.model';
 
 @Component({
     standalone: true,
@@ -34,9 +35,7 @@ export class ResetPasswordComponent implements OnInit {
 
   public showCurrent!: boolean;
 
-  public messages: string[] = [];
-
-  public errors: string[] = [];
+  public messages = new FlashModel();
 
   public submitting = false;
 
@@ -55,7 +54,7 @@ export class ResetPasswordComponent implements OnInit {
       this.passwordForm.controls.current.addValidators(Validators.required);
     } else{
       if (!this.token){
-        this.errors = ['Invalid reset link'];
+        this.messages = isError('Invalid reset link');
         this.submitting = true;
       }
     }
@@ -82,16 +81,16 @@ export class ResetPasswordComponent implements OnInit {
         )
       .subscribe({
         next: (r) => {
-          this.messages = ['Password updated successfully'];
+          this.messages = isSuccess('Password updated successfully');
           this.submitting = false;
           this.passwordForm.reset();
         },
         error: (e:HttpErrorResponse) => {
           if (e.status === 400) {
-            this.errors = e.error.errors;
+            this.messages = hasErrors(e.error.errors);
           }
           else
-            this.errors = ['Unable to reset password. Please try again later'];
+            this.messages = isError('Unable to reset password. Please try again later');
             this.submitting = false;
         }
       });
