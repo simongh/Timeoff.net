@@ -3,6 +3,7 @@ import { FlashComponent } from "../../../components/flash/flash.component";
 import { IntegrationService } from './integration.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { IntegrationModel } from './integration.model';
+import { FlashModel, isError, isSuccess } from '../../../components/flash/flash.model';
 
 @Component({
     selector: 'integration',
@@ -19,9 +20,7 @@ export class IntegrationComponent {
 
   public name = '';
 
-  public message: string[] = [];
-
-  public errors: string[] = [];
+  public message = new FlashModel();
 
   public updating = false;
 
@@ -63,14 +62,12 @@ export class IntegrationComponent {
     this.apiEnabled = data.enabled;
     this.apiKey = data.apiKey;
 
-    this.errors = [];
-    this.message = ['Settings updated'];
+    this.message = isSuccess('Settings updated');
     this.updating = false;
   }
 
   private error(e: any) {
-    this.message = [];
-    this.errors = ['Unabled to update API settings'];
+    this.message = isError('Unabled to update API settings');
     this.updating = false;
   }
 }

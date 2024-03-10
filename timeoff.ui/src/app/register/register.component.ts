@@ -8,6 +8,7 @@ import { compareValidator, listValidator } from '../components/validators';
 import { RegisterModel } from './register.model';
 import { ValidatorMessageComponent } from '../components/validator-message/validator-message.component';
 import { HttpErrorResponse } from '@angular/common/http';
+import { FlashModel, hasErrors, isSuccess } from '../components/flash/flash.model';
 
 @Component({
     standalone: true,
@@ -42,9 +43,7 @@ export class RegisterComponent implements OnInit {
     description: string;
   }[];
 
-  public messages?: string[];
-
-  public errors?: string[];
+  public messages = new FlashModel();
 
   public submitting = false;
 
@@ -74,11 +73,11 @@ export class RegisterComponent implements OnInit {
       .pipe(takeUntilDestroyed(this.destroyed$))
       .subscribe({
         next: ()=>{
-          this.messages = ['Company registered successfully. Please login using the details you supplied'];
+          this.messages = isSuccess('Company registered successfully. Please login using the details you supplied');
           this.registerForm.reset();
         },
         error: (e: HttpErrorResponse) => {
-          this.errors = e.error.errors;
+          this.messages = hasErrors(e.error.errors);
         }
       });
   }
