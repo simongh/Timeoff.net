@@ -2,9 +2,7 @@
 {
     public record UserInfoResult : Types.UserModel
     {
-        public int TeamId { get; init; }
-
-        public string TeamName { get; init; } = null!;
+        public ResultModels.ListResult Team { get; init; } = null!;
 
         public bool IsAdmin { get; init; }
 
@@ -12,6 +10,6 @@
 
         public double DaysUsed => AllowanceCalculator.DaysUsed;
 
-        public Types.AllowanceCalculator AllowanceCalculator { get; init; }
+        internal Types.AllowanceCalculator AllowanceCalculator { get; init; }
     }
 }

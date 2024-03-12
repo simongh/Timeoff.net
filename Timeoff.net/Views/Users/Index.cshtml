@@ -68,7 +68,7 @@
                             }
                         </a>
                     </td>
-                    <td class="user_team"><a asp-controller="Teams" asp-action="Edit" asp-route-id="@item.Id">@item.TeamName</a></td>
+                    <td class="user_team"><a asp-controller="Teams" asp-action="Edit" asp-route-id="@item.Id">@item.Team.Name</a></td>
                     <td>@IsAdmin(item.IsAdmin)</td>
                     <td class="vpp-days-remaining">@item.AvailableAllowance</td>
                     <td class="vpp-days-used">@item.DaysUsed</td>

@@ -1,7 +1,7 @@
 import { CommonModule, NgIf } from "@angular/common";
 import { Component, Input } from "@angular/core";
 import { RouterLink } from "@angular/router";
-import { TeamModel } from "./team.model";
+import { TeamModel } from "../../models/team.model";
 import { eachDayOfInterval, endOfMonth } from "date-fns";
 
 @Component({

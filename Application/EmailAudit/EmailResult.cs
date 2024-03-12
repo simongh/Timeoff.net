@@ -7,7 +7,7 @@ namespace Timeoff.Application.EmailAudit
     {
         public int Id { get; init; }
 
-        public ResultModels.UserResult User { get; init; } = null!;
+        public ResultModels.ListResult User { get; init; } = null!;
 
         public string Email { get; init; } = null!;
 

@@ -10,6 +10,6 @@
 
         public int? ManagerId { get; init; }
 
-        public ResultModels.UserResult? Manager { get; init; }
+        public ResultModels.ListResult? Manager { get; init; }
     }
 }

@@ -21,7 +21,7 @@ export class TeamsService {
     }
 
     public getUsers() {
-        return this.client.get<UserModel[]>('/api/users/list');
+        return this.client.get<UserModel[]>('/api/teams/users');
     }
 
     public get(id: number) {

@@ -1,6 +1,6 @@
 ﻿namespace Timeoff.ResultModels
 {
-    public record UserResult
+    public record ListResult
     {
         public int Id { get; init; }
 
