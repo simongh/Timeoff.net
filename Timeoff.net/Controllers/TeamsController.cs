@@ -22,12 +22,12 @@ namespace Timeoff.Controllers
         //    return View(vm);
         //}
 
-        [HttpPost("teams")]
-        public async Task<IActionResult> CreateAsync(Application.TeamDetails.UpdateTeamCommand command)
-        {
-            var vm = await _mediator.Send(command);
-            return View("Index", vm);
-        }
+        //[HttpPost("teams")]
+        //public async Task<IActionResult> CreateAsync(Application.TeamDetails.UpdateTeamCommand command)
+        //{
+        //    var vm = await _mediator.Send(command);
+        //    return View("Index", vm);
+        //}
 
         //[HttpPost("teams/delete/{id:int}")]
         //public async Task<IActionResult> DeleteAsync([FromRoute] Application.DeleteTeam.DeleteTeamCommand command)

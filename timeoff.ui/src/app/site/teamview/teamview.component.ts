@@ -4,7 +4,7 @@ import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { ActivatedRoute, Router, RouterLink } from "@angular/router";
 import { addMonths, startOfMonth, subMonths } from "date-fns";
 import { DatePickerComponent } from "./datepicker.component";
-import { TeamModel } from "./team.model";
+import { TeamModel } from "../../models/team.model";
 import { MonthViewComponent } from "./month-view.component";
 
 @Component({

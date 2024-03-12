@@ -1,5 +1,5 @@
 <h1>Staff</h1>
-<flash-message/>
+<flash-message [messages]="messages"/>
 
 <div class="row">
     <div class="col-md-3 lead">{{name}}'s staff</div>
@@ -33,10 +33,8 @@
 <div class="row">&nbsp;</div>
 
 <div class="col-md-3 list-group all-teams">
-    <a asp-controller="users" asp-action="index" class="list-group-item @IsSelected(null)">All teams</a>
-    <!-- @foreach (var item in Model.Teams) {
-        <a class="list-group-item @IsSelected(item.Id)" asp-action="index" asp-controller="users" asp-route-team="@item.Id">@item.Value</a>
-    } -->
+    <a routerLink="/users" class="list-group-item" [ngClass]="team == null ? 'selected-item' : null">All teams</a>
+    <a *ngFor="let t of teams" class="list-group-item" [ngClass]="team == t.id ? 'selected-item' : null" routerLink="/users" [queryParams]="{team: t.id}">{{t.name}}</a>
 </div>
 
 <div class="col-md-9">
@@ -51,27 +49,18 @@
             </tr>
         </thead>
         <tbody>
-            <!-- @foreach (var item in Model.Users)
-            {
-                <tr data-vpp-user-row="@item.Id">
-                    <td class="user-link-cell">
-                        <a asp-controller="users" asp-action="edit" asp-route-id="@item.Id">
-                            @if (!item.IsActive)
-                            {
-                                <s>@item.Name</s>
-                            }
-                            else
-                            {
-                                @item.Name
-                            }
-                        </a>
-                    </td>
-                    <td class="user_team"><a asp-controller="Teams" asp-action="Edit" asp-route-id="@item.Id">@item.TeamName</a></td>
-                    <td>@IsAdmin(item.IsAdmin)</td>
-                    <td class="vpp-days-remaining">@item.AvailableAllowance</td>
-                    <td class="vpp-days-used">@item.DaysUsed</td>
-                </tr>
-            } -->
+            <tr *ngFor="let u of users" [attr.data-vpp-user-row]="u.id">
+                <td class="user-link-cell">
+                    <a routerLink="/users/{{u.id}}">
+                        <s *ngIf="!u.isActive">{{u.name}}</s>
+                        <ng-container *ngIf="!!u.isActive">{{u.name}}</ng-container>
+                    </a>
+                </td>
+                <td class="user_team"><a routerLink="/settings/teams/{{u.team.id}}">{{u.team.name}}</a></td>
+                <td>{{u.isActive | yes}}</td>
+                <td class="vpp-days-remaining">{{u.availableAllowance}}</td>
+                <td class="vpp-days-used">{{u.daysUsed}}</td>
+            </tr>
         </tbody>
     </table>
 </div>

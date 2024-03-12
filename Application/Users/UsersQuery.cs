@@ -2,29 +2,26 @@
 
 namespace Timeoff.Application.Users
 {
-    public record UsersQuery : IRequest<UsersViewModel>
+    public record UsersQuery : IRequest<IEnumerable<UserInfoResult>>
     {
         public int? Team { get; init; }
 
         public bool AsCsv { get; init; }
     }
 
-    internal class UsersQueryHandler : IRequestHandler<UsersQuery, UsersViewModel>
+    internal class UsersQueryHandler(
+        IDataContext dataContext,
+        Services.ICurrentUserService currentUserService)
+        : IRequestHandler<UsersQuery, IEnumerable<UserInfoResult>>
     {
-        private readonly IDataContext _dataContext;
-        private readonly Services.ICurrentUserService _currentUserService;
+        private readonly IDataContext _dataContext = dataContext;
+        private readonly Services.ICurrentUserService _currentUserService = currentUserService;
 
-        public UsersQueryHandler(
-            IDataContext dataContext,
-            Services.ICurrentUserService currentUserService)
+        public async Task<IEnumerable<UserInfoResult>> Handle(UsersQuery request, CancellationToken cancellationToken)
         {
-            _dataContext = dataContext;
-            _currentUserService = currentUserService;
-        }
+            var result = await _dataContext.QueryUsers(_currentUserService.CompanyId, request.Team);
 
-        public async Task<UsersViewModel> Handle(UsersQuery request, CancellationToken cancellationToken)
-        {
-            return await _dataContext.QueryUsers(_currentUserService.CompanyId, request.Team);
+            return result.Users;
         }
     }
 }

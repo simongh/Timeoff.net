@@ -15,6 +15,12 @@ namespace Timeoff.Api
             return Ok(await _mediator.Send(new Application.Teams.TeamsQuery()));
         }
 
+        [HttpGet("users")]
+        public async Task<IActionResult> UsersAsync()
+        {
+            return Ok(await _mediator.Send(new Application.Users.UsersListQuery()));
+        }
+
         [HttpPost]
         public async Task<IActionResult> CreateAsync(Application.TeamDetails.UpdateTeamCommand command)
         {

@@ -170,8 +170,11 @@ namespace Timeoff.Application
                     Id = u.UserId,
                     FirstName = u.FirstName,
                     LastName = u.LastName,
-                    TeamId = u.TeamId,
-                    TeamName = u.Team.Name,
+                    Team = new()
+                    {
+                        Id = u.TeamId,
+                        Name = u.Team.Name,
+                    },
                     IsActive = u.IsActive,
                     IsAdmin = u.IsAdmin,
                     AllowanceCalculator = new()

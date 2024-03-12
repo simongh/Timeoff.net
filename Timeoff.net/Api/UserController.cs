@@ -9,16 +9,16 @@ namespace Timeoff.Api
     {
         private readonly IMediator _mediator = mediator;
 
-        [HttpGet("list")]
-        public async Task<IActionResult> GetUserListAsync()
+        [HttpGet]
+        public async Task<IActionResult> GetUsersAsync([FromQuery] Application.Users.UsersQuery query)
         {
-            return Ok(await _mediator.Send(new Application.Users.UsersListQuery()));
+            return Ok(await _mediator.Send(query));
         }
 
-        [HttpGet]
-        public Task<IActionResult> GetUsersAsync()
+        [HttpGet("teams")]
+        public async Task<IActionResult> GetTeamsAsync()
         {
-            throw new NotImplementedException();
+            return Ok(await _mediator.Send(new Application.Teams.TeamsListQuery()));
         }
 
         [HttpPost]

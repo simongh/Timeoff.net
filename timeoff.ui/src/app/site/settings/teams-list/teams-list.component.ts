@@ -24,6 +24,7 @@ export class TeamsListComponent implements OnInit {
     
     public ngOnInit(): void {
         this.refresh();
+        console.log(history.state.message);
     }
 
     public refresh() {
