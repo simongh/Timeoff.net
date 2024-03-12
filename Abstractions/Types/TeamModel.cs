@@ -8,8 +8,8 @@
 
         public bool IsAccruedAllowance { get; init; }
 
-        public int ManagerId { get; init; }
+        public int? ManagerId { get; init; }
 
-        public ResultModels.UserResult Manager { get; init; } = null!;
+        public ResultModels.UserResult? Manager { get; init; }
     }
 }

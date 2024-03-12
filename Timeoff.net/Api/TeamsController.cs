@@ -16,22 +16,29 @@ namespace Timeoff.Api
         }
 
         [HttpPost]
-        public Task<IActionResult> CreateAsync()
+        public async Task<IActionResult> CreateAsync(Application.TeamDetails.UpdateTeamCommand command)
         {
-            throw new NotImplementedException();
+            if (command == null)
+                return BadRequest();
+
+            await _mediator.Send(command);
+
+            return NoContent();
         }
 
         [HttpGet("{id:int}")]
-        public async Task<IActionResult> GetAsync(Application.TeamDetails.GetTeamCommand command)
+        public async Task<IActionResult> GetAsync([FromRoute] Application.TeamDetails.GetTeamCommand command)
         {
             return Ok(await _mediator.Send(command));
         }
 
         [HttpPut("{id:int}")]
-        public async Task<IActionResult> UpdateAsync(Application.TeamDetails.UpdateTeamCommand command)
+        public async Task<IActionResult> UpdateAsync(int id, Application.TeamDetails.UpdateTeamCommand command)
         {
             if (command == null)
                 return BadRequest();
+
+            command.Id = id;
 
             await _mediator.Send(command);
 

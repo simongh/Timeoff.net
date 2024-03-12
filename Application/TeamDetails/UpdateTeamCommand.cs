@@ -6,7 +6,7 @@ namespace Timeoff.Application.TeamDetails
 {
     public record UpdateTeamCommand : Types.TeamModel, IRequest<Teams.TeamsViewModel?>, Commands.IValidated
     {
-        public int? Id { get; init; }
+        public int? Id { get; set; }
         public IEnumerable<ValidationFailure>? Failures { get; set; }
     }
 
@@ -29,6 +29,19 @@ namespace Timeoff.Application.TeamDetails
 
             if (request.Failures.IsValid())
             {
+                var managerFound = await _dataContext.Users
+                    .Where(u => u.CompanyId == _currentUserService.CompanyId)
+                    .Where(u => u.UserId == request.ManagerId)
+                    .AnyAsync();
+
+                if (!managerFound)
+                {
+                    return new()
+                    {
+                        Result = ResultModels.FlashResult.WithError("Invalid manager"),
+                    };
+                }
+
                 Entities.Team? team;
                 if (request.Id == null)
                 {
@@ -45,7 +58,10 @@ namespace Timeoff.Application.TeamDetails
                         .FirstOrDefaultAsync();
 
                     if (team == null)
-                        return null;
+                        return new()
+                        {
+                            Result = ResultModels.FlashResult.WithError("Invalid team"),
+                        };
                 }
 
                 team.Name = request.Name;
@@ -66,9 +82,10 @@ namespace Timeoff.Application.TeamDetails
                 messages = request.Failures.ToFlashResult();
             }
 
-            var result = await _dataContext.QueryTeams(_currentUserService.CompanyId);
-            result.Result = messages;
-            return result;
+            return new()
+            {
+                Result = messages,
+            };
         }
     }
 }

@@ -23,6 +23,10 @@ export class TeamsListComponent implements OnInit {
         private destroyed: DestroyRef){}
     
     public ngOnInit(): void {
+        this.refresh();
+    }
+
+    public refresh() {
         this.teamSvc.getTeams()
             .pipe(takeUntilDestroyed(this.destroyed))
             .subscribe((t)=>{

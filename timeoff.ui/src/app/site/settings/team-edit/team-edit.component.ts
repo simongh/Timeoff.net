@@ -1,13 +1,15 @@
 import { Component, DestroyRef, Input } from '@angular/core';
 import { FlashComponent } from '../../../components/flash/flash.component';
-import { Router, RouterLink } from '@angular/router';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ReactiveFormsModule } from '@angular/forms';
 import { ValidatorMessageComponent } from '../../../components/validator-message/validator-message.component';
 import { UserModel } from '../../../models/user.model';
 import { CommonModule } from '@angular/common';
 import { TeamsService } from '../../../services/teams/teams.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { HttpErrorResponse } from '@angular/common/http';
+import { FlashModel, hasErrors, isError, isSuccess } from '../../../components/flash/flash.model';
+import { combineLatest, switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-team-edit',
@@ -19,11 +21,8 @@ import { HttpErrorResponse } from '@angular/common/http';
 })
 export class TeamEditComponent {
   public get name() {
-    return this.editForm.value.name;
+    return this.editForm.controls.name.value;
   }
-
-  @Input()
-  public id!: number;
 
   public get editForm() {
     return this.teamSvc.form;
@@ -33,31 +32,45 @@ export class TeamEditComponent {
 
   public allowances = new Array<number>;
 
-  public messages: string[] = [];
+  public messages = new FlashModel();
 
-  public errors: string[] = [];
+  public id!: number;
 
   constructor(
-    private readonly fb: FormBuilder,
     private destroyed: DestroyRef,
     private readonly router: Router,
+    private readonly route: ActivatedRoute,
     private readonly teamSvc: TeamsService
   ) {
     for(let i = 0; i <= 50; i += 0.5) {
       this.allowances.push(i);
     }
     
-    this.teamSvc.get(this.id)
-      .pipe(takeUntilDestroyed(destroyed))
-      .subscribe((data) => {
-        this.editForm.setValue({
-          name: data.name,
-          allowance: data.allowance,
-          manager: data.manager.id,
-          includePublicHolidays: data.includePublicHolidays,
-          accruedAllowance:data.isAccruedAllowance,
-        });
+    combineLatest([
+      this.teamSvc.getUsers()
+        .pipe(takeUntilDestroyed(this.destroyed)),
+      route.paramMap
+        .pipe(
+          takeUntilDestroyed(destroyed),
+          switchMap((p) => {
+            if (p.has("id")) {
+              this.id = Number.parseInt(p.get("id")!);
+            } else {
+              throw new Error("No team id specified");
+            }
+
+            return this.teamSvc.get(this.id);
+          })
+        )
+    ]).subscribe(([users, data]) => {
+      this.users = users;
+
+      this.editForm.setValue({
+        ...data,
+        managerId: data.manager.id,
       });
+
+    });
   }
 
   public save() {
@@ -71,12 +84,12 @@ export class TeamEditComponent {
     this.teamSvc.update(this.id)
       .pipe(takeUntilDestroyed(this.destroyed))
       .subscribe({
-        next: () => this.messages = [`Team ${this.name} was updated`],
+        next: () => this.messages = isSuccess(`Team ${this.name} was updated`),
         error: (e: HttpErrorResponse) => {
           if (e.status == 400) {
-            this.errors = e.error.errors;
+            this.messages = hasErrors(e.error.errors);
           } else {
-            this.errors = [`Unable to update team ${this.name}`];
+            this.messages = isError(`Unable to update team ${this.name}`);
           }
         }
       });
@@ -87,7 +100,7 @@ export class TeamEditComponent {
       .pipe(takeUntilDestroyed(this.destroyed))
       .subscribe({
         next: () => {
-          this.router.navigateByUrl('/settings/teams', {
+          this.router.navigate(['settings','teams'], {
             state: {
               messages: `Team ${this.name} was deleted`
             }
@@ -95,9 +108,9 @@ export class TeamEditComponent {
         },
         error: (e: HttpErrorResponse) => {
           if (e.status == 400) {
-            this.errors = e.error.errors;
+            this.messages = hasErrors(e.error.errors);
           } else {
-            this.errors = ['Unable to delete the team'];
+            this.messages = isError('Unable to delete the team');
           }
         }
       });
