@@ -59,7 +59,7 @@
                     
                 <tr data-vpp-team-list-mode="readonly">
                     <td><a asp-controller="Teams" asp-action="Edit" asp-route-id="@item.Id" data-vpp-team-name=1>@item.Name</a></td>
-                    <td><a asp-controller="Users" asp-action="Edit" asp-route-id="@item.ManagerId">@Model.GetName(item.ManagerId)</a></td>
+                    <td><a asp-controller="Users" asp-action="Edit" asp-route-id="@item.ManagerId">@Model.GetName(item.ManagerId ?? 0)</a></td>
                     <td>
                         @item.Allowance
                     </td>

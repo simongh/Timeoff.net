@@ -1,13 +1,14 @@
 import { CommonModule } from "@angular/common";
-import { Component, DestroyRef, EventEmitter, OnInit } from "@angular/core";
+import { Component, DestroyRef, EventEmitter, OnInit, Output } from "@angular/core";
 import { TeamsService } from "../../../services/teams/teams.service";
 import { ReactiveFormsModule } from "@angular/forms";
 import { ValidatorMessageComponent } from "../../../components/validator-message/validator-message.component";
 import { TeamModel } from "../../../services/teams/team.model";
 import { ErrorsService } from "../../../services/errors/errors.service";
-import { FlashModel, isSuccess } from "../../../components/flash/flash.model";
+import { FlashModel, hasErrors, isError, isSuccess } from "../../../components/flash/flash.model";
 import { UserModel } from "../../../models/user.model";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { HttpErrorResponse } from "@angular/common/http";
 
 @Component({
     standalone: true,
@@ -26,6 +27,11 @@ export class AddNewModalComponent implements OnInit {
 
     public messages = new FlashModel();
 
+    @Output()
+    public added = new EventEmitter();
+
+    public submitting = false;
+
     constructor(
         private readonly teamsSvc: TeamsService,
         private destroyed: DestroyRef,
@@ -42,19 +48,34 @@ export class AddNewModalComponent implements OnInit {
     }
 
     public add() {
-        this.messages = isSuccess('New team added');
         this.form.markAllAsTouched();
 
         if (this.form.invalid) {
             return;
         }
+        this.submitting = true;
+        this.teamsSvc.create()
+            .pipe(takeUntilDestroyed(this.destroyed))
+            .subscribe({
+                next: () => {
+                    this.messages = isSuccess('New team added');
+                    this.added.emit();
+                    this.form.reset();
+                    this.submitting = false;
+                },
+                error: (e: HttpErrorResponse) => {
+                    if (e.status == 400) {
+                        this.messages = hasErrors(e.error.errors);
+                    } else {
+                        this.messages = isError('Unable to add new team');
+                    }
 
-        // this.newTeam.emit({
-        //     name: this.form.value.name,
-        //     allowance: this.form.value.allowance,
-        //     includePublicHolidays: this.form.value.includePublicHolidays,
-        //     isAccruedAllowance: this.form.value.accruedAllowance,
-        //     manager: this.form.value.manager
-        // } as TeamModel)
+                    this.submitting = false;
+                }
+            })
+    }
+
+    public cancel() {
+        this.teamsSvc.reset();
     }
 }

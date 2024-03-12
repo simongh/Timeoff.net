@@ -4,19 +4,17 @@ import { TeamModel } from "./team.model";
 import { FormBuilder, Validators } from "@angular/forms";
 import { UserModel } from "../../models/user.model";
 
+export type TeamFormGroup = ReturnType<TeamsService['createForm']>
+
 @Injectable()
 export class TeamsService {
-    public form = this.fb.group({
-        name: ['', [Validators.required]],
-        manager: [0, [Validators.required, Validators.min(1)]],
-        allowance: [20, [Validators.required, Validators.min(0), Validators.max(50)]],
-        includePublicHolidays: true,
-        accruedAllowance: false,
-      });
+    public form: TeamFormGroup;
 
     constructor(
         private readonly client: HttpClient,
-        private readonly fb: FormBuilder) {}
+        private readonly fb: FormBuilder) {
+            this.form = this.createForm();
+        }
 
     public getTeams() {
         return this.client.get<TeamModel[]>('/api/teams');
@@ -40,5 +38,23 @@ export class TeamsService {
 
     public create() {
         return this.client.post<void>('/api/teams', this.form.value);
+    }
+
+    public reset() {
+        this.form.reset({
+            allowance: 20,
+            includePublicHolidays: true,
+            isAccruedAllowance: false,
+        });
+    }
+
+    private createForm() {
+        return this.fb.group({
+            name: ['', [Validators.required]],
+            managerId: [0, [Validators.required, Validators.min(1)]],
+            allowance: [20, [Validators.required, Validators.min(0), Validators.max(50)]],
+            includePublicHolidays: true,
+            isAccruedAllowance: false,
+          });
     }
 }

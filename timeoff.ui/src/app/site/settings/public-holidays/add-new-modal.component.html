@@ -31,7 +31,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-link" data-dismiss="modal" (click)="cancel()">Cancel</button>
-                    <button type="submit" class="btn btn-success single-click" (click)="create()">Create</button>
+                    <button type="submit" class="btn btn-success single-click" (click)="create()" [disabled]="submitting">Create</button>
                 </div>
             </form>
         </div>

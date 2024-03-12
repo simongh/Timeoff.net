@@ -136,24 +136,17 @@ export class PublicHolidaysComponent implements OnInit {
             });
     }
 
-    public create(model: PublicHolidayModel) {
-        this.holidaySvc.add(model)
+    public create(messages: FlashModel) {
+        this.holidaySvc.get(this.currentYear)
             .pipe(
                 takeUntilDestroyed(this.destroyed),
-                switchMap(() =>{
-                    return this.holidaySvc.get(this.currentYear);
-                })
             ).subscribe({
                 next: (data) => {
                     this.loadHolidays(data);
-                    this.messages = isSuccess('Holiday added');
+                    this.messages = messages;
                 },
                 error: (e: HttpErrorResponse) => {
-                    if (e.status == 400) {
-                        this.messages = hasErrors(e.error.errors);
-                    } else {
-                        this.messages = isError('Unable to add holiday');
-                    }
+                    this.messages = messages;
                 } 
             });
     }

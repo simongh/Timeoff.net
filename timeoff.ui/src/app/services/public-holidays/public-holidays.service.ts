@@ -10,12 +10,13 @@ export interface holidayFormControls {
   name: FormControl<string|null>;
   date: FormControl<string|null>;
 }
+export type HolidayFormGroup = ReturnType<PublicHolidaysService['newForm']>;
 
 @Injectable()
 export class PublicHolidaysService {
-  public holidays = this.fb.array<FormGroup<holidayFormControls>>([]);
+  public holidays = this.fb.array<HolidayFormGroup>([]);
 
-  public addForm : FormGroup<holidayFormControls> | null = null;
+  public addForm! : HolidayFormGroup;
 
   constructor(
     private readonly client: HttpClient,
@@ -44,9 +45,9 @@ export class PublicHolidaysService {
     });
   }
 
-  public add(model: PublicHolidayModel) {
+  public addNew() {
     return this.client.post<void>('/api/public-holidays', {
-      publicHolidays : [model]
+      publicHolidays : [this.addForm.value]
     });
   }
 

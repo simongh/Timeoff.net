@@ -11,7 +11,7 @@
 
 <div class="row">&nbsp;</div>
 
-<flash-message/>
+<flash-message [messages]="messages"/>
 
 <div class="col-md-3 list-group">
   <a class="list-group-item selected-item">General details</a>
@@ -23,7 +23,7 @@
     <div class="col-md-7">
 
         <ol class="breadcrumb">
-            <li><a routerLink="/teams" data-vpp-all-teams-link="1">All teams</a></li>
+            <li><a routerLink="/settings/teams" data-vpp-all-teams-link="1">All teams</a></li>
             <li class="active">{{name}}</li>
         </ol>
 
@@ -36,7 +36,7 @@
 
         <div class="form-group">
             <label for="manager" class="control-label">Manager</label>
-            <select class="form-control" formControlName="manager" id="manager">
+            <select class="form-control" formControlName="managerId" id="manager">
                 <option *ngFor="let u of users" value="{{u.id}}">{{u.name}}</option>
             </select>
             <span class="help-block">Head of {{name}} team. Main manager. <a asp-controller="users" asp-action="edit" asp-route-id="@Model.ManagerId">More details <i class="fa fa-angle-double-right"></i></a></span>
@@ -88,7 +88,7 @@
 
         <div class="form-group">
             <label for="isAccruedAllowance" class="control-label">
-                <input class="" type="checkbox" formControlName="accruedAllowance" id="isAccruedAllowance" value="true">
+                <input class="" type="checkbox" formControlName="isAccruedAllowance" id="isAccruedAllowance" value="true">
                 Accrued allowance
             </label>
             <span class="help-block">If enabled, holiday allowance starts to build up - or accrue - from the first day of employment. It accrues in proportion to the annual entitlement. E.g. an employee in the ninth month of employment would have built up 9/12ths (or three-quarters) of annual entitlement.</span>

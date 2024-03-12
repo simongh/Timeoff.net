@@ -1,9 +1,12 @@
-import { Component, EventEmitter, Input, Output } from "@angular/core";
+import { Component, DestroyRef, EventEmitter, Input, Output } from "@angular/core";
 import { PublicHolidaysService } from "../../../services/public-holidays/public-holidays.service";
 import { ReactiveFormsModule } from "@angular/forms";
 import { ValidatorMessageComponent } from "../../../components/validator-message/validator-message.component";
 import { DatePickerDirective } from "./date-picker.directive";
 import { PublicHolidayModel } from "../../../services/public-holidays/public-holiday.model";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { FlashModel, hasErrors, isError, isSuccess } from "../../../components/flash/flash.model";
+import { HttpErrorResponse } from "@angular/common/http";
 
 @Component({
     standalone: true,
@@ -24,9 +27,14 @@ export class AddNewModalComponent {
     }
 
     @Output()
-    public added = new EventEmitter<PublicHolidayModel>();
+    public added = new EventEmitter<FlashModel>();
 
-    constructor(private readonly holidaySvc: PublicHolidaysService) {}
+    public submitting = false;
+
+    constructor(
+        private readonly holidaySvc: PublicHolidaysService,
+        private destroyed: DestroyRef,
+    ) {}
 
     public cancel() {
         this.form.reset();
@@ -40,10 +48,24 @@ export class AddNewModalComponent {
             return;
         }
 
-        this.added.emit(this.form.value as PublicHolidayModel);
-
-        this.form.reset();
-
-        return true;
+        this.submitting = true;
+        this.holidaySvc.addNew()
+            .pipe(
+                takeUntilDestroyed(this.destroyed),
+            ).subscribe({
+                next: () => {
+                    this.added.emit(isSuccess('Holiday added'));
+                    this.form.reset();
+                    this.submitting = false;
+                },
+                error: (e: HttpErrorResponse) => {
+                    if (e.status == 400) {
+                        this.added.emit(hasErrors(e.error.errors));
+                    } else {
+                        this.added.emit(isError('Unable to add holiday'));
+                    }
+                    this.submitting = false;
+                } 
+            });
     }
 }

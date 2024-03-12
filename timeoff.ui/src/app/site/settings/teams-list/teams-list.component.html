@@ -46,17 +46,17 @@
             </thead>
             <tbody>
                 <tr *ngFor="let team of teams" data-vpp-team-list-mode="readonly">
-                    <td><a routerLink="./edit/{{team.id}}" data-vpp-team-name=1>{{team.name}}</a></td>
+                    <td><a routerLink="./{{team.id}}" data-vpp-team-name=1>{{team.name}}</a></td>
                     <td><a routerLink="/users/{{team.manager.id}}">{{team.manager.name}}</a></td>
                     <td>{{team.allowance}}</td>
                     <td><a routerLink="/users" [queryParams]="{team: team.id}">{{team.employeeCount}}</a></td>
                     <td>{{team.includePublicHolidays | yes}}</td>
                     <td>{{team.isAccruedAllowance | yes}}</td>
-                    <td><a routerLink="./edit/{{team.id}}" class="btn btn-link btn-xs pull-right"><span class="fa fa-chevron-right"></span></a></td>
+                    <td><a routerLink="./{{team.id}}" class="btn btn-link btn-xs pull-right"><span class="fa fa-chevron-right"></span></a></td>
                 </tr>
             </tbody>
         </table>
     </div>
 
 </div>
-<add-new-modal #modal/>
+<add-new-modal #modal (added)="refresh()"/>
