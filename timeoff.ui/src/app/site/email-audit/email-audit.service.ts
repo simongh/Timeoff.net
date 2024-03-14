@@ -4,6 +4,7 @@ import { map, of } from "rxjs";
 import { Injectable } from "@angular/core";
 import { EmailModel } from "./email.model";
 import { HttpClient } from "@angular/common/http";
+import { dateString } from "../../components/types";
 
 interface QueryResult {
     pages: number;
@@ -13,9 +14,9 @@ interface QueryResult {
 @Injectable()
 export class EmailAuditService {
     public searchForm = this.fb.group({
-        start: [null],
-        end: [null],
-        userId: [null as number | null]
+        start: ['' as dateString | null],
+        end: ['' as dateString | null],
+        userId: ['']
     });
 
     public currentPage: number = 1;
@@ -28,15 +29,15 @@ export class EmailAuditService {
     ) {}
 
     public getUsers() {
-        return of([] as UserModel[]);
+        return this.client.get<UserModel[]>('/api/teams/users');
     }
 
     public search() {
         return this.client.get<QueryResult>('/api/audit/email',{
             params: {
-                ...this.searchForm.value as any,
+                ...this.searchForm.value,
                 page: this.currentPage
-            }
+            } as any
         })
             .pipe(map((result) => {
                 this.totalPages = result.pages;

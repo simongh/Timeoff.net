@@ -1,98 +1,99 @@
 <h1>Emails audit</h1>
+<flash-message [messages]="messages"/>
 
 <div class="row">
-    <div class="col-md-6 lead">All emails ever been sent by the system</div>
+  <div class="col-md-6 lead">All emails ever been sent by the system</div>
 </div>
 
 <div class="row">&nbsp;</div>
 
 <div class="row">
-    <div class="content">
-        <div class="col-md-3">
-            <table class="table table-hover all-teams">
-                <thead>
-                    <tr>
-                        <th>Filter options</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>
-                            <form [formGroup]="form">
-                                <div class="form-group input-group">
-                                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                                    <input type="text" formControlName="start" class="form-control" placeholder="Start Date" data-provide="datepicker" data-date-autoclose="1" [attr.data-date-format]="dateFormat" data-date-week-start="1">
-                                </div>
-                                <div class="form-group input-group">
-                                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                                    <input type="text" formControlName="end" class="form-control" placeholder="End Date" data-provide="datepicker" data-date-autoclose="1" [attr.data-date-format]="dateFormat" data-date-week-start="1">
-                                </div>
-                                <div class="form-group">
-                                    <select class="form-control" formControlName="userId">
-                                        <option [value]="null">Employee to filter by</option>
-                                        <option *ngFor="let u of users" value="{{u.id}}">{{u.name}}</option>
-                                    </select>
-                                </div>
+  <div class="content">
+    <div class="col-md-3">
+      <table class="table table-hover all-teams">
+        <thead>
+          <tr>
+            <th>Filter options</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <form [formGroup]="form">
+                <div class="form-group input-group">
+                  <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                  <input type="text" formControlName="start" class="form-control" placeholder="Start Date" data-provide="datepicker" data-date-autoclose="1" [attr.data-date-format]="dateFormat" data-date-week-start="1">
+                </div>
+                <div class="form-group input-group">
+                  <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                  <input type="text" formControlName="end" class="form-control" placeholder="End Date" data-provide="datepicker" data-date-autoclose="1" [attr.data-date-format]="dateFormat" data-date-week-start="1">
+                </div>
+                <div class="form-group">
+                  <select class="form-control" formControlName="userId">
+                    <option value="">Employee to filter by</option>
+                    <option *ngFor="let u of users" value="{{u.id}}">{{u.name}}</option>
+                  </select>
+                </div> 
 
-                                <button (click)="search()" class="btn btn-info single-click">Filter</button>&nbsp;
-                                <a (click)="reset()" class="btn btn-default" [attr.disabled]="showReset">Reset</a>
-                            </form>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+                <button (click)="search()" class="btn btn-info single-click">Filter</button>&nbsp;
+                <button (click)="reset()" class="btn btn-default" [disabled]="this.form.pristine">Reset</button>
+              </form>
+              </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
 
-        <div class="col-md-9">
-            <table class="table table-hover" id="email_list">
-                <thead>
-                    <tr>
-                        <th>To Employee</th>
-                        <th>Subject</th>
-                        <th>Date And Time</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngIf="emails.length === 0">
-                        <td colspan="3">
-                            <div class="text-center">No emails recorded yet</div>
-                        </td>
-                    </tr>
+    <div class="col-md-9">
+      <table class="table table-hover" id="email_list">
+        <thead>
+          <tr>
+            <th>To Employee</th>
+            <th>Subject</th>
+            <th>Date And Time</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngIf="emails.length === 0">
+            <td colspan="3">
+              <div class="text-center">No emails recorded yet</div>
+            </td>
+          </tr>
 
-                    <ng-container *ngFor="let e of emails">
-                        <tr id="heading_@item.Id" class="vpp-email-audit-entry-header">
-                            <td class="user-link-cell">
-                                <a (click)="searchByUser(e.user.id)">{{e.user.name}}</a>
-                            </td>
-                            <td>
-                                <a class="collapsed" data-toggle="collapse" data-parent="#email_list" href="#collapse_@item.Id">
-                                    {{e.subject}}
-                                </a>
-                            </td>
-                            <td>
-                                {{e.createdAt | date: dateFormat + ' HH:mm:ss'}}
-                            </td>
-                        </tr>
-                        <tr id="collapse_@item.Id" class="collapse">
-                            <td colspan=3>
-                                <address>
-                                    <strong>To Email:</strong>
-                                    <a href="mailto:#">{{e.email}}</a>
-                                </address>
-                                <pre>{{e.body}}</pre>
-                            </td>
-                        </tr>
-                    </ng-container>
-                </tbody>
-            </table>
+          <ng-container *ngFor="let e of emails">
+            <tr id="heading_@item.Id" class="vpp-email-audit-entry-header">
+              <td class="user-link-cell">
+                <a (click)="searchByUser(e.user.id)">{{e.user.name}}</a>
+              </td>
+              <td>
+                <a class="collapsed" data-toggle="collapse" data-parent="#email_list" href="#collapse_@item.Id">
+                  {{e.subject}}
+                </a>
+              </td>
+              <td>
+                {{e.createdAt | date: dateFormat + ' HH:mm:ss'}}
+              </td>
+            </tr>
+            <tr id="collapse_@item.Id" class="collapse">
+              <td colspan=3>
+                <address>
+                  <strong>To Email:</strong>
+                  <a href="mailto:#">{{e.email}}</a>
+                </address>
+                <pre>{{e.body}}</pre>
+              </td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </table>
 
-            <div class="text-center">
-                <pager *ngIf="emails.length > 0" [totalPages]="totalPages" [currentPage]="currentPage"/>
-            </div>
-
-        </div>
+      <div class="text-center">
+        <pager *ngIf="emails.length > 0" [totalPages]="totalPages" [currentPage]="currentPage"/>
+      </div>
 
     </div>
+
+  </div>
 </div>
 
 <div class="row">&nbsp;</div>

@@ -7,4 +7,6 @@ import { RouterOutlet } from "@angular/router";
     templateUrl: 'users-page.component.html',
     imports:[RouterOutlet]
 })
-export class UsersPageComponent {}
+export class UsersPageComponent {
+    public companyName = '';
+}

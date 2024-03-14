@@ -3,8 +3,6 @@ import { Component, DestroyRef, EventEmitter, OnInit, Output } from "@angular/co
 import { TeamsService } from "../../../services/teams/teams.service";
 import { ReactiveFormsModule } from "@angular/forms";
 import { ValidatorMessageComponent } from "../../../components/validator-message/validator-message.component";
-import { TeamModel } from "../../../services/teams/team.model";
-import { ErrorsService } from "../../../services/errors/errors.service";
 import { FlashModel, hasErrors, isError, isSuccess } from "../../../components/flash/flash.model";
 import { UserModel } from "../../../models/user.model";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";

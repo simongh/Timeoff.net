@@ -6,6 +6,11 @@ namespace Timeoff.Application.CreateUser
 {
     public record CreateCommand : Types.UserDetailsModelBase, IRequest<CreateViewModel>, Commands.IValidated
     {
+        public int Team
+        {
+            get => TeamId;
+            init => TeamId = value;
+        }
         public IEnumerable<ValidationFailure>? Failures { get; set; }
     }
 
@@ -60,18 +65,18 @@ namespace Timeoff.Application.CreateUser
             {
                 messages = errors.ToFlashResult();
 
-                var vm = await _dataContext.GetCreateViewModelAsync(_currentUserService.CompanyId);
+                //var vm = await _dataContext.GetCreateViewModelAsync(_currentUserService.CompanyId);
 
-                return vm with
+                return new()
                 {
-                    FirstName = request.FirstName,
-                    LastName = request.LastName,
-                    Email = request.Email,
-                    TeamId = request.TeamId,
-                    StartDate = request.StartDate,
-                    EndDate = request.EndDate,
-                    AutoApprove = request.AutoApprove,
-                    IsAdmin = request.IsAdmin,
+                    //FirstName = request.FirstName,
+                    //LastName = request.LastName,
+                    //Email = request.Email,
+                    //TeamId = request.TeamId,
+                    //StartDate = request.StartDate,
+                    //EndDate = request.EndDate,
+                    //AutoApprove = request.AutoApprove,
+                    //IsAdmin = request.IsAdmin,
                     Messages = messages,
                 };
             }

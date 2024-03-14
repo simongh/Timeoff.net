@@ -22,9 +22,14 @@ namespace Timeoff.Api
         }
 
         [HttpPost]
-        public Task<IActionResult> CreateAsync()
+        public async Task<IActionResult> CreateAsync(Application.CreateUser.CreateCommand command)
         {
-            throw new NotImplementedException();
+            var result = await _mediator.Send(command);
+
+            if (result.Messages?.Errors?.Any() == true)
+                return BadRequest(result.Messages);
+            else
+                return NoContent();
         }
 
         [HttpGet("{id:int}")]

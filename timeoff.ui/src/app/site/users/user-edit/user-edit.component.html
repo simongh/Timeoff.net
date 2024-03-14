@@ -1,0 +1,114 @@
+<user-details [id]="id" name="" [isActive]="false" [messages]="messages">
+    <form method="POST" asp-controller="users" asp-action="update" asp-route-id="@Model.Id">
+
+        <div class="col-md-7">
+    
+            <!-- <partial name="_Breadcrumb" /> -->
+            <user-breadcrumb name=""/>
+    
+            <div class="form-group">
+                <label asp-for="FirstName" class="control-label">First Name</label>
+                <input class="form-control" asp-for="FirstName" required value="@Model.FirstName">
+            </div>
+    
+            <div class="form-group">
+                <label asp-for="LastName" class="control-label">Last Name</label>
+                <input class="form-control" asp-for="LastName" required value="@Model.LastName">
+            </div>
+    
+            <div class="form-group">
+                <label asp-for="Email" class="control-label">Email Address</label>
+                <input class="form-control" asp-for="Email" type="email" required value="@Model.Email" aria-describedby="email_help">
+                <span id="email_help" class="help-block">Email address used by this user</span>
+            </div>
+    
+            <div class="form-group">
+                <label asp-for="TeamId" class="control-label">Team</label>
+                <select class="form-control" asp-for="TeamId" aria-describedby="team_help">
+                    <!-- @foreach (var item in Model.Teams)
+                    {
+                        <option value="@item.Id" selected="@(item.Id == Model.TeamId)">@item.Value</option>
+    
+                    } -->
+                </select>
+                <span id="team_help" class="help-block">Team current user is part of. <a asp-controller="Teams" asp-action="edit" asp-route-id="@Model.TeamId">More details <i class="fa fa-angle-double-right"></i></a></span>
+            </div>
+    
+            <div class="form-group">
+                <label asp-for="IsAdmin" class="control-label">
+                    <input class="" asp-for="IsAdmin" type="checkbox" checked="@Model.IsAdmin" value="true">
+                    Is administrator user
+                </label>
+            </div>
+    
+            <div class="form-group">
+                <label asp-for="AutoApprove" class="control-label">
+                    <input class="" asp-for="AutoApprove" type="checkbox" checked="@Model.AutoApprove">
+                    Auto approve leave requests
+                </label>
+                <span class="help-block">Set the flag ON to streamline leave requests from <!--@Model.Name--> directly into <strong>Approved</strong> state.</span>
+            </div>
+    
+            <div class="form-group">
+                <label asp-for="StartDate" class="control-label">Started on</label>
+                <div class="input-group col-md-4">
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    <input class="form-control" asp-for="StartDate" type="text" required data-date-autoclose="1" data-provide="datepicker" data-date-format="@Model.DateFormat.ToJsFormat()" data-date-week-start="1" value="@Model.StartDate?.ToString(Model.DateFormat)" aria-describedby="start_date_help">
+                </div>
+                <span id="start_date_help" class="help-block">Date when employee started (inclusive)</span>
+            </div>
+    
+            <div class="form-group">
+                <label asp-for="EndDate" class="control-label">Ended on</label>
+                <div class="input-group col-md-4">
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    <input class="form-control" asp-for="EndDate" type="text" data-date-autoclose="1" data-provide="datepicker" data-date-format="@Model.DateFormat.ToJsFormat()" data-date-week-start="1" value="@Model.EndDate?.ToString(Model.DateFormat)" aria-describedby="end_date_help">
+                </div>
+                <span id="end_date_help" class="help-block"><div>Date when user leaves {{companyName}}.</div><div>After this date user is not able to access the company.</div><div>This is a way of deactivating user accounts.</div></span>
+            </div>
+    
+            <div class="form-group">
+                <label asp-for="IsActive" class="control-label">
+                    <input class="" asp-for="IsActive" type="checkbox" checked="@Model.IsActive" value="true">
+                    Is user active
+                </label>
+                <span class="help-block">Deactivating a user will prevent the user from logging in</span>
+            </div>
+    
+            <div class="form-group">
+                <a class="btn btn-success" href="#">Reset</a>
+                <span class="help-block">Reset a users password. The user will need to follow instructions in the email to login again</span>
+            </div>
+            <!-- @*<div class="form-group">
+            <label for="password_inp" class="control-label">Password</label>
+            <input class="form-control" id="password_inp" type="password" name="password_one" value="" {{#if company.ldap_auth_enabled}} readonly {{ /if}} aria-describedby="password_inp_help">
+            <span id="password_inp_help" class="help-block">
+            {{# if company.ldap_auth_enabled }}
+            <a href="/settings/company/authentication/">LDAP authentication</a> is enabled, so that password does not matter.
+            {{else}}
+            It is possible to update password for given account.
+            {{/ if}}
+            </span>
+            </div>
+    
+            <div class="form-group">
+            <label for="password_inp" class="control-label">Confirm password</label>
+            <input class="form-control" id="confirm_password_inp" type="password" name="password_confirm" value="" {{# if company.ldap_auth_enabled}}readonly{{ /if}}>
+            </div>*@ -->
+    
+            <div class="form-group">
+                <label for="link_to_email_audit" class="control-label">
+                    <a routerLink="/audit/emails" [queryParams]="{user: id}">Emails ever sent to <!-- @Model.Name --></a>
+                </label>
+            </div>
+        </div>
+    
+        <div class="row">
+            <div class="col-md-12">
+                <button id="save_changes_btn" type="submit" class="btn btn-success pull-right single-click">Save changes</button>
+                <a class="btn btn-link pull-right" routerLink="/users">Cancel</a>
+            </div>
+        </div>
+    
+    </form>
+</user-details>
