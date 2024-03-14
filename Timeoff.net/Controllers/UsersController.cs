@@ -15,24 +15,24 @@ namespace Timeoff.Controllers
             _mediator = mediator;
         }
 
-        [HttpGet("add")]
-        public async Task<IActionResult> CreateAsync()
-        {
-            return View(await _mediator.Send(new Application.CreateUser.GetCreateCommand()));
-        }
+        //[HttpGet("add")]
+        //public async Task<IActionResult> CreateAsync()
+        //{
+        //    return View(await _mediator.Send(new Application.CreateUser.GetCreateCommand()));
+        //}
 
-        [HttpPost("add")]
-        public async Task<IActionResult> AddPostAsync(Application.CreateUser.CreateCommand command)
-        {
-            var vm = await _mediator.Send(command);
-            if (vm.Messages!.Errors == null)
-            {
-                var usersVm = await _mediator.Send(new Application.Users.UsersQuery());
-                return View("Index", usersVm);
-            }
+        //[HttpPost("add")]
+        //public async Task<IActionResult> AddPostAsync(Application.CreateUser.CreateCommand command)
+        //{
+        //    var vm = await _mediator.Send(command);
+        //    if (vm.Messages!.Errors == null)
+        //    {
+        //        var usersVm = await _mediator.Send(new Application.Users.UsersQuery());
+        //        return View("Index", usersVm);
+        //    }
 
-            return View("Create", vm);
-        }
+        //    return View("Create", vm);
+        //}
 
         [HttpGet("import")]
         public IActionResult Import()

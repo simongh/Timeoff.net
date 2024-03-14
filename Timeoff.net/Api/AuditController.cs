@@ -9,10 +9,10 @@ namespace Timeoff.Api
     {
         private readonly IMediator _mediator = mediator;
 
-        //[HttpGet("email")]
-        //public async Task<IActionResult> GetEmailsAsync([FromQuery] Application.EmailAudit.EmailAuditQuery command)
-        //{
-        //    return Ok(await _mediator.Send(command));
-        //}
+        [HttpGet("email")]
+        public async Task<IActionResult> GetEmailsAsync([FromQuery] Application.EmailAudit.EmailAuditQuery command)
+        {
+            return Ok(await _mediator.Send(command));
+        }
     }
 }

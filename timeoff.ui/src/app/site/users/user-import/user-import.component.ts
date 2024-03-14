@@ -6,9 +6,9 @@ import { RouterLink } from '@angular/router';
   selector: 'user-import',
   standalone: true,
   imports: [FlashComponent, RouterLink],
-  templateUrl: './import.component.html',
-  styleUrl: './import.component.sass'
+  templateUrl: './user-import.component.html',
+  styleUrl: './user-import.component.sass'
 })
-export class ImportComponent {
+export class UserImportComponent {
 
 }

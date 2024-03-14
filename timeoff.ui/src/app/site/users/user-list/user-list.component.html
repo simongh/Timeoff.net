@@ -12,7 +12,7 @@
             </button>
             <ul class="dropdown-menu">
                 <li><a routerLink="/users/import" id="import_users_btn">Import employees</a></li>
-                <li><a asp-controller="users" asp-action="create" id="add_new_user">Add single employee</a></li>
+                <li><a routerLink="/users/add" id="add_new_user">Add single employee</a></li>
             </ul>
         </div>
         <form asp-action="index" method="GET">
@@ -66,15 +66,3 @@
 </div>
 
 <div class="row">&nbsp;</div>
-
-<!-- @functions {
-    public string IsSelected(int? id)
-    {
-        return Model.TeamId == id ? "selected-item" : "";
-    }
-
-    public string IsAdmin(bool value)
-    {
-        return value ? "Yes" : "";
-    }
-} -->

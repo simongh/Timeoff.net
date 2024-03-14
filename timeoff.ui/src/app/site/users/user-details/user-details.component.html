@@ -1,0 +1,27 @@
+<h1>{{name}}'s details 
+    <span *ngIf="!isActive" class="badge alert-warning">Deactivated</span>
+</h1>
+
+<div class="row">
+    <div class="col-md-3 lead">Employee details</div>
+    <form id="add_new_user_frm" method="post"asp-controller="users" asp-action="delete" asp-route-id="@Model.Id" onsubmit="return confirm('Do you really want to delete the user @Model.Name?');">
+        <div class="col-md-1 col-md-offset-8">
+            <button id="remove_btn" type="submit" class="pull-right btn btn-danger single-click" data-toggle="tooltip" data-placement="top" title="Remove employee"><i class="fa fa-trash"></i> Delete</button>
+        </div>
+    </form>
+</div>
+
+<div class="row">&nbsp;</div>
+
+<flash-message [messages]="messages"/>
+
+<div class="col-md-3 list-group">
+    <a routerLink="/users/{{id}}" class="list-group-item" routerLinkActive="selected-item">General details</a>
+    <a routerLink="/users/{{id}}/schedule" class="list-group-item" routerLinkActive="selected-item">Schedule</a>
+    <a routerLink="/users/{{id}}/calendar" class="list-group-item" routerLinkActive="selected-item">Calendar</a>
+    <a routerLink="/users/{{id}}/absences" class="list-group-item" routerLinkActive="selected-item">Absences</a>
+</div>
+
+<ng-content></ng-content>
+
+<div class="row">&nbsp;</div>

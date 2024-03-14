@@ -10,6 +10,9 @@ import { ReportsPageComponent } from "./reports/reports-page.component";
 import { reportsRoutes } from "./reports/reports.routes";
 import { EmailAuditComponent } from "./email-audit/email-audit.component";
 import { FeedsComponent } from "./feeds/feeds.component";
+import { UserListComponent } from "./users/user-list/user-list.component";
+import { UserImportComponent } from "./users/user-import/user-import.component";
+import { UserCreateComponent } from "./users/user-create/user-create.component";
 
 export const siteRoutes: Routes = [
     {

@@ -27,7 +27,7 @@ namespace Timeoff.Api
 
             if (result.Result.Errors?.Any() == true)
             {
-                return BadRequest(result.Result.Errors);
+                return BadRequest(result.Result);
             }
             else
                 return NoContent();
@@ -44,7 +44,7 @@ namespace Timeoff.Api
 
             if (result.Result.Errors?.Any() == true)
             {
-                return BadRequest(result.Result.Errors);
+                return BadRequest(result.Result);
             }
             else
                 return NoContent();
@@ -56,7 +56,7 @@ namespace Timeoff.Api
             var result = await _mediator.Send(command);
 
             if (result.Result?.Errors?.Any() == true)
-                return BadRequest(result.Result.Errors);
+                return BadRequest(result.Result);
             else
                 return NoContent();
         }

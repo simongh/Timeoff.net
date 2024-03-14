@@ -27,9 +27,12 @@ namespace Timeoff.Api
             if (command == null)
                 return BadRequest();
 
-            await _mediator.Send(command);
+            var result = await _mediator.Send(command);
 
-            return NoContent();
+            if (result?.Result?.Errors?.Any() == true)
+                return BadRequest(result.Result);
+            else
+                return NoContent();
         }
 
         [HttpGet("{id:int}")]
@@ -46,9 +49,12 @@ namespace Timeoff.Api
 
             command.Id = id;
 
-            await _mediator.Send(command);
+            var result = await _mediator.Send(command);
 
-            return NoContent();
+            if (result?.Result?.Errors?.Any() == true)
+                return BadRequest(result.Result);
+            else
+                return NoContent();
         }
 
         [HttpDelete("{id:int}")]
