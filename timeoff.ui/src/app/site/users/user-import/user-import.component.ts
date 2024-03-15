@@ -3,12 +3,10 @@ import { FlashComponent } from '../../../components/flash/flash.component';
 import { RouterLink } from '@angular/router';
 
 @Component({
-  selector: 'user-import',
-  standalone: true,
-  imports: [FlashComponent, RouterLink],
-  templateUrl: './user-import.component.html',
-  styleUrl: './user-import.component.sass'
+    selector: 'user-import',
+    standalone: true,
+    imports: [FlashComponent, RouterLink],
+    templateUrl: './user-import.component.html',
+    styleUrl: './user-import.component.sass',
 })
-export class UserImportComponent {
-
-}
+export class UserImportComponent {}

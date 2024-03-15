@@ -1,18 +1,15 @@
-import { Routes } from "@angular/router";
-import { HomeComponent } from "./home/home.component";
-import { SettingsPageComponent } from "./settings/settings-page.component";
-import { LogoutComponent } from "./logout/logout.component";
-import { settingsRoutes } from "./settings/settings.routes";
-import { TeamviewComponent } from "./teamview/teamview.component";
-import { usersRoutes } from "./users/users.routes";
-import { UsersPageComponent } from "./users/users-page.component";
-import { ReportsPageComponent } from "./reports/reports-page.component";
-import { reportsRoutes } from "./reports/reports.routes";
-import { EmailAuditComponent } from "./email-audit/email-audit.component";
-import { FeedsComponent } from "./feeds/feeds.component";
-import { UserListComponent } from "./users/user-list/user-list.component";
-import { UserImportComponent } from "./users/user-import/user-import.component";
-import { UserCreateComponent } from "./users/user-create/user-create.component";
+import { Routes } from '@angular/router';
+import { HomeComponent } from './home/home.component';
+import { SettingsPageComponent } from './settings/settings-page.component';
+import { LogoutComponent } from './logout/logout.component';
+import { settingsRoutes } from './settings/settings.routes';
+import { TeamviewComponent } from './teamview/teamview.component';
+import { usersRoutes } from './users/users.routes';
+import { UsersPageComponent } from './users/users-page.component';
+import { ReportsPageComponent } from './reports/reports-page.component';
+import { reportsRoutes } from './reports/reports.routes';
+import { EmailAuditComponent } from './email-audit/email-audit.component';
+import { FeedsComponent } from './feeds/feeds.component';
 
 export const siteRoutes: Routes = [
     {
@@ -22,21 +19,21 @@ export const siteRoutes: Routes = [
     {
         path: 'settings',
         component: SettingsPageComponent,
-        children : settingsRoutes
+        children: settingsRoutes,
     },
     {
         path: 'users',
         component: UsersPageComponent,
-        children: usersRoutes
+        children: usersRoutes,
     },
     {
         path: 'reports',
         component: ReportsPageComponent,
-        children: reportsRoutes
+        children: reportsRoutes,
     },
     {
         path: 'audit/emails',
-        component: EmailAuditComponent
+        component: EmailAuditComponent,
     },
     {
         path: 'teamview',
@@ -48,6 +45,6 @@ export const siteRoutes: Routes = [
     },
     {
         path: 'logout',
-        component: LogoutComponent
-    }
-]
+        component: LogoutComponent,
+    },
+];

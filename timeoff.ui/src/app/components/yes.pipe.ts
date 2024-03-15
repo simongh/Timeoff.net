@@ -1,12 +1,11 @@
-import { Pipe, PipeTransform } from "@angular/core";
+import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
     standalone: true,
-    name: 'yes'
+    name: 'yes',
 })
-export class YesPipe implements PipeTransform
-{
+export class YesPipe implements PipeTransform {
     transform(value: boolean) {
-        return value ? "Yes" : "";
+        return value ? 'Yes' : '';
     }
 }

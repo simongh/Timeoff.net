@@ -1,35 +1,47 @@
 import { Injectable } from '@angular/core';
 import { FlashModel } from '../../components/flash/flash.model';
+import { Subject } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root',
+    providedIn: 'root',
 })
 export class MessagesService {
-  private messages: FlashModel[] = [];
+    private stored = new FlashModel();
 
-  public isSuccess(value: string) {
-    this.messages = [{
-      isError: false,
-      messages: [value],
-    }];
-  }
+    private subject = new Subject<FlashModel>();
 
-  public isError(value: string) {
-    this.messages = [{
-      isError: true,
-      messages: [value],
-    }];
-  }
-
-  public addMessage(model: FlashModel) {
-    this.messages.push(model);
-  }
-
-  public getMessages() {
-    if (this.messages.length == 0) {
-      return new FlashModel();
-    } else {
-      return this.messages.pop()!;
+    public isSuccess(value: string) {
+        this.addMessage({
+            isError: false,
+            messages: [value],
+        });
     }
-  }
+
+    public isError(value: string) {
+        this.addMessage({
+            isError: true,
+            messages: [value],
+        });
+    }
+
+    public hasErrors(values: string[]) {
+        this.addMessage({
+            isError: true,
+            messages: values,
+        });
+    }
+
+    public addMessage(model: FlashModel) {
+        this.subject.next(model);
+        this.stored = model;
+    }
+
+    public clearStored() {
+        this.addMessage(this.stored);
+        this.stored = new FlashModel();
+    }
+
+    public getMessages() {
+        return this.subject.asObservable();
+    }
 }

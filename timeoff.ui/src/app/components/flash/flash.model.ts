@@ -1,21 +1,21 @@
 export function isSuccess(message: string) {
     return {
         isError: false,
-        messages: [message]
+        messages: [message],
     } as FlashModel;
 }
 
 export function isError(message: string) {
     return {
         isError: true,
-        messages: [message]
+        messages: [message],
     } as FlashModel;
 }
 
 export function hasErrors(messages: string[]) {
     return {
         isError: true,
-        messages: messages
+        messages: messages,
     } as FlashModel;
 }
 

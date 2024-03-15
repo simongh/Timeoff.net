@@ -10,11 +10,11 @@ import { ResetPasswordComponent } from './reset-password/reset-password.componen
 export const routes: Routes = [
     {
         path: 'login',
-        component: LoginComponent
+        component: LoginComponent,
     },
     {
         path: 'forgot-password',
-        component: ForgotPasswordComponent
+        component: ForgotPasswordComponent,
     },
     {
         path: 'register',
@@ -22,12 +22,12 @@ export const routes: Routes = [
     },
     {
         path: 'reset-password',
-        component: ResetPasswordComponent
+        component: ResetPasswordComponent,
     },
     {
         path: '',
         component: SiteComponent,
         canMatch: [authGuard],
-        children: siteRoutes
-    }
+        children: siteRoutes,
+    },
 ];

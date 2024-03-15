@@ -1,10 +1,10 @@
-import { HttpClient } from "@angular/common/http";
-import { Injectable } from "@angular/core";
-import { TeamModel } from "./team.model";
-import { FormBuilder, Validators } from "@angular/forms";
-import { UserModel } from "../../models/user.model";
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { TeamModel } from './team.model';
+import { FormBuilder, Validators } from '@angular/forms';
+import { UserModel } from '../../models/user.model';
 
-export type TeamFormGroup = ReturnType<TeamsService['createForm']>
+export type TeamFormGroup = ReturnType<TeamsService['createForm']>;
 
 @Injectable()
 export class TeamsService {
@@ -12,9 +12,10 @@ export class TeamsService {
 
     constructor(
         private readonly client: HttpClient,
-        private readonly fb: FormBuilder) {
-            this.form = this.createForm();
-        }
+        private readonly fb: FormBuilder
+    ) {
+        this.form = this.createForm();
+    }
 
     public getTeams() {
         return this.client.get<TeamModel[]>('/api/teams');
@@ -52,9 +53,12 @@ export class TeamsService {
         return this.fb.group({
             name: ['', [Validators.required]],
             managerId: [0, [Validators.required, Validators.min(1)]],
-            allowance: [20, [Validators.required, Validators.min(0), Validators.max(50)]],
+            allowance: [
+                20,
+                [Validators.required, Validators.min(0), Validators.max(50)],
+            ],
             includePublicHolidays: true,
             isAccruedAllowance: false,
-          });
+        });
     }
 }

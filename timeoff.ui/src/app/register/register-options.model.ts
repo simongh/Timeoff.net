@@ -1,6 +1,6 @@
-import { Country } from "../services/country.model";
+import { Country } from '../services/country.model';
 
-export interface RegisterOptions{
+export interface RegisterOptions {
     countries: Country[];
     timezones: {
         name: string;

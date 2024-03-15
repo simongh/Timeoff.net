@@ -33,13 +33,11 @@ export class TeamsListComponent implements OnInit {
     public ngOnInit(): void {
         this.refresh();
         console.log(history.state.message);
-
-        this.messages = this.messagesSvc.getMessages();
     }
 
     public added()
     {
-        this.messages = this.addNewModel.messages;
+        this.messagesSvc.clearStored();
         this.refresh();
     }
 

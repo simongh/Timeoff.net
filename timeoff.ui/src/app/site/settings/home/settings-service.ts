@@ -1,15 +1,19 @@
-import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
-import { LeaveTypeModel } from "./leave-type.model";
-import { Injectable } from "@angular/core";
+import {
+    FormBuilder,
+    FormControl,
+    FormGroup,
+    Validators,
+} from '@angular/forms';
+import { Injectable } from '@angular/core';
 
-export interface LeaveTypeControls{
-    id: FormControl<number|null>;
-    name: FormControl<string|null>;
-    colour: FormControl<string|null>;
-    useAllowance: FormControl<boolean|null>;
-    autoApprove: FormControl<boolean|null>;
-    limit: FormControl<number|null>;
-    first: FormControl<number|null>;
+export interface LeaveTypeControls {
+    id: FormControl<number | null>;
+    name: FormControl<string | null>;
+    colour: FormControl<string | null>;
+    useAllowance: FormControl<boolean | null>;
+    autoApprove: FormControl<boolean | null>;
+    limit: FormControl<number | null>;
+    first: FormControl<number | null>;
 }
 
 @Injectable()
@@ -19,23 +23,22 @@ export class SettingsService {
         dateFormat: [''],
         country: ['GB', [Validators.required]],
         timezone: ['', [Validators.required]],
-        carryOver: [5,[Validators.min(0), Validators.max(1000)]],
+        carryOver: [5, [Validators.min(0), Validators.max(1000)]],
         showHoliday: [false],
-        hideTeamView: [false]
+        hideTeamView: [false],
     });
 
     public leaveTypeForm = this.fb.group({
-        id:[0],
+        id: [0],
         name: ['', [Validators.required]],
         colour: [''],
         useAllowance: [true],
         autoApprove: [false],
         limit: [0],
-        first: [null as number | null]
+        first: [null as number | null],
     });
 
     public leaveTypes = this.fb.array<FormGroup<LeaveTypeControls>>([]);
 
-    constructor(private readonly fb: FormBuilder)
-    {}
+    constructor(private readonly fb: FormBuilder) {}
 }

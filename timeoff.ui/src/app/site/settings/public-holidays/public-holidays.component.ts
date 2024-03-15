@@ -11,9 +11,9 @@ import { ReactiveFormsModule } from "@angular/forms";
 import { switchMap } from "rxjs";
 import { ValidatorMessageComponent } from "../../../components/validator-message/validator-message.component";
 import { AddNewModalComponent } from "./add-new-modal.component";
-import { DatePickerDirective } from "./date-picker.directive";
+import { DatePickerDirective } from "../../../components/date-picker.directive";
 import { HttpErrorResponse } from "@angular/common/http";
-import { FlashModel, hasErrors, isError, isSuccess } from "../../../components/flash/flash.model";
+import { MessagesService } from "../../../services/messages/messages.service";
 
 @Component({
     standalone: true,
@@ -51,14 +51,13 @@ export class PublicHolidaysComponent implements OnInit {
 
     public holidays!: PublicHolidayModel[];
 
-    public messages = new FlashModel();
-
     public get holidaysForm() {
         return this.holidaySvc.holidays;
     }
 
     constructor(
         private readonly holidaySvc: PublicHolidaysService,
+        private readonly msgsSvc: MessagesService,
         private destroyed: DestroyRef,
         private readonly route: ActivatedRoute,
     ) {}
@@ -81,13 +80,13 @@ export class PublicHolidaysComponent implements OnInit {
             ).subscribe({
                 next: (data) => {
                     this.loadHolidays(data);
-                    this.messages = isSuccess('Holiday was successfully removed');
+                    this.msgsSvc.isSuccess('Holiday was successfully removed');
                 },
                 error: (error: HttpErrorResponse) => {
                     if (error.status == 400) {
-                        this.messages = hasErrors(error.error.errors);
+                        this.msgsSvc.hasErrors(error.error.errors);
                     } else {
-                        this.messages = isError('Unable to remove holiday');
+                        this.msgsSvc.isError('Unable to remove holiday');
                     }
                 }
             });
@@ -103,13 +102,13 @@ export class PublicHolidaysComponent implements OnInit {
             ).subscribe({
                 next: (data) => {
                     this.loadHolidays(data);
-                    this.messages = isSuccess('Holidays updated');
+                    this.msgsSvc.isSuccess('Holidays updated');
                 },
                 error: (e: HttpErrorResponse) => {
                     if (e.status == 400) {
-                        this.messages = hasErrors(e.error.errors);
+                        this.msgsSvc.hasErrors(e.error.errors);
                     } else {
-                        this.messages = isError('Unable to update holidays');
+                        this.msgsSvc.isError('Unable to update holidays');
                     }
                 } 
             });
@@ -131,22 +130,19 @@ export class PublicHolidaysComponent implements OnInit {
             ).subscribe({
                 next: (data) => {
                     this.loadHolidays(data);
-                    this.messages = new FlashModel();
                 },
             });
     }
 
-    public create(messages: FlashModel) {
+    public create() {
         this.holidaySvc.get(this.currentYear)
             .pipe(
                 takeUntilDestroyed(this.destroyed),
             ).subscribe({
                 next: (data) => {
                     this.loadHolidays(data);
-                    this.messages = messages;
                 },
                 error: (e: HttpErrorResponse) => {
-                    this.messages = messages;
                 } 
             });
     }

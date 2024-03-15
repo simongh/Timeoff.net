@@ -1,9 +1,9 @@
-import { Component } from "@angular/core";
-import { RouterOutlet } from "@angular/router";
+import { Component } from '@angular/core';
+import { RouterOutlet } from '@angular/router';
 
 @Component({
     standalone: true,
     templateUrl: 'site.component.html',
-    imports:[RouterOutlet]
+    imports: [RouterOutlet],
 })
-export class SiteComponent{}
+export class SiteComponent {}

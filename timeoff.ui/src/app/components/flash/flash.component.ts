@@ -1,21 +1,20 @@
-import { CommonModule } from "@angular/common";
-import { Component, Input } from "@angular/core";
-import { ErrorsService } from "../../services/errors/errors.service";
-import { FlashModel } from "./flash.model";
+import { CommonModule } from '@angular/common';
+import { Component, DestroyRef, Input, OnInit } from '@angular/core';
+import { FlashModel } from './flash.model';
+import { MessagesService } from '../../services/messages/messages.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
     standalone: true,
     templateUrl: 'flash.component.html',
     selector: 'flash-message',
     imports: [CommonModule],
-    providers: [ErrorsService]
+    providers: [],
 })
+export class FlashComponent implements OnInit {
+    private messages: FlashModel = new FlashModel();
 
-export class FlashComponent {
-    @Input()
-    public messages: FlashModel = new FlashModel();
-
-    protected get errors() : string[] {
+    protected get errors(): string[] {
         if (this.messages.isError) {
             return this.messages.messages;
         } else {
@@ -30,5 +29,19 @@ export class FlashComponent {
             return [];
         }
     }
-    constructor() {}
+    constructor(
+        private readonly msgSvc: MessagesService,
+        private destroyed: DestroyRef
+    ) {}
+
+    public ngOnInit(): void {
+        this.msgSvc
+            .getMessages()
+            .pipe(takeUntilDestroyed(this.destroyed))
+            .subscribe((m) => {
+                this.messages = m;
+            });
+
+        this.msgSvc.clearStored();
+    }
 }
