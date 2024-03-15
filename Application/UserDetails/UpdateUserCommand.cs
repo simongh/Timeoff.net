@@ -6,24 +6,19 @@ namespace Timeoff.Application.UserDetails
 {
     public record UpdateUserCommand : Types.UserDetailsModelBase, IRequest<DetailsViewModel?>, Commands.IValidated
     {
+        public int Team { get => TeamId; init => TeamId = value; }
         public IEnumerable<ValidationFailure>? Failures { get; set; }
     }
 
-    internal class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand, DetailsViewModel?>
+    internal class UpdateUserCommandHandler(
+        IDataContext dataContext,
+        Services.ICurrentUserService currentUserService,
+        Services.INewLeaveService leaveService)
+        : IRequestHandler<UpdateUserCommand, DetailsViewModel?>
     {
-        private readonly IDataContext _dataContext;
-        private readonly Services.ICurrentUserService _currentUserService;
-        private readonly Services.INewLeaveService _leaveService;
-
-        public UpdateUserCommandHandler(
-            IDataContext dataContext,
-            Services.ICurrentUserService currentUserService,
-            Services.INewLeaveService leaveService)
-        {
-            _dataContext = dataContext;
-            _currentUserService = currentUserService;
-            _leaveService = leaveService;
-        }
+        private readonly IDataContext _dataContext = dataContext;
+        private readonly Services.ICurrentUserService _currentUserService = currentUserService;
+        private readonly Services.INewLeaveService _leaveService = leaveService;
 
         public async Task<DetailsViewModel?> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
         {

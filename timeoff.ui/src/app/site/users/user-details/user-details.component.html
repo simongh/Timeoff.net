@@ -4,9 +4,9 @@
 
 <div class="row">
     <div class="col-md-3 lead">Employee details</div>
-    <form id="add_new_user_frm" method="post"asp-controller="users" asp-action="delete" asp-route-id="@Model.Id" onsubmit="return confirm('Do you really want to delete the user @Model.Name?');">
+    <form id="add_new_user_frm">
         <div class="col-md-1 col-md-offset-8">
-            <button id="remove_btn" type="submit" class="pull-right btn btn-danger single-click" data-toggle="tooltip" data-placement="top" title="Remove employee"><i class="fa fa-trash"></i> Delete</button>
+            <button id="remove_btn" (click)="delete()" type="button" class="pull-right btn btn-danger single-click" data-toggle="tooltip" data-placement="top" title="Remove employee"><i class="fa fa-trash"></i> Delete</button>
         </div>
     </form>
 </div>

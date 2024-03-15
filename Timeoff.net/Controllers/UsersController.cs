@@ -100,21 +100,21 @@ namespace Timeoff.Controllers
             return View(vm);
         }
 
-        [HttpPost("edit/{id:int}")]
-        public async Task<IActionResult> UpdateAsync(Application.UserDetails.UpdateUserCommand command)
-        {
-            var vm = await _mediator.Send(command);
+        //[HttpPost("edit/{id:int}")]
+        //public async Task<IActionResult> UpdateAsync(Application.UserDetails.UpdateUserCommand command)
+        //{
+        //    var vm = await _mediator.Send(command);
 
-            return View("edit", vm);
-        }
+        //    return View("edit", vm);
+        //}
 
-        [HttpPost("delete/{id:int}")]
-        public async Task<IActionResult> DeleteAsync([FromRoute] Application.DeleteUser.DeleteUserCommand command)
-        {
-            var vm = await _mediator.Send(command);
+        //[HttpPost("delete/{id:int}")]
+        //public async Task<IActionResult> DeleteAsync([FromRoute] Application.DeleteUser.DeleteUserCommand command)
+        //{
+        //    var vm = await _mediator.Send(command);
 
-            return View("Index", vm);
-        }
+        //    return View("Index", vm);
+        //}
 
         [HttpGet("search")]
         [HttpPost("search")]
@@ -129,18 +129,18 @@ namespace Timeoff.Controllers
         //    return View(await _mediator.Send(query));
         //}
 
-        [HttpPost("edit/reset-password/{id:int}")]
-        public async Task<IActionResult> ResetPasswordAsync([FromRoute] Application.ResetPassword.ResetUserPasswordCommand command)
-        {
-            var vm = await _mediator.Send(command);
+        //[HttpPost("edit/reset-password/{id:int}")]
+        //public async Task<IActionResult> ResetPasswordAsync([FromRoute] Application.ResetPassword.ResetUserPasswordCommand command)
+        //{
+        //    var vm = await _mediator.Send(command);
 
-            if (vm == null)
-            {
-                //return RedirectToAction(nameof(IndexAsync));
-            }
+        //    if (vm == null)
+        //    {
+        //        //return RedirectToAction(nameof(IndexAsync));
+        //    }
 
-            return View("Edit", vm);
-        }
+        //    return View("Edit", vm);
+        //}
 
         [HttpGet("summary/{id:int}")]
         [Authorize()]

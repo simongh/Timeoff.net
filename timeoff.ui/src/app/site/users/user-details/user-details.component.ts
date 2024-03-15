@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { FlashComponent } from '../../../components/flash/flash.component';
 
@@ -19,4 +19,15 @@ export class UserDetailsComponent {
 
     @Input()
     public id!: number;
+
+    @Output()
+    public deleting = new EventEmitter();
+
+    public delete() {
+        const doit = window.confirm(`Do you really want to delete the user ${this.name}?`);
+
+        if (doit) {
+            this.deleting.emit();
+        }
+    }
 }
