@@ -2,13 +2,13 @@ import { Component, Input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 @Component({
-  selector: 'user-breadcrumb',
-  standalone: true,
-  imports: [RouterLink],
-  templateUrl: './user-breadcrumb.component.html',
-  styleUrl: './user-breadcrumb.component.sass'
+    selector: 'user-breadcrumb',
+    standalone: true,
+    imports: [RouterLink],
+    templateUrl: './user-breadcrumb.component.html',
+    styleUrl: './user-breadcrumb.component.sass',
 })
 export class UserBreadcrumbComponent {
-  @Input()
-  public name!: string;
+    @Input()
+    public name!: string;
 }

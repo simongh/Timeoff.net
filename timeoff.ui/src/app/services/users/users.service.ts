@@ -9,50 +9,50 @@ type UserFromGroup = ReturnType<UsersService['createUserForm']>;
 
 @Injectable()
 export class UsersService {
-  public form: UserFromGroup;
+    public form: UserFromGroup;
 
-  constructor(
-    private readonly client: HttpClient,
-    private readonly fb: FormBuilder
-  ) {
-    this.form = this.createUserForm();
-  }
+    constructor(
+        private readonly client: HttpClient,
+        private readonly fb: FormBuilder
+    ) {
+        this.form = this.createUserForm();
+    }
 
-  public getTeams() {
-    return this.client.get<TeamModel[]>('/api/users/teams');
-  }
+    public getTeams() {
+        return this.client.get<TeamModel[]>('/api/users/teams');
+    }
 
-  public getUsers(team: number | null) {
-    const options = team
-      ? {
-          params: new HttpParams().set('team', team),
-        }
-      : {};
+    public getUsers(team: number | null) {
+        const options = team
+            ? {
+                  params: new HttpParams().set('team', team),
+              }
+            : {};
 
-    return this.client.get<UserModel[]>('/api/users', options);
-  }
+        return this.client.get<UserModel[]>('/api/users', options);
+    }
 
-  public addUser() {
-    return this.client.post<void>('/api/users',this.form.value);
-  }
+    public addUser() {
+        return this.client.post<void>('/api/users', this.form.value);
+    }
 
-  private createUserForm() {
-    const form = this.fb.group(
-      {
-        firstName: ['', Validators.required],
-        lastName: ['', Validators.required],
-        email: ['', [Validators.required, Validators.email]],
-        team: [null as number | null],
-        isAdmin: [false],
-        autoApprove: [false],
-        startDate: [null as dateString | null, Validators.required],
-        endDate: [null as dateString | null],
-      },
-      {
-        validators: [],
-      }
-    );
+    private createUserForm() {
+        const form = this.fb.group(
+            {
+                firstName: ['', Validators.required],
+                lastName: ['', Validators.required],
+                email: ['', [Validators.required, Validators.email]],
+                team: [null as number | null],
+                isAdmin: [false],
+                autoApprove: [false],
+                startDate: [null as dateString | null, Validators.required],
+                endDate: [null as dateString | null],
+            },
+            {
+                validators: [],
+            }
+        );
 
-    return form;
-  }
+        return form;
+    }
 }

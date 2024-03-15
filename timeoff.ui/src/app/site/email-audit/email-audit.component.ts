@@ -10,103 +10,111 @@ import { ActivatedRoute } from '@angular/router';
 import { switchMap } from 'rxjs';
 import { FlashComponent } from '../../components/flash/flash.component';
 import { FlashModel, isError } from '../../components/flash/flash.model';
+import { MessagesService } from '../../services/messages/messages.service';
 
 @Component({
-  selector: 'email-audit',
-  standalone: true,
-  providers: [EmailAuditService],
-  templateUrl: './email-audit.component.html',
-  styleUrl: './email-audit.component.sass',
-  imports: [ReactiveFormsModule, CommonModule, PagerComponent, FlashComponent],
+    selector: 'email-audit',
+    standalone: true,
+    providers: [EmailAuditService],
+    templateUrl: './email-audit.component.html',
+    styleUrl: './email-audit.component.sass',
+    imports: [
+        ReactiveFormsModule,
+        CommonModule,
+        PagerComponent,
+        FlashComponent,
+    ],
 })
 export class EmailAuditComponent implements OnInit {
-  public get form() {
-    return this.searchSvc.searchForm;
-  }
+    public get form() {
+        return this.searchSvc.searchForm;
+    }
 
-  public messages = new FlashModel();
+    public dateFormat = 'yyyy-mm-dd';
 
-  public dateFormat = 'yyyy-mm-dd';
+    public users: UserModel[] = [];
 
-  public users: UserModel[] = [];
+    public emails: EmailModel[] = [];
 
-  public emails: EmailModel[] = [];
+    public searching = false;
 
-  public searching = false;
+    public get currentPage() {
+        return this.searchSvc.currentPage;
+    }
 
-  public get currentPage() {
-    return this.searchSvc.currentPage;
-  }
+    public get totalPages() {
+        return this.searchSvc.totalPages;
+    }
 
-  public get totalPages() {
-    return this.searchSvc.totalPages;
-  }
+    constructor(
+        private readonly searchSvc: EmailAuditService,
+        private readonly msgsSvc: MessagesService,
+        private readonly destroyed: DestroyRef,
+        private readonly route: ActivatedRoute
+    ) {}
 
-  constructor(
-    private readonly searchSvc: EmailAuditService,
-    private readonly destroyed: DestroyRef,
-    private readonly route: ActivatedRoute
-  ) {}
-  ngOnInit(): void {
-    this.searchSvc
-      .getUsers()
-      .pipe(takeUntilDestroyed(this.destroyed))
-      .subscribe((data) => {
-        this.users = data;
-      });
+    public ngOnInit(): void {
+        this.searchSvc
+            .getUsers()
+            .pipe(takeUntilDestroyed(this.destroyed))
+            .subscribe((data) => {
+                this.users = data;
+            });
 
-    this.find();
-  }
+        this.find();
+    }
 
-  public search() {
-    this.searchSvc.currentPage = 1;
-    this.find();
-  }
+    public search() {
+        this.searchSvc.currentPage = 1;
+        this.find();
+    }
 
-  public reset() {
-    this.form.reset({
-      userId:'',
-      start:'',
-      end:''
-    });
-    this.search();
-  }
+    public reset() {
+        this.form.reset({
+            userId: '',
+            start: '',
+            end: '',
+        });
+        this.search();
+    }
 
-  public searchByUser(userId: number) {
-    this.form.controls.userId.setValue(userId.toString());
+    public searchByUser(userId: number) {
+        this.form.controls.userId.setValue(userId.toString());
 
-    this.search();
-  }
+        this.search();
+    }
 
-  private find() {
-    this.searching = true;
+    private find() {
+        this.searching = true;
 
-    this.route.queryParamMap
-      .pipe(
-        takeUntilDestroyed(this.destroyed),
-        switchMap((p) => {
-          if (p.has('page')) {
-            this.searchSvc.currentPage = Number.parseInt(p.get('page')!);
-          } else {
-            this.searchSvc.currentPage = 1;
-          }
+        this.route.queryParamMap
+            .pipe(
+                takeUntilDestroyed(this.destroyed),
+                switchMap((p) => {
+                    if (p.has('page')) {
+                        this.searchSvc.currentPage = Number.parseInt(
+                            p.get('page')!
+                        );
+                    } else {
+                        this.searchSvc.currentPage = 1;
+                    }
 
-          if (p.has('user')) {
-            this.form.controls.userId.setValue(p.get('user')!);
-          }
+                    if (p.has('user')) {
+                        this.form.controls.userId.setValue(p.get('user')!);
+                    }
 
-          return this.searchSvc.search();
-        })
-      )
-      .subscribe({
-        next: (data) => {
-          this.emails = data;
-          this.searching = false;
-        },
-        error: ()=> {
-          this.messages = isError('Unable to retrieve emails');
-          this.emails = [];
-        }
-      });
-  }
+                    return this.searchSvc.search();
+                })
+            )
+            .subscribe({
+                next: (data) => {
+                    this.emails = data;
+                    this.searching = false;
+                },
+                error: () => {
+                    this.msgsSvc.isError('Unable to retrieve emails');
+                    this.emails = [];
+                },
+            });
+    }
 }

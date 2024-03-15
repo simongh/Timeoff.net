@@ -7,6 +7,7 @@ import { FlashModel, hasErrors, isError, isSuccess } from "../../../components/f
 import { UserModel } from "../../../models/user.model";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { HttpErrorResponse } from "@angular/common/http";
+import { MessagesService } from "../../../services/messages/messages.service";
 
 @Component({
     standalone: true,
@@ -23,8 +24,6 @@ export class AddNewModalComponent implements OnInit {
         return this.teamsSvc.form;
     }
 
-    public messages = new FlashModel();
-
     @Output()
     public added = new EventEmitter();
 
@@ -32,6 +31,7 @@ export class AddNewModalComponent implements OnInit {
 
     constructor(
         private readonly teamsSvc: TeamsService,
+        private readonly msgSvc: MessagesService,
         private destroyed: DestroyRef,
     ) {}
 
@@ -56,16 +56,16 @@ export class AddNewModalComponent implements OnInit {
             .pipe(takeUntilDestroyed(this.destroyed))
             .subscribe({
                 next: () => {
-                    this.messages = isSuccess('New team added');
+                    this.msgSvc.isSuccess('New team added');
                     this.added.emit();
                     this.form.reset();
                     this.submitting = false;
                 },
                 error: (e: HttpErrorResponse) => {
                     if (e.status == 400) {
-                        this.messages = hasErrors(e.error.errors);
+                        this.msgSvc.hasErrors(e.error.errors);
                     } else {
-                        this.messages = isError('Unable to add new team');
+                        this.msgSvc.isError('Unable to add new team');
                     }
 
                     this.submitting = false;

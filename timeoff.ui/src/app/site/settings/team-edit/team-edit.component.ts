@@ -8,12 +8,6 @@ import { CommonModule } from '@angular/common';
 import { TeamsService } from '../../../services/teams/teams.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { HttpErrorResponse } from '@angular/common/http';
-import {
-  FlashModel,
-  hasErrors,
-  isError,
-  isSuccess,
-} from '../../../components/flash/flash.model';
 import { combineLatest, switchMap } from 'rxjs';
 import { MessagesService } from '../../../services/messages/messages.service';
 
@@ -43,8 +37,6 @@ export class TeamEditComponent implements OnInit {
   public users: UserModel[] = [];
 
   public allowances = new Array<number>();
-
-  public messages = new FlashModel();
 
   public id!: number;
 
@@ -101,12 +93,12 @@ export class TeamEditComponent implements OnInit {
       .pipe(takeUntilDestroyed(this.destroyed))
       .subscribe({
         next: () =>
-          (this.messages = isSuccess(`Team ${this.name} was updated`)),
+          (this.messagesSvc.isSuccess(`Team ${this.name} was updated`)),
         error: (e: HttpErrorResponse) => {
           if (e.status == 400) {
-            this.messages = hasErrors(e.error.errors);
+            this.messagesSvc.hasErrors(e.error.errors);
           } else {
-            this.messages = isError(`Unable to update team ${this.name}`);
+            this.messagesSvc.isError(`Unable to update team ${this.name}`);
           }
         },
       });
@@ -123,9 +115,9 @@ export class TeamEditComponent implements OnInit {
         },
         error: (e: HttpErrorResponse) => {
           if (e.status == 400) {
-            this.messages = hasErrors(e.error.errors);
+            this.messagesSvc.hasErrors(e.error.errors);
           } else {
-            this.messages = isError('Unable to delete the team');
+            this.messagesSvc.isError('Unable to delete the team');
           }
         },
       });

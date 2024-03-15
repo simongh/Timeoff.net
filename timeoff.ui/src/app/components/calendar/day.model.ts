@@ -1,11 +1,10 @@
-import { isSameDay, isWeekend } from "date-fns";
-import { PublicHolidayModel } from "../../services/public-holidays/public-holiday.model";
-import { formatDate } from "@angular/common";
+import { isSameDay, isWeekend } from 'date-fns';
+import { PublicHolidayModel } from '../../services/public-holidays/public-holiday.model';
 
 export class DayModel {
     public date: Date;
 
-    public classes : string = ''
+    public classes: string = '';
 
     public label: string | null = null;
 
@@ -17,10 +16,10 @@ export class DayModel {
         }
         if (isSameDay(date, new Date())) {
             this.classes += ' current_day_cell';
-            this.label = 'Today'
+            this.label = 'Today';
         }
 
-        const found = holidays.find((h)=> isSameDay(date, h.date!));
+        const found = holidays.find((h) => isSameDay(date, h.date!));
         if (!!found) {
             this.classes += ' public_holiday_cell';
             this.label = `Public Holiday: ${found.name}`;

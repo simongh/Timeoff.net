@@ -1,12 +1,11 @@
-import { Component } from "@angular/core";
-import { RouterOutlet } from "@angular/router";
+import { Component } from '@angular/core';
+import { RouterOutlet } from '@angular/router';
 
 @Component({
-    standalone:true,
+    standalone: true,
     selector: 'users-page',
     templateUrl: 'users-page.component.html',
-    imports:[RouterOutlet]
+    imports: [RouterOutlet],
 })
 export class UsersPageComponent {
-    public companyName = '';
 }

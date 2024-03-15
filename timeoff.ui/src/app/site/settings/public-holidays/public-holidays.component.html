@@ -21,7 +21,7 @@
 
 <div class="row">&nbsp;</div>
 
-<flash-message [messages]="messages"/>
+<flash-message/>
 <div class="row">
     <div class="col-xs-2">
         <a class="btn btn-default" routerLink="." [queryParams]="{year: lastYear}"><span aria-hidden="true" class="fa fa-chevron-left"></span> {{lastYear}} </a>
@@ -98,4 +98,4 @@
 
 <div class="row">&nbsp;</div>
 
-<add-new-modal [year]="currentYear" (added)="create($event)"/>
+<add-new-modal [year]="currentYear" (added)="create()"/>

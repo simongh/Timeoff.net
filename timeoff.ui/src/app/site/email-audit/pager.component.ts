@@ -1,16 +1,16 @@
-import { NgClass, NgIf } from "@angular/common";
-import { Component, Input } from "@angular/core";
-import { RouterLink } from "@angular/router";
+import { NgClass, NgIf } from '@angular/common';
+import { Component, Input } from '@angular/core';
+import { RouterLink } from '@angular/router';
 
 @Component({
     standalone: true,
     templateUrl: 'pager.component.html',
     selector: 'pager',
-    imports: [NgIf, RouterLink, NgClass]
+    imports: [NgIf, RouterLink, NgClass],
 })
 export class PagerComponent {
     @Input()
-    public totalPages! : number;
+    public totalPages!: number;
 
     @Input()
     public currentPage!: number;
@@ -20,6 +20,6 @@ export class PagerComponent {
     }
 
     public get previousPage() {
-        return this.currentPage -1;
+        return this.currentPage - 1;
     }
 }
