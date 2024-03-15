@@ -33,9 +33,9 @@ namespace Timeoff.Api
         }
 
         [HttpGet("{id:int}")]
-        public Task<IActionResult> GetAsync(int id)
+        public async Task<IActionResult> GetAsync([FromRoute] Application.UserDetails.GetDetailsCommand command)
         {
-            throw new NotImplementedException();
+            return Ok(await _mediator.Send(command));
         }
 
         [HttpPut("{id:int}")]

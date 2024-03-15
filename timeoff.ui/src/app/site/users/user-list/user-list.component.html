@@ -57,7 +57,7 @@
                     </a>
                 </td>
                 <td class="user_team"><a routerLink="/settings/teams/{{u.team.id}}">{{u.team.name}}</a></td>
-                <td>{{u.isActive | yes}}</td>
+                <td>{{u.isAdmin | yes}}</td>
                 <td class="vpp-days-remaining">{{u.availableAllowance}}</td>
                 <td class="vpp-days-used">{{u.daysUsed}}</td>
             </tr>

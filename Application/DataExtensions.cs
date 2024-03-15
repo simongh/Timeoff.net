@@ -138,15 +138,15 @@ namespace Timeoff.Application
                     IsAdmin = u.IsAdmin,
                     TeamId = u.TeamId,
                     Email = u.Email,
-                    CompanyName = u.Company.Name,
-                    DateFormat = u.Company.DateFormat,
-                    Teams = u.Company.Teams
-                    .OrderBy(d => d.Name)
-                    .Select(d => new ResultModels.ListItem
-                    {
-                        Id = d.TeamId,
-                        Value = d.Name,
-                    }),
+                    //CompanyName = u.Company.Name,
+                    //DateFormat = u.Company.DateFormat,
+                    //Teams = u.Company.Teams
+                    //.OrderBy(d => d.Name)
+                    //.Select(d => new ResultModels.ListItem
+                    //{
+                    //    Id = d.TeamId,
+                    //    Value = d.Name,
+                    //}),
                 })
                 .FirstOrDefaultAsync();
         }

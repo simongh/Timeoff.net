@@ -52,16 +52,16 @@ namespace Timeoff.Controllers
             return View();
         }
 
-        [HttpGet("edit/{id:int}")]
-        public async Task<IActionResult> EditAsync([FromRoute] Application.UserDetails.GetDetailsCommand command)
-        {
-            var vm = await _mediator.Send(command);
+        //[HttpGet("edit/{id:int}")]
+        //public async Task<IActionResult> EditAsync([FromRoute] Application.UserDetails.GetDetailsCommand command)
+        //{
+        //    var vm = await _mediator.Send(command);
 
-            //if (vm == null)
-            //    return RedirectToAction(nameof(IndexAsync));
+        //    //if (vm == null)
+        //    //    return RedirectToAction(nameof(IndexAsync));
 
-            return View(vm);
-        }
+        //    return View(vm);
+        //}
 
         [HttpGet("edit/{id:int}/absences")]
         public async Task<IActionResult> AbsencesAsync(Application.Absences.GetAbsencesCommand command)
