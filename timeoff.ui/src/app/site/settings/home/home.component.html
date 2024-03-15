@@ -2,7 +2,7 @@
 
 <p class="lead">Account main settings</p>
 
-<!-- <Partial name="_Flash" model="Model.Result" /> -->
+<flash-message/>
 
 <div class="row">&nbsp;</div>
 
@@ -120,6 +120,7 @@
                             </div>
                             <div class="form-group">
                                 <div class="col-md-offset-2">
+                                    <schedule [days]="days"/>
                                     <!-- <partial name="_ScheduleView" model="Model.Schedule.ToArray()" /> -->
                                 </div>
                             </div>

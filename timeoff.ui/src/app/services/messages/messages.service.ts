@@ -10,30 +10,33 @@ export class MessagesService {
 
     private subject = new Subject<FlashModel>();
 
-    public isSuccess(value: string) {
+    public isSuccess(value: string, store = false) {
         this.addMessage({
             isError: false,
             messages: [value],
         });
     }
 
-    public isError(value: string) {
+    public isError(value: string, store = false) {
         this.addMessage({
             isError: true,
             messages: [value],
         });
     }
 
-    public hasErrors(values: string[]) {
+    public hasErrors(values: string[], store = false) {
         this.addMessage({
             isError: true,
             messages: values,
         });
     }
 
-    public addMessage(model: FlashModel) {
+    public addMessage(model: FlashModel, store = false) {
         this.subject.next(model);
-        this.stored = model;
+
+        if (store) {
+            this.stored = model;
+        }
     }
 
     public clearStored() {

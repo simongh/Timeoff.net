@@ -16,7 +16,7 @@
 <flash-message/>
 
 <div class="col-md-3 list-group">
-    <a routerLink="/users/{{id}}" class="list-group-item" routerLinkActive="selected-item">General details</a>
+    <a routerLink="/users/{{id}}" class="list-group-item" routerLinkActive="selected-item" [routerLinkActiveOptions]="{exact:true}">General details</a>
     <a routerLink="/users/{{id}}/schedule" class="list-group-item" routerLinkActive="selected-item">Schedule</a>
     <a routerLink="/users/{{id}}/calendar" class="list-group-item" routerLinkActive="selected-item">Calendar</a>
     <a routerLink="/users/{{id}}/absences" class="list-group-item" routerLinkActive="selected-item">Absences</a>
