@@ -1,9 +1,8 @@
-<user-details [id]="id" [name]="fullName" [isActive]="userEnabled!" (deleting)="delete()">
+<user-details [id]="id" [name]="fullName" [isActive]="userEnabled!">
     <form [formGroup]="form">
 
         <div class="col-md-7">
     
-            <!-- <partial name="_Breadcrumb" /> -->
             <user-breadcrumb [name]="fullName"/>
     
             <div class="form-group">

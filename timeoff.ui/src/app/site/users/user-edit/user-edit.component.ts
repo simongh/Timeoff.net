@@ -62,7 +62,6 @@ export class UserEditComponent implements OnInit {
         private destroyed: DestroyRef,
         private readonly usersSvc: UsersService,
         private readonly msgsSvc: MessagesService,
-        private readonly router: Router,
     ) {}
 
     public ngOnInit(): void {
@@ -114,27 +113,6 @@ export class UserEditComponent implements OnInit {
                     this.submitting = false;
                 },
             });
-    }
-
-    public delete() {
-        this.submitting = true;
-        this.usersSvc.deleteUser(this.id)
-        .pipe(takeUntilDestroyed(this.destroyed))
-        .subscribe({
-            next: () => {
-                this.msgsSvc.isSuccess('Employee data removed');
-                this.submitting = false;
-
-                this.router.navigate(['users']);
-            },
-            error: (e: HttpErrorResponse) => {
-                if (e.status == 400) {
-                    this.msgsSvc.hasErrors(e.error.errors)
-                }
-                this.msgsSvc.isError('Unable to remove employee');
-                this.submitting = false;
-            }
-        });
     }
 
     public resetPassword() {

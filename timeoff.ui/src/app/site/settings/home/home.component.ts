@@ -6,10 +6,12 @@ import { getDateFormats } from './date-formats';
 import { TimezoneModel } from '../../../services/timezone.model';
 import { getTimezones } from '../../../services/timezones';
 import { SettingsService } from './settings-service';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { ColourPickerComponent } from './colour-picker/colour-picker.component';
 import { LeaveTypeModalComponent } from './leave-type-modal/leave-type-modal.component';
 import { RouterLink } from '@angular/router';
+import { FlashComponent } from '../../../components/flash/flash.component';
+import { ScheduleComponent } from '../../../components/schedule/schedule.component';
 
 @Component({
     selector: 'app-home',
@@ -23,6 +25,8 @@ import { RouterLink } from '@angular/router';
         ColourPickerComponent,
         LeaveTypeModalComponent,
         RouterLink,
+        FlashComponent,
+        ScheduleComponent,
     ],
 })
 export class HomeComponent implements OnInit {
@@ -46,6 +50,16 @@ export class HomeComponent implements OnInit {
     public get leaveTypes() {
         return this.settingsService.leaveTypes;
     }
+
+    public days: FormControl<boolean>[] = [
+        new FormControl<boolean>(true, { nonNullable: true }),
+        new FormControl<boolean>(true, { nonNullable: true }),
+        new FormControl<boolean>(true, { nonNullable: true }),
+        new FormControl<boolean>(true, { nonNullable: true }),
+        new FormControl<boolean>(true, { nonNullable: true }),
+        new FormControl<boolean>(false, { nonNullable: true }),
+        new FormControl<boolean>(false, { nonNullable: true }),
+    ];
 
     constructor(private readonly settingsService: SettingsService) {}
 

@@ -1,7 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { Component, DestroyRef, EventEmitter, Input, Output } from '@angular/core';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { FlashComponent } from '../../../components/flash/flash.component';
+import { UsersService } from '../../../services/users/users.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { MessagesService } from '../../../services/messages/messages.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
     selector: 'user-details',
@@ -23,11 +27,34 @@ export class UserDetailsComponent {
     @Output()
     public deleting = new EventEmitter();
 
-    public delete() {
-        const doit = window.confirm(`Do you really want to delete the user ${this.name}?`);
+    public submitting = false;
 
-        if (doit) {
-            this.deleting.emit();
-        }
+    constructor(
+        private destroyed: DestroyRef,
+        private readonly usersSvc: UsersService,
+        private readonly router: Router,
+        private readonly msgsSvc: MessagesService
+    ) {}
+
+    public delete() {
+        this.submitting = true;
+        this.usersSvc
+            .deleteUser(this.id)
+            .pipe(takeUntilDestroyed(this.destroyed))
+            .subscribe({
+                next: () => {
+                    this.msgsSvc.isSuccess('Employee data removed', true);
+                    this.submitting = false;
+
+                    this.router.navigate(['users']);
+                },
+                error: (e: HttpErrorResponse) => {
+                    if (e.status == 400) {
+                        this.msgsSvc.hasErrors(e.error.errors);
+                    }
+                    this.msgsSvc.isError('Unable to remove employee');
+                    this.submitting = false;
+                },
+            });
     }
 }
