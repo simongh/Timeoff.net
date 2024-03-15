@@ -39,9 +39,41 @@ namespace Timeoff.Api
         }
 
         [HttpPut("{id:int}")]
-        public Task<IActionResult> UpdateAsync(int id)
+        public async Task<IActionResult> UpdateAsync(int id, Application.UserDetails.UpdateUserCommand command)
         {
-            throw new NotImplementedException();
+            if (command == null)
+                return BadRequest();
+
+            command.Id = id;
+
+            var result = await _mediator.Send(command);
+
+            if (result.Messages?.Errors?.Any() == true)
+                return BadRequest(result.Messages);
+            else
+                return NoContent();
+        }
+
+        [HttpDelete("{id:int}")]
+        public async Task<IActionResult> DeleteAsync([FromRoute] Application.DeleteUser.DeleteUserCommand command)
+        {
+            if (command == null)
+                return BadRequest();
+
+            var result = await _mediator.Send(command);
+
+            if (result.Messages?.Errors?.Any() == true)
+                return BadRequest(result.Messages);
+            else
+                return NoContent();
+        }
+
+        [HttpPost("{id:int}/reset-password")]
+        public async Task<IActionResult> ResetPasswordAsync([FromRoute] Application.ResetPassword.ResetUserPasswordCommand command)
+        {
+            await _mediator.Send(command);
+
+            return Accepted();
         }
     }
 }

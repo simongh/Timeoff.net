@@ -20,7 +20,7 @@ namespace Timeoff.Validators
                 .NotEmpty();
 
             RuleFor(m => m.EndDate)
-                .GreaterThan(m => m.EndDate);
+                .GreaterThan(m => m.StartDate);
         }
     }
 }

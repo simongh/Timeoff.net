@@ -11,10 +11,7 @@ type UserFromGroup = ReturnType<UsersService['createUserForm']>;
 export class UsersService {
     public form: UserFromGroup;
 
-    constructor(
-        private readonly client: HttpClient,
-        private readonly fb: FormBuilder
-    ) {
+    constructor(private readonly client: HttpClient, private readonly fb: FormBuilder) {
         this.form = this.createUserForm();
     }
 
@@ -40,6 +37,18 @@ export class UsersService {
         return this.client.get<UserModel>(`/api/users/${id}`);
     }
 
+    public updateUser(id: number) {
+        return this.client.put<void>(`/api/users/${id}`, this.form.value);
+    }
+
+    public deleteUser(id: number) {
+        return this.client.delete<void>(`/api/users/${id}`);
+    }
+
+    public resetPassword(id: number) {
+        return this.client.post<void>(`/api/users/${id}/reset-password`, {});
+    }
+
     private createUserForm() {
         const form = this.fb.group(
             {
@@ -51,7 +60,7 @@ export class UsersService {
                 autoApprove: [false],
                 startDate: [null as dateString | null, Validators.required],
                 endDate: [null as dateString | null],
-                isActive: [true]
+                isActive: [true],
             },
             {
                 validators: [],
