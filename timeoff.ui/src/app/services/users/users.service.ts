@@ -36,6 +36,10 @@ export class UsersService {
         return this.client.post<void>('/api/users', this.form.value);
     }
 
+    public getUser(id: number) {
+        return this.client.get<UserModel>(`/api/users/${id}`);
+    }
+
     private createUserForm() {
         const form = this.fb.group(
             {
@@ -47,6 +51,7 @@ export class UsersService {
                 autoApprove: [false],
                 startDate: [null as dateString | null, Validators.required],
                 endDate: [null as dateString | null],
+                isActive: [true]
             },
             {
                 validators: [],
