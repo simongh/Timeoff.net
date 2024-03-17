@@ -6,7 +6,7 @@ import { getDateFormats } from './date-formats';
 import { TimezoneModel } from '../../../services/timezone.model';
 import { getTimezones } from '../../../services/timezones';
 import { SettingsService } from './settings-service';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { FormArray, FormControl, ReactiveFormsModule } from '@angular/forms';
 import { ColourPickerComponent } from './colour-picker/colour-picker.component';
 import { LeaveTypeModalComponent } from './leave-type-modal/leave-type-modal.component';
 import { RouterLink } from '@angular/router';
@@ -51,15 +51,15 @@ export class HomeComponent implements OnInit {
         return this.settingsService.leaveTypes;
     }
 
-    public days: FormControl<boolean>[] = [
-        new FormControl<boolean>(true, { nonNullable: true }),
-        new FormControl<boolean>(true, { nonNullable: true }),
-        new FormControl<boolean>(true, { nonNullable: true }),
-        new FormControl<boolean>(true, { nonNullable: true }),
-        new FormControl<boolean>(true, { nonNullable: true }),
-        new FormControl<boolean>(false, { nonNullable: true }),
-        new FormControl<boolean>(false, { nonNullable: true }),
-    ];
+    public days: FormArray<FormControl<boolean| null>> = new FormArray([
+        new FormControl<boolean>(true),
+        new FormControl<boolean>(true),
+        new FormControl<boolean>(true),
+        new FormControl<boolean>(true),
+        new FormControl<boolean>(true),
+        new FormControl<boolean>(false),
+        new FormControl<boolean>(false),
+    ]);
 
     constructor(private readonly settingsService: SettingsService) {}
 

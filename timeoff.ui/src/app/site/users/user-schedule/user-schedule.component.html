@@ -1,51 +1,34 @@
-<user-details [id]="id" [name]="''" [isActive]="true">
+<user-details [id]="id" [name]="fullName" [isActive]="userEnabled">
     <div class="col-md-9">
 
-    <form method="POST" asp-controller="users" asp-action="setschedule" asp-route-id="@Model.Id" id="company_schedule_form">
-        <!-- <input type="hidden" @Html.NameFor(m=>m.Id) value="@Model.Id"> -->
+        <form [formGroup]="form" id="company_schedule_form">
 
-        <!-- <partial name="_Breadcrumb" /> -->
-        <user-breadcrumb/>
+            <user-breadcrumb [name]="fullName"/>
 
-        <div class="form-group">
-            <label for="" class="control-label">Schedule</label>
+            <div class="form-group">
+                <label for="" class="control-label">Schedule</label>
 
-            <p class="help-block">
-                <!-- @if (Model.UserSpecific)
-                {
-                    @:Current employee has <strong data-vpp="declare-user-specific-schedule">custom</strong> schedule.
-                    
-                }
-                else
-                {
-                    <text>
-                    Current employee uses <strong><a data-vpp="link-to-company-schedule" asp-controller="settings" asp-action="index">company wide</a></strong> schedule.
-                    </text>
-                } -->
-            </p>
+                <p *ngIf="form.controls.scheduleOverride.value" class="help-block">
+                    Current employee has <strong data-vpp="declare-user-specific-schedule">custom</strong> schedule.
+                </p>
+                <p *ngIf="!form.controls.scheduleOverride.value" class="help-block">
+                    Current employee uses <strong><a data-vpp="link-to-company-schedule" routerLink="/settings">company wide</a></strong> schedule.
+                </p>
+                <div class="input-group">
+                    <schedule [days]="this.form.controls.schedule.controls"/>
+                </div>
 
-            <div class="input-group">
-                <!-- <partial name="_ScheduleView" model="Model.Schedule"/> -->
             </div>
-
-        </div>
-        <div class="form-group">
-            <div class="pull-right">
-                <!-- @if(Model.UserSpecific)
-                {
-                    <button type="submit" name="action" class="btn btn-default" value="reset">Move employee to company wide schedule</button>
-                    <button type="submit" class="btn btn-success">Save employee specific schedule</button>
-                }
-                else
-                {
-                <button type="submit" class="btn btn-success">Override company wide schedule</button>
-                } -->
+            <div class="form-group">
+                <div *ngIf="form.controls.scheduleOverride.value" class="pull-right">
+                    <button type="button" (click)="reset()" [disabled]="submitting" name="action" class="btn btn-default" value="reset">Move employee to company wide schedule</button>
+                    <button type="button" (click)="update()" [disabled]="submitting" class="btn btn-success">Save employee specific schedule</button>
+                </div>
+                <div *ngIf="!form.controls.scheduleOverride.value" class="pull-right">
+                    <button type="button" (click)="update()" [disabled]="submitting" class="btn btn-success">Override company wide schedule</button>
+                </div>
             </div>
-        </div>
-    </form>
+        </form>
 
-</div>
+    </div>
 </user-details>
-<!-- @section Messages {
-    <partial name="_Flash" model="Model.Messages" />
-} -->

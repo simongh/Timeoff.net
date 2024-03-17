@@ -1,4 +1,5 @@
 import { dateString } from '../../components/types';
+import { ScheduleModel } from '../../models/schedule.model';
 import { TeamModel } from '../../models/team.model';
 
 export interface UserModel {
@@ -15,5 +16,7 @@ export interface UserModel {
     firstName:  string;
     lastName: string;
     email: string;
-    autoApprove: boolean
+    autoApprove: boolean;
+    schedule: ScheduleModel;
+    scheduleOverride: boolean;
 }

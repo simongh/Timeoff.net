@@ -1,11 +1,10 @@
 import { Component, DestroyRef, OnInit } from '@angular/core';
 import { UserDetailsComponent } from '../user-details/user-details.component';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { UserBreadcrumbComponent } from '../user-breadcrumb/user-breadcrumb.component';
 import { UsersService } from '../../../services/users/users.service';
 import { combineLatest, switchMap } from 'rxjs';
-import { endOfToday, formatDate, isAfter, parseISO } from 'date-fns';
 import { TeamModel } from '../../../models/team.model';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -40,17 +39,11 @@ export class UserEditComponent implements OnInit {
     }
 
     public get fullName() {
-        return `${this.form.controls.firstName.value} ${this.form.controls.lastName.value}`;
+        return this.usersSvc.fullName;
     }
 
     public get userEnabled() {
-        const ending = this.form.controls.endDate.value;
-        const isActive = this.form.controls.isActive.value;
-        if (!!ending) {
-            return isAfter(parseISO(ending), endOfToday()) && isActive;
-        } else {
-            return isActive;
-        }
+        return this.usersSvc.userEnabled;
     }
 
     public teams: TeamModel[] = [];
@@ -78,17 +71,7 @@ export class UserEditComponent implements OnInit {
         ]).subscribe(([user, teams]) => {
             this.teams = teams;
 
-            this.form.setValue({
-                firstName: user.firstName,
-                lastName: user.lastName,
-                email: user.email,
-                isAdmin: user.isAdmin,
-                autoApprove: user.autoApprove,
-                team: user.teamId,
-                startDate: formatDate(user.startDate, 'yyyy-MM-dd'),
-                endDate: user.endDate ? formatDate(user.endDate, 'yyyy-MM-dd') : null,
-                isActive: user.isActive,
-            });
+            this.usersSvc.fillForm(user);
         });
     }
 

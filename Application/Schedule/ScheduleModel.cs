@@ -1,6 +1,6 @@
 ﻿namespace Timeoff.Application.Schedule
 {
-    public abstract record ScheduleModel
+    public record ScheduleModel
     {
         public bool Monday { get; init; }
         public bool Tuesday { get; init; }

@@ -75,5 +75,17 @@ namespace Timeoff.Api
 
             return Accepted();
         }
+
+        [HttpPut("{id:int}/schedule")]
+        public async Task<IActionResult> UpdateSchedule(int id, Application.Schedule.ScheduleModel? schedule)
+        {
+            var result = await _mediator.Send(new Application.Schedule.UpdateUserScheduleCommand
+            {
+                Id = id,
+                Schedule = schedule
+            });
+
+            return Ok(result);
+        }
     }
 }
