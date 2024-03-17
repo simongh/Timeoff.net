@@ -3,14 +3,14 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Timeoff.Application.Schedule
 {
-    public record UpdateUserScheduleCommand : ScheduleModel, IRequest<ScheduleViewModel>
+    public record UpdateUserScheduleCommand : IRequest<ScheduleModel>
     {
         public int Id { get; set; }
 
-        public string? Action { get; init; }
+        public ScheduleModel? Schedule { get; set; }
     }
 
-    internal class UpdateUserScheduleCommandHandler : IRequestHandler<UpdateUserScheduleCommand, ScheduleViewModel>
+    internal class UpdateUserScheduleCommandHandler : IRequestHandler<UpdateUserScheduleCommand, ScheduleModel>
     {
         private readonly IDataContext _dataContext;
         private readonly Services.ICurrentUserService _currentUserService;
@@ -23,7 +23,7 @@ namespace Timeoff.Application.Schedule
             _currentUserService = currentUserService;
         }
 
-        public async Task<ScheduleViewModel> Handle(UpdateUserScheduleCommand request, CancellationToken cancellationToken)
+        public async Task<ScheduleModel> Handle(UpdateUserScheduleCommand request, CancellationToken cancellationToken)
         {
             var user = await _dataContext.Users
                 .Where(u => u.UserId == request.Id && u.CompanyId == _currentUserService.CompanyId)
@@ -38,7 +38,7 @@ namespace Timeoff.Application.Schedule
                 .Where(s => s.UserId == request.Id)
                 .FirstOrDefaultAsync();
 
-            if (request.Action == "reset")
+            if (request.Schedule == null)
             {
                 if (schedule != null)
                 {
@@ -56,15 +56,12 @@ namespace Timeoff.Application.Schedule
                     _dataContext.Schedules.Add(schedule);
                 }
 
-                schedule.UpdateSchedule(request);
+                schedule.UpdateSchedule(request.Schedule);
             }
 
             await _dataContext.SaveChangesAsync();
 
-            var result = await _dataContext.GetUserScheduleAsync(_currentUserService.CompanyId, request.Id);
-            result.Messages = ResultModels.FlashResult.Success("Schedule updated");
-
-            return result;
+            return await _dataContext.GetUserScheduleModelAsync(_currentUserService.CompanyId, request.Id);
         }
     }
 }
