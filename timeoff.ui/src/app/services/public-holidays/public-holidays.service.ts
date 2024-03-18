@@ -1,11 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { PublicHolidayModel } from './public-holiday.model';
-import {
-    FormBuilder,
-    FormControl,
-    Validators,
-} from '@angular/forms';
+import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { yearValidator } from '../../components/validators';
 import { formatDate } from '@angular/common';
 
@@ -22,17 +18,12 @@ export class PublicHolidaysService {
 
     public addForm!: HolidayFormGroup;
 
-    constructor(
-        private readonly client: HttpClient,
-        private readonly fb: FormBuilder
-    ) {
+    constructor(private readonly client: HttpClient, private readonly fb: FormBuilder) {
         this.setAddForm(0);
     }
 
     public get(year: number) {
-        return this.client.get<PublicHolidayModel[]>(
-            `/api/public-holidays/${year}`
-        );
+        return this.client.get<PublicHolidayModel[]>(`/api/public-holidays/${year}`);
     }
 
     public setAddForm(year: number) {
@@ -50,10 +41,7 @@ export class PublicHolidaysService {
         return this.fb.group({
             id: data.id,
             name: [data.name, Validators.required],
-            date: [
-                data.date ? formatDate(data.date, 'yyyy-MM-dd', 'en') : null,
-                yearValidator(year),
-            ],
+            date: [data.date ? formatDate(data.date, 'yyyy-MM-dd', 'en') : null, yearValidator(year)],
         });
     }
 

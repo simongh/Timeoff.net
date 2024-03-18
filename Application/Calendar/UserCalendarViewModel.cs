@@ -1,6 +1,4 @@
-﻿using Timeoff.ResultModels;
-
-namespace Timeoff.Application.Calendar
+﻿namespace Timeoff.Application.Calendar
 {
     public record UserCalendarViewModel : Types.UserModel
     {
@@ -10,10 +8,12 @@ namespace Timeoff.Application.Calendar
 
         public int PreviousYear => CurrentYear - 1;
 
-        public AllowanceSummaryResult Summary { get; init; } = null!;
+        public ResultModels.AllowanceSummaryResult Summary { get; init; } = null!;
 
-        public CalendarResult Calendar { get; init; } = null!;
+        public ResultModels.CalendarResult Calendar { get; init; } = null!;
 
-        public IEnumerable<LeaveRequestedResult> LeaveRequested { get; init; } = null!;
+        public IEnumerable<ResultModels.PublicHolidayResult> Holidays => Calendar.Holidays;
+
+        public IEnumerable<ResultModels.LeaveRequestedResult> LeaveRequested { get; init; } = null!;
     }
 }

@@ -93,12 +93,12 @@ namespace Timeoff.Controllers
         //    return View("Schedule", vm);
         //}
 
-        [HttpGet("edit/{id:int}/calendar")]
-        public async Task<IActionResult> CalendarAsync(Application.Calendar.GetUserCalendarCommand command)
-        {
-            var vm = await _mediator.Send(command);
-            return View(vm);
-        }
+        //[HttpGet("edit/{id:int}/calendar")]
+        //public async Task<IActionResult> CalendarAsync(Application.Calendar.GetUserCalendarCommand command)
+        //{
+        //    var vm = await _mediator.Send(command);
+        //    return View(vm);
+        //}
 
         //[HttpPost("edit/{id:int}")]
         //public async Task<IActionResult> UpdateAsync(Application.UserDetails.UpdateUserCommand command)
