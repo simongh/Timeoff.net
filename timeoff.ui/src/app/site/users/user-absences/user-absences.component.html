@@ -1,6 +1,6 @@
 <user-details [id]="id" [isActive]="isActive" [name]="name">
 <div class="col-md-9">
-    <form method="POST">
+    <form method="POST" [formGroup]="form">
 
         <user-breadcrumb [name]="name"/>
 
@@ -52,7 +52,7 @@
         <div class="form-group">
             <label for="carried_over_allowance" class="control-label">Allowance carried over from previous year</label>
             <div class="input-group col-md-4">
-                <input class="form-control" readonly id="carried_over_allowance" type="number" step="0.5" name="carried_over_allowance" value="{{summary.carryOver}}" aria-describedby="carried_over_allowance_help">
+                <input class="form-control" formControlName="carryOver" readonly id="carried_over_allowance" type="number" step="0.5" aria-describedby="carried_over_allowance_help">
                 <span class="input-group-addon">working days</span>
             </div>
             <div id="carried_over_allowance_help" class="help-block">
@@ -64,7 +64,7 @@
         <div class="form-group">
             <label for="adjustment" class="control-label">Allowance adjustment in current year</label>
             <div class="input-group col-md-4">
-                <input class="form-control" id="adjustment" type="number" step="0.5" name="adjustment" value="{{summary.adjustment}}" aria-describedby="adjustment_help">
+                <input class="form-control" formControlName="adjustment" id="adjustment" type="number" step="0.5" aria-describedby="adjustment_help">
                 <span class="input-group-addon">working days</span>
             </div>
             <div id="adjustment_help" class="help-block">
@@ -76,12 +76,20 @@
 
         <div class="form-group">
             <div class="col-md-12">
-                <button id="save_changes_btn" type="submit" class="btn btn-success pull-right single-click">Save changes</button>
+                <button id="save_changes_btn" (click)="save()" type="button" [disabled]="submitting" class="btn btn-success pull-right single-click">Save changes</button>
             </div>
         </div>
     </form>
 
     <div class="main-row_header">&nbsp;</div>
     <!-- <partial name="..\Request\_UserRequests" model="Model.LeaveRequested" /> -->
+    <ng-container *ngFor="let y of groupedRequests">
+        <h2>{{y[0]}}</h2>
+
+        <requests-list [requests]="y[1]"/>
+        
+        <p><em>Days would be deducted from allowance:</em> <!--<span>{{ this.total_deduction }}</span>--></p>
+        <div class="main-row_header">&nbsp;</div>
+    </ng-container>
 </div>
 </user-details>

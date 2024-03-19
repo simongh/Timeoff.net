@@ -25,11 +25,11 @@
     </div>
 
     <div class="col-md-3 secondary-leave-type-statistics hidden-xs">
-        <!-- <partial name="_AllowanceBreakdown" model="Model.AllowanceSummary" /> -->
+        <allowance-breakdown [summary]="allowanceSummary"/>
     </div>
 
     <div class="col-md-3 secondary-leave-type-statistics hidden-xs">
-        <!-- <partial name="_LeaveSummary" model="Model.AllowanceSummary"/> -->
+        <leave-summary/>
     </div>
 
     <div class="col-md-3 secondary-leave-type-statistics hidden-xs">
@@ -59,7 +59,7 @@
     </div>
     <div class="col-xs-8 calendar-section-caption">
        
-        <strong *ngIf="showFullYear">January - December</strong>
+        <strong *ngIf="showFullYear">January - December {{year}}</strong>
         <strong *ngIf="!showFullYear">Upcoming Months</strong>
         &nbsp;
 
@@ -74,7 +74,7 @@
 <div class="row">&nbsp;</div>
 
 <div class="row clearfix">
-    <calendar [start]="start" [monthCount]="showFullYear ? 12 : 3" [monthFormat]="showFullYear ? 'MMMM' : 'MMM, yyyy'"/>
+    <calendar [start]="start" [monthCount]="showFullYear ? 12 : 4" [monthFormat]="showFullYear ? 'MMMM' : 'MMM, yyyy'"/>
     <!-- @for (int i = 0; i < Model.Calendar.Months; i++)
     {
     <div class="col-md-3 month_container">

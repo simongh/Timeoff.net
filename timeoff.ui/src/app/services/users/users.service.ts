@@ -7,12 +7,19 @@ import { dateString } from '../../components/types';
 import { endOfToday, formatDate, isAfter, parseISO } from 'date-fns';
 import { ScheduleModel } from '../../models/schedule.model';
 import { WeekDay } from '@angular/common';
+import { UserAbsencesModel } from './user-absences.model';
+import { LeaveSummary } from '../calendar/leave-summary.model';
+import { AllowanceSummaryModel } from '../calendar/allowance-summary.model';
 
 type UserFromGroup = ReturnType<UsersService['createUserForm']>;
+
+type AdjustmentFormGroup = ReturnType<UsersService['createAdjustmentForm']>;
 
 @Injectable()
 export class UsersService {
     public form: UserFromGroup;
+
+    public adjustmentForm: AdjustmentFormGroup;
 
     public get fullName() {
         return `${this.form.controls.firstName.value} ${this.form.controls.lastName.value}`;
@@ -31,6 +38,7 @@ export class UsersService {
 
     constructor(private readonly client: HttpClient, private readonly fb: FormBuilder) {
         this.form = this.createUserForm();
+        this.adjustmentForm = this.createAdjustmentForm();
     }
 
     public getTeams() {
@@ -83,6 +91,14 @@ export class UsersService {
         return this.updateUserSchedule(id, null);
     }
 
+    public getAbsences(id: number) {
+        return this.client.get<UserAbsencesModel>(`/api/users/${id}/absences`);
+    }
+
+    public updateAdjustments(id: number) {
+        return this.client.put<void>(`/api/users/${id}/adjustments`,this.adjustmentForm.value);
+    }
+
     public fillForm(model: UserModel) {
         this.form.setValue({
             firstName: model.firstName,
@@ -105,6 +121,15 @@ export class UsersService {
         this.form.controls.schedule.clear();
 
         Object.values(schedule).map((s) => this.form.controls.schedule.push(this.fb.control(s, { nonNullable: true })));
+    }
+
+    public fillAdjustments(model: AllowanceSummaryModel) {
+        this.adjustmentForm.setValue({
+            carryOver: model.carryOver,
+            adjustment: model.adjustment
+        });
+
+        this.adjustmentForm.markAsUntouched();
     }
 
     private createUserForm() {
@@ -132,5 +157,14 @@ export class UsersService {
 
     private updateUserSchedule(id: number, model: ScheduleModel | null) {
         return this.client.put<ScheduleModel>(`/api/users/${id}/schedule`, model);
+    }
+
+    private createAdjustmentForm() {
+        const form = this.fb.group({
+            carryOver: [0],
+            adjustment: [0]
+        });
+
+        return form;
     }
 }
