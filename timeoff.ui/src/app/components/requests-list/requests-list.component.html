@@ -1,0 +1,84 @@
+<div class="row">
+    <div *ngIf="requests.length == 0" class="col-md-12 text-muted">
+        There are no leave requests yet.
+    </div>
+    <div *ngIf="requests.length > 0" class="col-md-12">
+        <p class="visible-xs-block"><em class="text-muted">Scroll table horizontally</em></p>
+        <div class="table-responsive">
+            <table class="table table-hover user-requests-table">
+                <thead>
+                    <tr>
+                        <th>Dates (from <i class="fa fa-long-arrow-right"></i> to)</th>
+                        <th>Type</th>
+                        <th>Deducted</th>
+                        <th>Approved by</th>
+                        <th></th>
+                        <th class="col-xs-2">Comment</th>
+                        <th><span class="pull-right">Status</span></th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr *ngFor="let r of requests" class="leave-request-row">
+                        <td data-tom-leave-dates="1">
+                            <a class="leave-details-summary-trigger" [attr.data-leave-id]="r.id" href="#">
+                                {{r.startDate | date: dateFormat}} ({{r.startPart | datePart}})
+                                <i class="fa fa-long-arrow-right"></i>
+                                {{r.endDate | date: dateFormat}} ({{r.endPart | datePart}})
+                            </a>
+                        </td>
+                        <td>
+                            {{r.type}}
+                            <ng-container *ngIf="r.status == 'PendingRevoke'">
+                                <br/>
+                                (pended revoke)
+                            </ng-container>
+                        </td>
+                        <td>{{r.days}}</td>
+                        <td class="user-request-table-approver">{{r.approver.name}}</td>
+                        <td>
+                            <button type="button" *ngIf="r.status == 'PendingRevoke'" class="pull-right btn btn-default btn-xs revoke-btn single-click" title="Revoke leave request. Subject of approval."><i class="fa fa-trash"></i> Revoke</button>
+                            <button type="submit" *ngIf="r.status != 'PendingRevoke'" class="pull-right btn btn-default btn-xs revoke-btn single-click" title="Cancel leave request" value="cancel"><i class="fa fa-trash"></i> Cancel</button>
+                            <!-- @if (item.Status == Timeoff.LeaveStatus.PendingRevoke)
+                            {
+                                <form method="post" asp-controller="Request" asp-action="Revoke">
+                                    <input type="hidden" name="id" value="@item.Id">
+                                </form>
+                            }
+                            else
+                            {
+
+                                <form method="post" asp-controller="Request" asp-action="Cancel">
+                                    <input type="hidden" value="@item.Id" name="id">
+                                </form>
+                            } -->
+                        </td>
+                        <td>{{r.comment}}</td>
+                        <td>
+                            <span class="pull-right leave-request-row-status">{{r.status}}</span>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+</div>
+
+<!-- @functions {
+    public void Dates(Timeoff.ResultModels.LeaveRequestedResult item)
+    {
+        @item.StartDate.ToString(item.DateFormat) @Part(item.StartPart)
+        <i class="fa fa-long-arrow-right"></i>
+        @item.EndDate.ToString(item.DateFormat) @Part(item.EndPart)
+    }
+
+    public string Part(Timeoff.LeavePart part)
+    {
+        return part switch
+        {
+            Timeoff.LeavePart.Morning => "(morning)",
+            Timeoff.LeavePart.Afternoon => "(afternoon)",
+            _ => ""
+        };
+    }
+} -->
