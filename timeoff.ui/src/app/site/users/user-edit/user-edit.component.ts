@@ -1,22 +1,23 @@
 import { Component, DestroyRef, OnInit } from '@angular/core';
-import { UserDetailsComponent } from '../user-details/user-details.component';
-import { ActivatedRoute, RouterLink } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { UserBreadcrumbComponent } from '../user-breadcrumb/user-breadcrumb.component';
-import { UsersService } from '../../../services/users/users.service';
-import { combineLatest, switchMap } from 'rxjs';
-import { TeamModel } from '../../../models/team.model';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { HttpErrorResponse } from '@angular/common/http';
+import { switchMap } from 'rxjs';
+import { UserDetailsComponent } from '../user-details/user-details.component';
+import { UserBreadcrumbComponent } from '../user-breadcrumb/user-breadcrumb.component';
+import { UsersService } from '../../../services/users/users.service';
 import { DatePickerDirective } from '../../../components/date-picker.directive';
 import { MessagesService } from '../../../services/messages/messages.service';
-import { HttpErrorResponse } from '@angular/common/http';
+import { TeamSelectComponent } from '../../../components/team-select/team-select.component';
 
 @Component({
     selector: 'user-edit',
     standalone: true,
     templateUrl: './user-edit.component.html',
     styleUrl: './user-edit.component.sass',
+    providers: [UsersService],
     imports: [
         UserDetailsComponent,
         RouterLink,
@@ -24,8 +25,8 @@ import { HttpErrorResponse } from '@angular/common/http';
         ReactiveFormsModule,
         CommonModule,
         DatePickerDirective,
+        TeamSelectComponent,
     ],
-    providers: [UsersService],
 })
 export class UserEditComponent implements OnInit {
     public companyName = '';
@@ -46,33 +47,28 @@ export class UserEditComponent implements OnInit {
         return this.usersSvc.userEnabled;
     }
 
-    public teams: TeamModel[] = [];
-
     public submitting = false;
 
     constructor(
         private readonly route: ActivatedRoute,
         private destroyed: DestroyRef,
         private readonly usersSvc: UsersService,
-        private readonly msgsSvc: MessagesService,
+        private readonly msgsSvc: MessagesService
     ) {}
 
     public ngOnInit(): void {
-        combineLatest([
-            this.route.paramMap.pipe(
+        this.route.paramMap
+            .pipe(
                 takeUntilDestroyed(this.destroyed),
                 switchMap((p) => {
                     this.id = Number.parseInt(p.get('id')!);
 
                     return this.usersSvc.getUser(this.id);
                 })
-            ),
-            this.usersSvc.getTeams(),
-        ]).subscribe(([user, teams]) => {
-            this.teams = teams;
-
-            this.usersSvc.fillForm(user);
-        });
+            )
+            .subscribe((user) => {
+                this.usersSvc.fillForm(user);
+            });
     }
 
     public save() {
@@ -84,7 +80,7 @@ export class UserEditComponent implements OnInit {
             .subscribe({
                 next: () => {
                     this.submitting = false;
-                    this.msgsSvc.isSuccess(`Details for {request.Name} were updated`);
+                    this.msgsSvc.isSuccess(`Details for ${this.fullName} were updated`);
                 },
                 error: (e: HttpErrorResponse) => {
                     if (e.status == 400) {
@@ -101,17 +97,18 @@ export class UserEditComponent implements OnInit {
     public resetPassword() {
         this.submitting = true;
 
-        this.usersSvc.resetPassword(this.id)
-        .pipe(takeUntilDestroyed(this.destroyed))
-        .subscribe({
-            next: () => {
-                this.submitting = false;
-                this.msgsSvc.isSuccess('Password reset');
-            },
-            error: () => {
-                this.msgsSvc.isError('Unable to reset password');
-                this.submitting = false;
-            }
-        })
+        this.usersSvc
+            .resetPassword(this.id)
+            .pipe(takeUntilDestroyed(this.destroyed))
+            .subscribe({
+                next: () => {
+                    this.submitting = false;
+                    this.msgsSvc.isSuccess('Password reset');
+                },
+                error: () => {
+                    this.msgsSvc.isError('Unable to reset password');
+                    this.submitting = false;
+                },
+            });
     }
 }

@@ -1,6 +1,6 @@
 import { dateString } from '../../components/types';
 import { ScheduleModel } from '../../models/schedule.model';
-import { TeamModel } from '../../models/team.model';
+import { TeamModel } from '../company/team.model';
 
 export interface UserModel {
     id: number;
@@ -13,7 +13,7 @@ export interface UserModel {
     isActive: boolean;
     startDate: dateString;
     endDate: dateString;
-    firstName:  string;
+    firstName: string;
     lastName: string;
     email: string;
     autoApprove: boolean;

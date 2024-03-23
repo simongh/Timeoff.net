@@ -1,25 +1,24 @@
 import { Component, DestroyRef, OnInit } from '@angular/core';
-import { FlashComponent } from '../components/flash/flash.component';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { RegisterService } from './register.service';
+import { HttpErrorResponse } from '@angular/common/http';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { combineLatest } from 'rxjs';
+import { FlashComponent } from '../components/flash/flash.component';
+import { RegisterService } from './register.service';
 import { compareValidator, listValidator } from '../components/validators';
 import { RegisterModel } from './register.model';
 import { ValidatorMessageComponent } from '../components/validator-message/validator-message.component';
-import { HttpErrorResponse } from '@angular/common/http';
 import { MessagesService } from '../services/messages/messages.service';
+import { TimeZoneModel } from '../services/company/time-zone.model';
+import { Country } from '../services/company/country.model';
+import { CompanyService } from '../services/company/company.service';
 
 @Component({
     standalone: true,
     templateUrl: 'register.component.html',
     providers: [RegisterService],
-    imports: [
-        FlashComponent,
-        ReactiveFormsModule,
-        CommonModule,
-        ValidatorMessageComponent,
-    ],
+    imports: [FlashComponent, ReactiveFormsModule, CommonModule, ValidatorMessageComponent],
 })
 export class RegisterComponent implements OnInit {
     public registerForm = this.fb.group(
@@ -38,42 +37,41 @@ export class RegisterComponent implements OnInit {
         }
     );
 
-    public countries!: {
-        code: string;
-        name: string;
-    }[];
+    public countries!: Country[];
 
-    public timezones!: {
-        name: string;
-        description: string;
-    }[];
+    public timezones!: TimeZoneModel[];
 
     public submitting = false;
 
     constructor(
         private readonly fb: FormBuilder,
         private readonly registerSvc: RegisterService,
+        private readonly companySvc: CompanyService,
         private readonly msgsSvc: MessagesService,
         private destroyed: DestroyRef
     ) {
-        ({ countries: this.countries, timezones: this.timezones } =
-            this.registerSvc.getOptions());
+        ({ countries: this.countries, timezones: this.timezones } = this.registerSvc.getOptions());
     }
 
     public ngOnInit(): void {
-        this.registerForm.controls.country.addValidators(
-            listValidator(this.countries.map((c) => c.code))
-        );
-        this.registerForm.controls.timezone.addValidators(
-            listValidator(this.timezones.map((t) => t.name))
-        );
+        combineLatest([this.companySvc.countries(), this.companySvc.timeZones()])
+            .pipe(takeUntilDestroyed(this.destroyed))
+            .subscribe(([countries, timezones]) => {
+                this.countries = countries;
+                this.timezones = timezones;
 
-        this.registerForm.controls.timezone.setValue(this.timezones[0].name);
+                this.registerForm.controls.country.addValidators(listValidator(this.countries.map((c) => c.code)));
+                this.registerForm.controls.timezone.addValidators(listValidator(this.timezones.map((t) => t.name)));
+
+                this.registerForm.controls.timezone.setValue(this.timezones[0].name);
+            });
     }
 
     public register() {
         this.registerForm.markAllAsTouched();
-        if (this.registerForm.invalid) return;
+        if (this.registerForm.invalid) {
+            return;
+        }
 
         this.submitting = true;
         this.registerSvc

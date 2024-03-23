@@ -1,18 +1,29 @@
 import { Component, DestroyRef, OnInit } from '@angular/core';
-import { FlashComponent } from '../../components/flash/flash.component';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, RouterLink } from '@angular/router';
-import { CalendarComponent } from '../../components/calendar/calendar.component';
-import { startOfMonth, startOfYear } from 'date-fns';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ActivatedRoute, RouterLink } from '@angular/router';
+import { switchMap } from 'rxjs';
+import { startOfMonth, startOfYear } from 'date-fns';
+import { FlashComponent } from '../../components/flash/flash.component';
+import { CalendarComponent } from '../../components/calendar/calendar.component';
 import { AllowanceSummaryModel } from '../../services/calendar/allowance-summary.model';
-import { AllowanceBreakdownComponent } from "../../components/allowance-breakdown/allowance-breakdown.component";
-import { LeaveSummaryComponent } from "../../components/leave-summary/leave-summary.component";
+import { AllowanceBreakdownComponent } from '../../components/allowance-breakdown/allowance-breakdown.component';
+import { LeaveSummaryComponent } from '../../components/leave-summary/leave-summary.component';
+import { CalendarService } from '../../services/calendar/calendar.service';
+import { PublicHolidayModel } from '../../services/public-holidays/public-holiday.model';
 
 @Component({
     standalone: true,
     templateUrl: 'home.component.html',
-    imports: [FlashComponent, CommonModule, RouterLink, CalendarComponent, AllowanceBreakdownComponent, LeaveSummaryComponent]
+    imports: [
+        FlashComponent,
+        CommonModule,
+        RouterLink,
+        CalendarComponent,
+        AllowanceBreakdownComponent,
+        LeaveSummaryComponent,
+    ],
+    providers: [CalendarService],
 })
 export class HomeComponent implements OnInit {
     public name: string = '';
@@ -31,15 +42,9 @@ export class HomeComponent implements OnInit {
 
     public showFullYear: boolean = false;
 
-    public allowanceSummary = {
-        total: 0,
-        remaining: 0,
-        allowance: 0,
-        carryOver: 0,
-        adjustment: 0,
-        employmentRangeAdjustment: 0,
-        used: 0,
-    } as AllowanceSummaryModel;
+    public allowanceSummary = {} as AllowanceSummaryModel;
+
+    public holidays: PublicHolidayModel[] = [];
 
     public managerName: string = 'manager';
 
@@ -51,21 +56,36 @@ export class HomeComponent implements OnInit {
 
     public start!: Date;
 
-    constructor(private readonly route: ActivatedRoute, private readonly destroyed: DestroyRef) {}
+    constructor(
+        private readonly route: ActivatedRoute,
+        private readonly destroyed: DestroyRef,
+        private readonly calendarSvc: CalendarService
+    ) {}
 
     public ngOnInit(): void {
-        this.route.queryParamMap.pipe(takeUntilDestroyed(this.destroyed)).subscribe((p) => {
-            this.showFullYear = p.has('showFullYear');
+        this.route.queryParamMap
+            .pipe(
+                takeUntilDestroyed(this.destroyed),
+                switchMap((p) => {
+                    this.showFullYear = p.has('showFullYear');
 
-            if (this.showFullYear) {
-                if (p.has('year')) {
-                    this.start = startOfYear(new Date(Number.parseInt(p.get('year')!), 0, 1));
-                } else {
-                    this.start = startOfYear(new Date());
-                }
-            } else {
-                this.start = startOfMonth(new Date());
-            }
-        });
+                    if (this.showFullYear) {
+                        if (p.has('year')) {
+                            this.start = startOfYear(new Date(Number.parseInt(p.get('year')!), 0, 1));
+                        } else {
+                            this.start = startOfYear(new Date());
+                        }
+                    } else {
+                        this.start = startOfMonth(new Date());
+                    }
+
+                    return this.calendarSvc.get(this.year);
+                })
+            )
+            .subscribe((calendar) => {
+                this.allowanceSummary = calendar.summary;
+                this.holidays = calendar.holidays;
+                this.name = `${calendar.firstName} ${calendar.lastName}`;
+            });
     }
 }

@@ -1,8 +1,8 @@
 import { Component, DestroyRef } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { FlashComponent } from '../components/flash/flash.component';
 import { NgIf } from '@angular/common';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { FlashComponent } from '../components/flash/flash.component';
 import { AuthService } from '../services/auth/auth.service';
 import { ValidatorMessageComponent } from '../components/validator-message/validator-message.component';
 import { MessagesService } from '../services/messages/messages.service';
@@ -11,12 +11,7 @@ import { MessagesService } from '../services/messages/messages.service';
     standalone: true,
     templateUrl: 'forgot-password.component.html',
     providers: [AuthService],
-    imports: [
-        FlashComponent,
-        ReactiveFormsModule,
-        NgIf,
-        ValidatorMessageComponent,
-    ],
+    imports: [FlashComponent, ReactiveFormsModule, NgIf, ValidatorMessageComponent],
 })
 export class ForgotPasswordComponent {
     public passwordForm = this.fb.group({
@@ -42,17 +37,13 @@ export class ForgotPasswordComponent {
             .pipe(takeUntilDestroyed(this.destroyed))
             .subscribe({
                 next: () => {
-                    this.msgsSvc.isSuccess(
-                        `Password reset email sent to ${this.passwordForm.controls.email.value}`
-                    );
+                    this.msgsSvc.isSuccess(`Password reset email sent to ${this.passwordForm.controls.email.value}`);
 
                     this.passwordForm.reset();
                     this.submitting = false;
                 },
                 error: () => {
-                    this.msgsSvc.isError(
-                        'Unable to send reset email. Please try again later'
-                    );
+                    this.msgsSvc.isError('Unable to send reset email. Please try again later');
                     this.submitting = false;
                 },
             });

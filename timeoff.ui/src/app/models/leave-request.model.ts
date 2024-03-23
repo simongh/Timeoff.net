@@ -1,7 +1,7 @@
-import { datePart, dateString } from "../components/types";
-import { UserModel } from "./user.model";
+import { datePart } from '../components/types';
+import { UserModel } from '../services/company/user.model';
 
-export interface LeaveRequestModel{
+export interface LeaveRequestModel {
     id: number;
     startDate: Date;
     startPart: datePart;

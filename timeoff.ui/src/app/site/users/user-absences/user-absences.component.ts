@@ -1,19 +1,19 @@
-import { Component, DestroyRef, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, DestroyRef, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule } from '@angular/forms';
+import { HttpErrorResponse } from '@angular/common/http';
+import { switchMap } from 'rxjs';
 import { UserDetailsComponent } from '../user-details/user-details.component';
 import { UserBreadcrumbComponent } from '../user-breadcrumb/user-breadcrumb.component';
 import { UsersService } from '../../../services/users/users.service';
-import { ActivatedRoute } from '@angular/router';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { switchMap } from 'rxjs';
 import { CalendarService } from '../../../services/calendar/calendar.service';
 import { AllowanceSummaryModel } from '../../../services/calendar/allowance-summary.model';
-import { CommonModule } from '@angular/common';
 import { YesPipe } from '../../../components/yes.pipe';
 import { LeaveRequestModel } from '../../../models/leave-request.model';
 import { RequestsListComponent } from '../../../components/requests-list/requests-list.component';
-import { ReactiveFormsModule } from '@angular/forms';
 import { MessagesService } from '../../../services/messages/messages.service';
-import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
     selector: 'user-absences',
@@ -72,7 +72,8 @@ export class UserAbsencesComponent implements OnInit {
         private destroyed: DestroyRef,
         private readonly usersSvc: UsersService,
         private readonly calendarSvc: CalendarService,
-        private readonly msgsSvc: MessagesService
+        private readonly msgsSvc: MessagesService,
+        private readonly cd: ChangeDetectorRef
     ) {
         this.summary = {
             used: 0,
@@ -108,7 +109,16 @@ export class UserAbsencesComponent implements OnInit {
             .subscribe({
                 next: () => {
                     this.msgsSvc.isSuccess('Adjustments save');
+
+                    const diff = this.summary.adjustment - this.form.value.adjustment!;
+                    this.summary.total = this.summary.total - diff;
+                    this.summary.remaining = this.summary.remaining - diff;
+
+                    this.summary.adjustment = this.form.value.adjustment!;
+
                     this.submitting = false;
+
+                    this.cd.detectChanges();
                 },
                 error: (e: HttpErrorResponse) => {
                     this.msgsSvc.isError('Unable to save adjustments');

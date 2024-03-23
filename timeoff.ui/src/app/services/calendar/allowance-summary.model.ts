@@ -1,6 +1,6 @@
-import { LeaveSummary } from "./leave-summary.model";
+import { LeaveSummary } from './leave-summary.model';
 
-export interface AllowanceSummaryModel{
+export interface AllowanceSummaryModel {
     available: number;
     allowance: number;
     carryOver: number;

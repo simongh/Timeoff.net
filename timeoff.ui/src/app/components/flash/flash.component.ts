@@ -29,10 +29,7 @@ export class FlashComponent implements OnInit {
             return [];
         }
     }
-    constructor(
-        private readonly msgSvc: MessagesService,
-        private destroyed: DestroyRef
-    ) {}
+    constructor(private readonly msgSvc: MessagesService, private destroyed: DestroyRef) {}
 
     public ngOnInit(): void {
         this.msgSvc

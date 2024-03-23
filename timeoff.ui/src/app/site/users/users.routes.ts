@@ -30,10 +30,10 @@ export const usersRoutes: Routes = [
     },
     {
         path: ':id/calendar',
-        component: UserCalendarComponent
+        component: UserCalendarComponent,
     },
     {
         path: ':id/absences',
-        component: UserAbsencesComponent
+        component: UserAbsencesComponent,
     },
 ];

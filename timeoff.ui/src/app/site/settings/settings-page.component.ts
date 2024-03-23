@@ -1,10 +1,10 @@
-import { Component } from "@angular/core";
-import { RouterOutlet } from "@angular/router";
+import { Component } from '@angular/core';
+import { RouterOutlet } from '@angular/router';
 
 @Component({
-    standalone:true,
+    standalone: true,
     selector: 'settings-page',
     templateUrl: 'settings-page.component.html',
-    imports:[RouterOutlet]
+    imports: [RouterOutlet],
 })
 export class SettingsPageComponent {}

@@ -1,7 +1,6 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { ColourPickerComponent } from '../colour-picker/colour-picker.component';
-import { FormGroup } from '@angular/forms';
-import { LeaveTypeControls } from '../settings-service';
+import { LeaveTypeFormGroup } from '../../../../services/company/company.service';
 
 @Component({
     standalone: true,
@@ -11,7 +10,7 @@ import { LeaveTypeControls } from '../settings-service';
 })
 export class LeaveTypeModalComponent {
     @Output()
-    public addedLeaveType = new EventEmitter<FormGroup<LeaveTypeControls>>();
+    public addedLeaveType = new EventEmitter<LeaveTypeFormGroup>();
 
     public addNew() {
         return true;

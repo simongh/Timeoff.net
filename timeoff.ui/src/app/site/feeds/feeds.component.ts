@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { FlashComponent } from '../../components/flash/flash.component';
 import { NgIf } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { FlashComponent } from '../../components/flash/flash.component';
 
 @Component({
     selector: 'feeds',

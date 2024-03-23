@@ -34,10 +34,11 @@
 
                     <div class="form-group">
                         <label for="manager" class="control-label">Manager</label>
-                        <select class="form-control" id="manager" formControlName="managerId">
+                        <user-select [control]="form.controls.managerId" for="manager"/>
+                        <!-- <select class="form-control" id="manager" formControlName="managerId">
                             <option disabled></option>
                             <option *ngFor="let u of users" [value]="u.id">{{u.name}}</option>
-                        </select>
+                        </select> -->
                         <validator-message controlName="managerId" validatorName="min">A manager is required</validator-message>
                     </div>
 

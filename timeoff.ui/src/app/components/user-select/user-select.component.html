@@ -1,0 +1,4 @@
+<select class="form-control" [formControl]="control" [id]="for">
+    <option disabled></option>
+    <option *ngFor="let u of users" value="{{u.id}}">{{u.name}}</option>
+</select>

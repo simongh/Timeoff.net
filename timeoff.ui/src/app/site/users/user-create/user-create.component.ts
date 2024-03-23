@@ -1,16 +1,16 @@
-import { Component, DestroyRef, OnInit } from '@angular/core';
+import { Component, DestroyRef } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
-import { UsersService } from '../../../services/users/users.service';
 import { ReactiveFormsModule } from '@angular/forms';
-import { FlashComponent } from '../../../components/flash/flash.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { TeamModel } from '../../../models/team.model';
 import { CommonModule } from '@angular/common';
+import { HttpErrorResponse } from '@angular/common/http';
+import { UsersService } from '../../../services/users/users.service';
+import { FlashComponent } from '../../../components/flash/flash.component';
 import { ValidatorMessageComponent } from '../../../components/validator-message/validator-message.component';
 import { DatePickerDirective } from '../../../components/date-picker.directive';
-import { HttpErrorResponse } from '@angular/common/http';
 import { MessagesService } from '../../../services/messages/messages.service';
 import { UserBreadcrumbComponent } from '../user-breadcrumb/user-breadcrumb.component';
+import { TeamSelectComponent } from '../../../components/team-select/team-select.component';
 
 @Component({
     selector: 'user-create',
@@ -26,9 +26,10 @@ import { UserBreadcrumbComponent } from '../user-breadcrumb/user-breadcrumb.comp
         ValidatorMessageComponent,
         DatePickerDirective,
         UserBreadcrumbComponent,
+        TeamSelectComponent,
     ],
 })
-export class UserCreateComponent implements OnInit {
+export class UserCreateComponent {
     public get form() {
         return this.usersSvc.form;
     }
@@ -37,21 +38,12 @@ export class UserCreateComponent implements OnInit {
 
     public companyName = '';
 
-    public teams: TeamModel[] = [];
-
     constructor(
         private readonly usersSvc: UsersService,
         private readonly messagesSvc: MessagesService,
         private readonly router: Router,
         private destroyed: DestroyRef
     ) {}
-
-    public ngOnInit(): void {
-        this.usersSvc
-            .getTeams()
-            .pipe(takeUntilDestroyed(this.destroyed))
-            .subscribe((teams) => (this.teams = teams));
-    }
 
     public add() {
         this.form.markAllAsTouched();
@@ -65,9 +57,7 @@ export class UserCreateComponent implements OnInit {
             .pipe(takeUntilDestroyed(this.destroyed))
             .subscribe({
                 next: () => {
-                    this.messagesSvc.isSuccess(
-                        'New user account successfully added'
-                    );
+                    this.messagesSvc.isSuccess('New user account successfully added', true);
                     this.router.navigate(['users']);
                 },
                 error: (e: HttpErrorResponse) => {

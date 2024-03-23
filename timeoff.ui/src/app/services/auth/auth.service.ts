@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { catchError, map, of, tap } from 'rxjs';
 import { ResetPasswordModel } from './reset-password.model';
 import { LoginModel } from './login.model';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 
 interface LoginResult {
     token: string;
@@ -59,9 +59,7 @@ export class AuthService {
     }
 
     public logout() {
-        return this.client
-            .post<void>('/api/account/logout', {})
-            .pipe(tap(() => (this.token = null)));
+        return this.client.post<void>('/api/account/logout', {}).pipe(tap(() => (this.token = null)));
     }
 
     public resetPassword(model: ResetPasswordModel) {

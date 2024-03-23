@@ -5,4 +5,5 @@ export interface LeaveTypeModel {
     useAllowance: boolean;
     autoApprove: boolean;
     limit: number;
+    first: boolean;
 }

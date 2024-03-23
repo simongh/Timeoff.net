@@ -53,10 +53,11 @@
             <div class="form-group">
                 <label for="team" class="col-md-3 control-label">Team</label>
                 <div class="col-md-3">
-                    <select class="form-control" formControlName="team" for="team" aria-describedby="team_help">
+                    <team-select [control]="form.controls.team" for="team" aria-describedby="team_help"/>
+                    <!-- <select class="form-control" formControlName="team" for="team" aria-describedby="team_help">
                         <option disabled></option>
                         <option *ngFor="let t of teams" value="{{t.id}}" [attr.data-vpp]="t.id">{{t.name}}</option>
-                    </select>
+                    </select> -->
                 </div>
                 <span id="team_help" class="help-block col-md-6">Team employee belongs to</span>
             </div>

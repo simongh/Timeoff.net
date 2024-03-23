@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { TeamModel } from '../../models/team.model';
 import { eachDayOfInterval, endOfMonth } from 'date-fns';
+import { TeamModel } from '../../services/company/team.model';
 
 @Component({
     standalone: true,

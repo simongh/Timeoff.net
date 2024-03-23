@@ -11,24 +11,33 @@ export class MessagesService {
     private subject = new Subject<FlashModel>();
 
     public isSuccess(value: string, store = false) {
-        this.addMessage({
-            isError: false,
-            messages: [value],
-        });
+        this.addMessage(
+            {
+                isError: false,
+                messages: [value],
+            },
+            store
+        );
     }
 
     public isError(value: string, store = false) {
-        this.addMessage({
-            isError: true,
-            messages: [value],
-        });
+        this.addMessage(
+            {
+                isError: true,
+                messages: [value],
+            },
+            store
+        );
     }
 
     public hasErrors(values: string[], store = false) {
-        this.addMessage({
-            isError: true,
-            messages: values,
-        });
+        this.addMessage(
+            {
+                isError: true,
+                messages: values,
+            },
+            store
+        );
     }
 
     public addMessage(model: FlashModel, store = false) {

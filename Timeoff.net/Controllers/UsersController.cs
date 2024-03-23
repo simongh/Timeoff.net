@@ -63,20 +63,20 @@ namespace Timeoff.Controllers
         //    return View(vm);
         //}
 
-        [HttpGet("edit/{id:int}/absences")]
-        public async Task<IActionResult> AbsencesAsync(Application.Absences.GetAbsencesCommand command)
-        {
-            var vm = await _mediator.Send(command);
+        //[HttpGet("edit/{id:int}/absences")]
+        //public async Task<IActionResult> AbsencesAsync(Application.Absences.GetAbsencesCommand command)
+        //{
+        //    var vm = await _mediator.Send(command);
 
-            return View(vm);
-        }
+        //    return View(vm);
+        //}
 
-        [HttpPost("edit/{id:int}/absences")]
-        public async Task<IActionResult> UpdateAbsencesAsync(Application.Absences.UpdateAbsencesCommand command)
-        {
-            var vm = await _mediator.Send(command);
-            return View("Absences", vm);
-        }
+        //[HttpPost("edit/{id:int}/absences")]
+        //public async Task<IActionResult> UpdateAbsencesAsync(Application.Absences.UpdateAbsencesCommand command)
+        //{
+        //    var vm = await _mediator.Send(command);
+        //    return View("Absences", vm);
+        //}
 
         //[HttpGet("edit/{id:int}/schedule")]
         //public async Task<IActionResult> ScheduleAsync([FromRoute] Application.Schedule.GetScheduleCommand command)

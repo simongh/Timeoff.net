@@ -36,9 +36,7 @@
 
         <div class="form-group">
             <label for="manager" class="control-label">Manager</label>
-            <select class="form-control" formControlName="managerId" id="manager">
-                <option *ngFor="let u of users" value="{{u.id}}">{{u.name}}</option>
-            </select>
+            <user-select [control]="editForm.controls.managerId" for="manager"/>
             <span class="help-block">Head of {{name}} team. Main manager. <a routerLink="/users/{{editForm.controls.managerId.value}}">More details <i class="fa fa-angle-double-right"></i></a></span>
         </div>
 

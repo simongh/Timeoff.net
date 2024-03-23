@@ -1,24 +1,18 @@
 import { Component, DestroyRef } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
-import { AuthService } from '../services/auth/auth.service';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { AuthService } from '../services/auth/auth.service';
 import { FlashComponent } from '../components/flash/flash.component';
 import { LoginModel } from '../services/auth/login.model';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ValidatorMessageComponent } from '../components/validator-message/validator-message.component';
 import { MessagesService } from '../services/messages/messages.service';
 
 @Component({
     standalone: true,
     templateUrl: 'login.component.html',
-    imports: [
-        RouterLink,
-        CommonModule,
-        ReactiveFormsModule,
-        FlashComponent,
-        ValidatorMessageComponent,
-    ],
+    imports: [RouterLink, CommonModule, ReactiveFormsModule, FlashComponent, ValidatorMessageComponent],
     providers: [],
 })
 export class LoginComponent {
@@ -53,9 +47,7 @@ export class LoginComponent {
                     if (this.authService.isUserLoggedIn) {
                         this.router.navigate(['']);
                     } else {
-                        !!r
-                            ? this.msgsSvc.hasErrors(r)
-                            : this.msgsSvc.isError('Invalid credentials');
+                        !!r ? this.msgsSvc.hasErrors(r) : this.msgsSvc.isError('Invalid credentials');
                         this.loginForm.controls.password.setValue('');
                         this.loginForm.markAsUntouched();
                     }

@@ -1,19 +1,19 @@
-import { Component, DestroyRef, Input, OnInit } from "@angular/core";
-import { FlashComponent } from "../../../components/flash/flash.component";
-import { ActivatedRoute, RouterLink } from "@angular/router";
-import { CalendarComponent } from "../../../components/calendar/calendar.component";
-import { startOfYear } from "date-fns";
-import { PublicHolidaysService } from "../../../services/public-holidays/public-holidays.service";
-import { PublicHolidayModel } from "../../../services/public-holidays/public-holiday.model";
-import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
-import { CommonModule } from "@angular/common";
-import { ReactiveFormsModule } from "@angular/forms";
-import { switchMap } from "rxjs";
-import { ValidatorMessageComponent } from "../../../components/validator-message/validator-message.component";
-import { AddNewModalComponent } from "./add-new-modal.component";
-import { DatePickerDirective } from "../../../components/date-picker.directive";
-import { HttpErrorResponse } from "@angular/common/http";
-import { MessagesService } from "../../../services/messages/messages.service";
+import { Component, DestroyRef, OnInit } from '@angular/core';
+import { ActivatedRoute, RouterLink } from '@angular/router';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule } from '@angular/forms';
+import { HttpErrorResponse } from '@angular/common/http';
+import { switchMap } from 'rxjs';
+import { startOfYear } from 'date-fns';
+import { FlashComponent } from '../../../components/flash/flash.component';
+import { CalendarComponent } from '../../../components/calendar/calendar.component';
+import { PublicHolidaysService } from '../../../services/public-holidays/public-holidays.service';
+import { PublicHolidayModel } from '../../../services/public-holidays/public-holiday.model';
+import { ValidatorMessageComponent } from '../../../components/validator-message/validator-message.component';
+import { AddNewModalComponent } from './add-new-modal.component';
+import { DatePickerDirective } from '../../../components/date-picker.directive';
+import { MessagesService } from '../../../services/messages/messages.service';
 
 @Component({
     standalone: true,
@@ -27,8 +27,8 @@ import { MessagesService } from "../../../services/messages/messages.service";
         ReactiveFormsModule,
         ValidatorMessageComponent,
         AddNewModalComponent,
-        DatePickerDirective
-    ]
+        DatePickerDirective,
+    ],
 })
 export class PublicHolidaysComponent implements OnInit {
     public companyName: string = '';
@@ -40,11 +40,11 @@ export class PublicHolidaysComponent implements OnInit {
     }
 
     public get nextYear() {
-        return this.currentYear +1;
+        return this.currentYear + 1;
     }
 
     public get lastYear() {
-        return this.currentYear -1;
+        return this.currentYear - 1;
     }
 
     public start = startOfYear(new Date());
@@ -59,7 +59,7 @@ export class PublicHolidaysComponent implements OnInit {
         private readonly holidaySvc: PublicHolidaysService,
         private readonly msgsSvc: MessagesService,
         private destroyed: DestroyRef,
-        private readonly route: ActivatedRoute,
+        private readonly route: ActivatedRoute
     ) {}
 
     public ngOnInit(): void {
@@ -71,13 +71,15 @@ export class PublicHolidaysComponent implements OnInit {
             return;
         }
 
-        this.holidaySvc.delete(id!)
+        this.holidaySvc
+            .delete(id!)
             .pipe(
                 takeUntilDestroyed(this.destroyed),
                 switchMap(() => {
                     return this.holidaySvc.get(this.currentYear);
                 })
-            ).subscribe({
+            )
+            .subscribe({
                 next: (data) => {
                     this.loadHolidays(data);
                     this.msgsSvc.isSuccess('Holiday was successfully removed');
@@ -88,18 +90,20 @@ export class PublicHolidaysComponent implements OnInit {
                     } else {
                         this.msgsSvc.isError('Unable to remove holiday');
                     }
-                }
+                },
             });
     }
 
     public save() {
-        this.holidaySvc.update(this.holidaysForm.value as PublicHolidayModel[])
+        this.holidaySvc
+            .update(this.holidaysForm.value as PublicHolidayModel[])
             .pipe(
                 takeUntilDestroyed(this.destroyed),
                 switchMap(() => {
                     return this.holidaySvc.get(this.currentYear);
                 })
-            ).subscribe({
+            )
+            .subscribe({
                 next: (data) => {
                     this.loadHolidays(data);
                     this.msgsSvc.isSuccess('Holidays updated');
@@ -110,7 +114,7 @@ export class PublicHolidaysComponent implements OnInit {
                     } else {
                         this.msgsSvc.isError('Unable to update holidays');
                     }
-                } 
+                },
             });
     }
 
@@ -127,7 +131,8 @@ export class PublicHolidaysComponent implements OnInit {
 
                     return this.holidaySvc.get(this.currentYear);
                 })
-            ).subscribe({
+            )
+            .subscribe({
                 next: (data) => {
                     this.loadHolidays(data);
                 },
@@ -135,15 +140,14 @@ export class PublicHolidaysComponent implements OnInit {
     }
 
     public create() {
-        this.holidaySvc.get(this.currentYear)
-            .pipe(
-                takeUntilDestroyed(this.destroyed),
-            ).subscribe({
+        this.holidaySvc
+            .get(this.currentYear)
+            .pipe(takeUntilDestroyed(this.destroyed))
+            .subscribe({
                 next: (data) => {
                     this.loadHolidays(data);
                 },
-                error: (e: HttpErrorResponse) => {
-                } 
+                error: (e: HttpErrorResponse) => {},
             });
     }
 
@@ -151,9 +155,9 @@ export class PublicHolidaysComponent implements OnInit {
         this.holidaysForm.clear();
 
         data.map((h) => {
-            this.holidaySvc.holidays.push(this.holidaySvc.newForm(h,this.currentYear))
+            this.holidaySvc.holidays.push(this.holidaySvc.newForm(h, this.currentYear));
         });
 
-        this.holidays = data;          
+        this.holidays = data;
     }
 }

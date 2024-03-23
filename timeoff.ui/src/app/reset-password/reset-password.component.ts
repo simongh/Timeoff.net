@@ -1,25 +1,20 @@
 import { Component, DestroyRef, OnInit } from '@angular/core';
-import { FlashComponent } from '../components/flash/flash.component';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { compareValidator } from '../components/validators';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
-import { AuthService } from '../services/auth/auth.service';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { ValidatorMessageComponent } from '../components/validator-message/validator-message.component';
 import { HttpErrorResponse } from '@angular/common/http';
+import { FlashComponent } from '../components/flash/flash.component';
+import { compareValidator } from '../components/validators';
+import { AuthService } from '../services/auth/auth.service';
+import { ValidatorMessageComponent } from '../components/validator-message/validator-message.component';
 import { MessagesService } from '../services/messages/messages.service';
 
 @Component({
     standalone: true,
     templateUrl: './reset-password.component.html',
     styleUrl: './reset-password.component.sass',
-    imports: [
-        FlashComponent,
-        CommonModule,
-        ReactiveFormsModule,
-        ValidatorMessageComponent,
-    ],
+    imports: [FlashComponent, CommonModule, ReactiveFormsModule, ValidatorMessageComponent],
 })
 export class ResetPasswordComponent implements OnInit {
     public passwordForm = this.fb.group(
@@ -50,26 +45,22 @@ export class ResetPasswordComponent implements OnInit {
     public ngOnInit(): void {
         this.showCurrent = this.authSvc.isUserLoggedIn;
 
-        this.route.queryParamMap
-            .pipe(takeUntilDestroyed(this.destroyed))
-            .subscribe((p) => {
-                if (p.has('t')) {
-                    this.token = p.get('t');
-                } else {
-                    this.token = null;
-                }
+        this.route.queryParamMap.pipe(takeUntilDestroyed(this.destroyed)).subscribe((p) => {
+            if (p.has('t')) {
+                this.token = p.get('t');
+            } else {
+                this.token = null;
+            }
 
-                if (this.showCurrent) {
-                    this.passwordForm.controls.current.addValidators(
-                        Validators.required
-                    );
-                } else {
-                    if (!this.token) {
-                        this.msgsSvc.isError('Invalid reset link');
-                        this.submitting = true;
-                    }
+            if (this.showCurrent) {
+                this.passwordForm.controls.current.addValidators(Validators.required);
+            } else {
+                if (!this.token) {
+                    this.msgsSvc.isError('Invalid reset link');
+                    this.submitting = true;
                 }
-            });
+            }
+        });
     }
 
     public save() {
@@ -99,10 +90,7 @@ export class ResetPasswordComponent implements OnInit {
                 error: (e: HttpErrorResponse) => {
                     if (e.status === 400) {
                         this.msgsSvc.hasErrors(e.error.errors);
-                    } else
-                        this.msgsSvc.isError(
-                            'Unable to reset password. Please try again later'
-                        );
+                    } else this.msgsSvc.isError('Unable to reset password. Please try again later');
                     this.submitting = false;
                 },
             });

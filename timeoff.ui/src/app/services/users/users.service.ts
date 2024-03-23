@@ -1,14 +1,11 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { TeamModel } from '../../models/team.model';
-import { UserModel } from './user.model';
 import { Injectable } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, Validators } from '@angular/forms';
-import { dateString } from '../../components/types';
+import { FormBuilder, Validators } from '@angular/forms';
 import { endOfToday, formatDate, isAfter, parseISO } from 'date-fns';
+import { UserModel } from './user.model';
+import { dateString } from '../../components/types';
 import { ScheduleModel } from '../../models/schedule.model';
-import { WeekDay } from '@angular/common';
 import { UserAbsencesModel } from './user-absences.model';
-import { LeaveSummary } from '../calendar/leave-summary.model';
 import { AllowanceSummaryModel } from '../calendar/allowance-summary.model';
 
 type UserFromGroup = ReturnType<UsersService['createUserForm']>;
@@ -39,10 +36,6 @@ export class UsersService {
     constructor(private readonly client: HttpClient, private readonly fb: FormBuilder) {
         this.form = this.createUserForm();
         this.adjustmentForm = this.createAdjustmentForm();
-    }
-
-    public getTeams() {
-        return this.client.get<TeamModel[]>('/api/users/teams');
     }
 
     public getUsers(team: number | null) {
@@ -96,7 +89,7 @@ export class UsersService {
     }
 
     public updateAdjustments(id: number) {
-        return this.client.put<void>(`/api/users/${id}/adjustments`,this.adjustmentForm.value);
+        return this.client.put<void>(`/api/users/${id}/adjustments`, this.adjustmentForm.value);
     }
 
     public fillForm(model: UserModel) {
@@ -126,7 +119,7 @@ export class UsersService {
     public fillAdjustments(model: AllowanceSummaryModel) {
         this.adjustmentForm.setValue({
             carryOver: model.carryOver,
-            adjustment: model.adjustment
+            adjustment: model.adjustment,
         });
 
         this.adjustmentForm.markAsUntouched();
@@ -162,7 +155,7 @@ export class UsersService {
     private createAdjustmentForm() {
         const form = this.fb.group({
             carryOver: [0],
-            adjustment: [0]
+            adjustment: [0],
         });
 
         return form;

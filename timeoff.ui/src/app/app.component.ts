@@ -10,5 +10,4 @@ import { HeaderComponent } from './components/header/header.component';
     styleUrl: './app.component.sass',
     imports: [RouterOutlet, FooterComponent, HeaderComponent],
 })
-export class AppComponent {
-}
+export class AppComponent {}

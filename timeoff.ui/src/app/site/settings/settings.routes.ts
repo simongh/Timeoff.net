@@ -1,9 +1,9 @@
-import { Routes } from "@angular/router";
-import { HomeComponent } from "./home/home.component";
-import { PublicHolidaysComponent } from "./public-holidays/public-holidays.component";
-import { TeamsListComponent } from "./teams-list/teams-list.component";
-import { IntegrationComponent } from "./integration/integration.component";
-import { TeamEditComponent } from "./team-edit/team-edit.component";
+import { Routes } from '@angular/router';
+import { HomeComponent } from './home/home.component';
+import { PublicHolidaysComponent } from './public-holidays/public-holidays.component';
+import { TeamsListComponent } from './teams-list/teams-list.component';
+import { IntegrationComponent } from './integration/integration.component';
+import { TeamEditComponent } from './team-edit/team-edit.component';
 
 export const settingsRoutes: Routes = [
     {
@@ -12,11 +12,11 @@ export const settingsRoutes: Routes = [
     },
     {
         path: 'public-holidays',
-        component: PublicHolidaysComponent
+        component: PublicHolidaysComponent,
     },
     {
         path: 'teams',
-        component: TeamsListComponent
+        component: TeamsListComponent,
     },
     {
         path: 'teams/:id',
@@ -26,4 +26,4 @@ export const settingsRoutes: Routes = [
         path: 'integration',
         component: IntegrationComponent,
     },
-]
+];

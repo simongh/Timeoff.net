@@ -73,7 +73,7 @@
                 <label for="timezone" class="col-md-2 control-label">Time zone</label>
                 <div class="col-md-6">
                     <select class="form-control" formControlName="timezone">
-                        <option *ngFor="let tz of timezones" [ngValue]="tz.name">{{ tz.description }}</option>
+                        <option *ngFor="let tz of timezones" [ngValue]="tz.id">{{ tz.name }}</option>
                     </select>
                     <validator-message controlName="timezone" validatorName="invalidItem">Invalid timezone selected</validator-message>
                 </div>

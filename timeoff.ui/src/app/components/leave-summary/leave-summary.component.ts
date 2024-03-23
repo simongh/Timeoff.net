@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
-import { LeaveSummary } from '../../services/calendar/leave-summary.model';
 import { CommonModule } from '@angular/common';
+import { LeaveSummary } from '../../services/calendar/leave-summary.model';
 
 @Component({
     selector: 'leave-summary',
