@@ -23,9 +23,7 @@
     
             <div class="form-group">
                 <label for="team" class="control-label">Team</label>
-                <select class="form-control" formControlName="team" id="team" aria-describedby="team_help">
-                    <option *ngFor="let t of teams" [value]="t.id">{{t.name}}</option>
-                </select>
+                <team-select [control]="form.controls.team" for="team" aria-describedby="team_help"/>
                 <span id="team_help" class="help-block">Team current user is part of. <a routerLink="/settings/team/{{form.controls.team.value}}">More details <i class="fa fa-angle-double-right"></i></a></span>
             </div>
     

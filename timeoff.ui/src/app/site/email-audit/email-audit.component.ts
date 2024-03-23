@@ -1,15 +1,14 @@
 import { Component, DestroyRef, OnInit } from '@angular/core';
-import { EmailAuditService } from './email-audit.service';
-import { ReactiveFormsModule } from '@angular/forms';
-import { UserModel } from '../../models/user.model';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
+import { ActivatedRoute } from '@angular/router';
+import { ReactiveFormsModule } from '@angular/forms';
+import { switchMap } from 'rxjs';
+import { EmailAuditService } from './email-audit.service';
+import { UserModel } from '../../services/company/user.model';
 import { EmailModel } from './email.model';
 import { PagerComponent } from './pager.component';
-import { ActivatedRoute } from '@angular/router';
-import { switchMap } from 'rxjs';
 import { FlashComponent } from '../../components/flash/flash.component';
-import { FlashModel, isError } from '../../components/flash/flash.model';
 import { MessagesService } from '../../services/messages/messages.service';
 
 @Component({
@@ -18,12 +17,7 @@ import { MessagesService } from '../../services/messages/messages.service';
     providers: [EmailAuditService],
     templateUrl: './email-audit.component.html',
     styleUrl: './email-audit.component.sass',
-    imports: [
-        ReactiveFormsModule,
-        CommonModule,
-        PagerComponent,
-        FlashComponent,
-    ],
+    imports: [ReactiveFormsModule, CommonModule, PagerComponent, FlashComponent],
 })
 export class EmailAuditComponent implements OnInit {
     public get form() {
@@ -92,9 +86,7 @@ export class EmailAuditComponent implements OnInit {
                 takeUntilDestroyed(this.destroyed),
                 switchMap((p) => {
                     if (p.has('page')) {
-                        this.searchSvc.currentPage = Number.parseInt(
-                            p.get('page')!
-                        );
+                        this.searchSvc.currentPage = Number.parseInt(p.get('page')!);
                     } else {
                         this.searchSvc.currentPage = 1;
                     }

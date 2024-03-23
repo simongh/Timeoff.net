@@ -72,19 +72,19 @@ namespace Timeoff.Controllers
             return View();
         }
 
-        [HttpPost("company/delete")]
-        public async Task<IActionResult> CompanyDeleteAsync(Application.DeleteCompany.DeleteCompanyCommand command)
-        {
-            var vm = await _mediator.Send(command);
+        //[HttpPost("company/delete")]
+        //public async Task<IActionResult> CompanyDeleteAsync(Application.DeleteCompany.DeleteCompanyCommand command)
+        //{
+        //    var vm = await _mediator.Send(command);
 
-            if (vm != null)
-            {
-                return View("index", vm);
-            }
-            else
-            {
-                return RedirectToAction("Logout", "Account");
-            }
-        }
+        //    if (vm != null)
+        //    {
+        //        return View("index", vm);
+        //    }
+        //    else
+        //    {
+        //        return RedirectToAction("Logout", "Account");
+        //    }
+        //}
     }
 }

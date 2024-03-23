@@ -15,12 +15,6 @@ namespace Timeoff.Api
             return Ok(await _mediator.Send(query));
         }
 
-        [HttpGet("teams")]
-        public async Task<IActionResult> GetTeamsAsync()
-        {
-            return Ok(await _mediator.Send(new Application.Teams.TeamsListQuery()));
-        }
-
         [HttpPost]
         public async Task<IActionResult> CreateAsync(Application.CreateUser.CreateCommand command)
         {
@@ -77,7 +71,7 @@ namespace Timeoff.Api
         }
 
         [HttpPut("{id:int}/schedule")]
-        public async Task<IActionResult> UpdateSchedule(int id, Application.Schedule.ScheduleModel? schedule)
+        public async Task<IActionResult> UpdateScheduleAsync(int id, Application.Schedule.ScheduleModel? schedule)
         {
             var result = await _mediator.Send(new Application.Schedule.UpdateUserScheduleCommand
             {
@@ -86,6 +80,22 @@ namespace Timeoff.Api
             });
 
             return Ok(result);
+        }
+
+        [HttpPut("{id:int}/adjustments")]
+        public async Task<IActionResult> UpdateAdjustmentsAsync(int id, Application.Absences.UpdateAbsencesCommand command)
+        {
+            if (command == null)
+                return BadRequest();
+
+            command.Id = id;
+
+            var result = await _mediator.Send(command);
+
+            if (result.Messages?.Errors?.Any() == true)
+                return BadRequest(result.Messages);
+            else
+                return Ok(result.Summary);
         }
     }
 }

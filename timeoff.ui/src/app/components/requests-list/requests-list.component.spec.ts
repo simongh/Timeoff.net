@@ -1,23 +1,21 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { RequestsListComponent } from './requests-list.component';
 
 describe('RequestsListComponent', () => {
-  let component: RequestsListComponent;
-  let fixture: ComponentFixture<RequestsListComponent>;
+    let component: RequestsListComponent;
+    let fixture: ComponentFixture<RequestsListComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [RequestsListComponent]
-    })
-    .compileComponents();
-    
-    fixture = TestBed.createComponent(RequestsListComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+    beforeEach(async () => {
+        await TestBed.configureTestingModule({
+            imports: [RequestsListComponent],
+        }).compileComponents();
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+        fixture = TestBed.createComponent(RequestsListComponent);
+        component = fixture.componentInstance;
+        fixture.detectChanges();
+    });
+
+    it('should create', () => {
+        expect(component).toBeTruthy();
+    });
 });

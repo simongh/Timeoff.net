@@ -74,7 +74,7 @@
 <div class="row">&nbsp;</div>
 
 <div class="row clearfix">
-    <calendar [start]="start" [monthCount]="showFullYear ? 12 : 4" [monthFormat]="showFullYear ? 'MMMM' : 'MMM, yyyy'"/>
+    <calendar [start]="start" [monthCount]="showFullYear ? 12 : 4" [monthFormat]="showFullYear ? 'MMMM' : 'MMM, yyyy'" [holidays]="holidays"/>
     <!-- @for (int i = 0; i < Model.Calendar.Months; i++)
     {
     <div class="col-md-3 month_container">

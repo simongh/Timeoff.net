@@ -1,22 +1,23 @@
-import { CommonModule } from "@angular/common";
-import { Component, DestroyRef, EventEmitter, OnInit, Output } from "@angular/core";
-import { TeamsService } from "../../../services/teams/teams.service";
-import { ReactiveFormsModule } from "@angular/forms";
-import { ValidatorMessageComponent } from "../../../components/validator-message/validator-message.component";
-import { FlashModel, hasErrors, isError, isSuccess } from "../../../components/flash/flash.model";
-import { UserModel } from "../../../models/user.model";
-import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
-import { HttpErrorResponse } from "@angular/common/http";
-import { MessagesService } from "../../../services/messages/messages.service";
+import { CommonModule } from '@angular/common';
+import { Component, DestroyRef, EventEmitter, Output } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { HttpErrorResponse } from '@angular/common/http';
+import { TeamsService } from '../../../services/teams/teams.service';
+import { ValidatorMessageComponent } from '../../../components/validator-message/validator-message.component';
+import { UserModel } from '../../../services/company/user.model';
+import { MessagesService } from '../../../services/messages/messages.service';
+import { UserListComponent } from '../../../components/user-select/user-select.component';
+import { getAllowances } from '../../../components/allowances';
 
 @Component({
     standalone: true,
     templateUrl: 'add-new-modal.component.html',
     selector: 'add-new-modal',
-    imports: [CommonModule,ReactiveFormsModule,ValidatorMessageComponent]
+    imports: [CommonModule, ReactiveFormsModule, ValidatorMessageComponent, UserListComponent],
 })
-export class AddNewModalComponent implements OnInit {
-    public allowance: number[] = [];
+export class AddNewModalComponent {
+    public allowance: number[] = getAllowances();
 
     public users: UserModel[] = [];
 
@@ -32,18 +33,8 @@ export class AddNewModalComponent implements OnInit {
     constructor(
         private readonly teamsSvc: TeamsService,
         private readonly msgSvc: MessagesService,
-        private destroyed: DestroyRef,
+        private destroyed: DestroyRef
     ) {}
-
-    public ngOnInit(): void {
-        for (let index = 0; index <= 50; index += 0.5) {
-            this.allowance.push(index);
-        }
-
-        this.teamsSvc.getUsers()
-            .pipe(takeUntilDestroyed(this.destroyed))
-            .subscribe((data) => this.users = data);
-    }
 
     public add() {
         this.form.markAllAsTouched();
@@ -52,7 +43,8 @@ export class AddNewModalComponent implements OnInit {
             return;
         }
         this.submitting = true;
-        this.teamsSvc.create()
+        this.teamsSvc
+            .create()
             .pipe(takeUntilDestroyed(this.destroyed))
             .subscribe({
                 next: () => {
@@ -69,8 +61,8 @@ export class AddNewModalComponent implements OnInit {
                     }
 
                     this.submitting = false;
-                }
-            })
+                },
+            });
     }
 
     public cancel() {

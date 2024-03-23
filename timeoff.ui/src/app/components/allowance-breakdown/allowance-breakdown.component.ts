@@ -11,5 +11,5 @@ import { AllowanceSummaryModel } from '../../services/calendar/allowance-summary
 })
 export class AllowanceBreakdownComponent {
     @Input()
-    public summary!: AllowanceSummaryModel
+    public summary!: AllowanceSummaryModel;
 }

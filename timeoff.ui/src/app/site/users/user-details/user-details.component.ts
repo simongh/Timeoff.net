@@ -1,11 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { Component, DestroyRef, EventEmitter, Input, Output } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { HttpErrorResponse } from '@angular/common/http';
 import { FlashComponent } from '../../../components/flash/flash.component';
 import { UsersService } from '../../../services/users/users.service';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MessagesService } from '../../../services/messages/messages.service';
-import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
     selector: 'user-details',

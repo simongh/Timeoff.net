@@ -31,10 +31,7 @@ export class ValidatorMessageComponent {
 
         if (control.touched) {
             if (this.validatorName) {
-                return (
-                    control.hasError(this.validatorName) ||
-                    (control.parent?.hasError(this.validatorName) ?? false)
-                );
+                return control.hasError(this.validatorName) || (control.parent?.hasError(this.validatorName) ?? false);
             } else {
                 return control.errors != null;
             }

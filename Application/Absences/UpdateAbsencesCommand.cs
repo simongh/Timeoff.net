@@ -6,7 +6,7 @@ namespace Timeoff.Application.Absences
 {
     public record UpdateAbsencesCommand : IRequest<AbsencesViewModel>, Commands.IValidated
     {
-        public int Id { get; init; }
+        public int Id { get; set; }
 
         public double Adjustment { get; init; }
         public IEnumerable<ValidationFailure>? Failures { get; set; }

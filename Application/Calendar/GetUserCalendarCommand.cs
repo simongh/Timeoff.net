@@ -20,8 +20,9 @@ namespace Timeoff.Application.Calendar
 
         public async Task<UserCalendarViewModel> Handle(GetUserCalendarCommand request, CancellationToken cancellationToken)
         {
+            var id = request.Id == 0 ? _currentUserService.UserId : request.Id;
             var user = await _dataContext.Users
-                .FindById(request.Id)
+                .FindById(id)
                 .Select(u => new
                 {
                     u.FirstName,
@@ -41,8 +42,8 @@ namespace Timeoff.Application.Calendar
                 CurrentYear = request.Year,
                 IsActive = user.IsActivated && (user.EndDate == null || user.EndDate > DateTime.Today),
                 Calendar = await _dataContext.GetCalendarAsync(_currentUserService.CompanyId, request.Year, true),
-                Summary = await _dataContext.GetAllowanceAsync(request.Id, request.Year),
-                LeaveRequested = await _dataContext.Leaves.GetRequested(request.Id, request.Year),
+                Summary = await _dataContext.GetAllowanceAsync(id, request.Year),
+                LeaveRequested = await _dataContext.Leaves.GetRequested(id, request.Year),
             };
         }
     }

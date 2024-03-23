@@ -1,15 +1,15 @@
-import { ChangeDetectorRef, Component, DestroyRef, OnInit } from '@angular/core';
-import { UserDetailsComponent } from '../user-details/user-details.component';
-import { UserBreadcrumbComponent } from '../user-breadcrumb/user-breadcrumb.component';
+import { Component, DestroyRef, OnInit } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { switchMap } from 'rxjs';
-import { UsersService } from '../../../services/users/users.service';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { ScheduleComponent } from "../../../components/schedule/schedule.component";
-import { MessagesService } from '../../../services/messages/messages.service';
 import { HttpErrorResponse } from '@angular/common/http';
+import { switchMap } from 'rxjs';
+import { UserDetailsComponent } from '../user-details/user-details.component';
+import { UserBreadcrumbComponent } from '../user-breadcrumb/user-breadcrumb.component';
+import { UsersService } from '../../../services/users/users.service';
+import { ScheduleComponent } from '../../../components/schedule/schedule.component';
+import { MessagesService } from '../../../services/messages/messages.service';
 
 @Component({
     selector: 'app-user-schedule',
@@ -17,7 +17,14 @@ import { HttpErrorResponse } from '@angular/common/http';
     templateUrl: './user-schedule.component.html',
     styleUrl: './user-schedule.component.sass',
     providers: [UsersService],
-    imports: [UserDetailsComponent, UserBreadcrumbComponent, ReactiveFormsModule, CommonModule, RouterLink, ScheduleComponent]
+    imports: [
+        UserDetailsComponent,
+        UserBreadcrumbComponent,
+        ReactiveFormsModule,
+        CommonModule,
+        RouterLink,
+        ScheduleComponent,
+    ],
 })
 export class UserScheduleComponent implements OnInit {
     public id!: number;
@@ -33,7 +40,7 @@ export class UserScheduleComponent implements OnInit {
     public get userEnabled() {
         return this.usersSvc.userEnabled;
     }
-    
+
     public get schedule() {
         return this.form.controls.schedule;
     }
@@ -44,9 +51,8 @@ export class UserScheduleComponent implements OnInit {
         private readonly route: ActivatedRoute,
         private destroyed: DestroyRef,
         private readonly usersSvc: UsersService,
-        private readonly msgsSvc: MessagesService,
-        private readonly cd: ChangeDetectorRef,
-    ) {    }
+        private readonly msgsSvc: MessagesService
+    ) {}
 
     public ngOnInit(): void {
         this.route.paramMap
@@ -66,7 +72,8 @@ export class UserScheduleComponent implements OnInit {
     public update() {
         this.submitting = true;
 
-        this.usersSvc.updateSchedule(this.id)
+        this.usersSvc
+            .updateSchedule(this.id)
             .pipe(takeUntilDestroyed(this.destroyed))
             .subscribe({
                 next: () => {
@@ -77,14 +84,15 @@ export class UserScheduleComponent implements OnInit {
                 error: (e: HttpErrorResponse) => {
                     this.msgsSvc.isError('Unabled to update schedule');
                     this.submitting = false;
-                }
-            })
+                },
+            });
     }
 
     public reset() {
         this.submitting = true;
 
-        this.usersSvc.resetSchedule(this.id)
+        this.usersSvc
+            .resetSchedule(this.id)
             .pipe(takeUntilDestroyed(this.destroyed))
             .subscribe({
                 next: (schedule) => {
@@ -97,8 +105,7 @@ export class UserScheduleComponent implements OnInit {
                 error: (e: HttpErrorResponse) => {
                     this.msgsSvc.isError('Unabled to update schedule');
                     this.submitting = false;
-                }
-            })
-
+                },
+            });
     }
 }

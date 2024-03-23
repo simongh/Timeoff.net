@@ -1,23 +1,18 @@
 import { DestroyRef, Injectable } from '@angular/core';
-import countries from '../services/countries.json';
-import { RegisterOptions } from './register-options.model';
-import { Observable } from 'rxjs';
-import { RegisterModel } from './register.model';
 import { HttpClient } from '@angular/common/http';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { getTimezones } from '../services/timezones';
+import { Observable } from 'rxjs';
+import { RegisterOptions } from './register-options.model';
+import { RegisterModel } from './register.model';
 
 @Injectable()
 export class RegisterService {
-    constructor(
-        private readonly client: HttpClient,
-        private destroyed: DestroyRef
-    ) {}
+    constructor(private readonly client: HttpClient, private destroyed: DestroyRef) {}
 
     public getOptions(): RegisterOptions {
         return {
-            countries: countries,
-            timezones: getTimezones(),
+            countries: [],
+            timezones: [],
         };
     }
 

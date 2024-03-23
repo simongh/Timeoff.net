@@ -8,8 +8,8 @@ import { UsersService } from '../../../services/users/users.service';
 import { CalendarComponent } from '../../../components/calendar/calendar.component';
 import { CalendarService } from '../../../services/calendar/calendar.service';
 import { CalendarModel } from '../../../services/calendar/calendar.model';
-import { AllowanceBreakdownComponent } from "../../../components/allowance-breakdown/allowance-breakdown.component";
-import { LeaveSummaryComponent } from "../../../components/leave-summary/leave-summary.component";
+import { AllowanceBreakdownComponent } from '../../../components/allowance-breakdown/allowance-breakdown.component';
+import { LeaveSummaryComponent } from '../../../components/leave-summary/leave-summary.component';
 
 @Component({
     selector: 'user-calendar',
@@ -17,7 +17,14 @@ import { LeaveSummaryComponent } from "../../../components/leave-summary/leave-s
     templateUrl: './user-calendar.component.html',
     styleUrl: './user-calendar.component.sass',
     providers: [UsersService, CalendarService],
-    imports: [RouterLink, UserBreadcrumbComponent, UserDetailsComponent, CalendarComponent, AllowanceBreakdownComponent, LeaveSummaryComponent]
+    imports: [
+        RouterLink,
+        UserBreadcrumbComponent,
+        UserDetailsComponent,
+        CalendarComponent,
+        AllowanceBreakdownComponent,
+        LeaveSummaryComponent,
+    ],
 })
 export class UserCalendarComponent implements OnInit {
     public id: number = 0;
@@ -46,7 +53,7 @@ export class UserCalendarComponent implements OnInit {
             firstName: '',
             lastName: '',
             isActive: true,
-            summary : {
+            summary: {
                 available: 0,
                 carryOver: 0,
                 used: 0,
@@ -59,7 +66,7 @@ export class UserCalendarComponent implements OnInit {
                 total: 0,
                 remaining: 0,
                 leaveSummary: [],
-            }
+            },
         } as CalendarModel;
     }
 

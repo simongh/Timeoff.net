@@ -12,10 +12,7 @@ export class DatePickerDirective implements AfterViewInit {
     @Output()
     public selected = new EventEmitter<Date>();
 
-    constructor(
-        private elRef: ElementRef,
-        @Optional() private ngControl: NgControl
-    ) {}
+    constructor(private elRef: ElementRef, @Optional() private ngControl: NgControl) {}
 
     public ngAfterViewInit(): void {
         const setFn = (d: Date) => {

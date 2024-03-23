@@ -1,22 +1,23 @@
 import { Component, DestroyRef, Input, OnInit } from '@angular/core';
-import { FlashComponent } from '../../../components/flash/flash.component';
-import { ActivatedRoute, RouterLink } from '@angular/router';
-import { UsersService } from '../../../services/users/users.service';
-import { TeamModel } from '../../../models/team.model';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
-import { switchMap } from 'rxjs';
-import { UserModel } from '../../../services/users/user.model';
+import { ActivatedRoute, RouterLink } from '@angular/router';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { HttpErrorResponse } from '@angular/common/http';
+import { switchMap } from 'rxjs';
+import { FlashComponent } from '../../../components/flash/flash.component';
+import { UsersService } from '../../../services/users/users.service';
+import { TeamModel } from '../../../services/company/team.model';
+import { UserModel } from '../../../services/users/user.model';
 import { YesPipe } from '../../../components/yes.pipe';
 import { MessagesService } from '../../../services/messages/messages.service';
+import { CompanyService } from '../../../services/company/company.service';
 
 @Component({
     selector: 'user-list',
     standalone: true,
     templateUrl: './user-list.component.html',
     styleUrl: './user-list.component.sass',
-    providers: [UsersService],
+    providers: [UsersService, CompanyService],
     imports: [FlashComponent, RouterLink, CommonModule, YesPipe],
 })
 export class UserListComponent implements OnInit {
@@ -32,11 +33,12 @@ export class UserListComponent implements OnInit {
         private readonly route: ActivatedRoute,
         private destroyed: DestroyRef,
         private usersSvc: UsersService,
+        private companySvc: CompanyService,
         private messagesSvc: MessagesService
     ) {}
 
     public ngOnInit(): void {
-        this.usersSvc
+        this.companySvc
             .getTeams()
             .pipe(takeUntilDestroyed(this.destroyed))
             .subscribe((teams) => {
