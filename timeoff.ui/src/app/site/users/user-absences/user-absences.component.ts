@@ -5,21 +5,24 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
 import { switchMap } from 'rxjs';
-import { UserDetailsComponent } from '../user-details/user-details.component';
-import { UserBreadcrumbComponent } from '../user-breadcrumb/user-breadcrumb.component';
-import { UsersService } from '../../../services/users/users.service';
-import { CalendarService } from '../../../services/calendar/calendar.service';
-import { AllowanceSummaryModel } from '../../../services/calendar/allowance-summary.model';
-import { YesPipe } from '../../../components/yes.pipe';
+
+import { YesPipe } from '@components/yes.pipe';
+import { RequestsListComponent } from '@components/requests-list/requests-list.component';
+
+import { CalendarService } from '@services/calendar/calendar.service';
+import { AllowanceSummaryModel } from '@services/calendar/allowance-summary.model';
+import { MessagesService } from '@services/messages/messages.service';
+
+import { UsersService } from '../users.service';
 import { LeaveRequestModel } from '../../../models/leave-request.model';
-import { RequestsListComponent } from '../../../components/requests-list/requests-list.component';
-import { MessagesService } from '../../../services/messages/messages.service';
+import { UserBreadcrumbComponent } from '../user-breadcrumb/user-breadcrumb.component';
+import { UserDetailsComponent } from '../user-details/user-details.component';
 
 @Component({
     selector: 'user-absences',
     standalone: true,
     templateUrl: './user-absences.component.html',
-    styleUrl: './user-absences.component.sass',
+    styleUrl: './user-absences.component.scss',
     providers: [UsersService, CalendarService],
     imports: [
         UserDetailsComponent,

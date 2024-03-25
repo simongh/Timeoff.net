@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { ColourPickerComponent } from '../colour-picker/colour-picker.component';
-import { LeaveTypeFormGroup } from '../../../../services/company/company.service';
+
+import { LeaveTypeFormGroup } from '@services/company/company.service';
 
 @Component({
     standalone: true,

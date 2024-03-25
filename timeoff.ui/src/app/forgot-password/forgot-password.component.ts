@@ -2,12 +2,15 @@ import { Component, DestroyRef } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NgIf } from '@angular/common';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { FlashComponent } from '../components/flash/flash.component';
-import { AuthService } from '../services/auth/auth.service';
-import { ValidatorMessageComponent } from '../components/validator-message/validator-message.component';
-import { MessagesService } from '../services/messages/messages.service';
+
+import { FlashComponent } from '@components/flash/flash.component';
+import { ValidatorMessageComponent } from '@components/validator-message/validator-message.component';
+
+import { AuthService } from '@services/auth/auth.service';
+import { MessagesService } from '@services/messages/messages.service';
 
 @Component({
+    selector: 'forgot-password-page',
     standalone: true,
     templateUrl: 'forgot-password.component.html',
     providers: [AuthService],

@@ -4,19 +4,23 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { switchMap } from 'rxjs';
-import { EmailAuditService } from './email-audit.service';
-import { UserModel } from '../../services/company/user.model';
-import { EmailModel } from './email.model';
+
+import { FlashComponent } from '@components/flash/flash.component';
+
+import { MessagesService } from '@services/messages/messages.service';
+import { UserModel } from '@services/company/user.model';
+import { CompanyService } from '@services/company/company.service';
+
 import { PagerComponent } from './pager.component';
-import { FlashComponent } from '../../components/flash/flash.component';
-import { MessagesService } from '../../services/messages/messages.service';
+import { EmailModel } from './email.model';
+import { EmailAuditService } from './email-audit.service';
 
 @Component({
     selector: 'email-audit',
     standalone: true,
     providers: [EmailAuditService],
     templateUrl: './email-audit.component.html',
-    styleUrl: './email-audit.component.sass',
+    styleUrl: './email-audit.component.scss',
     imports: [ReactiveFormsModule, CommonModule, PagerComponent, FlashComponent],
 })
 export class EmailAuditComponent implements OnInit {
@@ -43,12 +47,13 @@ export class EmailAuditComponent implements OnInit {
     constructor(
         private readonly searchSvc: EmailAuditService,
         private readonly msgsSvc: MessagesService,
+        private readonly companySvc: CompanyService,
         private readonly destroyed: DestroyRef,
         private readonly route: ActivatedRoute
     ) {}
 
     public ngOnInit(): void {
-        this.searchSvc
+        this.companySvc
             .getUsers()
             .pipe(takeUntilDestroyed(this.destroyed))
             .subscribe((data) => {

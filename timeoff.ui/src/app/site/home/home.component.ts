@@ -4,13 +4,16 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { switchMap } from 'rxjs';
 import { startOfMonth, startOfYear } from 'date-fns';
-import { FlashComponent } from '../../components/flash/flash.component';
-import { CalendarComponent } from '../../components/calendar/calendar.component';
-import { AllowanceSummaryModel } from '../../services/calendar/allowance-summary.model';
-import { AllowanceBreakdownComponent } from '../../components/allowance-breakdown/allowance-breakdown.component';
-import { LeaveSummaryComponent } from '../../components/leave-summary/leave-summary.component';
-import { CalendarService } from '../../services/calendar/calendar.service';
-import { PublicHolidayModel } from '../../services/public-holidays/public-holiday.model';
+
+import { FlashComponent } from '@components/flash/flash.component';
+import { CalendarComponent } from '@components/calendar/calendar.component';
+import { AllowanceBreakdownComponent } from '@components/allowance-breakdown/allowance-breakdown.component';
+import { LeaveSummaryComponent } from '@components/leave-summary/leave-summary.component';
+
+import { AllowanceSummaryModel } from '@services/calendar/allowance-summary.model';
+import { CalendarService } from '@services/calendar/calendar.service';
+
+import { PublicHolidayModel } from '@models/public-holiday.model';
 
 @Component({
     standalone: true,

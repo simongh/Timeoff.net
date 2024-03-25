@@ -1,5 +1,5 @@
-import { datePart } from '../components/types';
-import { UserModel } from '../services/company/user.model';
+import { datePart } from '@components/types';
+import { UserModel } from '@services/company/user.model';
 
 export interface LeaveRequestModel {
     id: number;

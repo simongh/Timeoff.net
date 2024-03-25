@@ -7,7 +7,7 @@
             "projectType": "application",
             "schematics": {
                 "@schematics/angular:component": {
-                    "style": "sass"
+                    "style": "scss"
                 }
             },
             "root": "",
@@ -24,8 +24,11 @@
                         "tsConfig": "tsconfig.app.json",
                         "inlineStyleLanguage": "sass",
                         "assets": ["src/favicon.ico", "src/assets", "src/js", "src/css", "src/fonts"],
-                        "styles": ["src/styles.sass"],
-                        "scripts": []
+                        "styles": ["src/styles.scss"],
+                        "scripts": [],
+                        "stylePreprocessorOptions": {
+                            "includePaths": ["src/theme"]
+                        }
                     },
                     "configurations": {
                         "production": {

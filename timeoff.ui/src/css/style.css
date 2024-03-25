@@ -3,85 +3,85 @@
     (from witin project rooot directory)
       sassc scss/main.scss public/css/style.css
 */
-body {
+/* body {
     font: 14px "Open Sans", Helvetica, Arial, sans-serif;
     color: #61686b;
 }
 
 a {
     color: #5ba4e5;
-}
+} */
 
 /*
   Simple class that makes its content's font size little bit bigger
  */
-.text-bigger {
+/* .text-bigger {
     font-size: 16px;
-}
+} */
 
 /*
   Add special class to remove default buttom space
 */
-.no-bottom-space {
+/* .no-bottom-space {
     margin-bottom: 0px;
 }
 
 .large-bottom-space {
     margin-bottom: 300px;
-}
+} */
 
 /*
   Increase space between form groups so they are more prominent
 */
-.form-group {
+/* .form-group {
     margin-bottom: 20px;
-}
+} */
 
     /*
   Make help blocks in forms to be more distinguishable
  */
-    .form-group .help-block {
+    /* .form-group .help-block {
         font-style: italic;
-    }
+    } */
 
 /*
  Make certain progress bars to be taller
  */
-.progress.bigger {
+/* .progress.bigger {
     height: 38px;
 }
 
     .progress.bigger .progress-bar {
         line-height: 38px;
-    }
+    } */
 
 /* Space out content a bit */
-body {
+/* body {
     padding-top: 20px;
     padding-bottom: 20px;
 }
 
 label.label-plain {
     font-weight: normal;
-}
+} */
 
 /* Make breadcrumbs to be transparant */
-.breadcrumb {
+/* .breadcrumb {
     background: none;
     padding-right: 0;
     padding-left: 0;
-}
+} */
 
 /* Make the masthead heading the same height as the navigation */
-.header h3 {
+/* .header h3 {
     padding-bottom: 19px;
     margin-top: 0;
     margin-bottom: 0;
     line-height: 40px;
-}
+} */
 
 /* Custom page footer */
-.footer {
+/* .footer {
     margin-top: 20px;
     padding-top: 20px;
     border-top: 1px solid #e5e5e5;
@@ -90,16 +90,16 @@ label.label-plain {
 .header, .marketing, .footer {
     padding-right: 0;
     padding-left: 0;
-}
+} */
 
 /* Space out the masthead */
-.header {
+/* .header {
     margin-bottom: 30px;
 }
 
 .popover {
     min-width: 300px;
-}
+} */
 
 /* styling calendar*/
 .calendar_month {
@@ -207,7 +207,7 @@ td.leave_cell_pended {
 }
 
 /* Feeds */
-.feed-calendar-big {
+/* .feed-calendar-big {
     font-size: 450px;
     color: #F8F8F8;
 }
@@ -223,7 +223,7 @@ p.description-paragraph {
 
 div.feeds-holder {
     margin-top: 20px;
-}
+} */
 
 /* Calendars */
 .top-leave-type-statistics {

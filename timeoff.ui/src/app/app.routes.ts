@@ -1,8 +1,6 @@
 import { Routes } from '@angular/router';
 import { LoginComponent } from './login/login.component';
 import { authGuard } from './services/auth/auth.guard';
-import { siteRoutes } from './site/site.routes';
-import { SiteComponent } from './site/site.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { RegisterComponent } from './register/register.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
@@ -26,8 +24,7 @@ export const routes: Routes = [
     },
     {
         path: '',
-        component: SiteComponent,
         canMatch: [authGuard],
-        children: siteRoutes,
+        loadChildren: () => import('./site/site.routes').then(m=>m.siteRoutes)
     },
 ];

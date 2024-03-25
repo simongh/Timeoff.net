@@ -1,7 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Timeoff.Application.Schedule;
 
 namespace Timeoff.Controllers
 {
@@ -22,11 +21,11 @@ namespace Timeoff.Controllers
         //    return View(await _mediator.Send(new Application.Settings.GetSettingsCommand()));
         //}
 
-        [HttpPost("company")]
-        public async Task<IActionResult> UpdateCompanyAsync(Application.Settings.UpdateSettingsCommand command)
-        {
-            return View("index", await _mediator.Send(command));
-        }
+        //[HttpPost("company")]
+        //public async Task<IActionResult> UpdateCompanyAsync(Application.Settings.UpdateSettingsCommand command)
+        //{
+        //    return View("index", await _mediator.Send(command));
+        //}
 
         [HttpPost("carryOverUnusedAllowance")]
         public async Task<IActionResult> CarryOverAsync()
@@ -34,11 +33,11 @@ namespace Timeoff.Controllers
             return View();
         }
 
-        [HttpPost("schedule")]
-        public async Task<IActionResult> ScheduleAsync(UpdateScheduleCommand command)
-        {
-            return View("index", await _mediator.Send(command));
-        }
+        //[HttpPost("schedule")]
+        //public async Task<IActionResult> ScheduleAsync(UpdateScheduleCommand command)
+        //{
+        //    return View("index", await _mediator.Send(command));
+        //}
 
         [HttpPost("leavetypes")]
         public async Task<IActionResult> UpdateLeaveTypesAsync(Application.Settings.UpdateLeaveTypesCommand command)

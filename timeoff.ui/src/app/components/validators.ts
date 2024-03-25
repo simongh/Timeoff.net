@@ -22,7 +22,6 @@ export function listValidator(values: string[]): ValidatorFn {
 
 export function yearValidator(year: number): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
-        console.log(control.value?.substring(0, 4) == year);
         return control.value?.substring(0, 4) == year
             ? null
             : {

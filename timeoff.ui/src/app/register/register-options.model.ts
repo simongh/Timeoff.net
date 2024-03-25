@@ -1,4 +1,4 @@
-import { Country } from '../services/company/country.model';
+import { Country } from '@services/company/country.model';
 
 export interface RegisterOptions {
     countries: Country[];

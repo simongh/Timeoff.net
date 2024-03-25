@@ -2,11 +2,13 @@ import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { eachDayOfInterval, endOfMonth } from 'date-fns';
-import { TeamModel } from '../../services/company/team.model';
+
+import { TeamModel } from '@services/company/team.model';
 
 @Component({
     standalone: true,
     templateUrl: 'month-view.component.html',
+    styleUrl: 'month-view.component.scss',
     selector: 'month-view',
     imports: [CommonModule, RouterLink],
 })

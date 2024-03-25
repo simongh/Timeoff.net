@@ -9,13 +9,16 @@ import {
     endOfWeek,
     getDay,
 } from 'date-fns';
-import { PublicHolidayModel } from '../../services/public-holidays/public-holiday.model';
+
+import { PublicHolidayModel } from '@models/public-holiday.model';
+
 import { DayModel } from './day.model';
 
 @Component({
     selector: 'calendar',
     standalone: true,
     templateUrl: 'calendar.component.html',
+    styleUrl: 'calendar.component.scss',
     imports: [CommonModule],
 })
 export class CalendarComponent {

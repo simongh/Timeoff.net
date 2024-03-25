@@ -6,7 +6,7 @@ import { RouterLink } from '@angular/router';
     standalone: true,
     imports: [RouterLink],
     templateUrl: './user-breadcrumb.component.html',
-    styleUrl: './user-breadcrumb.component.sass',
+    styleUrl: './user-breadcrumb.component.scss',
 })
 export class UserBreadcrumbComponent {
     @Input()

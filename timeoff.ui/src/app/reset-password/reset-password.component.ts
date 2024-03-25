@@ -4,16 +4,19 @@ import { ActivatedRoute } from '@angular/router';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { HttpErrorResponse } from '@angular/common/http';
-import { FlashComponent } from '../components/flash/flash.component';
-import { compareValidator } from '../components/validators';
-import { AuthService } from '../services/auth/auth.service';
-import { ValidatorMessageComponent } from '../components/validator-message/validator-message.component';
-import { MessagesService } from '../services/messages/messages.service';
+
+import { FlashComponent } from '@components/flash/flash.component';
+import { compareValidator } from '@components/validators';
+import { ValidatorMessageComponent } from '@components/validator-message/validator-message.component';
+
+import { AuthService } from '@services/auth/auth.service';
+import { MessagesService } from '@services/messages/messages.service';
 
 @Component({
+    selector: 'reset-password-page',
     standalone: true,
     templateUrl: './reset-password.component.html',
-    styleUrl: './reset-password.component.sass',
+    styleUrl: './reset-password.component.scss',
     imports: [FlashComponent, CommonModule, ReactiveFormsModule, ValidatorMessageComponent],
 })
 export class ResetPasswordComponent implements OnInit {
