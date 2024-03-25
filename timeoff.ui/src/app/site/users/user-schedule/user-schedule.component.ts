@@ -5,17 +5,20 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { switchMap } from 'rxjs';
+
+import { ScheduleComponent } from '@components/schedule/schedule.component';
+
+import { MessagesService } from '@services/messages/messages.service';
+
+import { UsersService } from '../users.service';
 import { UserDetailsComponent } from '../user-details/user-details.component';
 import { UserBreadcrumbComponent } from '../user-breadcrumb/user-breadcrumb.component';
-import { UsersService } from '../../../services/users/users.service';
-import { ScheduleComponent } from '../../../components/schedule/schedule.component';
-import { MessagesService } from '../../../services/messages/messages.service';
 
 @Component({
-    selector: 'app-user-schedule',
+    selector: 'user-schedule',
     standalone: true,
     templateUrl: './user-schedule.component.html',
-    styleUrl: './user-schedule.component.sass',
+    styleUrl: './user-schedule.component.scss',
     providers: [UsersService],
     imports: [
         UserDetailsComponent,

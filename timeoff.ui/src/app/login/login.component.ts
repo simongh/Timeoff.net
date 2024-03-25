@@ -3,13 +3,16 @@ import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { AuthService } from '../services/auth/auth.service';
-import { FlashComponent } from '../components/flash/flash.component';
-import { LoginModel } from '../services/auth/login.model';
-import { ValidatorMessageComponent } from '../components/validator-message/validator-message.component';
-import { MessagesService } from '../services/messages/messages.service';
+
+import { FlashComponent } from '@components/flash/flash.component';
+import { ValidatorMessageComponent } from '@components/validator-message/validator-message.component';
+
+import { AuthService } from '@services/auth/auth.service';
+import { LoginModel } from '@services/auth/login.model';
+import { MessagesService } from '@services/messages/messages.service';
 
 @Component({
+    selector: 'login-apge',
     standalone: true,
     templateUrl: 'login.component.html',
     imports: [RouterLink, CommonModule, ReactiveFormsModule, FlashComponent, ValidatorMessageComponent],

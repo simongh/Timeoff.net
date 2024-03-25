@@ -1,8 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { Component, DestroyRef, Input, OnInit } from '@angular/core';
-import { FlashModel } from './flash.model';
-import { MessagesService } from '../../services/messages/messages.service';
+import { Component, DestroyRef, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+
+import { MessagesService } from '@services/messages/messages.service';
+import { FlashModel } from './flash.model';
 
 @Component({
     standalone: true,

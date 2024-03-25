@@ -4,20 +4,23 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
-import { UsersService } from '../../../services/users/users.service';
-import { FlashComponent } from '../../../components/flash/flash.component';
-import { ValidatorMessageComponent } from '../../../components/validator-message/validator-message.component';
-import { DatePickerDirective } from '../../../components/date-picker.directive';
-import { MessagesService } from '../../../services/messages/messages.service';
+
+import { FlashComponent } from '@components/flash/flash.component';
+import { ValidatorMessageComponent } from '@components/validator-message/validator-message.component';
+import { DatePickerDirective } from '@components/date-picker.directive';
+import { TeamSelectComponent } from '@components/team-select/team-select.component';
+
+import { MessagesService } from '@services/messages/messages.service';
+
+import { UsersService } from '../users.service';
 import { UserBreadcrumbComponent } from '../user-breadcrumb/user-breadcrumb.component';
-import { TeamSelectComponent } from '../../../components/team-select/team-select.component';
 
 @Component({
     selector: 'user-create',
     standalone: true,
     providers: [UsersService],
     templateUrl: './user-create.component.html',
-    styleUrl: './user-create.component.sass',
+    styleUrl: './user-create.component.scss',
     imports: [
         RouterLink,
         ReactiveFormsModule,

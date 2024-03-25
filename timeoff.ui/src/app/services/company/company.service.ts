@@ -41,6 +41,20 @@ export class CompanyService {
         return this.client.put<void>('/api/customer', this.settingsForm.value);
     }
 
+    public saveSchedule() {
+        const schedule = this.settingsForm.value.schedule!;
+
+        return this.client.put<void>('/api/company/schedule', {
+            monday: schedule[0],
+            tuesday: schedule[1],
+            wednesday: schedule![2],
+            thursday: schedule[3],
+            friday: schedule[4],
+            saturday: schedule[5],
+            sunday: schedule[6],
+        });
+    }
+
     public fillSchedule(schedule: ScheduleModel) {
         this.settingsForm.controls.schedule.clear();
 
@@ -61,6 +75,14 @@ export class CompanyService {
 
     public timeZones() {
         return this.client.get<TimeZoneModel[]>('/api/company/time-zones');
+    }
+
+    public deleteCompany(companyName: string) {
+        return this.client.delete<void>('/api/company', {
+            body: {
+                name: companyName,
+            },
+        });
     }
 
     private createForm() {

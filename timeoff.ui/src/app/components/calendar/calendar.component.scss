@@ -1,0 +1,37 @@
+div.month_container {
+  height : 250px;
+}
+
+.calendar_month {
+  width : 100%;
+
+  td {
+    text-align: center;
+    padding-top    : 5px;
+    padding-bottom : 5px;
+  }
+  
+  thead {
+    text-align: center;
+    font-weight: bolder;
+  }
+}
+
+td.calendar_cell {
+  width          : 15px !important;
+  min-width      : 15px !important;
+  max-width      : 15px !important;
+  position       : relative;
+  text-align     : center;
+  padding-top    : 5px;
+  padding-bottom : 5px;
+
+  span {
+    position   : relative;
+    left       : 9px;
+    top        : -1px;
+    display    : block;
+    text-align : center;
+    z-index : 10;
+  }
+}

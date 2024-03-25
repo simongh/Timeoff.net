@@ -1,4 +1,4 @@
-import { PublicHolidayModel } from '../public-holidays/public-holiday.model';
+import { PublicHolidayModel } from '@models/public-holiday.model';
 import { AllowanceSummaryModel } from './allowance-summary.model';
 
 export interface CalendarModel {

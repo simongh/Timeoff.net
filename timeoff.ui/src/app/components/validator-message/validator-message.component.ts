@@ -1,15 +1,18 @@
 import { NgIf } from '@angular/common';
 import { Component, Host, Input, Optional, SkipSelf } from '@angular/core';
-import { ControlContainer } from '@angular/forms';
+import { ControlContainer, FormControl } from '@angular/forms';
 
 @Component({
     selector: 'validator-message',
     standalone: true,
     imports: [NgIf],
     templateUrl: './validator-message.component.html',
-    styleUrl: './validator-message.component.sass',
+    styleUrl: './validator-message.component.scss',
 })
 export class ValidatorMessageComponent {
+    @Input()
+    public control!: FormControl;
+
     @Input()
     public controlName!: string;
 
@@ -23,10 +26,10 @@ export class ValidatorMessageComponent {
     }
 
     protected get hasError(): boolean {
-        const control = this.parent.control?.get(this.controlName);
+        const control = !!this.control ? this.control : this.parent.control?.get(this.controlName);
 
         if (!control) {
-            throw new Error(`Control ${this.controlName} was not found`);
+            throw new Error(`Control was not found for validator ${this.validatorName}`);
         }
 
         if (control.touched) {

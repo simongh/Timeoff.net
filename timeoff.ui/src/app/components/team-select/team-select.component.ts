@@ -2,15 +2,16 @@ import { Component, DestroyRef, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { CompanyService } from '../../services/company/company.service';
-import { TeamModel } from '../../services/company/team.model';
+
+import { CompanyService } from '@services/company/company.service';
+import { TeamModel } from '@services/company/team.model';
 
 @Component({
     selector: 'team-select',
     standalone: true,
     imports: [ReactiveFormsModule, CommonModule],
     templateUrl: './team-select.component.html',
-    styleUrl: './team-select.component.sass',
+    styleUrl: './team-select.component.scss',
     providers: [CompanyService],
 })
 export class TeamSelectComponent implements OnInit {

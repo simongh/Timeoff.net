@@ -4,17 +4,21 @@ import { CommonModule } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { combineLatest } from 'rxjs';
-import { FlashComponent } from '../components/flash/flash.component';
-import { RegisterService } from './register.service';
-import { compareValidator, listValidator } from '../components/validators';
+
+import { FlashComponent } from '@components/flash/flash.component';
+import { compareValidator, listValidator } from '@components/validators';
+import { ValidatorMessageComponent } from '@components/validator-message/validator-message.component';
+
+import { MessagesService } from '@services/messages/messages.service';
+import { TimeZoneModel } from '@services/company/time-zone.model';
+import { Country } from '@services/company/country.model';
+import { CompanyService } from '@services/company/company.service';
+
 import { RegisterModel } from './register.model';
-import { ValidatorMessageComponent } from '../components/validator-message/validator-message.component';
-import { MessagesService } from '../services/messages/messages.service';
-import { TimeZoneModel } from '../services/company/time-zone.model';
-import { Country } from '../services/company/country.model';
-import { CompanyService } from '../services/company/company.service';
+import { RegisterService } from './register.service';
 
 @Component({
+    selector: 'register-page',
     standalone: true,
     templateUrl: 'register.component.html',
     providers: [RegisterService],

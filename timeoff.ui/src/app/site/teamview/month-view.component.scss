@@ -1,0 +1,24 @@
+@import "theme";
+
+.team-view-table {
+  width : 100%;
+
+  td {
+    padding-top    : 5px;
+    padding-bottom : 5px;
+  }
+}
+
+td.team-view-header {
+  height: 43px;
+  text-align: center;
+}
+
+.left-column-cell {
+  text-overflow: ellipsis;
+  /* Cannot avoid specifying width with pixels... */
+  width: 165px;
+  white-space: nowrap;
+  overflow: hidden;
+  display: inline-block;
+}

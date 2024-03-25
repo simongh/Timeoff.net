@@ -6,14 +6,18 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
 import { switchMap } from 'rxjs';
 import { startOfYear } from 'date-fns';
-import { FlashComponent } from '../../../components/flash/flash.component';
-import { CalendarComponent } from '../../../components/calendar/calendar.component';
-import { PublicHolidaysService } from '../../../services/public-holidays/public-holidays.service';
-import { PublicHolidayModel } from '../../../services/public-holidays/public-holiday.model';
-import { ValidatorMessageComponent } from '../../../components/validator-message/validator-message.component';
+
+import { FlashComponent } from '@components/flash/flash.component';
+import { CalendarComponent } from '@components/calendar/calendar.component';
+import { ValidatorMessageComponent } from '@components/validator-message/validator-message.component';
+import { DatePickerDirective } from '@components/date-picker.directive';
+
+import { MessagesService } from '@services/messages/messages.service';
+
+import { PublicHolidayModel } from '@models/public-holiday.model';
+
+import { PublicHolidaysService } from './public-holidays.service';
 import { AddNewModalComponent } from './add-new-modal.component';
-import { DatePickerDirective } from '../../../components/date-picker.directive';
-import { MessagesService } from '../../../services/messages/messages.service';
 
 @Component({
     standalone: true,
@@ -49,7 +53,7 @@ export class PublicHolidaysComponent implements OnInit {
 
     public start = startOfYear(new Date());
 
-    public holidays!: PublicHolidayModel[];
+    public holidays: PublicHolidayModel[] = [];
 
     public get holidaysForm() {
         return this.holidaySvc.holidays;

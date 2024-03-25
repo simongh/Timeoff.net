@@ -3,15 +3,18 @@ import { Component, DestroyRef, EventEmitter, Input, Output } from '@angular/cor
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { HttpErrorResponse } from '@angular/common/http';
-import { FlashComponent } from '../../../components/flash/flash.component';
-import { UsersService } from '../../../services/users/users.service';
-import { MessagesService } from '../../../services/messages/messages.service';
+
+import { FlashComponent } from '@components/flash/flash.component';
+
+import { MessagesService } from '@services/messages/messages.service';
+
+import { UsersService } from '../users.service';
 
 @Component({
     selector: 'user-details',
     standalone: true,
     templateUrl: './user-details.component.html',
-    styleUrl: './user-details.component.sass',
+    styleUrl: './user-details.component.scss',
     imports: [CommonModule, RouterLink, FlashComponent, RouterLinkActive],
 })
 export class UserDetailsComponent {

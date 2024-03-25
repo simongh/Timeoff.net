@@ -1,6 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { PublicHolidayModel } from '../public-holidays/public-holiday.model';
+import { PublicHolidayModel } from '@models/public-holiday.model';
 import { CalendarModel } from './calendar.model';
 
 @Injectable()

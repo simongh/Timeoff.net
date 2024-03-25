@@ -8,7 +8,7 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
     standalone: true,
     imports: [CommonModule, ReactiveFormsModule],
     templateUrl: './schedule.component.html',
-    styleUrl: './schedule.component.sass',
+    styleUrl: './schedule.component.scss',
 })
 export class ScheduleComponent {
     @Input()

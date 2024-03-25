@@ -2,9 +2,9 @@ import { FormBuilder } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map } from 'rxjs';
-import { UserModel } from '../../services/company/user.model';
+
 import { EmailModel } from './email.model';
-import { dateString } from '../../components/types';
+import { dateString } from '@components/types';
 
 interface QueryResult {
     pages: number;
@@ -24,10 +24,6 @@ export class EmailAuditService {
     public totalPages: number = 0;
 
     constructor(private readonly fb: FormBuilder, private readonly client: HttpClient) {}
-
-    public getUsers() {
-        return this.client.get<UserModel[]>('/api/teams/users');
-    }
 
     public search() {
         return this.client

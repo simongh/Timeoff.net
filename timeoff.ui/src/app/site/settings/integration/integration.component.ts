@@ -1,15 +1,18 @@
 import { Component, DestroyRef } from '@angular/core';
-import { FlashComponent } from '../../../components/flash/flash.component';
-import { IntegrationService } from './integration.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+
+import { FlashComponent } from '@components/flash/flash.component';
+
+import { MessagesService } from '@services/messages/messages.service';
+
+import { IntegrationService } from './integration.service';
 import { IntegrationModel } from './integration.model';
-import { MessagesService } from '../../../services/messages/messages.service';
 
 @Component({
     selector: 'integration',
     standalone: true,
     templateUrl: './integration.component.html',
-    styleUrl: './integration.component.sass',
+    styleUrl: './integration.component.scss',
     imports: [FlashComponent],
     providers: [IntegrationService],
 })

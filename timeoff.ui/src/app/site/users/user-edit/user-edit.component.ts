@@ -5,18 +5,21 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { switchMap } from 'rxjs';
-import { UserDetailsComponent } from '../user-details/user-details.component';
+
+import { DatePickerDirective } from '@components/date-picker.directive';
+import { TeamSelectComponent } from '@components/team-select/team-select.component';
+
+import { MessagesService } from '@services/messages/messages.service';
+
+import { UsersService } from '../users.service';
 import { UserBreadcrumbComponent } from '../user-breadcrumb/user-breadcrumb.component';
-import { UsersService } from '../../../services/users/users.service';
-import { DatePickerDirective } from '../../../components/date-picker.directive';
-import { MessagesService } from '../../../services/messages/messages.service';
-import { TeamSelectComponent } from '../../../components/team-select/team-select.component';
+import { UserDetailsComponent } from '../user-details/user-details.component';
 
 @Component({
     selector: 'user-edit',
     standalone: true,
     templateUrl: './user-edit.component.html',
-    styleUrl: './user-edit.component.sass',
+    styleUrl: './user-edit.component.scss',
     providers: [UsersService],
     imports: [
         UserDetailsComponent,

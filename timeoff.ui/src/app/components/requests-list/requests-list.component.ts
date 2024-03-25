@@ -7,7 +7,7 @@ import { DatePartPipe } from '../date-part.pipe';
     selector: 'requests-list',
     standalone: true,
     templateUrl: './requests-list.component.html',
-    styleUrl: './requests-list.component.sass',
+    styleUrl: './requests-list.component.scss',
     imports: [CommonModule, DatePartPipe],
 })
 export class RequestsListComponent {

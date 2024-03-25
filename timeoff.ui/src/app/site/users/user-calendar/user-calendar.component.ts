@@ -3,19 +3,22 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, RouterLink, RouterModule } from '@angular/router';
 import { UserBreadcrumbComponent } from '../user-breadcrumb/user-breadcrumb.component';
 import { combineLatest, switchMap } from 'rxjs';
+
+import { CalendarComponent } from '@components/calendar/calendar.component';
+import { AllowanceBreakdownComponent } from '@components/allowance-breakdown/allowance-breakdown.component';
+import { LeaveSummaryComponent } from '@components/leave-summary/leave-summary.component';
+
+import { CalendarService } from '@services/calendar/calendar.service';
+import { CalendarModel } from '@services/calendar/calendar.model';
+
+import { UsersService } from '../users.service';
 import { UserDetailsComponent } from '../user-details/user-details.component';
-import { UsersService } from '../../../services/users/users.service';
-import { CalendarComponent } from '../../../components/calendar/calendar.component';
-import { CalendarService } from '../../../services/calendar/calendar.service';
-import { CalendarModel } from '../../../services/calendar/calendar.model';
-import { AllowanceBreakdownComponent } from '../../../components/allowance-breakdown/allowance-breakdown.component';
-import { LeaveSummaryComponent } from '../../../components/leave-summary/leave-summary.component';
 
 @Component({
     selector: 'user-calendar',
     standalone: true,
     templateUrl: './user-calendar.component.html',
-    styleUrl: './user-calendar.component.sass',
+    styleUrl: './user-calendar.component.scss',
     providers: [UsersService, CalendarService],
     imports: [
         RouterLink,

@@ -2,10 +2,13 @@ import { Component, DestroyRef, EventEmitter, Input, Output } from '@angular/cor
 import { ReactiveFormsModule } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { HttpErrorResponse } from '@angular/common/http';
-import { PublicHolidaysService } from '../../../services/public-holidays/public-holidays.service';
-import { ValidatorMessageComponent } from '../../../components/validator-message/validator-message.component';
-import { DatePickerDirective } from '../../../components/date-picker.directive';
-import { MessagesService } from '../../../services/messages/messages.service';
+
+import { ValidatorMessageComponent } from '@components/validator-message/validator-message.component';
+import { DatePickerDirective } from '@components/date-picker.directive';
+
+import { MessagesService } from '@services/messages/messages.service';
+
+import { PublicHolidaysService } from './public-holidays.service';
 
 @Component({
     standalone: true,

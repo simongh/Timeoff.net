@@ -1,5 +1,5 @@
 import { isSameDay, isWeekend } from 'date-fns';
-import { PublicHolidayModel } from '../../services/public-holidays/public-holiday.model';
+import { PublicHolidayModel } from '@models/public-holiday.model';
 
 export class DayModel {
     public date: Date;

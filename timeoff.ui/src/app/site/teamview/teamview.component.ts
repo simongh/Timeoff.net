@@ -3,13 +3,17 @@ import { Component, DestroyRef, Input, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { addMonths, startOfMonth, subMonths } from 'date-fns';
-import { TeamModel } from '../../services/company/team.model';
+
+import { DatePickerDirective } from '@components/date-picker.directive';
+
+import { TeamModel } from '@services/company/team.model';
+
 import { MonthViewComponent } from './month-view.component';
-import { DatePickerDirective } from '../../components/date-picker.directive';
 
 @Component({
     standalone: true,
-    templateUrl: 'teamview.component.html',
+    templateUrl: './teamview.component.html',
+    styleUrl: './teamview.component.scss',
     imports: [CommonModule, RouterLink, MonthViewComponent, DatePickerDirective],
 })
 export class TeamviewComponent implements OnInit {

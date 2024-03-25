@@ -1,9 +1,9 @@
 import { Routes } from '@angular/router';
 import { HomeComponent } from './home/home.component';
 import { PublicHolidaysComponent } from './public-holidays/public-holidays.component';
-import { TeamsListComponent } from './teams-list/teams-list.component';
+import { TeamsListComponent } from './teams/teams-list/teams-list.component';
 import { IntegrationComponent } from './integration/integration.component';
-import { TeamEditComponent } from './team-edit/team-edit.component';
+import { TeamEditComponent } from './teams/team-edit/team-edit.component';
 
 export const settingsRoutes: Routes = [
     {

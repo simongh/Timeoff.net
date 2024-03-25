@@ -4,19 +4,22 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { HttpErrorResponse } from '@angular/common/http';
 import { switchMap } from 'rxjs';
-import { FlashComponent } from '../../../components/flash/flash.component';
-import { UsersService } from '../../../services/users/users.service';
-import { TeamModel } from '../../../services/company/team.model';
-import { UserModel } from '../../../services/users/user.model';
-import { YesPipe } from '../../../components/yes.pipe';
-import { MessagesService } from '../../../services/messages/messages.service';
-import { CompanyService } from '../../../services/company/company.service';
+
+import { FlashComponent } from '@components/flash/flash.component';
+import { YesPipe } from '@components/yes.pipe';
+
+import { TeamModel } from '@services/company/team.model';
+import { MessagesService } from '@services/messages/messages.service';
+import { CompanyService } from '@services/company/company.service';
+
+import { UsersService } from '../users.service';
+import { UserModel } from '../user.model';
 
 @Component({
     selector: 'user-list',
     standalone: true,
     templateUrl: './user-list.component.html',
-    styleUrl: './user-list.component.sass',
+    styleUrl: './user-list.component.scss',
     providers: [UsersService, CompanyService],
     imports: [FlashComponent, RouterLink, CommonModule, YesPipe],
 })
