@@ -1,37 +1,33 @@
 <div class="modal fade" id="add_new_leave_type_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form id="leave_type_new_form" method="POST" asp-asp-controller="settings" asp-action="UpdateLeaveTypes">
+            <form id="leave_type_new_form" [formGroup]="form">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title">Add new Leave Type</h4>
                 </div>
 
                 <div class="modal-body">
-                    <!-- @{
-                        var add = new Timeoff.Application.Settings.LeaveTypeRequest();
-                    } -->
                     <div class="form-group">
-                        <label asp-for="@add.Name" class="control-label">Name:</label>
-                        <input type="text" class="form-control" asp-for="@add.Name" required>
+                        <label for="name" class="control-label">Name:</label>
+                        <input type="text" formControlName="name" class="form-control" id="name" required>
                     </div>
 
                     <div class="form-group">
-                        <input type="checkbox" asp-for="@add.UseAllowance" value="true">&nbsp;
-                        <label asp-for="@add.UseAllowance" class="control-label">Use allowance</label>
+                        <input type="checkbox" formControlName="useAllowance" id="useAllowance" value="true">&nbsp;
+                        <label for="useAllowance" class="control-label">Use allowance</label>
                         <p><em>If checked leaves of this type are going to be counted towards employee's annual holiday allowance.</em></p>
                     </div>
 
                     <div class="form-group">
-                        <input type="checkbox" asp-for="@add.AutoApprove" value="true">&nbsp;
-                        <label asp-for="@add.AutoApprove" class="control-label">Auto approve</label>
+                        <input type="checkbox" formControlName="autoApprove" id="autoApprove" value="true">&nbsp;
+                        <label for="autoApprove" class="control-label">Auto approve</label>
                         <p><em>If checked leaves of this type will not require supervisor approval.</em></p>
                     </div>
 
                     <div class="form-group">
                         <div class="dropdown" data-tom-color-picker="1">
-                            <input type="hidden" asp-for="@add.Colour" value="leave_type_color_1">
-                            <colour-picker #picker colour="leave_type_color_1">Pick up color for new type</colour-picker>
+                            <colour-picker [control]="form.controls.colour">Pick up color for new type</colour-picker>
                             <!-- <button type="button" class="btn btn-default dropdown-toggle leave_type_color_1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-paint-brush"></i> Pick up color for new type</button>
                             <ul class="dropdown-menu">
                                 <partial name="_OptionsForColourPicker" />
@@ -41,15 +37,15 @@
                     </div>
 
                     <div class="form-group">
-                        <label asp-for="@add.Limit" class="control-label">Limit:</label>
-                        <input type="number" class="form-control" asp-for="@add.Limit">
+                        <label for="limit" class="control-label">Limit:</label>
+                        <input type="number" formControlName="limit" class="form-control" id="limit" min="0">
                         <p><em>If set to non-zero value determines maximum number of days of new leave type each employee could take during the year.</em></p>
                     </div>
 
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-link" data-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-success single-click" (click)="addNew()">Create</button>
+                    <button type="button" class="btn btn-success single-click" data-dismiss="modal" (click)="addNew()">Create</button>
                 </div>
             </form>
         </div>
