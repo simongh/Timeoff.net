@@ -20,6 +20,8 @@ export class CompanyService {
 
     public leaveTypes = this.fb.array<LeaveTypeFormGroup>([]);
 
+    public first = this.fb.control<number>(0);
+
     constructor(private readonly client: HttpClient, private readonly fb: FormBuilder) {
         this.settingsForm = this.createForm();
         this.leaveTypeForm = this.createLeaveTypeForm();
@@ -55,6 +57,13 @@ export class CompanyService {
         });
     }
 
+    public updateLeaveTypes() {
+        return this.client.put<void>('/api/company/leave-types',{
+            first: this.first.value,
+            types: this.leaveTypes.value
+        });
+    }
+
     public fillSchedule(schedule: ScheduleModel) {
         this.settingsForm.controls.schedule.clear();
 
@@ -66,7 +75,15 @@ export class CompanyService {
     public fillLeaveTypes(types: LeaveTypeModel[]) {
         types.map((lt) => {
             this.leaveTypes.push(this.createLeaveTypeForm(lt));
+
+            if (lt.first) {
+                this.first.setValue(lt.id);
+            }
         });
+    }
+
+    public resetLeaveTypeForm() {
+        this.leaveTypeForm = this.createLeaveTypeForm();
     }
 
     public countries() {

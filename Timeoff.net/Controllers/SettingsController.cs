@@ -46,12 +46,12 @@ namespace Timeoff.Controllers
             return View("index", vm);
         }
 
-        [HttpPost("leavetypes/delete")]
-        public async Task<IActionResult> DeleteLeaveTypesAsync([FromQuery] Application.Settings.DeleteLeaveTypeCommand command)
-        {
-            var vm = await _mediator.Send(command);
-            return View("general", vm);
-        }
+        //[HttpPost("leavetypes/delete")]
+        //public async Task<IActionResult> DeleteLeaveTypesAsync([FromQuery] Application.Settings.DeleteLeaveTypeCommand command)
+        //{
+        //    var vm = await _mediator.Send(command);
+        //    return View("general", vm);
+        //}
 
         [HttpGet("company/authentication")]
         public async Task<IActionResult> CompanyAuthenticateAsync()

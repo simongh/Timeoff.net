@@ -187,13 +187,11 @@
                 <ng-container *ngFor="let leave of leaveTypes.controls; let i=index">
                     <div class="row" [formGroup]="leave">
                         <div class="col-md-6">
-                        <input type="hidden" formControlName="id"/>
-
                             <div class="input-group">
                                 <span class="input-group-addon">
-                                    <input type="radio" formControlName="first">
+                                    <input type="radio" [formControl]="firstType" [value]="leave.controls.id.value" name="first"/>
                                 </span>
-                                <input type="text" class="form-control" formControlName="name" [attr.data-tom-leave-type-order]="leave.controls.name.value">
+                                <input type="text" class="form-control" formControlName="name" [attr.data-tom-leave-type-order]="leave.controls.name.value"/>
 
                                 <div class="input-group-btn" data-tom-color-picker="1" [attr.data-tom-leave-type-order]="leave.controls.colour.valid">
                                     <colour-picker [control]="leave.controls.colour"/>
@@ -216,7 +214,7 @@
                             <input type="number" class="form-control" formControlName="limit" min="0" max="365">
                         </div>
                         <div class="col-md-1">
-                            <button class="btn btn-default pull-right leavetype-remove-btn" value="@Model.LeaveTypes[i].Id" data-tom-leave-type-order="LeaveTypes[@i].Id"><span class="fa fa-remove"></span></button>
+                            <button class="btn btn-default pull-right leavetype-remove-btn" (click)="removeLeaveType(leave.value.id!)" [attr.data-tom-leave-type-order]="leave.controls.id.value"><span class="fa fa-remove"></span></button>
                         </div>
                     </div>
                     <div class="row">&nbsp;</div>
@@ -227,7 +225,7 @@
                     <div class="col-md-12">
                         <div class="pull-right">
                             <button class="btn btn-default" data-toggle="modal" data-target="#add_new_leave_type_modal" type="button" id="add_new_leave_type_btn">Add new</button>
-                            <button type="submit" class="btn btn-success single-click">Save changes</button>
+                            <button type="button" (click)="updateLeaveTypes()" class="btn btn-success single-click">Save changes</button>
                         </div>
                     </div>
                 </div>
@@ -278,5 +276,5 @@
     </div>
 </div>
 
-<leave-type-modal/>
+<leave-type-modal [form]="leaveTypeForm" (addedLeaveType)="addLeaveType()"/>
 <remove-company-modal (onDelete)="deleteCompany($event)"/>

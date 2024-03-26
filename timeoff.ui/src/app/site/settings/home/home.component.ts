@@ -63,6 +63,14 @@ export class HomeComponent implements OnInit {
         return this.companySvc.leaveTypes;
     }
 
+    public get leaveTypeForm() {
+        return this.companySvc.leaveTypeForm;
+    }
+
+    public get firstType() {
+        return this.companySvc.first;
+    }
+
     public get days() {
         return this.companySvc.settingsForm.controls.schedule.controls;
     }
@@ -173,9 +181,22 @@ export class HomeComponent implements OnInit {
                     if (e.status == 400) {
                         this.msgsSvc.hasErrors(e.error.errors);
                     } else {
-                        this.msgsSvc.isError("Unable to delete company");
+                        this.msgsSvc.isError('Unable to delete company');
                     }
-                }
+                },
             });
     }
+
+    public updateLeaveTypes() {
+        this.companySvc.updateLeaveTypes().pipe(takeUntilDestroyed(this.destroyed)).subscribe();
+    }
+
+    public addLeaveType() {
+        this.leaveTypes.push(this.leaveTypeForm);
+
+        this.companySvc.resetLeaveTypeForm();
+    }
+
+    public removeLeaveType(id: number)
+    {}
 }

@@ -3,18 +3,22 @@ import { Component, DestroyRef, Input, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { addMonths, startOfMonth, subMonths } from 'date-fns';
+import { combineLatest } from 'rxjs';
 
 import { DatePickerDirective } from '@components/date-picker.directive';
 
 import { TeamModel } from '@services/company/team.model';
+import { CompanyService } from '@services/company/company.service';
 
 import { MonthViewComponent } from './month-view.component';
 
 @Component({
+    selector: 'team-view',
     standalone: true,
     templateUrl: './teamview.component.html',
     styleUrl: './teamview.component.scss',
     imports: [CommonModule, RouterLink, MonthViewComponent, DatePickerDirective],
+    providers: [CompanyService],
 })
 export class TeamviewComponent implements OnInit {
     public name: string = '';
@@ -45,26 +49,35 @@ export class TeamviewComponent implements OnInit {
 
     public next!: Date;
 
-    public teams: TeamModel[] = [{ id: 1, name: 'test' }];
+    public teams: TeamModel[] = [];
 
-    constructor(private route: ActivatedRoute, private destroyed: DestroyRef, private router: Router) {}
+    constructor(
+        private route: ActivatedRoute,
+        private destroyed: DestroyRef,
+        private router: Router,
+        private companySvc: CompanyService
+    ) {}
 
     public ngOnInit(): void {
-        this.route.queryParamMap.pipe(takeUntilDestroyed(this.destroyed)).subscribe((p) => {
-            if (p.has('year') && p.has('month')) {
-                this.setStart(new Date(`${p.get('year')}-${p.get('month')}-01`));
-            } else {
-                this.setStart(startOfMonth(new Date()));
-            }
+        combineLatest([this.route.queryParamMap, this.companySvc.getTeams()])
+            .pipe(takeUntilDestroyed(this.destroyed))
+            .subscribe(([p, teams]) => {
+                if (p.has('year') && p.has('month')) {
+                    this.setStart(new Date(`${p.get('year')}-${p.get('month')}-01`));
+                } else {
+                    this.setStart(startOfMonth(new Date()));
+                }
 
-            this.grouped = p.has('grouped');
+                this.grouped = p.has('grouped');
 
-            if (p.has('team')) {
-                this.team = Number.parseInt(p.get('team')!);
-            } else {
-                this.team = null;
-            }
-        });
+                this.teams = teams;
+
+                if (p.has('team')) {
+                    this.team = Number.parseInt(p.get('team')!);
+                } else {
+                    this.team = null;
+                }
+            });
     }
 
     public dateselected(e: Date) {
