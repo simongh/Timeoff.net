@@ -1,6 +1,6 @@
 <div class="row clearfix">
     <div class="col-md-12">
-        <table class="team-view-table table-hover">
+        <table class="team-view-table table-hover" style="border: 1px;">
             <thead>
                 <tr>
                     <td class="team-view-header" colspan="2">
@@ -22,45 +22,32 @@
                         </div>
                     </td>
 
-                    <td *ngFor="let d of days" colspan="2" class="team-view-header"><b>{{d.getDate()}}</b></td>
+                    <td *ngFor="let d of days" colspan="2" class="team-view-header"><b>{{d | date: 'EEEEEE'}}</b></td>
 
                 </tr>
             </thead>
 
             <tbody>
-                <!-- @foreach (var user in Model.Users.Where(u => teamId == null ? true : u.TeamId ==  teamId.Value))
-                {
-                    <tr class="teamview-user-list-row" data-vpp-user-list-row="@user.UserId">
-                        <td class="left-column-cell cross-link user-details-summary-trigger" data-user-id="@user.UserId">
-                            @if (this.User.IsInRole("Admin"))
-                            {
-                                <a asp-controller="users" asp-action="edit" asp-route-id="@user.UserId">@user.Name</a>
-                            }
-                            else
-                            {
-                                <span>@user.Name</span>
-                            }
+                <tr *ngFor="let u of rows" class="teamview-user-list-row" [attr.data-vpp-user-list-row]="u.id">
+                    <td class="left-column-cell cross-link user-details-summary-trigger" [attr.data-user-id]="u.id">
+                        <a *ngIf="isAdmin" [routerLink]="['/users',u.id]">{{u.name}}</a>
+                        <span *ngIf="!isAdmin">{{u.name}}</span>
+                    </td>
+                    <td>
+                        <span class="teamview-deducted-days"
+                            [attr.data-content]="u.summary"
+                            data-placement="right"
+                            data-toggle="popover"
+                            data-trigger="focus hover">{{u.total}}</span>
+                    </td>
+                    <ng-container *ngFor="let day of u.days">
+                        <td class="calendar_cell half_1st" [ngClass]="day.classes">
+                            <span *ngIf="!day.label">{{day.date| date: 'd'}}</span>
+                            <span *ngIf="!!day.label" data-toggle="tooltip" data-placement="top" [title]="day.label">{{day.date| date: 'd'}}</span>
                         </td>
-                        <td>
-                            @{
-                                var days = Model.DaysDeducted(user.UserId);
-                            }
-                            <span class="teamview-deducted-days"
-                                data-content="In @Model.CurrentDate.ToString("MMMM, yyyy") @user.Name used @days days from allowance"
-                                data-placement="right"
-                                data-toggle="popover"
-                                data-trigger="focus hover">@days</span>
-                        </td>
-                        @for (DateTime i = Model.CurrentDate; i.Month == Model.CurrentDate.Month; i = i.AddDays(1))
-                        {
-                            var day = Model.CalendarDays.FirstOrDefault(d => d.Date == i && d.UserId == user.UserId) ?? new()
-                            {
-                                Date = i
-                            };
-                            <partial name="_CalendarCell" model="day" />
-                        }
-                    </tr>
-                } -->
+                        <td class="calendar_cell half_2nd" [ngClass]="day.classes"></td>
+                    </ng-container>
+                </tr>
             </tbody>
         </table>
     </div>

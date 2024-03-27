@@ -18,7 +18,7 @@ import { EmailAuditService } from './email-audit.service';
 @Component({
     selector: 'email-audit',
     standalone: true,
-    providers: [EmailAuditService],
+    providers: [EmailAuditService, CompanyService],
     templateUrl: './email-audit.component.html',
     styleUrl: './email-audit.component.scss',
     imports: [ReactiveFormsModule, CommonModule, PagerComponent, FlashComponent],

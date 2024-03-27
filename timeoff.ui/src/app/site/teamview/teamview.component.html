@@ -31,11 +31,11 @@
 <div class="row">&nbsp;</div>
 
 <ng-container *ngIf="grouped">
-    <month-view *ngFor="let t of teams" [team]="t" [selectedDate]="start" [selectedTeam]="team" [teams]="teams"/>
+    <month-view *ngFor="let t of teams" [team]="t" [selectedDate]="start" [selectedTeam]="team" [results]="results" [teams]="teams"/>
 </ng-container>
 
 <ng-container *ngIf="!grouped">
-    <month-view [selectedDate]="start" [selectedTeam]="team" [teams]="teams"/>
+    <month-view [selectedDate]="start" [selectedTeam]="team" [results]="results" [teams]="teams"/>
 </ng-container>
 
 <!-- @if (Model.Grouped)
