@@ -94,6 +94,25 @@ label.label-plain {
 }
 
 /* styling calendar*/
+td.calendar_cell {
+  width          : 15px !important;
+  min-width      : 15px !important;
+  max-width      : 15px !important;
+  position       : relative;
+  text-align     : center;
+  padding-top    : 5px;
+  padding-bottom : 5px;
+
+  span {
+    position   : relative;
+    left       : 9px;
+    top        : -1px;
+    display    : block;
+    text-align : center;
+    z-index : 10;
+  }
+}
+
 td.current_day_cell {
   background: #FFCDD2;
   color : #ffffff;

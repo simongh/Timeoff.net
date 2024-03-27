@@ -3,7 +3,7 @@ import { Component, DestroyRef, Input, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { addMonths, startOfMonth, subMonths } from 'date-fns';
-import { combineLatest } from 'rxjs';
+import { combineLatest, map, switchMap } from 'rxjs';
 
 import { DatePickerDirective } from '@components/date-picker.directive';
 
@@ -11,6 +11,9 @@ import { TeamModel } from '@services/company/team.model';
 import { CompanyService } from '@services/company/company.service';
 
 import { MonthViewComponent } from './month-view.component';
+import { TeamViewService } from './team-view.service';
+import { TeamViewModel } from './team-view.model';
+import { UserSummaryModel } from './user-summary.model';
 
 @Component({
     selector: 'team-view',
@@ -18,7 +21,7 @@ import { MonthViewComponent } from './month-view.component';
     templateUrl: './teamview.component.html',
     styleUrl: './teamview.component.scss',
     imports: [CommonModule, RouterLink, MonthViewComponent, DatePickerDirective],
-    providers: [CompanyService],
+    providers: [CompanyService, TeamViewService],
 })
 export class TeamviewComponent implements OnInit {
     public name: string = '';
@@ -51,32 +54,48 @@ export class TeamviewComponent implements OnInit {
 
     public teams: TeamModel[] = [];
 
+    public results: TeamViewModel = {
+        users: [] as UserSummaryModel[]
+    } as TeamViewModel;
+
     constructor(
         private route: ActivatedRoute,
         private destroyed: DestroyRef,
         private router: Router,
-        private companySvc: CompanyService
-    ) {}
+        private companySvc: CompanyService,
+        private teamViewSvc: TeamViewService
+    ) {
+        this.setStart(startOfMonth(new Date()));
+    }
 
     public ngOnInit(): void {
         combineLatest([this.route.queryParamMap, this.companySvc.getTeams()])
-            .pipe(takeUntilDestroyed(this.destroyed))
-            .subscribe(([p, teams]) => {
-                if (p.has('year') && p.has('month')) {
-                    this.setStart(new Date(`${p.get('year')}-${p.get('month')}-01`));
-                } else {
-                    this.setStart(startOfMonth(new Date()));
-                }
+            .pipe(
+                takeUntilDestroyed(this.destroyed),
+                switchMap(([p, teams]) => {
+                    if (p.has('year') && p.has('month')) {
+                        this.setStart(new Date(`${p.get('year')}-${p.get('month')}-01`));
+                    }
 
-                this.grouped = p.has('grouped');
+                    if (p.has('team')) {
+                        this.team = Number.parseInt(p.get('team')!);
+                    } else {
+                        this.team = null;
+                    }
 
-                this.teams = teams;
-
-                if (p.has('team')) {
-                    this.team = Number.parseInt(p.get('team')!);
-                } else {
-                    this.team = null;
-                }
+                    return this.teamViewSvc.getSummaryForUsers(this.start, this.team).pipe(
+                        map((results) => ({
+                            teams: teams,
+                            results: results,
+                            grouped: p.has('grouped')
+                        }))
+                    );
+                })
+            )
+            .subscribe((data) => {
+                this.teams = data.teams;
+                this.grouped = data.grouped;
+                this.results = data.results;
             });
     }
 
