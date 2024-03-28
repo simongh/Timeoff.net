@@ -1,6 +1,6 @@
-import { formatDate } from '@angular/common';
 import { AfterViewInit, Directive, ElementRef, EventEmitter, Optional, Output } from '@angular/core';
 import { NgControl } from '@angular/forms';
+import { formatISO, parseISO } from 'date-fns';
 
 declare var $: any;
 
@@ -16,10 +16,15 @@ export class DatePickerDirective implements AfterViewInit {
 
     public ngAfterViewInit(): void {
         const setFn = (d: Date) => {
-            this.ngControl?.control?.setValue(formatDate(d, 'yyyy-MM-dd', 'en'));
+            this.ngControl?.control?.setValue(formatISO(d, { representation: 'date' }));
 
             this.selected.emit(d);
         };
+
+        this.ngControl.valueChanges?.subscribe((d) => {
+            const value = parseISO(d);
+            $(this.elRef.nativeElement).datepicker('update', value);
+        });
 
         $(this.elRef.nativeElement)
             .datepicker()
