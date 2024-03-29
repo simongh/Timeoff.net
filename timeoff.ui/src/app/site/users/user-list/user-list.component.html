@@ -15,7 +15,7 @@
                 <li><a routerLink="/users/add" id="add_new_user">Add single employee</a></li>
             </ul>
         </div>
-        <form asp-action="index" method="GET">
+        <form>
             <input type="hidden" name="team" value="@Model.TeamId">
             <input type="hidden" name="ascsv" value="true">
             <button class="btn btn-link pull-right single-click"

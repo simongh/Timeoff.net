@@ -4,6 +4,7 @@ import { LogoutComponent } from './logout/logout.component';
 import { TeamviewComponent } from './teamview/teamview.component';
 import { EmailAuditComponent } from './email-audit/email-audit.component';
 import { FeedsComponent } from './feeds/feeds.component';
+import { RequestsComponent } from './requests/requests.component';
 
 export const siteRoutes: Routes = [
     {
@@ -33,6 +34,10 @@ export const siteRoutes: Routes = [
     {
         path: 'feeds',
         component: FeedsComponent,
+    },
+    {
+        path: 'requests',
+        component: RequestsComponent,
     },
     {
         path: 'logout',

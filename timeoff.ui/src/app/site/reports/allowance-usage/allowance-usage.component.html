@@ -26,11 +26,8 @@
 
                         <div class="col-md-3">
                             <div class="form-group">
-                                <label for="department_id">Department</label>
-                                <select class="form-control" formControlName="team" id="department_id">
-                                    <option [value]="null">All</option>
-                                    <option *ngFor="let t of teams" [value]="t.id">{{t.name}}</option>
-                                </select>
+                                <label for="team_id">Team</label>
+                                <team-select [control]="form.controls.team" for="team_id"/>
                             </div>
                         </div>
 
