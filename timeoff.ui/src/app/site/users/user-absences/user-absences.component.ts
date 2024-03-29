@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, DestroyRef, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -31,6 +31,7 @@ import { UserDetailsComponent } from '../user-details/user-details.component';
         YesPipe,
         RequestsListComponent,
         ReactiveFormsModule,
+        RouterLink,
     ],
 })
 export class UserAbsencesComponent implements OnInit {

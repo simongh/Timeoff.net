@@ -1,4 +1,4 @@
-﻿@using Timeoff
+﻿@* @using Timeoff
 
 <div class="header">
     <nav class="navbar navbar-default">
@@ -47,7 +47,7 @@
                                 <li role="separator" class="divider"></li>
                                 <li><a asp-controller="Teams" asp-action="Index">Teams</a></li>
                                 <li><a asp-controller="PublicHoliday" asp-action="Index">Public Holidays</a></li>
-                               @* <li><a asp-controller="Settings" asp-action="CompanyAuthentication">LDAP configuration</a></li>*@
+                               @* <li><a asp-controller="Settings" asp-action="CompanyAuthentication">LDAP configuration</a></li>* @
                                 <li><a asp-controller="Settings" asp-action="CompanyIntegrationApi">API configuration</a></li>
                                 <li><a asp-controller="Users" asp-action="Import">Import employees</a></li>
                                 <li role="separator" class="divider"></li>
@@ -81,8 +81,9 @@
     {{# if logged_user.company.company_wide_message  }}
     <div class="alert alert-danger" role="alert">{{ logged_user.company.company_wide_message }}</div>
     {{/if}}
-    {{/if}}*@
+    {{/if}}* @
 
 </div>
 
 
+ *@

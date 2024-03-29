@@ -13,16 +13,16 @@ namespace Timeoff.Controllers
         //    return View();
         //}
 
-        [HttpGet("allowancebytime")]
-        public async Task<IActionResult> AllowanceByTimeAsync()
-        {
-            return View();
-        }
+        //[HttpGet("allowancebytime")]
+        //public async Task<IActionResult> AllowanceByTimeAsync()
+        //{
+        //    return View();
+        //}
 
-        [HttpGet("leaves")]
-        public async Task<IActionResult> LeavesAsync()
-        {
-            return View();
-        }
+        //[HttpGet("leaves")]
+        //public async Task<IActionResult> LeavesAsync()
+        //{
+        //    return View();
+        //}
     }
 }

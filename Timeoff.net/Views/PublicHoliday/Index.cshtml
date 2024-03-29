@@ -1,4 +1,4 @@
-﻿@using Timeoff;
+﻿@* @using Timeoff;
 @model Timeoff.Application.PublicHolidays.PublicHolidaysViewModel
 <h1>Public holidays</h1>
 
@@ -132,7 +132,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="pull-right">
-                        @*<button id="publicholiday-import-btn" class="btn btn-default" type="button">Import default holidays</button>*@
+                        @*<button id="publicholiday-import-btn" class="btn btn-default" type="button">Import default holidays</button>* @
                         <button class="btn btn-default" type="button" data-toggle="modal" data-target="#add_new_public_holiday_modal" id="add_new_public_holiday_btn">Add new</button>
                         @if (Model.PublicHolidays.Any())
                         {
@@ -153,4 +153,4 @@
 
 @section Scripts {
 <script src="~/js/public_holidays.js"></script>
-}
+} *@

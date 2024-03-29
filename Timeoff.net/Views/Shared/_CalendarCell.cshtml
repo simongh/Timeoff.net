@@ -1,4 +1,4 @@
-﻿@model Timeoff.ResultModels.CalendarDayResult
+﻿@* @model Timeoff.ResultModels.CalendarDayResult
 <td class="calendar_cell half_1st @{CssClasses(Model.IsMorning, Model.MorningColourClass);}">
     <span@{ShowLabel();}>@Model.Day</span>
 </td>
@@ -72,4 +72,4 @@
     {
         @: data-toggle="tooltip" data-placement="top" title="@label"
     }
-}
+} *@
