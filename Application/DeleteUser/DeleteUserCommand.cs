@@ -3,12 +3,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Timeoff.Application.DeleteUser
 {
-    public record DeleteUserCommand : IRequest<Users.UsersViewModel>
+    public record DeleteUserCommand : IRequest<ResultModels.ApiResult>
     {
         public int Id { get; init; }
     }
 
-    internal class DeleteUserCommandHandler : IRequestHandler<DeleteUserCommand, Users.UsersViewModel>
+    internal class DeleteUserCommandHandler : IRequestHandler<DeleteUserCommand, ResultModels.ApiResult>
     {
         private readonly IDataContext _dataContext;
         private readonly Services.ICurrentUserService _currentUserService;
@@ -21,7 +21,7 @@ namespace Timeoff.Application.DeleteUser
             _currentUserService = currentUserService;
         }
 
-        public async Task<Users.UsersViewModel> Handle(DeleteUserCommand request, CancellationToken cancellationToken)
+        public async Task<ResultModels.ApiResult> Handle(DeleteUserCommand request, CancellationToken cancellationToken)
         {
             ResultModels.FlashResult messages;
 
@@ -53,9 +53,10 @@ namespace Timeoff.Application.DeleteUser
                 messages = ResultModels.FlashResult.Success("Employee data removed");
             }
 
-            var result = await _dataContext.QueryUsers(_currentUserService.CompanyId, null);
-            result.Messages = messages;
-            return result;
+            return new()
+            {
+                Errors = messages.Errors,
+            };
         }
     }
 }

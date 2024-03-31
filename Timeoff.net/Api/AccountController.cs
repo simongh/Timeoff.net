@@ -65,10 +65,10 @@ namespace Timeoff.Api
         {
             var result = await _mediator.Send(command);
 
-            if (result.Result?.Messages?.Any() == true)
+            if (result.IsSuccess)
                 return NoContent();
             else
-                return BadRequest(result.Result);
+                return BadRequest(result);
         }
 
         [AllowAnonymous]
@@ -77,10 +77,10 @@ namespace Timeoff.Api
         {
             var result = await _mediator.Send(command);
 
-            if (result!.Success)
+            if (result!.IsSuccess)
                 return NoContent();
             else
-                return BadRequest(result.Result);
+                return BadRequest(result);
         }
     }
 }

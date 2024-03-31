@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace Timeoff.Application.TeamDetails
+namespace Timeoff.Application.Teams
 {
     internal class UpdateTeamCommandValidator : AbstractValidator<UpdateTeamCommand>
     {

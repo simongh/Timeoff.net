@@ -2,15 +2,15 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Timeoff.Application.TeamDetails
+namespace Timeoff.Application.Teams
 {
-    public record UpdateTeamCommand : Types.TeamModel, IRequest<Teams.TeamsViewModel?>, Commands.IValidated
+    public record UpdateTeamCommand : Types.TeamModel, IRequest<ResultModels.ApiResult>, Commands.IValidated
     {
         public int? Id { get; set; }
         public IEnumerable<ValidationFailure>? Failures { get; set; }
     }
 
-    internal class UpdateTeamCommandHandler : IRequestHandler<UpdateTeamCommand, Teams.TeamsViewModel?>
+    internal class UpdateTeamCommandHandler : IRequestHandler<UpdateTeamCommand, ResultModels.ApiResult>
     {
         private readonly IDataContext _dataContext;
         private readonly Services.ICurrentUserService _currentUserService;
@@ -23,7 +23,7 @@ namespace Timeoff.Application.TeamDetails
             _currentUserService = currentUserService;
         }
 
-        public async Task<Teams.TeamsViewModel?> Handle(UpdateTeamCommand request, CancellationToken cancellationToken)
+        public async Task<ResultModels.ApiResult> Handle(UpdateTeamCommand request, CancellationToken cancellationToken)
         {
             ResultModels.FlashResult messages;
 
@@ -38,7 +38,7 @@ namespace Timeoff.Application.TeamDetails
                 {
                     return new()
                     {
-                        Result = ResultModels.FlashResult.WithError("Invalid manager"),
+                        Errors = ResultModels.FlashResult.WithError("Invalid manager").Errors,
                     };
                 }
 
@@ -60,7 +60,7 @@ namespace Timeoff.Application.TeamDetails
                     if (team == null)
                         return new()
                         {
-                            Result = ResultModels.FlashResult.WithError("Invalid team"),
+                            Errors = ResultModels.FlashResult.WithError("Invalid team").Errors,
                         };
                 }
 
@@ -84,7 +84,7 @@ namespace Timeoff.Application.TeamDetails
 
             return new()
             {
-                Result = messages,
+                Errors = messages.Errors,
             };
         }
     }

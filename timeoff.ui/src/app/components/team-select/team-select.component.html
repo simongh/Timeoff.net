@@ -1,4 +1,4 @@
 <select class="form-control" [formControl]="control" [id]="for">
-    <option disabled></option>
+    <option [disabled]="allowAll ? null : 'disabled'"></option>
     <option *ngFor="let t of teams" value="{{t.id}}" [attr.data-vpp]="t.id">{{t.name}}</option>
 </select>

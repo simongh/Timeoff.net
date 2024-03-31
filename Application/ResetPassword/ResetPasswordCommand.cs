@@ -4,47 +4,36 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Timeoff.Application.ResetPassword
 {
-    public record ResetPasswordCommand : IRequest<ResetPasswordViewModel>, Commands.IValidated
+    public record ResetPasswordCommand : IRequest<ResultModels.ApiResult>, Commands.IValidated
     {
         public string? Password { get; init; }
 
         public string? NewPassword { get; init; }
-
-        public string? ConfirmPassword { get; init; }
 
         public string? Token { get; set; }
 
         public IEnumerable<ValidationFailure>? Failures { get; set; }
     }
 
-    internal class ResetPasswordCommandHandler : IRequestHandler<ResetPasswordCommand, ResetPasswordViewModel>
+    internal class ResetPasswordCommandHandler(
+        IDataContext dataContext,
+        Services.IUsersService usersService,
+        Services.ICurrentUserService currentUserService,
+        Services.IEmailTemplateService emailTemplateService)
+        : IRequestHandler<ResetPasswordCommand, ResultModels.ApiResult>
     {
-        private readonly IDataContext _dataContext;
-        private readonly Services.IUsersService _usersService;
-        private readonly Services.ICurrentUserService _currentUserService;
-        private readonly Services.IEmailTemplateService _emailTemplateService;
+        private readonly IDataContext _dataContext = dataContext;
+        private readonly Services.IUsersService _usersService = usersService;
+        private readonly Services.ICurrentUserService _currentUserService = currentUserService;
+        private readonly Services.IEmailTemplateService _emailTemplateService = emailTemplateService;
 
-        public ResetPasswordCommandHandler(
-            IDataContext dataContext,
-            Services.IUsersService usersService,
-            Services.ICurrentUserService currentUserService,
-            Services.IEmailTemplateService emailTemplateService)
-        {
-            _dataContext = dataContext;
-            _usersService = usersService;
-            _currentUserService = currentUserService;
-            _emailTemplateService = emailTemplateService;
-        }
-
-        public async Task<ResetPasswordViewModel> Handle(ResetPasswordCommand request, CancellationToken cancellationToken)
+        public async Task<ResultModels.ApiResult> Handle(ResetPasswordCommand request, CancellationToken cancellationToken)
         {
             if (!request.Failures.IsValid())
             {
                 return new()
                 {
-                    ShowCurrent = _currentUserService.IsAuthenticated,
-                    Token = request.Token,
-                    Result = request.Failures.ToFlashResult(),
+                    Errors = request.Failures.ToFlashResult().Errors,
                 };
             }
 
@@ -84,9 +73,7 @@ namespace Timeoff.Application.ResetPassword
 
             return new()
             {
-                Result = result,
-                Token = request.Token,
-                ShowCurrent = _currentUserService.IsAuthenticated
+                Errors = result.Errors,
             };
         }
 

@@ -3,11 +3,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Timeoff.Application.Schedule
 {
-    public record UpdateScheduleCommand : ScheduleModel, IRequest<Settings.SettingsViewModel>
+    public record UpdateScheduleCommand : ScheduleModel, IRequest<ResultModels.ApiResult>
     {
     }
 
-    internal class UpdateScheduleCommandHandler : IRequestHandler<UpdateScheduleCommand, Settings.SettingsViewModel>
+    internal class UpdateScheduleCommandHandler : IRequestHandler<UpdateScheduleCommand, ResultModels.ApiResult>
     {
         private readonly IDataContext _dataContext;
         private readonly Services.ICurrentUserService _currentUserService;
@@ -20,7 +20,7 @@ namespace Timeoff.Application.Schedule
             _currentUserService = currentUserService;
         }
 
-        public async Task<Settings.SettingsViewModel> Handle(UpdateScheduleCommand request, CancellationToken cancellationToken)
+        public async Task<ResultModels.ApiResult> Handle(UpdateScheduleCommand request, CancellationToken cancellationToken)
         {
             var schedule = await _dataContext.Schedules
                 .Where(s => s.CompanyId == _currentUserService.CompanyId)
@@ -35,10 +35,7 @@ namespace Timeoff.Application.Schedule
 
             await _dataContext.SaveChangesAsync();
 
-            var result = await _dataContext.GetSettingsAsync(_currentUserService.CompanyId);
-            result.Result = ResultModels.FlashResult.Success("Schedule updated");
-
-            return result;
+            return new();
         }
     }
 }

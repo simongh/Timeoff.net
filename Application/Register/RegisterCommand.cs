@@ -2,37 +2,50 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using Timeoff.ResultModels;
 
 namespace Timeoff.Application.Register
 {
-    public record RegisterCommand : RegisterModel, IRequest<RegisterViewModel?>, Commands.IValidated
+    public record RegisterCommand : IRequest<ApiResult>, Commands.IValidated
     {
+        public string? CompanyName { get; init; }
+
+        public string? FirstName { get; init; }
+
+        public string? LastName { get; init; }
+
+        public string? Email { get; init; }
+
+        public string? Password { get; init; }
+
+        public string? ConfirmPassword { get; init; }
+
+        public string? Country { get; init; }
+
+        public string? TimeZone { get; init; }
+
         public IEnumerable<ValidationFailure>? Failures { get; set; }
     }
 
-    internal class RegisterCommandHandler : IRequestHandler<RegisterCommand, RegisterViewModel?>
+    internal class RegisterCommandHandler(
+        IOptions<Types.Options> options,
+        IDataContext dataContext,
+        Services.IUsersService usersService,
+        Services.IEmailTemplateService templateService)
+        : IRequestHandler<RegisterCommand, ApiResult>
     {
-        private readonly Types.Options _options;
-        private readonly IDataContext _dataContext;
-        private readonly Services.IUsersService _usersService;
-        private readonly Services.IEmailTemplateService _templateService;
+        private readonly Types.Options _options = options.Value;
+        private readonly IDataContext _dataContext = dataContext;
+        private readonly Services.IUsersService _usersService = usersService;
+        private readonly Services.IEmailTemplateService _templateService = templateService;
 
-        public RegisterCommandHandler(
-            IOptions<Types.Options> options,
-            IDataContext dataContext,
-            Services.IUsersService usersService,
-            Services.IEmailTemplateService templateService)
-        {
-            _options = options.Value;
-            _dataContext = dataContext;
-            _usersService = usersService;
-            _templateService = templateService;
-        }
-
-        public async Task<RegisterViewModel?> Handle(RegisterCommand request, CancellationToken cancellationToken)
+        public async Task<ApiResult> Handle(RegisterCommand request, CancellationToken cancellationToken)
         {
             if (!_options.AllowNewAccountCreation)
-                return null;
+                return new()
+                {
+                    Errors = ["New registrations are not allowed"]
+                };
 
             if (!request.Failures.IsValid())
             {
@@ -112,19 +125,14 @@ namespace Timeoff.Application.Register
 
                 return Errored(ResultModels.FlashResult.WithError("Unable to create company. A database error occurred"));
             }
-            return new()
-            {
-                Success = true,
-            };
+            return new();
         }
 
-        private RegisterViewModel Errored(ResultModels.FlashResult errors)
+        private ApiResult Errored(ResultModels.FlashResult errors)
         {
             return new()
             {
-                TimeZones = Services.TimeZoneService.TimeZones,
-                Countries = Services.CountriesService.Countries,
-                Result = errors,
+                Errors = errors.Errors,
             };
         }
     }

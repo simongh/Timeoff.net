@@ -10,11 +10,6 @@ namespace Timeoff.Application.ResetPassword
                 .NotEmpty()
                 .MinimumLength(8);
 
-            RuleFor(m => m.ConfirmPassword)
-                .Equal(m => m.NewPassword)
-                .WithMessage("The passwords must match")
-                .NotEmpty();
-
             When(_ => userService.IsAuthenticated, () =>
             {
                 RuleFor(m => m.Password)

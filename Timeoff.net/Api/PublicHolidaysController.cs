@@ -25,12 +25,10 @@ namespace Timeoff.Api
 
             var result = await _mediator.Send(model);
 
-            if (result.Result.Errors?.Any() == true)
-            {
-                return BadRequest(result.Result);
-            }
-            else
+            if (result.IsSuccess)
                 return NoContent();
+            else
+                return BadRequest(result);
         }
 
         [HttpPut]
@@ -42,12 +40,12 @@ namespace Timeoff.Api
             }
             var result = await _mediator.Send(model);
 
-            if (result.Result.Errors?.Any() == true)
+            if (result.IsSuccess)
             {
-                return BadRequest(result.Result);
+                return NoContent();
             }
             else
-                return NoContent();
+                return BadRequest(result);
         }
 
         [HttpDelete("{id:int}")]
@@ -55,10 +53,10 @@ namespace Timeoff.Api
         {
             var result = await _mediator.Send(command);
 
-            if (result.Result?.Errors?.Any() == true)
-                return BadRequest(result.Result);
-            else
+            if (result.IsSuccess)
                 return NoContent();
+            else
+                return BadRequest(result);
         }
     }
 }

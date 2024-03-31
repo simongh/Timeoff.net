@@ -10,6 +10,7 @@ import { DatePickerDirective } from '@components/date-picker.directive';
 import { TeamSelectComponent } from "@components/team-select/team-select.component";
 
 import { CompanyService } from '@services/company/company.service';
+import { LeaveTypeModel } from '@services/company/leave-type.model';
 
 import { AllowanceModel } from './allowance.model';
 import { AllowanceUsageService } from './allowance-usage.service';
@@ -42,6 +43,8 @@ export class AllowanceUsageComponent implements OnInit {
         return parts.join(' ')
     }
 
+    public leaveTypes: LeaveTypeModel[] = [];
+
     private get start() {
         return parseISO(this.form.value.start!);
     }
@@ -52,9 +55,15 @@ export class AllowanceUsageComponent implements OnInit {
 
     constructor(
         private destroyed: DestroyRef,
-        private readonly allowanceSvc: AllowanceUsageService
+        private readonly allowanceSvc: AllowanceUsageService,
+        private readonly companySvc: CompanyService,
     ) {}
 
     public ngOnInit(): void {
+        this.companySvc.getLeaveTypes()
+        .pipe(takeUntilDestroyed(this.destroyed))
+        .subscribe((leaveTypes)=>{
+
+        })
     }
 }

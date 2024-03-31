@@ -27,7 +27,7 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label for="team_id">Team</label>
-                                <team-select [control]="form.controls.team" for="team_id"/>
+                                <team-select [control]="form.controls.team" for="team_id" [allowAll]="true"/>
                             </div>
                         </div>
 
@@ -86,10 +86,8 @@
             <thead>
                 <tr>
                     <th>Employee full name</th>
-                    <!-- {{# each users_and_leaves.0.statistics.leave_type_break_down.pretty_version}}
-                    <th>{{this.name}}</th>
-                    {{/each}}
-                    <th>Days deducted from allowance<br>in {{> reports/date_range_pretty same_month=same_month start_date=start_date_obj end_date=end_date_obj}}</th> -->
+                    <th *ngFor="let lt of leaveTypes">{{lt.name}}</th>
+                    <!-- <th>Days deducted from allowance<br>in {{> reports/date_range_pretty same_month=same_month start_date=start_date_obj end_date=end_date_obj}}</th> -->
                 </tr>
             </thead>
             <tr *ngFor="let u of results" [attr.data-vpp-user-list-row]="u.id">

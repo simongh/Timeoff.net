@@ -2,7 +2,7 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Timeoff.Application.TeamDetails
+namespace Timeoff.Application.Teams
 {
     public record GetTeamCommand : IRequest<Types.TeamModel>, Commands.IValidated
     {

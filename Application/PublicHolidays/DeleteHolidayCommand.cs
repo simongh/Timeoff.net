@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Timeoff.Application.PublicHolidays
 {
-    public record DeleteHolidayCommand : IRequest<PublicHolidaysViewModel>
+    public record DeleteHolidayCommand : IRequest<ResultModels.ApiResult>
     {
         public int Id { get; init; }
     }
@@ -12,13 +12,13 @@ namespace Timeoff.Application.PublicHolidays
         IDataContext dataContext,
         Services.ICurrentUserService currentUserService,
         Services.IDaysCalculator adjuster)
-        : IRequestHandler<DeleteHolidayCommand, PublicHolidaysViewModel>
+        : IRequestHandler<DeleteHolidayCommand, ResultModels.ApiResult>
     {
         private readonly IDataContext _dataContext = dataContext;
         private readonly Services.ICurrentUserService _currentUserService = currentUserService;
         private readonly Services.IDaysCalculator _adjuster = adjuster;
 
-        public async Task<PublicHolidaysViewModel> Handle(DeleteHolidayCommand request, CancellationToken cancellationToken)
+        public async Task<ResultModels.ApiResult> Handle(DeleteHolidayCommand request, CancellationToken cancellationToken)
         {
             var holiday = await _dataContext.PublicHolidays
                 .FirstOrDefaultAsync(h => h.PublicHolidayId == request.Id && h.CompanyId == _currentUserService.CompanyId);
@@ -40,7 +40,7 @@ namespace Timeoff.Application.PublicHolidays
 
             return new()
             {
-                Result = result,
+                Errors = result.Errors,
             };
         }
     }

@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Timeoff.Application.UserDetails
 {
-    public record UpdateUserCommand : Types.UserDetailsModelBase, IRequest<DetailsViewModel?>, Commands.IValidated
+    public record UpdateUserCommand : Types.UserDetailsModelBase, IRequest<ResultModels.ApiResult>, Commands.IValidated
     {
         public int Team { get => TeamId; init => TeamId = value; }
         public IEnumerable<ValidationFailure>? Failures { get; set; }
@@ -14,13 +14,13 @@ namespace Timeoff.Application.UserDetails
         IDataContext dataContext,
         Services.ICurrentUserService currentUserService,
         Services.INewLeaveService leaveService)
-        : IRequestHandler<UpdateUserCommand, DetailsViewModel?>
+        : IRequestHandler<UpdateUserCommand, ResultModels.ApiResult>
     {
         private readonly IDataContext _dataContext = dataContext;
         private readonly Services.ICurrentUserService _currentUserService = currentUserService;
         private readonly Services.INewLeaveService _leaveService = leaveService;
 
-        public async Task<DetailsViewModel?> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
+        public async Task<ResultModels.ApiResult> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
         {
             var errors = new List<ValidationFailure>();
             if (request.Failures != null)
@@ -89,12 +89,10 @@ namespace Timeoff.Application.UserDetails
                 messages = ResultModels.FlashResult.Success($"Details for {request.Name} were updated");
             }
 
-            var result = await _dataContext.GetUserDetailsAsync(_currentUserService.CompanyId, request.Id);
-            if (result != null)
+            return new()
             {
-                result.Messages = messages;
-            }
-            return result;
+                Errors = messages.Errors,
+            };
         }
     }
 }
