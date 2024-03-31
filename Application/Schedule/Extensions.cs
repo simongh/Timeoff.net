@@ -4,37 +4,6 @@ namespace Timeoff.Application.Schedule
 {
     internal static class Extensions
     {
-        public static async Task<ScheduleViewModel> GetUserScheduleAsync(this IDataContext dataContext, int companyId, int userId)
-        {
-            var schedule = await dataContext.Users
-                .Where(u => u.CompanyId == companyId && u.UserId == userId)
-                .Select(u => new
-                {
-                    User = u.Schedule,
-                    Company = u.Company.Schedule,
-                    u.FirstName,
-                    u.LastName,
-                    u.IsActivated,
-                    u.EndDate,
-                })
-                 .FirstOrDefaultAsync();
-
-            if (schedule == null)
-            {
-                throw new NotFoundException();
-            }
-
-            return new()
-            {
-                Schedule = (schedule.User ?? schedule.Company).ToEnumerable(),
-                Id = userId,
-                FirstName = schedule.FirstName,
-                LastName = schedule.LastName,
-                IsActive = schedule.IsActivated && (schedule.EndDate == null || schedule.EndDate > DateTime.Today),
-                UserSpecific = schedule.User != null,
-            };
-        }
-
         public static async Task<ScheduleModel> GetUserScheduleModelAsync(this IDataContext dataContext, int companyId, int userId)
         {
             var schedule = await dataContext.Users

@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
+using Timeoff.Application.Teams;
 
 namespace Timeoff.Application
 {
@@ -19,7 +20,7 @@ namespace Timeoff.Application
             services.AddTransient<IValidator<ResetPassword.ResetPasswordCommand>, ResetPassword.ResetPasswordCommandValidator>();
 
             services.AddTransient<IValidator<PublicHolidays.UpdatePublicHolidayCommand>, PublicHolidays.UpdatePublicHolidayCommandValidator>();
-            services.AddTransient<IValidator<TeamDetails.UpdateTeamCommand>, TeamDetails.UpdateTeamCommandValidator>();
+            services.AddTransient<IValidator<UpdateTeamCommand>, UpdateTeamCommandValidator>();
 
             services.AddTransient<IValidator<Settings.UpdateSettingsCommand>, Settings.UpdateSettingsCommandValidator>();
             services.AddTransient<IValidator<Settings.UpdateLeaveTypesCommand>, Settings.UpdateLeaveTypesCommandValidator>();

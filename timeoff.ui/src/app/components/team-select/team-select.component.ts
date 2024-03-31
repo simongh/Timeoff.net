@@ -23,6 +23,9 @@ export class TeamSelectComponent implements OnInit {
     @Input()
     public for: string = '';
 
+    @Input()
+    public allowAll = false;
+
     constructor(private destroyed: DestroyRef, private readonly companySvc: CompanyService) {}
 
     public ngOnInit(): void {

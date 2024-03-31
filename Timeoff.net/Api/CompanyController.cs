@@ -53,6 +53,12 @@ namespace Timeoff.Api
             return Ok((await _mediator.Send(new Application.Settings.ListsCommand())).TimeZones);
         }
 
+        [HttpGet("leave-types")]
+        public async Task<IActionResult> LeaveTypesAsync()
+        {
+            return Ok(await _mediator.Send(new Application.Company.LeaveTypesQuery()));
+        }
+
         [HttpPut("settings")]
         public async Task<IActionResult> UpdateSettingsAsync(Application.Settings.UpdateSettingsCommand command)
         {
@@ -75,10 +81,10 @@ namespace Timeoff.Api
 
             var result = await _mediator.Send(command);
 
-            if (result.Result?.Errors?.Any() == true)
-                return BadRequest(result.Result);
-            else
+            if (result.IsSuccess)
                 return NoContent();
+            else
+                return BadRequest(result);
         }
     }
 }

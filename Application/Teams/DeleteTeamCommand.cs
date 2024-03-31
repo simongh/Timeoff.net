@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Timeoff.Application.DeleteTeam
+namespace Timeoff.Application.Teams
 {
     public record DeleteTeamCommand : IRequest
     {

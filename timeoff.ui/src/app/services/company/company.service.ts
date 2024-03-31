@@ -35,6 +35,10 @@ export class CompanyService {
         return this.client.get<UserModel[]>('/api/company/users');
     }
 
+    public getLeaveTypes() {
+        return this.client.get<LeaveTypeModel[]>('/api/company/leave-types');
+    }
+
     public getSettings() {
         return this.client.get<SettingsModel>('/api/company');
     }

@@ -16,27 +16,27 @@ namespace Timeoff.Api
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateAsync(Application.TeamDetails.UpdateTeamCommand command)
+        public async Task<IActionResult> CreateAsync(Application.Teams.UpdateTeamCommand command)
         {
             if (command == null)
                 return BadRequest();
 
             var result = await _mediator.Send(command);
 
-            if (result?.Result?.Errors?.Any() == true)
-                return BadRequest(result.Result);
-            else
+            if (result.IsSuccess)
                 return NoContent();
+            else
+                return BadRequest(result);
         }
 
         [HttpGet("{id:int}")]
-        public async Task<IActionResult> GetAsync([FromRoute] Application.TeamDetails.GetTeamCommand command)
+        public async Task<IActionResult> GetAsync([FromRoute] Application.Teams.GetTeamCommand command)
         {
             return Ok(await _mediator.Send(command));
         }
 
         [HttpPut("{id:int}")]
-        public async Task<IActionResult> UpdateAsync(int id, Application.TeamDetails.UpdateTeamCommand command)
+        public async Task<IActionResult> UpdateAsync(int id, Application.Teams.UpdateTeamCommand command)
         {
             if (command == null)
                 return BadRequest();
@@ -45,14 +45,14 @@ namespace Timeoff.Api
 
             var result = await _mediator.Send(command);
 
-            if (result?.Result?.Errors?.Any() == true)
-                return BadRequest(result.Result);
-            else
+            if (result.IsSuccess)
                 return NoContent();
+            else
+                return BadRequest(result);
         }
 
         [HttpDelete("{id:int}")]
-        public async Task<IActionResult> DeleteAsync([FromRoute] Application.DeleteTeam.DeleteTeamCommand command)
+        public async Task<IActionResult> DeleteAsync([FromRoute] Application.Teams.DeleteTeamCommand command)
         {
             await _mediator.Send(command);
 

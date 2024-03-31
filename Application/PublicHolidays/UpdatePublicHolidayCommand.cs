@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Timeoff.Application.PublicHolidays
 {
-    public record UpdatePublicHolidayCommand : IRequest<PublicHolidaysViewModel>, Commands.IValidated
+    public record UpdatePublicHolidayCommand : IRequest<ResultModels.ApiResult>, Commands.IValidated
     {
         public PublicHolidayRequest[] PublicHolidays { get; init; } = null!;
 
@@ -15,14 +15,14 @@ namespace Timeoff.Application.PublicHolidays
         IDataContext dataContext,
         Services.ICurrentUserService currentUserService,
         Services.IDaysCalculator adjuster)
-        : IRequestHandler<UpdatePublicHolidayCommand, PublicHolidaysViewModel>
+        : IRequestHandler<UpdatePublicHolidayCommand, ResultModels.ApiResult>
     {
         private readonly IDataContext _dataContext = dataContext;
         private readonly Services.ICurrentUserService _currentUserService = currentUserService;
         private readonly Services.IDaysCalculator _adjuster = adjuster;
         private List<(DateTime original, DateTime modified)> _changes = new();
 
-        public async Task<PublicHolidaysViewModel> Handle(UpdatePublicHolidayCommand request, CancellationToken cancellationToken)
+        public async Task<ResultModels.ApiResult> Handle(UpdatePublicHolidayCommand request, CancellationToken cancellationToken)
         {
             if (request.Failures.IsValid())
             {
@@ -37,10 +37,7 @@ namespace Timeoff.Application.PublicHolidays
 
             return new()
             {
-                Result = new()
-                {
-                    Errors = request.Failures?.Select(e => e.ErrorMessage)
-                }
+                Errors = request.Failures?.Select(e => e.ErrorMessage)
             };
         }
 

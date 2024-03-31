@@ -46,46 +46,6 @@ namespace Timeoff.Application
             };
         }
 
-        public static async Task<Teams.TeamsViewModel> QueryTeams(this IDataContext dataContext, int companyId)
-        {
-            var teams = await dataContext.Teams
-                 .Where(d => d.CompanyId == companyId)
-                 .OrderBy(d => d.Name)
-                 .Select(d => new Teams.TeamResult
-                 {
-                     Id = d.TeamId,
-                     Name = d.Name,
-                     Allowance = d.Allowance,
-                     EmployeeCount = d.Users.Count(),
-                     IsAccruedAllowance = d.IsAccrued,
-                     IncludePublicHolidays = d.IncludePublicHolidays,
-                     ManagerId = d.ManagerId!.Value,
-                     Manager = new()
-                     {
-                         Id = d.ManagerId!.Value,
-                         Name = d.Manager!.FirstName + " " + d.Manager.LastName
-                     }
-                 })
-                 .ToArrayAsync();
-
-            var users = await dataContext.Users
-                .Where(u => u.CompanyId == companyId)
-                .OrderBy(u => u.FirstName)
-                .ThenBy(u => u.LastName)
-                .Select(u => new ResultModels.ListItem
-                {
-                    Id = u.UserId,
-                    Value = u.FirstName + " " + u.LastName,
-                })
-                .ToArrayAsync();
-
-            return new()
-            {
-                Teams = teams,
-                Users = users,
-            };
-        }
-
         public static async Task<Settings.SettingsViewModel> GetSettingsAsync(this IDataContext dataContext, int companyId)
         {
             var settings = await dataContext.Companies
@@ -165,78 +125,6 @@ namespace Timeoff.Application
             {
                 Schedule = (model.UserSchedule ?? model.CompanySchedule).ToModel(),
                 ScheduleOverride = model.UserSchedule != null,
-            };
-        }
-
-        public static async Task<Users.UsersViewModel> QueryUsers(this IDataContext dataContext, int companyId, int? team)
-        {
-            var query = dataContext.Users
-                .Where(u => u.CompanyId == companyId);
-
-            if (team.HasValue)
-            {
-                query = query.Where(u => u.TeamId == team.Value);
-            }
-            var year = DateTime.Today.Year;
-
-            var users = await query
-                .OrderBy(u => u.FirstName)
-                .ThenBy(u => u.LastName)
-                .Select(u => new Users.UserInfoResult
-                {
-                    Id = u.UserId,
-                    FirstName = u.FirstName,
-                    LastName = u.LastName,
-                    Team = new()
-                    {
-                        Id = u.TeamId,
-                        Name = u.Team.Name,
-                    },
-                    IsActive = u.IsActive,
-                    IsAdmin = u.IsAdmin,
-                    AllowanceCalculator = new()
-                    {
-                        DaysUsed = u.Leave
-                            .Where(a => a.DateStart.Year == year && a.DateEnd.Year == year)
-                            .Where(a => a.Status == LeaveStatus.Approved)
-                            .Sum(a => a.Days),
-                        Start = u.StartDate,
-                        End = u.EndDate,
-                        IsAccrued = u.Team.IsAccrued,
-                        Adjustment = u.Adjustments
-                            .Where(a => a.Year == year)
-                            .Any()
-                            ? u.Adjustments
-                                .Where(a => a.Year == year)
-                                .FirstOrDefault()!
-                                .Adjustment
-                            : 0,
-                        Allowance = u.Team.Allowance,
-                    }
-                })
-                .ToArrayAsync();
-
-            var company = await dataContext.Companies
-                .Where(c => c.CompanyId == companyId)
-                .Select(c => new
-                {
-                    c.Name,
-                    Teams = c.Teams
-                        .OrderBy(d => d.Name)
-                        .Select(d => new ResultModels.ListItem
-                        {
-                            Id = d.TeamId,
-                            Value = d.Name,
-                        })
-                })
-                .FirstAsync();
-
-            return new()
-            {
-                CompanyName = company.Name,
-                TeamId = team,
-                Teams = company.Teams,
-                Users = users,
             };
         }
 

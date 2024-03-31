@@ -42,10 +42,10 @@ namespace Timeoff.Api
 
             var result = await _mediator.Send(command);
 
-            if (result.Messages?.Errors?.Any() == true)
-                return BadRequest(result.Messages);
-            else
+            if (result.IsSuccess)
                 return NoContent();
+            else
+                return BadRequest(result);
         }
 
         [HttpDelete("{id:int}")]
@@ -56,10 +56,10 @@ namespace Timeoff.Api
 
             var result = await _mediator.Send(command);
 
-            if (result.Messages?.Errors?.Any() == true)
-                return BadRequest(result.Messages);
-            else
+            if (result.IsSuccess)
                 return NoContent();
+            else
+                return BadRequest(result);
         }
 
         [HttpPost("{id:int}/reset-password")]
