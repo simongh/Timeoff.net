@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace Timeoff.Application.Settings
+namespace Timeoff.Application.Company
 {
     public record ListsCommand : IRequest<ListsResult>
     { }
@@ -14,7 +14,7 @@ namespace Timeoff.Application.Settings
                 Countries = Services.CountriesService.Countries,
                 TimeZones = Services.TimeZoneService.TimeZones.Select(tz => new
                 {
-                    Id = tz.Id,
+                    tz.Id,
                     Name = tz.DisplayName
                 }),
             });

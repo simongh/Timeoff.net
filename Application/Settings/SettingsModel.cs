@@ -2,13 +2,13 @@
 {
     public abstract record SettingsModel
     {
-        public string Name { get; init; }
+        public string Name { get; init; } = null!;
 
-        public string Country { get; init; }
+        public string Country { get; init; } = null!;
 
-        public string DateFormat { get; init; }
+        public string DateFormat { get; init; } = null!;
 
-        public string TimeZone { get; init; }
+        public string TimeZone { get; init; } = null!;
 
         public int CarryOver { get; init; }
 

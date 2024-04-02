@@ -20,10 +20,10 @@ namespace Timeoff.Api
         {
             var result = await _mediator.Send(command);
 
-            if (result.Messages?.Errors?.Any() == true)
-                return BadRequest(result.Messages);
-            else
+            if (result.IsSuccess)
                 return NoContent();
+            else
+                return BadRequest(result);
         }
 
         [HttpGet("{id:int}")]
@@ -33,7 +33,7 @@ namespace Timeoff.Api
         }
 
         [HttpPut("{id:int}")]
-        public async Task<IActionResult> UpdateAsync(int id, Application.UserDetails.UpdateUserCommand command)
+        public async Task<IActionResult> UpdateAsync(int id, Application.Users.UpdateUserCommand command)
         {
             if (command == null)
                 return BadRequest();
@@ -71,7 +71,7 @@ namespace Timeoff.Api
         }
 
         [HttpPut("{id:int}/schedule")]
-        public async Task<IActionResult> UpdateScheduleAsync(int id, Application.Schedule.ScheduleModel? schedule)
+        public async Task<IActionResult> UpdateScheduleAsync(int id, Types.ScheduleModel? schedule)
         {
             var result = await _mediator.Send(new Application.Schedule.UpdateUserScheduleCommand
             {
@@ -83,7 +83,7 @@ namespace Timeoff.Api
         }
 
         [HttpPut("{id:int}/adjustments")]
-        public async Task<IActionResult> UpdateAdjustmentsAsync(int id, Application.Absences.UpdateAbsencesCommand command)
+        public async Task<IActionResult> UpdateAdjustmentsAsync(int id, Application.Users.UpdateAbsencesCommand command)
         {
             if (command == null)
                 return BadRequest();
@@ -92,10 +92,7 @@ namespace Timeoff.Api
 
             var result = await _mediator.Send(command);
 
-            if (result.Messages?.Errors?.Any() == true)
-                return BadRequest(result.Messages);
-            else
-                return Ok(result.Summary);
+            return Ok(result);
         }
     }
 }

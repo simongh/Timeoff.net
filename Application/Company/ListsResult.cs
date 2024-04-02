@@ -1,4 +1,4 @@
-﻿namespace Timeoff.Application.Settings
+﻿namespace Timeoff.Application.Company
 {
     public record ListsResult
     {

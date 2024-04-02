@@ -12,7 +12,7 @@
         {
             return new()
             {
-                Errors = new[] { error },
+                Errors = [error],
             };
         }
 
@@ -20,7 +20,7 @@
         {
             return new()
             {
-                Messages = new[] { message },
+                Messages = [message],
             };
         }
 

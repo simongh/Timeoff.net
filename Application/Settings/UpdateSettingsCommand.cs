@@ -4,12 +4,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Timeoff.Application.Settings
 {
-    public record UpdateSettingsCommand : SettingsModel, IRequest<SettingsViewModel>, Commands.IValidated
+    public record UpdateSettingsCommand : SettingsModel, IRequest<ResultModels.ApiResult>, Commands.IValidated
     {
         public IEnumerable<ValidationFailure>? Failures { get; set; }
     }
 
-    internal class UpdateSettingsCommandHandler : IRequestHandler<UpdateSettingsCommand, SettingsViewModel>
+    internal class UpdateSettingsCommandHandler : IRequestHandler<UpdateSettingsCommand, ResultModels.ApiResult>
     {
         private readonly IDataContext _dataContext;
         private readonly Services.ICurrentUserService _currentUserService;
@@ -22,10 +22,8 @@ namespace Timeoff.Application.Settings
             _currentUserService = currentUserService;
         }
 
-        public async Task<SettingsViewModel> Handle(UpdateSettingsCommand request, CancellationToken cancellationToken)
+        public async Task<ResultModels.ApiResult> Handle(UpdateSettingsCommand request, CancellationToken cancellationToken)
         {
-            ResultModels.FlashResult messages;
-
             if (request.Failures.IsValid())
             {
                 var company = await _dataContext.Companies
@@ -34,7 +32,10 @@ namespace Timeoff.Application.Settings
 
                 if (company == null)
                 {
-                    messages = ResultModels.FlashResult.WithError("The current company was not found!");
+                    return new()
+                    {
+                        Errors = ["The current company was not found!"]
+                    };
                 }
                 else
                 {
@@ -47,16 +48,15 @@ namespace Timeoff.Application.Settings
                     company.Country = request.Country;
 
                     await _dataContext.SaveChangesAsync();
-                    messages = ResultModels.FlashResult.Success("Company details updated");
+
+                    return new();
                 }
             }
             else
-                messages = request.Failures.ToFlashResult();
-
-            var result = await _dataContext.GetSettingsAsync(_currentUserService.CompanyId);
-            result.Result = messages;
-
-            return result;
+                return new()
+                {
+                    Errors = request.Failures.Select(v => v.ErrorMessage)
+                };
         }
     }
 }

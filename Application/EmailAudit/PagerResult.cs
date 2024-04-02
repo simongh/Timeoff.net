@@ -1,4 +1,4 @@
-﻿namespace Timeoff.ResultModels
+﻿namespace Timeoff.Application.EmailAudit
 {
     public record PagerResult
     {

@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Timeoff.Application.PublicHolidays
+namespace Timeoff.Application.DeletePublicHoliday
 {
     public record DeleteHolidayCommand : IRequest<ResultModels.ApiResult>
     {
@@ -23,10 +23,12 @@ namespace Timeoff.Application.PublicHolidays
             var holiday = await _dataContext.PublicHolidays
                 .FirstOrDefaultAsync(h => h.PublicHolidayId == request.Id && h.CompanyId == _currentUserService.CompanyId);
 
-            ResultModels.FlashResult result;
             if (holiday == null)
             {
-                result = ResultModels.FlashResult.WithError("Unabled to find holiday");
+                return new()
+                {
+                    Errors = ["Unabled to find holiday"]
+                };
             }
             else
             {
@@ -34,14 +36,9 @@ namespace Timeoff.Application.PublicHolidays
                 await _dataContext.SaveChangesAsync();
 
                 await _adjuster.AdjustForHolidaysAsync(new[] { (holiday.Date, holiday.Date) }, _currentUserService.CompanyId);
-
-                result = ResultModels.FlashResult.Success("Holiday was successfully removed");
             }
 
-            return new()
-            {
-                Errors = result.Errors,
-            };
+            return new();
         }
     }
 }

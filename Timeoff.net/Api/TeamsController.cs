@@ -52,7 +52,7 @@ namespace Timeoff.Api
         }
 
         [HttpDelete("{id:int}")]
-        public async Task<IActionResult> DeleteAsync([FromRoute] Application.Teams.DeleteTeamCommand command)
+        public async Task<IActionResult> DeleteAsync([FromRoute] Application.DeleteTeam.DeleteTeamCommand command)
         {
             await _mediator.Send(command);
 

@@ -4,11 +4,11 @@
     {
         public int Id { get; init; }
 
-        public string Name { get; init; }
+        public string Name { get; init; } = null!;
 
         public int Limit { get; init; }
 
-        public string Colour { get; init; }
+        public string Colour { get; init; } = null!;
 
         public bool UseAllowance { get; init; }
 

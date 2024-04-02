@@ -37,7 +37,7 @@ namespace Timeoff.Application.PublicHolidays
 
             return new()
             {
-                Errors = request.Failures?.Select(e => e.ErrorMessage)
+                Errors = request.Failures?.Select(e => e.ErrorMessage) ?? []
             };
         }
 

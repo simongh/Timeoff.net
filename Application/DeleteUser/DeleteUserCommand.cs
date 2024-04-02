@@ -23,7 +23,7 @@ namespace Timeoff.Application.DeleteUser
 
         public async Task<ResultModels.ApiResult> Handle(DeleteUserCommand request, CancellationToken cancellationToken)
         {
-            ResultModels.FlashResult messages;
+            var errors = new List<string>();
 
             var user = await _dataContext.Users
                 .Where(u => u.UserId == request.Id && u.CompanyId == _currentUserService.CompanyId)
@@ -34,7 +34,7 @@ namespace Timeoff.Application.DeleteUser
                 .Where(t => t.ManagerId == request.Id)
                 .AnyAsync();
             if (isManager)
-                messages = ResultModels.FlashResult.WithError("User manages a team");
+                errors.Add("User manages a team");
             else
             {
                 var leaves = await _dataContext.Leaves
@@ -49,13 +49,11 @@ namespace Timeoff.Application.DeleteUser
 
                 _dataContext.Users.Remove(user);
                 await _dataContext.SaveChangesAsync();
-
-                messages = ResultModels.FlashResult.Success("Employee data removed");
             }
 
             return new()
             {
-                Errors = messages.Errors,
+                Errors = errors,
             };
         }
     }

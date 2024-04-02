@@ -1,10 +1,22 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Timeoff.Application.Schedule;
 
 namespace Timeoff.Application
 {
     internal static class DataExtensions
     {
+        public static IQueryable<Entities.User> FindByEmail(this DbSet<Entities.User> users, string? email)
+        {
+            return users
+                .Where(u => u.Email == email)
+                .Where(u => u.EndDate == null || u.EndDate > DateTime.Today);
+        }
+
+        public static IQueryable<Entities.User> FindById(this DbSet<Entities.User> users, int userId)
+        {
+            return users
+                .Where(u => u.UserId == userId);
+        }
+
         public static async Task<ResultModels.AllowanceSummaryResult> GetAllowanceAsync(this IDataContext dataContext, int userId, int year)
         {
             var allowance = await dataContext.Users
@@ -46,88 +58,6 @@ namespace Timeoff.Application
             };
         }
 
-        public static async Task<Settings.SettingsViewModel> GetSettingsAsync(this IDataContext dataContext, int companyId)
-        {
-            var settings = await dataContext.Companies
-                .Where(c => c.CompanyId == companyId)
-                .Select(c => new Settings.SettingsViewModel
-                {
-                    Name = c.Name,
-                    CarryOver = c.CarryOver,
-                    Country = c.Country,
-                    DateFormat = c.DateFormat,
-                    TimeZone = c.TimeZone,
-                    HideTeamView = c.IsTeamViewHidden,
-                    ShowHoliday = c.ShareAllAbsences,
-                    Schedule = c.Schedule.ToEnumerable(),
-                    LeaveTypes = c.LeaveTypes
-                        .OrderBy(t => t.Name)
-                        .Select(l => new Settings.LeaveTypeResult
-                        {
-                            Name = l.Name,
-                            First = l.SortOrder == 0,
-                            AutoApprove = l.AutoApprove,
-                            UseAllowance = l.UseAllowance,
-                            Colour = l.Colour,
-                            Id = l.LeaveTypeId,
-                            Limit = l.Limit,
-                        })
-                        .ToArray(),
-                })
-                .FirstAsync();
-
-            settings.Countries = Services.CountriesService.Countries;
-            settings.TimeZones = Services.TimeZoneService.TimeZones;
-
-            return settings;
-        }
-
-        public static async Task<UserDetails.DetailsViewModel?> GetUserDetailsAsync(this IDataContext dataContext, int companyId, int userId)
-        {
-            var model = await dataContext.Users
-                .Where(u => u.CompanyId == companyId)
-                .Where(u => u.UserId == userId)
-                .Select(u => new
-                {
-                    User = new UserDetails.DetailsViewModel
-                    {
-                        Id = u.UserId,
-                        FirstName = u.FirstName,
-                        LastName = u.LastName,
-                        StartDate = u.StartDate,
-                        EndDate = u.EndDate,
-                        AutoApprove = u.AutoApprove,
-                        IsActive = u.IsActivated,
-                        IsAdmin = u.IsAdmin,
-                        TeamId = u.TeamId,
-                        Email = u.Email,
-                        //CompanyName = u.Company.Name,
-                        //DateFormat = u.Company.DateFormat,
-                        //Teams = u.Company.Teams
-                        //.OrderBy(d => d.Name)
-                        //.Select(d => new ResultModels.ListItem
-                        //{
-                        //    Id = d.TeamId,
-                        //    Value = d.Name,
-                        //}),
-                    },
-                    UserSchedule = u.Schedule,
-                    CompanySchedule = u.Company.Schedule
-                })
-                .FirstOrDefaultAsync();
-
-            if (model == null)
-            {
-                throw new NotFoundException();
-            }
-
-            return model.User with
-            {
-                Schedule = (model.UserSchedule ?? model.CompanySchedule).ToModel(),
-                ScheduleOverride = model.UserSchedule != null,
-            };
-        }
-
         public static async Task<IEnumerable<ResultModels.LeaveRequestedResult>> GetRequested(this DbSet<Entities.Leave> leaves, int userId, int year)
         {
             return await leaves
@@ -149,6 +79,20 @@ namespace Timeoff.Application
                     DateFormat = l.User.Company.DateFormat,
                 })
                 .ToArrayAsync();
+        }
+
+        public static Types.ScheduleModel ToModel(this Entities.Schedule schedule)
+        {
+            return new()
+            {
+                Monday = schedule.Monday == WorkingDay.WholeDay,
+                Tuesday = schedule.Tuesday == WorkingDay.WholeDay,
+                Wednesday = schedule.Wednesday == WorkingDay.WholeDay,
+                Thursday = schedule.Thursday == WorkingDay.WholeDay,
+                Friday = schedule.Friday == WorkingDay.WholeDay,
+                Saturday = schedule.Saturday == WorkingDay.WholeDay,
+                Sunday = schedule.Sunday == WorkingDay.WholeDay,
+            };
         }
     }
 }

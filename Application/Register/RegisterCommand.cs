@@ -2,11 +2,10 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using Timeoff.ResultModels;
 
 namespace Timeoff.Application.Register
 {
-    public record RegisterCommand : IRequest<ApiResult>, Commands.IValidated
+    public record RegisterCommand : IRequest<ResultModels.ApiResult>, Commands.IValidated
     {
         public string? CompanyName { get; init; }
 
@@ -32,14 +31,14 @@ namespace Timeoff.Application.Register
         IDataContext dataContext,
         Services.IUsersService usersService,
         Services.IEmailTemplateService templateService)
-        : IRequestHandler<RegisterCommand, ApiResult>
+        : IRequestHandler<RegisterCommand, ResultModels.ApiResult>
     {
         private readonly Types.Options _options = options.Value;
         private readonly IDataContext _dataContext = dataContext;
         private readonly Services.IUsersService _usersService = usersService;
         private readonly Services.IEmailTemplateService _templateService = templateService;
 
-        public async Task<ApiResult> Handle(RegisterCommand request, CancellationToken cancellationToken)
+        public async Task<ResultModels.ApiResult> Handle(RegisterCommand request, CancellationToken cancellationToken)
         {
             if (!_options.AllowNewAccountCreation)
                 return new()
@@ -49,12 +48,18 @@ namespace Timeoff.Application.Register
 
             if (!request.Failures.IsValid())
             {
-                return Errored(request.Failures.ToFlashResult());
+                return new()
+                {
+                    Errors = request.Failures.Select(v => v.ErrorMessage)
+                };
             }
 
             if (await _dataContext.Users.FindByEmail(request.Email).AnyAsync())
             {
-                return Errored(ResultModels.FlashResult.WithError("The email address is already in use"));
+                return new()
+                {
+                    Errors = ["The email address is already in use"]
+                };
             }
 
             var user = new Entities.User
@@ -74,32 +79,32 @@ namespace Timeoff.Application.Register
                 TimeZone = request.TimeZone!,
                 Country = request.Country!,
                 StartOfNewYear = 1,
-                LeaveTypes = new[]
-                {
-                    new Entities.LeaveType
+                LeaveTypes =
+                [
+                    new()
                     {
                         Name = "Holiday",
                         Colour = "leave_type_color_1"
                     },
-                    new Entities.LeaveType
+                    new()
                     {
                         Name = "Sickness",
                         Colour = "leave_type_color_1",
                         UseAllowance = false,
                     },
-                },
+                ],
                 Schedule = new(),
-                Teams = new[]
-                {
-                    new Entities.Team
+                Teams =
+                [
+                    new()
                     {
                         Name = "General",
-                        Users = new[]
-                        {
+                        Users =
+                        [
                             user,
-                        },
+                        ],
                     },
-                },
+                ],
             };
 
             company.Users.Add(user);
@@ -123,17 +128,13 @@ namespace Timeoff.Application.Register
             {
                 tx.Dispose();
 
-                return Errored(ResultModels.FlashResult.WithError("Unable to create company. A database error occurred"));
+                return new()
+                {
+                    Errors = ["Unable to create company. A database error occurred"]
+                };
             }
-            return new();
-        }
 
-        private ApiResult Errored(ResultModels.FlashResult errors)
-        {
-            return new()
-            {
-                Errors = errors.Errors,
-            };
+            return new();
         }
     }
 }

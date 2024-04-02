@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Timeoff.Application.Teams
 {
-    public record GetTeamCommand : IRequest<Types.TeamModel>, Commands.IValidated
+    public record GetTeamCommand : IRequest<TeamResult>, Commands.IValidated
     {
         public int Id { get; init; }
 
@@ -14,17 +14,18 @@ namespace Timeoff.Application.Teams
     internal class GetTeamCommandHandler(
         IDataContext dataContext,
         Services.ICurrentUserService currentUserService)
-        : IRequestHandler<GetTeamCommand, Types.TeamModel>
+        : IRequestHandler<GetTeamCommand, TeamResult>
     {
         private readonly IDataContext _dataContext = dataContext;
         private readonly Services.ICurrentUserService _currentUserService = currentUserService;
 
-        public async Task<Types.TeamModel> Handle(GetTeamCommand request, CancellationToken cancellationToken)
+        public async Task<TeamResult> Handle(GetTeamCommand request, CancellationToken cancellationToken)
         {
             var team = await _dataContext.Teams
                 .Where(d => d.TeamId == request.Id && d.CompanyId == _currentUserService.CompanyId)
-                .Select(d => new Types.TeamModel
+                .Select(d => new TeamResult
                 {
+                    Id = d.TeamId,
                     Name = d.Name,
                     Allowance = d.Allowance,
                     IncludePublicHolidays = d.IncludePublicHolidays,

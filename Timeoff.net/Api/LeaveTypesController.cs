@@ -1,11 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using MediatR;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Timeoff.Api
 {
     [Route("api/company/leave-types")]
     [ApiController]
-    public class LeaveTypesController : ControllerBase
+    public class LeaveTypesController(IMediator mediator) : ControllerBase
     {
+        private readonly IMediator _mediator = mediator;
+
         [HttpPut("")]
         public async Task<IActionResult> UpdateAsync()
         {
@@ -19,9 +22,16 @@ namespace Timeoff.Api
         }
 
         [HttpDelete("{id:int}")]
-        public async Task<IActionResult> DeleteAsync(int id)
+        public async Task<IActionResult> DeleteAsync([FromRoute] Application.DeleteLeaveType.DeleteLeaveTypeCommand command)
         {
-            throw new NotImplementedException();
+            var result = await _mediator.Send(command);
+
+            if (result.IsSuccess)
+            {
+                return NoContent();
+            }
+            else
+                return BadRequest(result);
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace Timeoff.Application.UserDetails
+namespace Timeoff.Application.Users
 {
     internal class UpdateUserCommandValidator : AbstractValidator<UpdateUserCommand>
     {

@@ -4,17 +4,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Timeoff.Application.CreateUser
 {
-    public record CreateCommand : Types.UserDetailsModelBase, IRequest<CreateViewModel>, Commands.IValidated
+    public record CreateCommand : Types.UserDetailsModelBase, IRequest<ResultModels.ApiResult>, Commands.IValidated
     {
-        public int Team
-        {
-            get => TeamId;
-            init => TeamId = value;
-        }
         public IEnumerable<ValidationFailure>? Failures { get; set; }
     }
 
-    internal class CreateCommandHandler : IRequestHandler<CreateCommand, CreateViewModel>
+    internal class CreateCommandHandler : IRequestHandler<CreateCommand, ResultModels.ApiResult>
     {
         private readonly IDataContext _dataContext;
         private readonly Services.ICurrentUserService _currentUserService;
@@ -36,7 +31,7 @@ namespace Timeoff.Application.CreateUser
             _templateService = templateService;
         }
 
-        public async Task<CreateViewModel> Handle(CreateCommand request, CancellationToken cancellationToken)
+        public async Task<ResultModels.ApiResult> Handle(CreateCommand request, CancellationToken cancellationToken)
         {
             var errors = new List<ValidationFailure>();
             if (request.Failures != null)
@@ -45,11 +40,11 @@ namespace Timeoff.Application.CreateUser
             }
 
             var teamValid = await _dataContext.Teams
-                .Where(d => d.CompanyId == _currentUserService.CompanyId && d.TeamId == request.TeamId)
+                .Where(d => d.CompanyId == _currentUserService.CompanyId && d.TeamId == request.Team)
                 .AnyAsync();
             if (!teamValid)
             {
-                errors.Add(new(nameof(request.TeamId), "Team could not be found"));
+                errors.Add(new(nameof(request.Team), "Team could not be found"));
             }
 
             var emailUsed = await _dataContext.Users
@@ -60,24 +55,11 @@ namespace Timeoff.Application.CreateUser
                 errors.Add(new(nameof(request.Email), "The email is already in use"));
             }
 
-            ResultModels.FlashResult messages;
             if (errors.Any())
             {
-                messages = errors.ToFlashResult();
-
-                //var vm = await _dataContext.GetCreateViewModelAsync(_currentUserService.CompanyId);
-
                 return new()
                 {
-                    //FirstName = request.FirstName,
-                    //LastName = request.LastName,
-                    //Email = request.Email,
-                    //TeamId = request.TeamId,
-                    //StartDate = request.StartDate,
-                    //EndDate = request.EndDate,
-                    //AutoApprove = request.AutoApprove,
-                    //IsAdmin = request.IsAdmin,
-                    Messages = messages,
+                    Errors = errors.Select(v => v.ErrorMessage),
                 };
             }
 
@@ -88,7 +70,7 @@ namespace Timeoff.Application.CreateUser
                 Email = request.Email,
                 StartDate = request.StartDate!.Value,
                 EndDate = request.EndDate,
-                TeamId = request.TeamId,
+                TeamId = request.Team,
                 AutoApprove = request.AutoApprove,
                 IsAdmin = request.IsAdmin,
                 IsActivated = true,
@@ -109,10 +91,7 @@ namespace Timeoff.Application.CreateUser
             _dataContext.EmailAudits.Add(_templateService.NewUser(user, thisUser));
             await _dataContext.SaveChangesAsync();
 
-            return new()
-            {
-                Messages = ResultModels.FlashResult.Success("New user account successfully added"),
-            };
+            return new();
         }
     }
 }

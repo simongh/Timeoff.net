@@ -2,11 +2,10 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Timeoff.Application.UserDetails
+namespace Timeoff.Application.Users
 {
     public record UpdateUserCommand : Types.UserDetailsModelBase, IRequest<ResultModels.ApiResult>, Commands.IValidated
     {
-        public int Team { get => TeamId; init => TeamId = value; }
         public IEnumerable<ValidationFailure>? Failures { get; set; }
     }
 
@@ -29,11 +28,11 @@ namespace Timeoff.Application.UserDetails
             }
 
             var teamValid = await _dataContext.Teams
-                .Where(d => d.CompanyId == _currentUserService.CompanyId && d.TeamId == request.TeamId)
+                .Where(d => d.CompanyId == _currentUserService.CompanyId && d.TeamId == request.Team)
                 .AnyAsync();
             if (!teamValid)
             {
-                errors.Add(new(nameof(request.TeamId), "Team could not be found"));
+                errors.Add(new(nameof(request.Team), "Team could not be found"));
             }
 
             var user = await _dataContext.Users
@@ -66,12 +65,7 @@ namespace Timeoff.Application.UserDetails
                 }
             }
 
-            ResultModels.FlashResult messages;
-            if (errors.Any())
-            {
-                messages = errors.ToFlashResult();
-            }
-            else
+            if (!errors.Any())
             {
                 user!.FirstName = request.FirstName;
                 user.LastName = request.LastName;
@@ -81,17 +75,15 @@ namespace Timeoff.Application.UserDetails
                 user.IsActivated = request.IsActive;
                 user.IsAdmin = request.IsAdmin;
                 user.AutoApprove = request.AutoApprove;
-                user.TeamId = request.TeamId;
+                user.TeamId = request.Team;
 
                 await _dataContext.SaveChangesAsync();
                 _leaveService.ClearEmployeeCache();
-
-                messages = ResultModels.FlashResult.Success($"Details for {request.Name} were updated");
             }
 
             return new()
             {
-                Errors = messages.Errors,
+                Errors = errors.Select(v => v.ErrorMessage),
             };
         }
     }
