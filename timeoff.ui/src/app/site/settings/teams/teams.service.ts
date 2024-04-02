@@ -45,7 +45,7 @@ export class TeamsService {
     private createForm() {
         return this.fb.group({
             name: ['', [Validators.required]],
-            managerId: [0, [Validators.required, Validators.min(1)]],
+            manager: [null as number | null, [Validators.required]],
             allowance: [20, [Validators.required, Validators.min(0), Validators.max(50)]],
             includePublicHolidays: true,
             isAccruedAllowance: false,

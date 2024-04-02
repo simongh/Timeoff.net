@@ -7,8 +7,7 @@ import { ScheduleModel } from '../../models/schedule.model';
 export interface UserModel {
     id: number;
     name: string;
-    team: TeamModel;
-    teamId: number;
+    team: number;
     isAdmin: boolean;
     availableAllowance: number;
     daysUsed: number;

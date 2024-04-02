@@ -13,7 +13,7 @@ import { MessagesService } from '@services/messages/messages.service';
 import { CompanyService } from '@services/company/company.service';
 
 import { UsersService } from '../users.service';
-import { UserModel } from '../user.model';
+import { UserListModel } from '../user-list.model';
 
 @Component({
     selector: 'user-list',
@@ -30,7 +30,7 @@ export class UserListComponent implements OnInit {
 
     public team: number | null = null;
 
-    public users!: UserModel[];
+    public users!: UserListModel[];
 
     constructor(
         private readonly route: ActivatedRoute,
