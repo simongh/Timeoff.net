@@ -36,8 +36,8 @@
 
         <div class="form-group">
             <label for="manager" class="control-label">Manager</label>
-            <user-select [control]="editForm.controls.managerId" for="manager"/>
-            <span class="help-block">Head of {{name}} team. Main manager. <a routerLink="/users/{{editForm.controls.managerId.value}}">More details <i class="fa fa-angle-double-right"></i></a></span>
+            <user-select [control]="editForm.controls.manager" for="manager"/>
+            <span class="help-block">Head of {{name}} team. Main manager. <a [routerLink]="['/users',editForm.controls.manager.value]">More details <i class="fa fa-angle-double-right"></i></a></span>
         </div>
 
         <!-- @*<div class="form-group">

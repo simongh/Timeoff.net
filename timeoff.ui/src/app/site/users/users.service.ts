@@ -10,6 +10,7 @@ import { AllowanceSummaryModel } from '@services/calendar/allowance-summary.mode
 
 import { ScheduleModel } from '../../models/schedule.model';
 import { UserAbsencesModel } from './user-absences.model';
+import { UserListModel } from './user-list.model';
 
 type UserFromGroup = ReturnType<UsersService['createUserForm']>;
 
@@ -48,7 +49,7 @@ export class UsersService {
               }
             : {};
 
-        return this.client.get<UserModel[]>('/api/users', options);
+        return this.client.get<UserListModel[]>('/api/users', options);
     }
 
     public addUser() {
@@ -102,7 +103,7 @@ export class UsersService {
             email: model.email,
             isAdmin: model.isAdmin,
             autoApprove: model.autoApprove,
-            team: model.teamId,
+            team: model.team,
             startDate: formatDate(model.startDate, 'yyyy-MM-dd'),
             endDate: model.endDate ? formatDate(model.endDate, 'yyyy-MM-dd') : null,
             isActive: model.isActive,

@@ -19,13 +19,7 @@ namespace Timeoff.Api
 
             if (result.Success)
             {
-                return Ok(new
-                {
-                    result.Success,
-                    Token = "token",
-                    Expires = DateTimeOffset.UtcNow.AddMinutes(15),
-                    result.Result?.Errors,
-                });
+                return Ok(result);
             }
             else
             {
