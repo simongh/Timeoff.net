@@ -49,7 +49,7 @@ namespace Timeoff.Api
         }
 
         [HttpDelete("{id:int}")]
-        public async Task<IActionResult> DeleteAsync([FromRoute] Application.PublicHolidays.DeleteHolidayCommand command)
+        public async Task<IActionResult> DeleteAsync([FromRoute] Application.DeletePublicHoliday.DeleteHolidayCommand command)
         {
             var result = await _mediator.Send(command);
 

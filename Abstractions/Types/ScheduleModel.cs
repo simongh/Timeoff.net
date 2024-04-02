@@ -1,4 +1,4 @@
-﻿namespace Timeoff.Application.Schedule
+﻿namespace Timeoff.Types
 {
     public record ScheduleModel
     {

@@ -1,8 +1,8 @@
-﻿namespace Timeoff.ResultModels
+﻿namespace Timeoff.Application.AllowanceUsage
 {
     public record AllowanceByTimeViewModel
     {
-        public IEnumerable<ListItem> Departments { get; init; }
+        public IEnumerable<ResultModels.ListItem> Departments { get; init; }
 
         public IEnumerable<UserSummaryResult> Users { get; init; }
 

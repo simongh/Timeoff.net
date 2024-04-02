@@ -17,7 +17,7 @@ namespace Timeoff.Application.Teams
                 .Must(i => i * 10 % 5 == 0)
                 .WithMessage("Allowance must be in half day increments");
 
-            RuleFor(m => m.ManagerId)
+            RuleFor(m => m.Manager)
                 .NotEmpty();
         }
     }

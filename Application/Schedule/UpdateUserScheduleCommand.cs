@@ -3,14 +3,14 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Timeoff.Application.Schedule
 {
-    public record UpdateUserScheduleCommand : IRequest<ScheduleModel>
+    public record UpdateUserScheduleCommand : IRequest<Types.ScheduleModel>
     {
         public int Id { get; set; }
 
-        public ScheduleModel? Schedule { get; set; }
+        public Types.ScheduleModel? Schedule { get; set; }
     }
 
-    internal class UpdateUserScheduleCommandHandler : IRequestHandler<UpdateUserScheduleCommand, ScheduleModel>
+    internal class UpdateUserScheduleCommandHandler : IRequestHandler<UpdateUserScheduleCommand, Types.ScheduleModel>
     {
         private readonly IDataContext _dataContext;
         private readonly Services.ICurrentUserService _currentUserService;
@@ -23,7 +23,7 @@ namespace Timeoff.Application.Schedule
             _currentUserService = currentUserService;
         }
 
-        public async Task<ScheduleModel> Handle(UpdateUserScheduleCommand request, CancellationToken cancellationToken)
+        public async Task<Types.ScheduleModel> Handle(UpdateUserScheduleCommand request, CancellationToken cancellationToken)
         {
             var user = await _dataContext.Users
                 .Where(u => u.UserId == request.Id && u.CompanyId == _currentUserService.CompanyId)

@@ -23,10 +23,10 @@ namespace Timeoff.Api
 
             var result = await _mediator.Send(command);
 
-            if (result.Result?.Errors?.Any() == true)
-                return BadRequest(result.Result);
-            else
+            if (result.IsSuccess)
                 return NoContent();
+            else
+                return BadRequest(result);
         }
 
         [HttpGet("teams")]
@@ -44,13 +44,13 @@ namespace Timeoff.Api
         [HttpGet("countries")]
         public async Task<IActionResult> CountriesAsync()
         {
-            return Ok((await _mediator.Send(new Application.Settings.ListsCommand())).Countries);
+            return Ok((await _mediator.Send(new Application.Company.ListsCommand())).Countries);
         }
 
         [HttpGet("time-zones")]
         public async Task<IActionResult> TimeZonesAsync()
         {
-            return Ok((await _mediator.Send(new Application.Settings.ListsCommand())).TimeZones);
+            return Ok((await _mediator.Send(new Application.Company.ListsCommand())).TimeZones);
         }
 
         [HttpGet("leave-types")]
@@ -67,10 +67,10 @@ namespace Timeoff.Api
 
             var result = await _mediator.Send(command);
 
-            if (result.Result?.Errors?.Any() == true)
-                return BadRequest(result.Result);
-            else
+            if (result.IsSuccess)
                 return NoContent();
+            else
+                return BadRequest(result);
         }
 
         [HttpPut("schedule")]

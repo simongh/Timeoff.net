@@ -4,9 +4,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Timeoff.Application.Teams
 {
-    public record UpdateTeamCommand : Types.TeamModel, IRequest<ResultModels.ApiResult>, Commands.IValidated
+    public record UpdateTeamCommand : TeamModel, IRequest<ResultModels.ApiResult>, Commands.IValidated
     {
         public int? Id { get; set; }
+
+        public int Manager { get; init; }
+
         public IEnumerable<ValidationFailure>? Failures { get; set; }
     }
 
@@ -25,20 +28,20 @@ namespace Timeoff.Application.Teams
 
         public async Task<ResultModels.ApiResult> Handle(UpdateTeamCommand request, CancellationToken cancellationToken)
         {
-            ResultModels.FlashResult messages;
+            var errors = new List<string>();
 
             if (request.Failures.IsValid())
             {
                 var managerFound = await _dataContext.Users
                     .Where(u => u.CompanyId == _currentUserService.CompanyId)
-                    .Where(u => u.UserId == request.ManagerId)
+                    .Where(u => u.UserId == request.Manager)
                     .AnyAsync();
 
                 if (!managerFound)
                 {
                     return new()
                     {
-                        Errors = ResultModels.FlashResult.WithError("Invalid manager").Errors,
+                        Errors = ["Invalid manager"],
                     };
                 }
 
@@ -60,7 +63,7 @@ namespace Timeoff.Application.Teams
                     if (team == null)
                         return new()
                         {
-                            Errors = ResultModels.FlashResult.WithError("Invalid team").Errors,
+                            Errors = ["Invalid team"],
                         };
                 }
 
@@ -68,23 +71,18 @@ namespace Timeoff.Application.Teams
                 team.Allowance = request.Allowance;
                 team.IsAccrued = request.IsAccruedAllowance;
                 team.IncludePublicHolidays = request.IncludePublicHolidays;
-                team.ManagerId = request.ManagerId;
+                team.ManagerId = request.Manager;
 
                 await _dataContext.SaveChangesAsync();
-
-                if (request.Id == null)
-                    messages = ResultModels.FlashResult.Success("Team added");
-                else
-                    messages = ResultModels.FlashResult.Success($"Team {team.Name} was updated");
             }
             else
             {
-                messages = request.Failures.ToFlashResult();
+                errors.AddRange(request.Failures.Select(v => v.ErrorMessage));
             }
 
             return new()
             {
-                Errors = messages.Errors,
+                Errors = errors,
             };
         }
     }

@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 using Timeoff.Application.Teams;
+using Timeoff.Application.Users;
 
 namespace Timeoff.Application
 {
@@ -26,7 +27,7 @@ namespace Timeoff.Application
             services.AddTransient<IValidator<Settings.UpdateLeaveTypesCommand>, Settings.UpdateLeaveTypesCommandValidator>();
 
             services.AddTransient<Validators.UserDetailsBaseValidator>();
-            services.AddTransient<IValidator<UserDetails.UpdateUserCommand>, UserDetails.UpdateUserCommandValidator>();
+            services.AddTransient<IValidator<UpdateUserCommand>, UpdateUserCommandValidator>();
             services.AddTransient<IValidator<CreateUser.CreateCommand>, CreateUser.CreateCommandValidator>();
 
             services.AddTransient<IValidator<BookAbsence.BookCommand>, BookAbsence.BookCommandValidator>();

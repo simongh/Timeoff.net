@@ -1,8 +1,8 @@
 ﻿using MediatR;
 
-namespace Timeoff.Commands
+namespace Timeoff.Application.AllowanceUsage
 {
-    public record AllowanceByTimeQuery : IRequest<ResultModels.AllowanceByTimeViewModel>
+    public record AllowanceUsageQuery : IRequest<AllowanceByTimeViewModel>
     {
         public DateTime StartDate { get; init; } = DateTime.Today.AddDays(-DateTime.Today.Day + 1);
 
@@ -11,7 +11,7 @@ namespace Timeoff.Commands
         public int? Team { get; init; }
     }
 
-    internal class AllowanceByTimeQueryHandler : IRequestHandler<AllowanceByTimeQuery, ResultModels.AllowanceByTimeViewModel>
+    internal class AllowanceByTimeQueryHandler : IRequestHandler<AllowanceUsageQuery, AllowanceByTimeViewModel>
     {
         private readonly IDataContext _dataContext;
         private readonly Services.ICurrentUserService _currentUserService;
@@ -24,7 +24,7 @@ namespace Timeoff.Commands
             _currentUserService = currentUserService;
         }
 
-        public async Task<ResultModels.AllowanceByTimeViewModel> Handle(AllowanceByTimeQuery request, CancellationToken cancellationToken)
+        public async Task<AllowanceByTimeViewModel> Handle(AllowanceUsageQuery request, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }

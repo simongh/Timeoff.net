@@ -28,7 +28,6 @@ namespace Timeoff.Application.Teams
                      EmployeeCount = d.Users.Count(),
                      IsAccruedAllowance = d.IsAccrued,
                      IncludePublicHolidays = d.IncludePublicHolidays,
-                     ManagerId = d.ManagerId!.Value,
                      Manager = new()
                      {
                          Id = d.ManagerId!.Value,

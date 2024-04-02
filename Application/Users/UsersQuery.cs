@@ -1,6 +1,5 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Timeoff.Entities;
 
 namespace Timeoff.Application.Users
 {
@@ -21,7 +20,7 @@ namespace Timeoff.Application.Users
 
         public async Task<IEnumerable<UserInfoResult>> Handle(UsersQuery request, CancellationToken cancellationToken)
         {
-            var query = dataContext.Users
+            var query = _dataContext.Users
                 .Where(u => u.CompanyId == _currentUserService.CompanyId);
 
             if (request.Team.HasValue)
@@ -33,7 +32,7 @@ namespace Timeoff.Application.Users
             return await query
                 .OrderBy(u => u.FirstName)
                 .ThenBy(u => u.LastName)
-                .Select(u => new Users.UserInfoResult
+                .Select(u => new UserInfoResult
                 {
                     Id = u.UserId,
                     FirstName = u.FirstName,

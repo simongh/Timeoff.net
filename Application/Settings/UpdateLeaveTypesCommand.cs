@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Timeoff.Application.Settings
 {
-    public record UpdateLeaveTypesCommand : IRequest<SettingsViewModel>, Commands.IValidated
+    public record UpdateLeaveTypesCommand : IRequest<ResultModels.ApiResult<IEnumerable<LeaveTypeResult>>>, Commands.IValidated
     {
         public LeaveTypeRequest[]? LeaveTypes { get; init; }
 
@@ -15,44 +15,45 @@ namespace Timeoff.Application.Settings
         public IEnumerable<ValidationFailure>? Failures { get; set; }
     }
 
-    internal class UpdateLeaveTypesCommandHandler : IRequestHandler<UpdateLeaveTypesCommand, SettingsViewModel>
+    internal class UpdateLeaveTypesCommandHandler(
+        IDataContext dataContext,
+        Services.ICurrentUserService currentUserService)
+        : IRequestHandler<UpdateLeaveTypesCommand, ResultModels.ApiResult<IEnumerable<LeaveTypeResult>>>
     {
-        private readonly IDataContext _dataContext;
-        private readonly Services.ICurrentUserService _currentUserService;
+        private readonly IDataContext _dataContext = dataContext;
+        private readonly Services.ICurrentUserService _currentUserService = currentUserService;
 
-        public UpdateLeaveTypesCommandHandler(
-            IDataContext dataContext,
-            Services.ICurrentUserService currentUserService)
+        public async Task<ResultModels.ApiResult<IEnumerable<LeaveTypeResult>>> Handle(UpdateLeaveTypesCommand request, CancellationToken cancellationToken)
         {
-            _dataContext = dataContext;
-            _currentUserService = currentUserService;
-        }
-
-        public async Task<SettingsViewModel> Handle(UpdateLeaveTypesCommand request, CancellationToken cancellationToken)
-        {
-            ResultModels.FlashResult? messages;
             if (request.Failures.IsValid())
             {
-                messages = Insert(request);
-                messages += await UpdateAsync(request);
+                Insert(request);
+                await UpdateAsync(request);
 
                 await _dataContext.SaveChangesAsync();
             }
             else
             {
-                messages = request.Failures.ToFlashResult();
+                return new()
+                {
+                    Errors = request.Failures.Select(v => v.ErrorMessage)
+                };
             }
 
-            var result = await _dataContext.GetSettingsAsync(_currentUserService.CompanyId);
-            result.Result = messages;
-
-            return result;
+            return new()
+            {
+                Result = await _dataContext.LeaveTypes
+                    .Where(lt => lt.CompanyId == _currentUserService.CompanyId)
+                    .ToModels()
+                    .AsQueryable()
+                    .ToArrayAsync(),
+            };
         }
 
-        private ResultModels.FlashResult? Insert(UpdateLeaveTypesCommand request)
+        private void Insert(UpdateLeaveTypesCommand request)
         {
             if (request.Add == null)
-                return null;
+                return;
 
             _dataContext.LeaveTypes.Add(new()
             {
@@ -64,14 +65,12 @@ namespace Timeoff.Application.Settings
                 SortOrder = 1,
                 CompanyId = _currentUserService.CompanyId,
             });
-
-            return ResultModels.FlashResult.Success($"Leave type {request.Add.Name} was added successfully");
         }
 
-        private async Task<ResultModels.FlashResult?> UpdateAsync(UpdateLeaveTypesCommand request)
+        private async Task UpdateAsync(UpdateLeaveTypesCommand request)
         {
             if (request.LeaveTypes == null)
-                return null;
+                return;
 
             var ids = request.LeaveTypes
                 .Select(i => i.Id);
@@ -91,8 +90,6 @@ namespace Timeoff.Application.Settings
                 item.Limit = leave.Limit;
                 item.SortOrder = request.First == item.LeaveTypeId ? 0 : 1;
             }
-
-            return ResultModels.FlashResult.Success("Leave type changes saved");
         }
     }
 }

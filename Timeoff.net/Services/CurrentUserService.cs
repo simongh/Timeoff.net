@@ -31,7 +31,7 @@ namespace Timeoff.Services
             }
         }
 
-        public string DateFormat => _httpContextAccessor.HttpContext!.User.FindFirstValue("dateformat");
+        public string DateFormat => _httpContextAccessor.HttpContext!.User.FindFirstValue("dateformat") ?? "yyyy-MM-dd";
 
         public bool IsAuthenticated => _httpContextAccessor.HttpContext?.User?.Identity?.IsAuthenticated ?? false;
 

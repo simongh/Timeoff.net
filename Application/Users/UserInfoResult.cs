@@ -10,6 +10,6 @@
 
         public double DaysUsed => AllowanceCalculator.DaysUsed;
 
-        internal Types.AllowanceCalculator AllowanceCalculator { get; init; }
+        internal Types.AllowanceCalculator AllowanceCalculator { get; init; } = null!;
     }
 }

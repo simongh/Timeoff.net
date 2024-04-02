@@ -2,8 +2,6 @@
 {
     public record AllowanceSummaryResult : Types.AllowanceCalculator
     {
-        public int PreviousYear => Year - 1;
-
         public IEnumerable<LeaveSummaryResult> LeaveSummary { get; init; } = null!;
 
         public double Used => LeaveSummary.Where(l => l.AffectsAllowance).Sum(l => l.Total);

@@ -42,7 +42,7 @@ namespace Timeoff.Application.EmailAudit
                 query = query.Where(e => e.UserId == request.UserId.Value);
             }
 
-            var pager = new ResultModels.PagerResult
+            var pager = new PagerResult
             {
                 CurrentPage = request.Page,
                 TotalRows = await query.CountAsync(),

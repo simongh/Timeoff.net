@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Timeoff.Application.Schedule
 {
-    public record UpdateScheduleCommand : ScheduleModel, IRequest<ResultModels.ApiResult>
+    public record UpdateScheduleCommand : Types.ScheduleModel, IRequest<ResultModels.ApiResult>
     {
     }
 

@@ -3,12 +3,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Timeoff.Application.DeleteCompany
 {
-    public record DeleteCompanyCommand : IRequest<Settings.SettingsViewModel?>
+    public record DeleteCompanyCommand : IRequest<ResultModels.ApiResult>
     {
         public string? Name { get; init; }
     }
 
-    internal class DeleteCompanyCommandHandler : IRequestHandler<DeleteCompanyCommand, Settings.SettingsViewModel?>
+    internal class DeleteCompanyCommandHandler : IRequestHandler<DeleteCompanyCommand, ResultModels.ApiResult>
     {
         private readonly IDataContext _dataContext;
         private readonly Services.ICurrentUserService _currentUserService;
@@ -21,7 +21,7 @@ namespace Timeoff.Application.DeleteCompany
             _currentUserService = currentUserService;
         }
 
-        public async Task<Settings.SettingsViewModel?> Handle(DeleteCompanyCommand request, CancellationToken cancellationToken)
+        public async Task<ResultModels.ApiResult> Handle(DeleteCompanyCommand request, CancellationToken cancellationToken)
         {
             var match = await _dataContext.Companies
                 .Where(c => c.Name == request.Name && c.CompanyId == _currentUserService.CompanyId)
@@ -29,10 +29,10 @@ namespace Timeoff.Application.DeleteCompany
 
             if (!match)
             {
-                var result = await _dataContext.GetSettingsAsync(_currentUserService.CompanyId);
-                result.Result = ResultModels.FlashResult.WithError("The company name did not match");
-
-                return result;
+                return new()
+                {
+                    Errors = ["The company name did not match"]
+                };
             }
 
             var tx = _dataContext.BeginTransaction();
@@ -87,16 +87,16 @@ namespace Timeoff.Application.DeleteCompany
                 await _dataContext.SaveChangesAsync();
 
                 await tx.CommitAsync();
-                return null;
+                return new();
             }
             catch
             {
                 tx.Dispose();
 
-                var result = await _dataContext.GetSettingsAsync(_currentUserService.CompanyId);
-                result.Result = ResultModels.FlashResult.WithError("Unable to delete company. A database error occurred");
-
-                return result;
+                return new()
+                {
+                    Errors = ["Unable to delete company. A database error occurred"]
+                };
             }
         }
     }

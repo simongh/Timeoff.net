@@ -33,12 +33,12 @@ namespace Timeoff.Application.ResetPassword
             {
                 return new()
                 {
-                    Errors = request.Failures.ToFlashResult().Errors,
+                    Errors = request.Failures.Select(v => v.ErrorMessage),
                 };
             }
 
             Entities.User? user = null;
-            ResultModels.FlashResult result;
+            var errors = new List<string>();
 
             if (!string.IsNullOrEmpty(request.Token))
             {
@@ -52,7 +52,7 @@ namespace Timeoff.Application.ResetPassword
             if (user != null)
             {
                 if (_currentUserService.IsAuthenticated && !_usersService.Authenticate(user.Password, request.Password))
-                    result = ResultModels.FlashResult.WithError("Current password is incorrect");
+                    errors = ["Current password is incorrect"];
                 else
                 {
                     user.Password = _usersService.HashPassword(request.NewPassword!);
@@ -60,20 +60,19 @@ namespace Timeoff.Application.ResetPassword
                     user.IsActivated = true;
                     _dataContext.EmailAudits.Add(_emailTemplateService.ResetPassword(user));
                     await _dataContext.SaveChangesAsync();
-                    result = ResultModels.FlashResult.Success("Please use new password to login into system");
                 }
             }
             else
             {
                 if (request.Token == null)
-                    result = ResultModels.FlashResult.WithError("Unable to find user");
+                    errors = ["Unable to find user"];
                 else
-                    result = ResultModels.FlashResult.WithError("Unknown reset password link, please submit request again");
+                    errors = ["Unknown reset password link, please submit request again"];
             }
 
             return new()
             {
-                Errors = result.Errors,
+                Errors = errors,
             };
         }
 

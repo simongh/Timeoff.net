@@ -2,9 +2,9 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Timeoff.Application.Absences
+namespace Timeoff.Application.Users
 {
-    public record UpdateAbsencesCommand : IRequest<AbsencesViewModel>, Commands.IValidated
+    public record UpdateAbsencesCommand : IRequest<ResultModels.AllowanceSummaryResult>, Commands.IValidated
     {
         public int Id { get; set; }
 
@@ -12,7 +12,7 @@ namespace Timeoff.Application.Absences
         public IEnumerable<ValidationFailure>? Failures { get; set; }
     }
 
-    internal class UpdateAbsencesCommandHandler : IRequestHandler<UpdateAbsencesCommand, AbsencesViewModel>
+    internal class UpdateAbsencesCommandHandler : IRequestHandler<UpdateAbsencesCommand, ResultModels.AllowanceSummaryResult>
     {
         private readonly IDataContext _dataContext;
         private readonly Services.ICurrentUserService _currentUserService;
@@ -25,7 +25,7 @@ namespace Timeoff.Application.Absences
             _currentUserService = currentUserService;
         }
 
-        public async Task<AbsencesViewModel> Handle(UpdateAbsencesCommand request, CancellationToken cancellationToken)
+        public async Task<ResultModels.AllowanceSummaryResult> Handle(UpdateAbsencesCommand request, CancellationToken cancellationToken)
         {
             if (!await _dataContext.Users
                 .Where(u => u.UserId == request.Id && u.CompanyId == _currentUserService.CompanyId)
@@ -52,9 +52,7 @@ namespace Timeoff.Application.Absences
 
             await _dataContext.SaveChangesAsync();
 
-            var result = await _dataContext.GetAbsencesAync(_currentUserService.CompanyId, request.Id);
-            result.Messages = ResultModels.FlashResult.Success("Adjustment updated");
-            return result;
+            return await _dataContext.GetAllowanceAsync(request.Id, DateTime.Today.Year);
         }
     }
 }

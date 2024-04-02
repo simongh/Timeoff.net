@@ -50,6 +50,7 @@ namespace Timeoff.Services
                 DayOfWeek.Thursday => schedule.Thursday == WorkingDay.WholeDay,
                 DayOfWeek.Friday => schedule.Friday == WorkingDay.WholeDay,
                 DayOfWeek.Saturday => schedule.Saturday == WorkingDay.WholeDay,
+                _ => throw new NotSupportedException("Only valid days of the week are supported")
             };
         }
 

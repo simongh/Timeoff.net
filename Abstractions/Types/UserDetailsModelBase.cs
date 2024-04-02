@@ -2,9 +2,8 @@
 {
     public abstract record UserDetailsModelBase : UserModel
     {
+        public int Team { get; init; }
         public string Email { get; init; } = null!;
-
-        public int TeamId { get; init; }
 
         public bool IsAdmin { get; init; }
 
