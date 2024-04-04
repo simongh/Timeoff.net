@@ -56,14 +56,14 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group pull-right">
-                                <button class="btn btn-link" type="button" name="as-csv" value="1"
+                                <button class="btn btn-link" type="button" [disabled]="submitting" name="as-csv" value="1"
                                         data-content="Download report as .CSV file"
                                         data-placement="top"
                                         data-toggle="popover"
                                         data-trigger="focus hover">
                                     <i class="fa fa-download"></i> .csv
                                 </button>
-                                <button class="btn btn-success single-click" type="button">Update results</button>
+                                <button class="btn btn-success single-click" [disabled]="submitting" type="button">Update results</button>
                             </div>
                         </div>
                     </div>

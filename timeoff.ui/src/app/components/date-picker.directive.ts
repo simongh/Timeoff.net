@@ -1,6 +1,7 @@
 import { AfterViewInit, Directive, ElementRef, EventEmitter, Optional, Output } from '@angular/core';
 import { NgControl } from '@angular/forms';
-import { formatISO, parseISO } from 'date-fns';
+import { By } from '@angular/platform-browser';
+import { formatISO, isValid, parseISO } from 'date-fns';
 
 declare var $: any;
 
@@ -15,14 +16,19 @@ export class DatePickerDirective implements AfterViewInit {
     constructor(private elRef: ElementRef, @Optional() private ngControl: NgControl) {}
 
     public ngAfterViewInit(): void {
-        const setFn = (d: Date) => {
+        const setFn = (d: Date | null) => {
+            if (!d) {
+                this.ngControl?.control?.setValue(null);
+                return;
+            }
             this.ngControl?.control?.setValue(formatISO(d, { representation: 'date' }));
 
             this.selected.emit(d);
         };
 
-        this.ngControl.valueChanges?.subscribe((d) => {
-            const value = parseISO(d);
+        this.ngControl?.valueChanges?.subscribe((d) => {
+            const valueDate = d ? parseISO(d) : null;
+            const value = isValid(valueDate) ? valueDate : null;
             $(this.elRef.nativeElement).datepicker('update', value);
         });
 
@@ -30,6 +36,9 @@ export class DatePickerDirective implements AfterViewInit {
             .datepicker()
             .on('changeDate', function (e: any) {
                 setFn(e.date);
+            })
+            .on('clearDate', function (e: any) {
+                setFn(null);
             });
     }
 }

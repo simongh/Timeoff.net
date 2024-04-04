@@ -61,7 +61,10 @@ export class UsersService {
     }
 
     public updateUser(id: number) {
-        return this.client.put<void>(`/api/users/${id}`, this.form.value);
+        return this.client.put<void>(`/api/users/${id}`, {
+            ...this.form.value,
+            endDate: this.form.value.endDate == "" ? null : this.form.value.endDate,
+        });
     }
 
     public deleteUser(id: number) {

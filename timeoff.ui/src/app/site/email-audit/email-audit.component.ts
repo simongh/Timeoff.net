@@ -6,6 +6,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { switchMap } from 'rxjs';
 
 import { FlashComponent } from '@components/flash/flash.component';
+import { DatePickerDirective } from '@components/date-picker.directive';
 
 import { MessagesService } from '@services/messages/messages.service';
 import { UserModel } from '@services/company/user.model';
@@ -21,7 +22,7 @@ import { EmailAuditService } from './email-audit.service';
     providers: [EmailAuditService, CompanyService],
     templateUrl: './email-audit.component.html',
     styleUrl: './email-audit.component.scss',
-    imports: [ReactiveFormsModule, CommonModule, PagerComponent, FlashComponent],
+    imports: [ReactiveFormsModule, CommonModule, PagerComponent, FlashComponent,DatePickerDirective],
 })
 export class EmailAuditComponent implements OnInit {
     public get form() {

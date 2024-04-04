@@ -71,7 +71,7 @@ export class TeamEditComponent implements OnInit {
                     allowance: data.allowance,
                     includePublicHolidays: data.includePublicHolidays,
                     isAccruedAllowance: data.isAccruedAllowance,
-                    managerId: data.manager.id,
+                    manager: data.manager.id,
                 });
             });
     }

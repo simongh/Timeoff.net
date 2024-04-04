@@ -2,7 +2,7 @@
 {
     public record UserSummaryResult : Types.UserModel
     {
-        public IEnumerable<(int Id, double Total)> LeaveSummary { get; init; }
+        public IEnumerable<LeaveSummaryResult> LeaveSummary { get; init; } = null!;
 
         public double AllowanceUsed { get; init; }
     }
