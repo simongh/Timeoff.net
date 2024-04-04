@@ -7,13 +7,14 @@ import { formatDate, parseISO } from 'date-fns';
 
 import { FlashComponent } from '@components/flash/flash.component';
 import { DatePickerDirective } from '@components/date-picker.directive';
-import { TeamSelectComponent } from "@components/team-select/team-select.component";
+import { TeamSelectComponent } from '@components/team-select/team-select.component';
 
 import { CompanyService } from '@services/company/company.service';
 import { LeaveTypeModel } from '@services/company/leave-type.model';
 
 import { AllowanceModel } from './allowance.model';
 import { AllowanceUsageService } from './allowance-usage.service';
+import { map, switchMap } from 'rxjs';
 
 @Component({
     selector: 'allowance-usage',
@@ -21,7 +22,7 @@ import { AllowanceUsageService } from './allowance-usage.service';
     templateUrl: './allowance-usage.component.html',
     styleUrl: './allowance-usage.component.scss',
     providers: [CompanyService, AllowanceUsageService],
-    imports: [FlashComponent, CommonModule, RouterLink, ReactiveFormsModule, DatePickerDirective, TeamSelectComponent]
+    imports: [FlashComponent, CommonModule, RouterLink, ReactiveFormsModule, DatePickerDirective, TeamSelectComponent],
 })
 export class AllowanceUsageComponent implements OnInit {
     public results: AllowanceModel[] = [];
@@ -32,38 +33,75 @@ export class AllowanceUsageComponent implements OnInit {
 
     public get prettyDateRange() {
         const parts = Array<string>();
-        parts.push(formatDate(this.start,'LLL'))
+        parts.push(formatDate(this.start, 'LLL'));
 
-        if (this.form.value.start != this.form.value.end) {
+        if (this.start.getMonth() != this.end.getMonth()) {
             parts.push('-');
             parts.push(formatDate(this.end, 'MMM'));
         }
-        parts.push(formatDate(this.end,'yyyy'));
+        parts.push(formatDate(this.end, 'yyyy'));
 
-        return parts.join(' ')
+        return parts.join(' ');
     }
 
     public leaveTypes: LeaveTypeModel[] = [];
 
-    private get start() {
-        return parseISO(this.form.value.start!);
-    }
-    
-    private get end() {
-        return parseISO(this.form.value.end!);
-    }
+    public submitting = false;
+
+    private start = new Date();
+
+    private end = new Date();
 
     constructor(
         private destroyed: DestroyRef,
         private readonly allowanceSvc: AllowanceUsageService,
-        private readonly companySvc: CompanyService,
+        private readonly companySvc: CompanyService
     ) {}
 
     public ngOnInit(): void {
-        this.companySvc.getLeaveTypes()
-        .pipe(takeUntilDestroyed(this.destroyed))
-        .subscribe((leaveTypes)=>{
+        this.companySvc
+            .getLeaveTypes()
+            .pipe(
+                takeUntilDestroyed(this.destroyed),
+                switchMap((leaveTypes) => {
+                    return this.allowanceSvc.getResults().pipe(
+                        map((results) => ({
+                            results: results,
+                            leaveTypes: leaveTypes,
+                        }))
+                    );
+                })
+            )
+            .subscribe((data) => {
+                this.leaveTypes = data.leaveTypes;
+                this.loadResults(data.results);
+            });
+    }
 
-        })
+    public update() {
+        if (this.form.invalid) {
+            return;
+        }
+
+        this.submitting = true;
+
+        this.allowanceSvc
+            .getResults()
+            .pipe(takeUntilDestroyed(this.destroyed))
+            .subscribe((data) => {
+                this.loadResults(data);
+                this.submitting = false;
+            });
+    }
+
+    private loadResults(results: AllowanceModel[]) {
+        this.results = results.map((d) => {
+            d.totals = this.leaveTypes.map((l) => d.leaveSummary.find((s) => s.id == l.id)?.allowanceUsed ?? 0);
+
+            return d;
+        });
+
+        this.start = this.allowanceSvc.start;
+        this.end = this.allowanceSvc.end;
     }
 }

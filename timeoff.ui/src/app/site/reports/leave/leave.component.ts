@@ -31,6 +31,8 @@ export class LeaveComponent implements OnInit {
         return this.leaveSvc.form;
     }
 
+    public submitting = false;
+    
     constructor(
         private readonly companySvc: CompanyService,
         private readonly leaveSvc: LeaveService,

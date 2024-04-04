@@ -8,6 +8,7 @@ import { switchMap } from 'rxjs';
 
 import { DatePickerDirective } from '@components/date-picker.directive';
 import { TeamSelectComponent } from '@components/team-select/team-select.component';
+import { ValidatorMessageComponent } from '@components/validator-message/validator-message.component';
 
 import { MessagesService } from '@services/messages/messages.service';
 
@@ -29,6 +30,7 @@ import { UserDetailsComponent } from '../user-details/user-details.component';
         CommonModule,
         DatePickerDirective,
         TeamSelectComponent,
+        ValidatorMessageComponent,
     ],
 })
 export class UserEditComponent implements OnInit {
@@ -75,6 +77,12 @@ export class UserEditComponent implements OnInit {
     }
 
     public save() {
+        this.form.markAllAsTouched();
+
+        if (this.form.invalid) {
+            return;
+        }
+
         this.submitting = true;
 
         this.usersSvc

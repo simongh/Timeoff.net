@@ -1,5 +1,10 @@
-export interface AllowanceModel{
+import { LeaveSummaryModel } from './leave-summary.model';
+
+export interface AllowanceModel {
     id: number;
-    name: string;
-    used: number;
+    firstName: string;
+    lastName: string;
+    allowanceUsed: number;
+    leaveSummary: LeaveSummaryModel[];
+    totals: number[];
 }
