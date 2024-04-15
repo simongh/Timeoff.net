@@ -14,6 +14,7 @@ import { MonthViewComponent } from './month-view.component';
 import { TeamViewService } from './team-view.service';
 import { TeamViewModel } from './team-view.model';
 import { UserSummaryModel } from './user-summary.model';
+import { LoggedInUserService } from '@services/logged-in-user/logged-in-user.service';
 
 @Component({
     selector: 'team-view',
@@ -24,7 +25,9 @@ import { UserSummaryModel } from './user-summary.model';
     providers: [CompanyService, TeamViewService],
 })
 export class TeamviewComponent implements OnInit {
-    public name: string = '';
+    public get name() {
+        return this.currentUser.userName;
+    }
 
     public get year() {
         return this.start.getFullYear();
@@ -59,11 +62,12 @@ export class TeamviewComponent implements OnInit {
     } as TeamViewModel;
 
     constructor(
-        private route: ActivatedRoute,
-        private destroyed: DestroyRef,
-        private router: Router,
-        private companySvc: CompanyService,
-        private teamViewSvc: TeamViewService
+        private readonly route: ActivatedRoute,
+        private readonly destroyed: DestroyRef,
+        private readonly router: Router,
+        private readonly companySvc: CompanyService,
+        private readonly teamViewSvc: TeamViewService,
+        private readonly currentUser: LoggedInUserService,
     ) {
         this.setStart(startOfMonth(new Date()));
     }

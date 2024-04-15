@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { AuthService } from '../../services/auth/auth.service';
 import { RouterLink } from '@angular/router';
+
+import { LoggedInUserService } from '@services/logged-in-user/logged-in-user.service';
 
 @Component({
     standalone: true,
@@ -10,13 +11,17 @@ import { RouterLink } from '@angular/router';
     imports: [CommonModule, RouterLink],
 })
 export class HeaderComponent {
-    public showTeamView = true;
-
-    public isAdmin = true;
-
-    public get isSignedIn() {
-        return this.authSvc.isUserLoggedIn;
+    public get showTeamView() {
+        return this.currentUser.showTeamView;
     }
 
-    constructor(private authSvc: AuthService) {}
+    public get isAdmin() {
+        return this.currentUser.isAdmin;
+    }
+
+    public get isSignedIn() {
+        return this.currentUser.isUserLoggedIn;
+    }
+
+    constructor(private currentUser: LoggedInUserService) {}
 }

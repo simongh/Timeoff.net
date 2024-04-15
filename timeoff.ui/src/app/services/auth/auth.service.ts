@@ -1,13 +1,15 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { catchError, map, of, tap } from 'rxjs';
-import { ResetPasswordModel } from './reset-password.model';
-import { LoginModel } from './login.model';
+import { HttpClient } from '@angular/common/http';
+import { FormBuilder, Validators } from '@angular/forms';
+import { catchError, of, tap } from 'rxjs';
 
-interface LoginResult {
-    token: string;
+import { compareValidator } from '@components/validators';
+
+import { LoggedInUserService } from '@services/logged-in-user/logged-in-user.service';
+import { LoggedInUserModel } from '@models/logged-in-user.model';
+
+interface LoginResult extends LoggedInUserModel {
     success: boolean;
-    expires: Date;
     errors: string[] | null;
 }
 
@@ -15,60 +17,59 @@ interface LoginResult {
     providedIn: 'root',
 })
 export class AuthService {
-    private token: string | null = null;
-
     public get isUserLoggedIn() {
-        return !!this.token;
+        return this.loggedInUser.isUserLoggedIn;
     }
 
-    constructor(private client: HttpClient) {}
+    public loginForm = this.fb.group({
+        username: ['', [Validators.required, Validators.email]],
+        password: ['', Validators.required],
+    });
+
+    public passwordForm = this.fb.group({
+        email: ['', [Validators.required, Validators.email]],
+    });
+
+    public resetForm = this.fb.group(
+        {
+            current: [''],
+            password: ['', [Validators.required, Validators.minLength(8)]],
+            confirmPassword: ['', []],
+            token: [null as string | null]
+        },
+        {
+            validators: [compareValidator('password', 'confirmPassword')],
+        }
+    );
+
+    constructor(
+        private client: HttpClient,
+        private readonly loggedInUser: LoggedInUserService,
+        private readonly fb: FormBuilder
+    ) {}
 
     public getToken() {
         return of('token').pipe(
             catchError((e) => {
-                this.token = null;
+                this.loggedInUser.clear();
                 throw e;
             }),
-            tap(() => (this.token = 'token'))
         );
     }
 
-    public login(model: LoginModel) {
-        return this.client
-            .post<LoginResult>('/api/account/login', {
-                username: model.email,
-                password: model.password,
-            })
-            .pipe(
-                catchError((err: HttpErrorResponse) => {
-                    if (err.status === 400) {
-                        return of({
-                            success: false,
-                            errors: ['Invalid credentials'],
-                        });
-                    } else {
-                        return of({
-                            success: false,
-                            errors: ['Unable to login. Please try again later'],
-                        } as LoginResult);
-                    }
-                }),
-                tap((r) => (this.token = 'token')),
-                map((r) => r.errors)
-            );
+    public login() {
+        return this.client.post<LoginResult>('/api/account/login', this.loginForm.value);
     }
 
     public logout() {
-        return this.client.post<void>('/api/account/logout', {}).pipe(tap(() => (this.token = null)));
+        return this.client.post<void>('/api/account/logout', {});
     }
 
-    public resetPassword(model: ResetPasswordModel) {
-        return this.client.post<void>('/api/account/reset-password', model);
+    public resetPassword() {
+        return this.client.post<void>('/api/account/reset-password', this.resetForm.value);
     }
 
-    public forgotPassword(email: string) {
-        return this.client.post<void>('/api/account/forgot-password', {
-            email: email,
-        });
+    public forgotPassword() {
+        return this.client.post<void>('/api/account/forgot-password', this.passwordForm.value);
     }
 }

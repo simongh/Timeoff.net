@@ -5,6 +5,7 @@ import { FlashComponent } from "@components/flash/flash.component";
 import { RequestsListComponent } from "@components/requests-list/requests-list.component";
 
 import { LeaveRequestModel } from '@models/leave-request.model';
+import { LoggedInUserService } from '@services/logged-in-user/logged-in-user.service';
 
 @Component({
     selector: 'app-requests',
@@ -14,7 +15,11 @@ import { LeaveRequestModel } from '@models/leave-request.model';
     imports: [FlashComponent, RequestsListComponent, CommonModule]
 })
 export class RequestsComponent {
-    public name: string = '';
+    public get name(){
+        return this.currentUser.userName;
+    }
 
     public pending: LeaveRequestModel[] = [];
+
+    constructor(private readonly currentUser: LoggedInUserService) {}
 }

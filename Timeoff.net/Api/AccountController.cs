@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace Timeoff.Api
 {
@@ -28,15 +29,17 @@ namespace Timeoff.Api
         }
 
         [HttpGet("token")]
+        [Authorize(Policy = "cookies")]
         public async Task<IActionResult> TokenAsync()
         {
-            return Ok(new
+            return Ok(await _mediator.Send(new Application.GetToken.GetTokenCommand
             {
-                Token = "token"
-            });
+                User = (User.Identity as ClaimsIdentity)!
+            }));
         }
 
         [HttpPost("logout")]
+        [Authorize(Policy = "cookies")]
         public async Task<IActionResult> LogoutAsync()
         {
             await HttpContext.SignOutAsync();

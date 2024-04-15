@@ -24,7 +24,8 @@ export const routes: Routes = [
     },
     {
         path: '',
-        canMatch: [authGuard],
+        canActivate: [authGuard],
+        canActivateChild: [authGuard],
         loadChildren: () => import('./site/site.routes').then(m=>m.siteRoutes)
     },
 ];

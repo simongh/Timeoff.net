@@ -9,5 +9,7 @@
         public EmailOptions Email { get; set; } = new();
 
         public bool SelectLeaveType { get; set; }
+
+        public string Secret { get; set; } = null!;
     }
 }

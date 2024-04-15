@@ -14,6 +14,7 @@ import { CompanyService } from '@services/company/company.service';
 
 import { UsersService } from '../users.service';
 import { UserListModel } from '../user-list.model';
+import { LoggedInUserService } from '@services/logged-in-user/logged-in-user.service';
 
 @Component({
     selector: 'user-list',
@@ -24,7 +25,9 @@ import { UserListModel } from '../user-list.model';
     imports: [FlashComponent, RouterLink, CommonModule, YesPipe],
 })
 export class UserListComponent implements OnInit {
-    public name: string = '';
+    public get name() {
+        return this.currentUser.companyName;
+    }
 
     public teams!: TeamModel[];
 
@@ -35,9 +38,10 @@ export class UserListComponent implements OnInit {
     constructor(
         private readonly route: ActivatedRoute,
         private destroyed: DestroyRef,
-        private usersSvc: UsersService,
-        private companySvc: CompanyService,
-        private messagesSvc: MessagesService
+        private readonly usersSvc: UsersService,
+        private readonly companySvc: CompanyService,
+        private readonly messagesSvc: MessagesService,
+        private readonly currentUser: LoggedInUserService,
     ) {}
 
     public ngOnInit(): void {

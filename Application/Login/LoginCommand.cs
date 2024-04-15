@@ -66,8 +66,8 @@ namespace Timeoff.Application.Login
                         DateFormat = user.Company.DateFormat,
                         ShowTeamView = !user.Company.IsTeamViewHidden,
                         IsAdmin = user.IsAdmin,
-                        Token = "token",
-                        Expires = DateTime.UtcNow.AddMinutes(15),
+                        Token = _usersService.CreateJwt(userId),
+                        Expires = DateTime.UtcNow.AddMinutes(5),
                     };
                 }
             }

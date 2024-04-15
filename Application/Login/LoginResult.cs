@@ -1,6 +1,6 @@
 ﻿namespace Timeoff.Application.Login
 {
-    public record LoginResult
+    public record LoginResult : ResultModels.TokenResult
     {
         public string? CompanyName { get; init; }
 
@@ -9,10 +9,6 @@
         public string? DateFormat { get; init; }
 
         public string? Name { get; init; }
-
-        public string? Token { get; init; }
-
-        public DateTimeOffset Expires { get; init; }
 
         public bool IsAdmin { get; init; }
 

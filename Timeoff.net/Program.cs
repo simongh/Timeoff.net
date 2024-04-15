@@ -1,6 +1,9 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 using Timeoff.Application;
 
 namespace Timeoff
@@ -27,6 +30,19 @@ namespace Timeoff
                 {
                     options.LoginPath = "/login";
                     options.LogoutPath = "/logout";
+                })
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new()
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+                        ValidIssuer = builder.Configuration["timeoff:siteUrl"],
+                        ValidAudience = builder.Configuration["timonoff:siteUrl"],
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["timeoff:secret"]!))
+                    };
                 });
 
             builder.Services.AddControllersWithViews();
@@ -36,6 +52,15 @@ namespace Timeoff
                 options.DefaultPolicy = new AuthorizationPolicyBuilder()
                     .RequireAuthenticatedUser()
                     .Build();
+
+                options.AddPolicy("tokens", policy => policy
+                    .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
+                    .RequireAuthenticatedUser()
+                    .Build());
+
+                options.AddPolicy("cookies", policy => policy
+                    .AddAuthenticationSchemes(CookieAuthenticationDefaults.AuthenticationScheme)
+                    .RequireAuthenticatedUser());
             });
 
             var app = builder.Build();

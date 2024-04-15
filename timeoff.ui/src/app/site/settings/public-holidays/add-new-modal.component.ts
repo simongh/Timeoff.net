@@ -9,6 +9,7 @@ import { DatePickerDirective } from '@components/date-picker.directive';
 import { MessagesService } from '@services/messages/messages.service';
 
 import { PublicHolidaysService } from './public-holidays.service';
+import { LoggedInUserService } from '@services/logged-in-user/logged-in-user.service';
 
 @Component({
     standalone: true,
@@ -21,7 +22,9 @@ export class AddNewModalComponent {
         return this.holidaySvc.addForm!;
     }
 
-    public dateFormat = 'yyyy-mm-dd';
+    public get dateFormat() {
+        return this.currentUser.dateFormat;
+    }
 
     @Input()
     public set year(value: number) {
@@ -36,6 +39,7 @@ export class AddNewModalComponent {
     constructor(
         private readonly holidaySvc: PublicHolidaysService,
         private readonly msgsSvc: MessagesService,
+        private readonly currentUser: LoggedInUserService,
         private destroyed: DestroyRef
     ) {}
 
