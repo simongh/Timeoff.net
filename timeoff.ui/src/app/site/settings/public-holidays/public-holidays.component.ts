@@ -18,6 +18,7 @@ import { PublicHolidayModel } from '@models/public-holiday.model';
 
 import { PublicHolidaysService } from './public-holidays.service';
 import { AddNewModalComponent } from './add-new-modal.component';
+import { LoggedInUserService } from '@services/logged-in-user/logged-in-user.service';
 
 @Component({
     standalone: true,
@@ -35,9 +36,13 @@ import { AddNewModalComponent } from './add-new-modal.component';
     ],
 })
 export class PublicHolidaysComponent implements OnInit {
-    public companyName: string = '';
+    public get companyName() {
+        return this.currentUser.companyName;
+    }
 
-    public dateFormat: string = 'yyyy-mm-dd';
+    public get dateFormat() {
+        return this.currentUser.dateFormat;
+    }
 
     public get currentYear() {
         return this.start.getFullYear();
@@ -62,6 +67,7 @@ export class PublicHolidaysComponent implements OnInit {
     constructor(
         private readonly holidaySvc: PublicHolidaysService,
         private readonly msgsSvc: MessagesService,
+        private readonly currentUser: LoggedInUserService,
         private destroyed: DestroyRef,
         private readonly route: ActivatedRoute
     ) {}

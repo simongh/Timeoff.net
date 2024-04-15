@@ -3,6 +3,7 @@ import { NgIf } from '@angular/common';
 import { RouterLink } from '@angular/router';
 
 import { FlashComponent } from '@components/flash/flash.component';
+import { LoggedInUserService } from '@services/logged-in-user/logged-in-user.service';
 
 @Component({
     selector: 'feeds',
@@ -12,5 +13,9 @@ import { FlashComponent } from '@components/flash/flash.component';
     styleUrl: './feeds.component.scss',
 })
 export class FeedsComponent {
-    public showTeamView = true;
+    public get showTeamView() {
+        return this.currentUser.showTeamView;
+    }
+
+    constructor(private readonly currentUser: LoggedInUserService) {}
 }

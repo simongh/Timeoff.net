@@ -1,12 +1,11 @@
 import { Component, DestroyRef, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ReactiveFormsModule, Validators } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { HttpErrorResponse } from '@angular/common/http';
 
 import { FlashComponent } from '@components/flash/flash.component';
-import { compareValidator } from '@components/validators';
 import { ValidatorMessageComponent } from '@components/validator-message/validator-message.component';
 
 import { AuthService } from '@services/auth/auth.service';
@@ -20,25 +19,15 @@ import { MessagesService } from '@services/messages/messages.service';
     imports: [FlashComponent, CommonModule, ReactiveFormsModule, ValidatorMessageComponent],
 })
 export class ResetPasswordComponent implements OnInit {
-    public passwordForm = this.fb.group(
-        {
-            current: [''],
-            password: ['', [Validators.required, Validators.minLength(8)]],
-            confirmPassword: ['', []],
-        },
-        {
-            validators: [compareValidator('password', 'confirmPassword')],
-        }
-    );
+    public get passwordForm() {
+        return this.authSvc.resetForm;
+    }
 
     public showCurrent!: boolean;
 
     public submitting = false;
 
-    private token: string | null = null;
-
     constructor(
-        private readonly fb: FormBuilder,
         private route: ActivatedRoute,
         private readonly authSvc: AuthService,
         private readonly msgsSvc: MessagesService,
@@ -49,16 +38,12 @@ export class ResetPasswordComponent implements OnInit {
         this.showCurrent = this.authSvc.isUserLoggedIn;
 
         this.route.queryParamMap.pipe(takeUntilDestroyed(this.destroyed)).subscribe((p) => {
-            if (p.has('t')) {
-                this.token = p.get('t');
-            } else {
-                this.token = null;
-            }
+            this.passwordForm.controls.token.setValue(p.get('t'));
 
             if (this.showCurrent) {
                 this.passwordForm.controls.current.addValidators(Validators.required);
             } else {
-                if (!this.token) {
+                if (!this.passwordForm.value.token) {
                     this.msgsSvc.isError('Invalid reset link');
                     this.submitting = true;
                 }
@@ -77,12 +62,7 @@ export class ResetPasswordComponent implements OnInit {
 
         const f = this.passwordForm.value;
         this.authSvc
-            .resetPassword({
-                password: f.current ? f.current : null,
-                newPassword: f.password!,
-                confirmPassword: f.confirmPassword!,
-                token: this.token,
-            })
+            .resetPassword()
             .pipe(takeUntilDestroyed(this.destroyed))
             .subscribe({
                 next: (r) => {

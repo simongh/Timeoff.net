@@ -11,7 +11,7 @@ namespace Timeoff.Services
             _dataContext = dataContext;
         }
 
-        public async void CalculateDays(Entities.Leave leave)
+        public async Task CalculateDaysAsync(Entities.Leave leave)
         {
             IEnumerable<DateTime> holidays;
             if (leave.User.Team.IncludePublicHolidays)
@@ -19,13 +19,18 @@ namespace Timeoff.Services
             else
                 holidays = Array.Empty<DateTime>();
 
+            CalculateDays(leave, leave.User.Schedule ?? leave.User.Company.Schedule, holidays);
+        }
+
+        public void CalculateDays(Entities.Leave leave, Entities.Schedule schedule, IEnumerable<DateTime> holidays)
+        {
             var days = 0d;
             for (DateTime i = leave.DateStart; i <= leave.DateEnd; i = i.AddDays(1))
             {
                 if (holidays.Contains(i))
                     continue;
 
-                if (!IsWorkingDay(leave.User.Schedule ?? leave.User.Company.Schedule, i.DayOfWeek))
+                if (!IsWorkingDay(schedule, i.DayOfWeek))
                     continue;
 
                 if (i == leave.DateStart && leave.DayPartStart == LeavePart.Afternoon)
@@ -92,7 +97,7 @@ namespace Timeoff.Services
 
             foreach (var leave in leaves)
             {
-                CalculateDays(leave);
+                await CalculateDaysAsync(leave);
             }
         }
     }

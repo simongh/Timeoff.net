@@ -1,21 +1,19 @@
 import { inject } from '@angular/core';
-import { Router } from '@angular/router';
-import { AuthService } from './auth.service';
-import { map } from 'rxjs';
+import { ActivatedRouteSnapshot, Router, RouterStateSnapshot } from '@angular/router';
 
-export const authGuard = () => {
+import { LoggedInUserService } from '@services/logged-in-user/logged-in-user.service';
+
+export const authGuard = (route: ActivatedRouteSnapshot, state: RouterStateSnapshot) => {
     const router = inject(Router);
-    const authService = inject(AuthService);
+    const currentUser = inject(LoggedInUserService);
 
-    if (authService.isUserLoggedIn) {
+    if (currentUser.isUserLoggedIn) {
         return true;
     }
 
-    return authService.getToken().pipe(
-        map(() => {
-            if (authService.isUserLoggedIn) return true;
-
-            return router.createUrlTree(['login']);
-        })
-    );
+    return router.createUrlTree(['login'], {
+        queryParams: {
+            returnUrl: state.url,
+        },
+    });
 };

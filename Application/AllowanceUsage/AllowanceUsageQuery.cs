@@ -14,14 +14,22 @@ namespace Timeoff.Application.AllowanceUsage
 
     internal class AllowanceByTimeQueryHandler(
         IDataContext dataContext,
-        Services.ICurrentUserService currentUserService)
+        Services.ICurrentUserService currentUserService,
+        Services.IDaysCalculator daysCalculator)
         : IRequestHandler<AllowanceUsageQuery, IEnumerable<UserSummaryResult>>
     {
         private readonly IDataContext _dataContext = dataContext;
         private readonly Services.ICurrentUserService _currentUserService = currentUserService;
+        private readonly Services.IDaysCalculator _daysCalculator = daysCalculator;
 
         public async Task<IEnumerable<UserSummaryResult>> Handle(AllowanceUsageQuery request, CancellationToken cancellationToken)
         {
+            var holidays = await _dataContext.PublicHolidays
+                .Where(h => h.CompanyId == _currentUserService.CompanyId)
+                .Where(h => h.Date >= request.StartDate && h.Date <= request.EndDate)
+                .Select(h => h.Date)
+                .ToArrayAsync();
+
             var query = _dataContext.Users
                 .Where(u => u.CompanyId == _currentUserService.CompanyId);
 
@@ -33,37 +41,62 @@ namespace Timeoff.Application.AllowanceUsage
                 {
                     Leaves = u.Leave
                         .Where(l => l.DateStart > request.StartDate || l.DateEnd > request.EndDate)
-                        .Select(l => new LeaveSummary
+                        .Select(l => new
                         {
-                            Start = l.DateStart < request.StartDate ? request.StartDate : l.DateStart,
-                            End = l.DateEnd > request.EndDate ? request.EndDate : l.DateEnd,
-                            StartPart = l.DayPartStart,
-                            EndPart = l.DayPartEnd,
-                            Id = l.LeaveTypeId,
-                            UsesAllowance = l.LeaveType.UseAllowance,
+                            LeaveType = l.LeaveTypeId,
+                            l.LeaveType.UseAllowance,
+                            Leave = l,
                         }),
+                    Schedule = u.Schedule ?? u.Company.Schedule,
                     u.FirstName,
                     u.LastName,
                     u.UserId,
                 })
+                .OrderBy(l => l.FirstName)
+                .AsNoTracking()
                 .ToArrayAsync();
 
-            return data.Select(d => new UserSummaryResult
+            var normalised = data.Select(u => new
             {
-                FirstName = d.FirstName,
-                LastName = d.LastName,
-                Id = d.UserId,
-                AllowanceUsed = d.Leaves
-                    .Where(l => l.UsesAllowance)
-                    .Sum(l => l.Days),
-                LeaveSummary = d.Leaves
-                    .GroupBy(d => d.Id)
-                    .Select(d => new LeaveSummaryResult
+                u.FirstName,
+                u.LastName,
+                u.UserId,
+                Leaves = u.Leaves.Select(l =>
+                {
+                    if (request.StartDate > l.Leave.DateStart)
                     {
-                        Id = d.Key,
-                        AllowanceUsed = d.Sum(l => l.Days),
-                    }),
-            })
+                        l.Leave.DateStart = request.StartDate;
+                        l.Leave.DayPartStart = LeavePart.All;
+                    }
+
+                    if (l.Leave.DateEnd > request.EndDate)
+                    {
+                        l.Leave.DateEnd = request.EndDate;
+                        l.Leave.DayPartEnd = LeavePart.All;
+                    }
+
+                    _daysCalculator.CalculateDays(l.Leave, u.Schedule, holidays);
+                    return l;
+                })
+            });
+
+            return normalised
+                .Select(d => new UserSummaryResult
+                {
+                    FirstName = d.FirstName,
+                    LastName = d.LastName,
+                    Id = d.UserId,
+                    AllowanceUsed = d.Leaves
+                        .Where(l => l.UseAllowance)
+                        .Sum(l => l.Leave.Days),
+                    LeaveSummary = d.Leaves
+                        .GroupBy(d => d.LeaveType)
+                        .Select(d => new LeaveSummaryResult
+                        {
+                            Id = d.Key,
+                            AllowanceUsed = d.Sum(l => l.Leave.Days),
+                        }),
+                })
                 .ToArray();
         }
 

@@ -15,6 +15,7 @@ import { CompanyService } from '@services/company/company.service';
 import { PagerComponent } from './pager.component';
 import { EmailModel } from './email.model';
 import { EmailAuditService } from './email-audit.service';
+import { LoggedInUserService } from '@services/logged-in-user/logged-in-user.service';
 
 @Component({
     selector: 'email-audit',
@@ -29,7 +30,9 @@ export class EmailAuditComponent implements OnInit {
         return this.searchSvc.searchForm;
     }
 
-    public dateFormat = 'yyyy-mm-dd';
+    public get dateFormat() {
+        return this.currentUser.dateFormat;
+    }
 
     public users: UserModel[] = [];
 
@@ -50,7 +53,8 @@ export class EmailAuditComponent implements OnInit {
         private readonly msgsSvc: MessagesService,
         private readonly companySvc: CompanyService,
         private readonly destroyed: DestroyRef,
-        private readonly route: ActivatedRoute
+        private readonly route: ActivatedRoute,
+        private readonly currentUser: LoggedInUserService,
     ) {}
 
     public ngOnInit(): void {

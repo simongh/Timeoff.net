@@ -5,6 +5,7 @@ import { TeamviewComponent } from './teamview/teamview.component';
 import { EmailAuditComponent } from './email-audit/email-audit.component';
 import { FeedsComponent } from './feeds/feeds.component';
 import { RequestsComponent } from './requests/requests.component';
+import { adminGuard } from '@services/auth/admin.guard';
 
 export const siteRoutes: Routes = [
     {
@@ -13,18 +14,22 @@ export const siteRoutes: Routes = [
     },
     {
         path: 'settings',
+        canActivate: [adminGuard],
         loadChildren: () => import('./settings/settings.routes').then((m) => m.settingsRoutes),
     },
     {
         path: 'users',
+        canActivate: [adminGuard],
         loadChildren: () => import('./users/users.routes').then((m) => m.usersRoutes),
     },
     {
         path: 'reports',
+        canActivate: [adminGuard],
         loadChildren: () => import('./reports/reports.routes').then((m) => m.reportsRoutes),
     },
     {
         path: 'audit/emails',
+        canActivate: [adminGuard],
         component: EmailAuditComponent,
     },
     {

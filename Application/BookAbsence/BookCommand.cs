@@ -95,7 +95,7 @@ namespace Timeoff.Application.BookAbsence
             };
 
             if (leaveType.UseAllowance)
-                _daysCalculator.CalculateDays(absence);
+                await _daysCalculator.CalculateDaysAsync(absence);
 
             if (absence.ApproverId == absence.UserId)
             {

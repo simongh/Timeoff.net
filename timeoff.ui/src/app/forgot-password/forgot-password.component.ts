@@ -1,5 +1,5 @@
 import { Component, DestroyRef } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { NgIf } from '@angular/common';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
@@ -17,14 +17,13 @@ import { MessagesService } from '@services/messages/messages.service';
     imports: [FlashComponent, ReactiveFormsModule, NgIf, ValidatorMessageComponent],
 })
 export class ForgotPasswordComponent {
-    public passwordForm = this.fb.group({
-        email: ['', [Validators.required, Validators.email]],
-    });
+    public get passwordForm() {
+        return this.passwordSvc.passwordForm;
+    }
 
     public submitting = false;
 
     constructor(
-        private fb: FormBuilder,
         private passwordSvc: AuthService,
         private msgsSvc: MessagesService,
         private destroyed: DestroyRef
@@ -36,7 +35,7 @@ export class ForgotPasswordComponent {
 
         this.submitting = true;
         this.passwordSvc
-            .forgotPassword(this.passwordForm.controls.email.value!)
+            .forgotPassword()
             .pipe(takeUntilDestroyed(this.destroyed))
             .subscribe({
                 next: () => {
