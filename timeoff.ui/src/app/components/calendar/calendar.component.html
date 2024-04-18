@@ -1,9 +1,9 @@
-<div *ngFor="let month of weeks" class="{{colStyle}} month_container">
+<div *ngFor="let month of weeks()" class="{{colStyle()}} month_container">
     <table class="calendar_month month_{{month.date| date: 'MMMM'}}">
         <thead>
             <tr>
                 <td colspan="14">
-                    {{month.date| date: monthFormat}}
+                    {{month.date| date: monthFormat()}}
                 </td>
             </tr>
             <tr>

@@ -6,7 +6,7 @@ using System.Security.Claims;
 
 namespace Timeoff.Application.Login
 {
-    public record LoginCommand : IRequest<LoginResult>, Commands.IValidated
+    public record LoginCommand : IRequest<ResultModels.TokenResult>, Commands.IValidated
     {
         public string? Username { get; init; }
 
@@ -20,14 +20,14 @@ namespace Timeoff.Application.Login
         Services.IUsersService usersService,
         Services.ICurrentUserService currentUserService,
         IDataContext dataContext)
-        : IRequestHandler<LoginCommand, LoginResult>
+        : IRequestHandler<LoginCommand, ResultModels.TokenResult>
     {
         private readonly Types.Options _options = options.Value;
         private readonly Services.IUsersService _usersService = usersService;
         private readonly Services.ICurrentUserService _currentUserService = currentUserService;
         private readonly IDataContext _dataContext = dataContext;
 
-        public async Task<LoginResult> Handle(LoginCommand request, CancellationToken cancellationToken)
+        public async Task<ResultModels.TokenResult> Handle(LoginCommand request, CancellationToken cancellationToken)
         {
             if (request.Failures == null)
             {
@@ -58,17 +58,7 @@ namespace Timeoff.Application.Login
 
                     await _currentUserService.SignInAsync(new(userId));
 
-                    return new()
-                    {
-                        Success = true,
-                        Name = $"{user.FirstName} {user.LastName}",
-                        CompanyName = user.Company.Name,
-                        DateFormat = user.Company.DateFormat,
-                        ShowTeamView = !user.Company.IsTeamViewHidden,
-                        IsAdmin = user.IsAdmin,
-                        Token = _usersService.CreateJwt(userId),
-                        Expires = DateTime.UtcNow.AddMinutes(5),
-                    };
+                    return user.ToResult(_usersService.CreateJwt(userId));
                 }
             }
 

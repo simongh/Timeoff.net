@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, input } from '@angular/core';
 
 import { AllowanceSummaryModel } from '@services/calendar/allowance-summary.model';
 
@@ -11,6 +11,5 @@ import { AllowanceSummaryModel } from '@services/calendar/allowance-summary.mode
     styleUrl: './allowance-breakdown.component.scss',
 })
 export class AllowanceBreakdownComponent {
-    @Input()
-    public summary!: AllowanceSummaryModel;
+    public summary = input.required<AllowanceSummaryModel>();
 }

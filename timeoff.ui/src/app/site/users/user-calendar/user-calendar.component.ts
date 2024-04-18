@@ -1,8 +1,9 @@
-import { Component, DestroyRef, OnInit } from '@angular/core';
+import { Component, DestroyRef, OnInit, computed, effect, numberAttribute, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { ActivatedRoute, RouterLink, RouterModule } from '@angular/router';
+import { RouterLink } from '@angular/router';
 import { UserBreadcrumbComponent } from '../user-breadcrumb/user-breadcrumb.component';
-import { combineLatest, switchMap } from 'rxjs';
+import { injectParams } from 'ngxtension/inject-params';
+import { injectQueryParams } from 'ngxtension/inject-query-params';
 
 import { CalendarComponent } from '@components/calendar/calendar.component';
 import { AllowanceBreakdownComponent } from '@components/allowance-breakdown/allowance-breakdown.component';
@@ -29,25 +30,20 @@ import { UserDetailsComponent } from '../user-details/user-details.component';
         LeaveSummaryComponent,
     ],
 })
-export class UserCalendarComponent implements OnInit {
-    public id: number = 0;
+export class UserCalendarComponent {
+    public id = injectParams((p) => numberAttribute(p['id']));
 
-    public currentYear!: number;
+    public currentYear = injectQueryParams((p) => numberAttribute(p['year'] ?? new Date().getFullYear()));
 
-    public get nextYear() {
-        return this.currentYear + 1;
-    }
+    public nextYear = computed(() => this.currentYear() + 1);
 
-    public get lastYear() {
-        return this.currentYear - 1;
-    }
+    public lastYear = computed(() => this.currentYear() - 1);
 
-    public start!: Date;
+    public start = computed(() => new Date(this.currentYear(), 0, 1));
 
     public calendar: CalendarModel;
 
     constructor(
-        private readonly route: ActivatedRoute,
         private destroyed: DestroyRef,
         private readonly calendarSvc: CalendarService
     ) {
@@ -71,28 +67,15 @@ export class UserCalendarComponent implements OnInit {
                 leaveSummary: [],
             },
         } as CalendarModel;
-    }
 
-    public ngOnInit(): void {
-        combineLatest([this.route.paramMap, this.route.queryParamMap])
+        effect(()=> {
+            this.calendarSvc.get(this.currentYear(), this.id())
             .pipe(
                 takeUntilDestroyed(this.destroyed),
-                switchMap(([p, q]) => {
-                    this.id = Number.parseInt(p.get('id')!);
-
-                    if (q.has('year')) {
-                        this.currentYear = Number.parseInt(q.get('year')!);
-                    } else {
-                        this.currentYear = new Date().getFullYear();
-                    }
-
-                    this.start = new Date(this.currentYear, 0, 1);
-
-                    return this.calendarSvc.get(this.currentYear, this.id);
-                })
             )
             .subscribe((calendar) => {
                 this.calendar = calendar;
             });
+        });
     }
 }

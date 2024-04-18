@@ -1,4 +1,4 @@
-import { Component, DestroyRef, Input, OnInit } from '@angular/core';
+import { Component, DestroyRef, effect, input, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -14,21 +14,19 @@ import { UserModel } from '@services/company/user.model';
     styleUrl: './user-select.component.scss',
     providers: [CompanyService],
 })
-export class UserListComponent implements OnInit {
-    public users: UserModel[] = [];
+export class UserListComponent {
+    protected readonly users = signal<UserModel[]>([]);
 
-    @Input()
-    public for: string = '';
+    public for = input('');
 
-    @Input()
-    public control!: FormControl<number | null>;
+    public control = input.required<FormControl<number | null>>();
 
-    constructor(private destroyed: DestroyRef, private readonly companySvc: CompanyService) {}
-
-    public ngOnInit(): void {
-        this.companySvc
-            .getUsers()
-            .pipe(takeUntilDestroyed(this.destroyed))
-            .subscribe((users) => (this.users = users));
+    constructor(private destroyed: DestroyRef, private readonly companySvc: CompanyService) {
+        effect(() => {
+            this.companySvc
+                .getUsers()
+                .pipe(takeUntilDestroyed(this.destroyed))
+                .subscribe((users) => this.users.set(users));
+        });
     }
 }

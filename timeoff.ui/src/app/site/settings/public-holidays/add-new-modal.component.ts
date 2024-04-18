@@ -1,4 +1,4 @@
-import { Component, DestroyRef, EventEmitter, Input, Output } from '@angular/core';
+import { Component, DestroyRef, EventEmitter, Input, Output, computed, signal } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -22,9 +22,7 @@ export class AddNewModalComponent {
         return this.holidaySvc.addForm!;
     }
 
-    public get dateFormat() {
-        return this.currentUser.dateFormat;
-    }
+    protected dateFormat = computed(()=> this.currentUser.dateFormat);
 
     @Input()
     public set year(value: number) {
@@ -34,7 +32,7 @@ export class AddNewModalComponent {
     @Output()
     public added = new EventEmitter();
 
-    public submitting = false;
+    protected submitting = signal(false);
 
     constructor(
         private readonly holidaySvc: PublicHolidaysService,
@@ -55,7 +53,7 @@ export class AddNewModalComponent {
             return;
         }
 
-        this.submitting = true;
+        this.submitting.set(true);
         this.holidaySvc
             .addNew()
             .pipe(takeUntilDestroyed(this.destroyed))
@@ -65,7 +63,7 @@ export class AddNewModalComponent {
 
                     this.added.emit();
                     this.form.reset();
-                    this.submitting = false;
+                    this.submitting.set(false);
                 },
                 error: (e: HttpErrorResponse) => {
                     if (e.status == 400) {
@@ -75,7 +73,7 @@ export class AddNewModalComponent {
                     }
 
                     this.added.emit();
-                    this.submitting = false;
+                    this.submitting.set(false);
                 },
             });
     }

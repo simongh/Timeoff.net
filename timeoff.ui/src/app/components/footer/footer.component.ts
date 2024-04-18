@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, computed } from '@angular/core';
 
 @Component({
     selector: 'site-footer',
@@ -7,5 +7,5 @@ import { Component } from '@angular/core';
     styleUrl: 'footer.component.scss',
 })
 export class FooterComponent {
-    public year = new Date().getFullYear();
+    protected readonly year = computed(()=>new Date().getFullYear());
 }

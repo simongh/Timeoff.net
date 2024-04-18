@@ -13,10 +13,11 @@
             </div>
 
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <ul *ngIf="isSignedIn" class="nav navbar-nav navbar-left">
+                @if (isSignedIn()) {
+                <ul class="nav navbar-nav navbar-left">
                     <li><a routerLink="/">Calendar</a></li>
-                    <li *ngIf="showTeamView"><a routerLink="/teamview">Team View</a></li>
-                    <li *ngIf="isAdmin" class="hidden-xs"><a routerLink="/users">Employees</a></li>
+                    <li *ngIf="showTeamView()"><a routerLink="/teamview">Team View</a></li>
+                    <li *ngIf="isAdmin()" class="hidden-xs"><a routerLink="/users">Employees</a></li>
                     <li class="navbar-form navbar-left">
                         <div class="form-group">
                             <button type="button" class="btn btn-info" data-toggle="modal" data-target="#book_leave_modal" id="book_time_off_btn">New absence</button>
@@ -24,7 +25,7 @@
                     </li>
                 </ul>
 
-                <ul *ngIf="isSignedIn" class="nav navbar-nav navbar-right">
+                <ul class="nav navbar-nav navbar-right">
                     <li class="dropdown" id="header-notification-dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
                             <span class="fa fa-bell-o"></span>
@@ -34,7 +35,7 @@
                             <li class="dropdown-header">No notifications</li>
                         </ul>
                     </li>
-                    <li *ngIf="isAdmin" class="dropdown hidden-xs">
+                    <li *ngIf="isAdmin()" class="dropdown hidden-xs">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><span class="fa fa-gears"></span> <span class="caret"></span></a>
                         <ul class="dropdown-menu" role="menu">
                             <li><a routerLink="/settings">General</a></li>
@@ -62,9 +63,11 @@
                         </ul>
                     </li>
                 </ul>
-                <ul *ngIf="!isSignedIn" class="nav navbar-nav navbar-right">
+            } @else {
+                <ul class="nav navbar-nav navbar-right">
                     <li><a routerLink="/login">Login</a></li>
                 </ul>
+            }
             </div>
         </div>
     </nav>

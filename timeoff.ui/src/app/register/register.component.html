@@ -63,7 +63,7 @@
                 <label for="country" class="col-md-2 control-label">Country</label>
                 <div class="col-md-6">
                     <select class="form-control" formControlName="country">
-                        <option *ngFor="let country of countries" [ngValue]="country.code">{{country.code}}: {{ country.name }}</option>
+                        <option *ngFor="let country of countries()" [ngValue]="country.code">{{country.code}}: {{ country.name }}</option>
                     </select>
                     <validator-message controlName="country" validatorName="invalidItem">Invalid country selected</validator-message>
                 </div>
@@ -73,7 +73,7 @@
                 <label for="timezone" class="col-md-2 control-label">Time zone</label>
                 <div class="col-md-6">
                     <select class="form-control" formControlName="timezone">
-                        <option *ngFor="let tz of timezones" [ngValue]="tz.id">{{ tz.name }}</option>
+                        <option *ngFor="let tz of timezones()" [ngValue]="tz.id">{{ tz.name }}</option>
                     </select>
                     <validator-message controlName="timezone" validatorName="invalidItem">Invalid timezone selected</validator-message>
                 </div>
@@ -81,7 +81,7 @@
 
             <div class="form-group">
                 <div class="col-md-offset-2 col-md-6">
-                    <button id="submit_registration" type="submit" class="btn btn-success" (click)="register()" [disabled]="submitting">Create</button>
+                    <button id="submit_registration" type="submit" class="btn btn-success" (click)="register()" [disabled]="submitting()">Create</button>
                 </div>
             </div>
 

@@ -14,16 +14,16 @@
               data-placement="top"
               data-toggle="popover"
               data-trigger="focus hover"
-              id='nominalAllowancePart'>{{summary.allowance}}</span>
+              id='nominalAllowancePart'>{{summary().allowance}}</span>
     </dd>
     <dd>
-        <em>Carried over from {{summary.previousYear}}</em>
+        <em>Carried over from {{summary().previousYear}}</em>
         <span class="pull-right"
               data-content="Allowance carried over from previous year. Note: this amount is calculated on the very first day of the year."
               data-placement="top"
               data-toggle="popover"
               data-trigger="focus hover"
-              id="allowanceCarriedOverPart">{{summary.carryOver}}</span>
+              id="allowanceCarriedOverPart">{{summary().carryOver}}</span>
     </dd>
     <dd>
         <em>Individual adjustment</em>
@@ -31,7 +31,7 @@
               data-content="Adjustment to allowance done by admin user."
               data-placement="top"
               data-toggle="popover"
-              data-trigger="focus hover">{{summary.adjustment}}</span>
+              data-trigger="focus hover">{{summary().adjustment}}</span>
     </dd>
     <dd>
         <em>Start/end of employment</em>
@@ -39,7 +39,7 @@
               data-content="Automatic adjustment to allowance based on employee's start and end day of employment."
               data-placement="top"
               data-toggle="popover"
-              data-trigger="focus hover">{{summary.employmentRangeAdjustment}}</span>
+              data-trigger="focus hover">{{summary().employmentRangeAdjustment}}</span>
     </dd>
     <dd>
         <em>Used so far</em>
@@ -47,14 +47,14 @@
               data-content="Number of days already taken from allowance."
               data-placement="top"
               data-toggle="popover"
-              data-trigger="focus hover">{{ summary.used == 0 ? '-' : summary.used }}</span>
+              data-trigger="focus hover">{{ summary().used == 0 ? '-' : summary().used }}</span>
     </dd>
-    <dd *ngIf="summary.isAccrued">
+    <dd *ngIf="summary().isAccrued">
         <em>Locked so far</em>
         <span class="pull-right"
               data-content="Number of unavailable days in allowance due to accrual nature of vacation entitlement."
               data-placement="top"
               data-toggle="popover"
-              data-trigger="focus hover">{{summary.accruedAdjustment}}</span>
+              data-trigger="focus hover">{{summary().accruedAdjustment}}</span>
     </dd>
 </dl>

@@ -1,4 +1,4 @@
-import { Component, DestroyRef } from '@angular/core';
+import { Component, DestroyRef, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -14,6 +14,7 @@ import { MessagesService } from '@services/messages/messages.service';
 
 import { UsersService } from '../users.service';
 import { UserBreadcrumbComponent } from '../user-breadcrumb/user-breadcrumb.component';
+import { LoggedInUserService } from '@services/logged-in-user/logged-in-user.service';
 
 @Component({
     selector: 'user-create',
@@ -33,15 +34,18 @@ import { UserBreadcrumbComponent } from '../user-breadcrumb/user-breadcrumb.comp
     ],
 })
 export class UserCreateComponent {
-    public get form() {
+    protected get form() {
         return this.usersSvc.form;
     }
 
-    public dateFormat = 'yyyy-mm-dd';
+    protected dateFormat = this.currentUser.dateFormat;
 
-    public companyName = '';
+    protected companyName = this.currentUser.companyName;
+
+    protected submitting = signal(false);
 
     constructor(
+        private readonly currentUser: LoggedInUserService,
         private readonly usersSvc: UsersService,
         private readonly messagesSvc: MessagesService,
         private readonly router: Router,
@@ -54,6 +58,8 @@ export class UserCreateComponent {
         if (this.form.invalid) {
             return;
         }
+
+        this.submitting.set(true);
 
         this.usersSvc
             .addUser()
@@ -69,6 +75,8 @@ export class UserCreateComponent {
                     } else {
                         this.messagesSvc.isError('Unable to add new user');
                     }
+
+                    this.submitting.set(false);
                 },
             });
     }

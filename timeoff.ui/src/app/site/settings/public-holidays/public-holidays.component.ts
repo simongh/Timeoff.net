@@ -1,4 +1,4 @@
-import { Component, DestroyRef, OnInit } from '@angular/core';
+import { Component, DestroyRef, OnInit, computed, numberAttribute, signal } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
@@ -36,31 +36,25 @@ import { LoggedInUserService } from '@services/logged-in-user/logged-in-user.ser
     ],
 })
 export class PublicHolidaysComponent implements OnInit {
-    public get companyName() {
-        return this.currentUser.companyName;
-    }
+    protected companyName = computed(() => this.currentUser.companyName);
 
-    public get dateFormat() {
-        return this.currentUser.dateFormat;
-    }
+    protected dateFormat = computed(() => this.currentUser.dateFormat);
 
-    public get currentYear() {
-        return this.start.getFullYear();
-    }
+    protected currentYear = signal(new Date().getFullYear());
 
-    public get nextYear() {
-        return this.currentYear + 1;
-    }
+    protected nextYear = computed(() => this.currentYear() + 1);
 
-    public get lastYear() {
-        return this.currentYear - 1;
-    }
+    protected lastYear = computed(() => this.currentYear() - 1);
 
-    public start = startOfYear(new Date());
+    protected start = computed(() => {
+        var d = startOfYear(new Date());
+        d.setFullYear(this.currentYear());
+        return d;
+    });
 
-    public holidays: PublicHolidayModel[] = [];
+    protected holidays = signal<PublicHolidayModel[]>([]);
 
-    public get holidaysForm() {
+    protected get holidaysForm() {
         return this.holidaySvc.holidays;
     }
 
@@ -86,7 +80,7 @@ export class PublicHolidaysComponent implements OnInit {
             .pipe(
                 takeUntilDestroyed(this.destroyed),
                 switchMap(() => {
-                    return this.holidaySvc.get(this.currentYear);
+                    return this.holidaySvc.get(this.currentYear());
                 })
             )
             .subscribe({
@@ -110,7 +104,7 @@ export class PublicHolidaysComponent implements OnInit {
             .pipe(
                 takeUntilDestroyed(this.destroyed),
                 switchMap(() => {
-                    return this.holidaySvc.get(this.currentYear);
+                    return this.holidaySvc.get(this.currentYear());
                 })
             )
             .subscribe({
@@ -134,12 +128,12 @@ export class PublicHolidaysComponent implements OnInit {
                 takeUntilDestroyed(this.destroyed),
                 switchMap((r) => {
                     if (r.has('year')) {
-                        this.start.setFullYear(Number.parseInt(r.get('year')!));
+                        this.currentYear.set(numberAttribute(r.get('year')!));
                     } else {
-                        this.start = startOfYear(new Date());
+                        this.currentYear.set(new Date().getFullYear());
                     }
 
-                    return this.holidaySvc.get(this.currentYear);
+                    return this.holidaySvc.get(this.currentYear());
                 })
             )
             .subscribe({
@@ -151,7 +145,7 @@ export class PublicHolidaysComponent implements OnInit {
 
     public create() {
         this.holidaySvc
-            .get(this.currentYear)
+            .get(this.currentYear())
             .pipe(takeUntilDestroyed(this.destroyed))
             .subscribe({
                 next: (data) => {
@@ -165,9 +159,9 @@ export class PublicHolidaysComponent implements OnInit {
         this.holidaysForm.clear();
 
         data.map((h) => {
-            this.holidaySvc.holidays.push(this.holidaySvc.newForm(h, this.currentYear));
+            this.holidaySvc.holidays.push(this.holidaySvc.newForm(h, this.currentYear()));
         });
 
-        this.holidays = data;
+        this.holidays.set(data);
     }
 }

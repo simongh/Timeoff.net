@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, computed, input } from '@angular/core';
 import {
     addMonths,
     eachDayOfInterval,
@@ -22,27 +22,22 @@ import { DayModel } from './day.model';
     imports: [CommonModule],
 })
 export class CalendarComponent {
-    @Input()
-    public monthCount: number = 0;
+    public readonly monthCount = input(0);
 
-    @Input()
-    public monthFormat: string = '';
+    public readonly monthFormat = input('');
 
-    @Input()
-    public start: Date = new Date();
+    public readonly start = input(new Date());
 
-    @Input()
-    public colStyle: string = 'col-md-3';
+    public readonly colStyle = input('col-md-3');
 
-    @Input()
-    public holidays: PublicHolidayModel[] = [];
+    public readonly holidays = input<PublicHolidayModel[]>([]);
 
-    public get weeks() {
+    protected readonly weeks = computed(() => {
         const today = new Date();
 
         return eachMonthOfInterval({
-            start: this.start,
-            end: addMonths(this.start, this.monthCount - 1),
+            start: this.start(),
+            end: addMonths(this.start(), this.monthCount() - 1),
         }).map((m) => ({
             date: m,
             padding: (getDay(m) + 6) % 7,
@@ -60,9 +55,9 @@ export class CalendarComponent {
                 })
                     .filter((day) => day.getMonth() == m.getMonth())
                     .map((day) => {
-                        return new DayModel(day, this.holidays);
+                        return new DayModel(day, this.holidays());
                     }),
             })),
         }));
-    }
+    });
 }

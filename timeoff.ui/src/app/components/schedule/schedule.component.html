@@ -1,7 +1,7 @@
 <div  data-toggle="buttons" class="btn-group">
-    <ng-container *ngFor="let d of models let i=index">
-        <label for="day{{i}}" (click)="change(i)" class="btn btn-default" [ngClass]="days[i].value ? 'active' : null">
-            <input id="day{{i}}" type="checkbox" [formControl]="days[i]" value="true"/>
+    <ng-container *ngFor="let d of models() let i=index">
+        <label for="day{{i}}" (click)="change(i)" class="btn btn-default" [ngClass]="days()[i].value ? 'active' : null">
+            <input id="day{{i}}" type="checkbox" [formControl]="days()[i]" value="true"/>
             {{d.displayName}}
         </label>
     </ng-container>

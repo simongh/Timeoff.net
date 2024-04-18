@@ -7,7 +7,7 @@ export const adminGuard = () => {
     const currentUser = inject(LoggedInUserService);
     const router = inject(Router);
 
-    if (currentUser.isAdmin) {
+    if (currentUser.isAdmin()) {
         return true;
     }
 

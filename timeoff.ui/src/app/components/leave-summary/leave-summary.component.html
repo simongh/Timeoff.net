@@ -1,6 +1,6 @@
 <dl>
     <dt>Used</dt>
-    <dd *ngFor="let s of items">
+    <dd *ngFor="let s of items()">
         <em>{{s.name}}:</em>
         <span class="pull-right">
             {{s.total}}{{ s.allowance > 0 ? ' out of ' + s.allowance : ''}}

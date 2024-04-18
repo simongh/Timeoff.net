@@ -1,4 +1,4 @@
-import { Component, DestroyRef } from '@angular/core';
+import { Component, DestroyRef, signal } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NgIf } from '@angular/common';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -17,11 +17,11 @@ import { MessagesService } from '@services/messages/messages.service';
     imports: [FlashComponent, ReactiveFormsModule, NgIf, ValidatorMessageComponent],
 })
 export class ForgotPasswordComponent {
-    public get passwordForm() {
+    protected get passwordForm() {
         return this.passwordSvc.passwordForm;
     }
 
-    public submitting = false;
+    protected submitting = signal(false);
 
     constructor(
         private passwordSvc: AuthService,
@@ -33,7 +33,7 @@ export class ForgotPasswordComponent {
         this.passwordForm.markAllAsTouched();
         if (this.passwordForm.invalid) return;
 
-        this.submitting = true;
+        this.submitting.set(true);
         this.passwordSvc
             .forgotPassword()
             .pipe(takeUntilDestroyed(this.destroyed))
@@ -42,11 +42,11 @@ export class ForgotPasswordComponent {
                     this.msgsSvc.isSuccess(`Password reset email sent to ${this.passwordForm.controls.email.value}`);
 
                     this.passwordForm.reset();
-                    this.submitting = false;
+                    this.submitting.set(false);
                 },
                 error: () => {
                     this.msgsSvc.isError('Unable to send reset email. Please try again later');
-                    this.submitting = false;
+                    this.submitting.set(false);
                 },
             });
     }
