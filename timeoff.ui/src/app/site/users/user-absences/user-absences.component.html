@@ -1,39 +1,39 @@
-<user-details [id]="id" [isActive]="isActive" [name]="name">
+<user-details [id]="id()" [isActive]="isActive()" [name]="name()">
 <div class="col-md-9">
-    <form method="POST" [formGroup]="form">
+    <form [formGroup]="form">
 
-        <user-breadcrumb [name]="name"/>
+        <user-breadcrumb [name]="name()"/>
 
         <div class="form-group">
             <label class="control-label">Overview</label>
             <div class="progress bigger">
                 <div class="progress-bar progress-bar-success"
-                     [ngStyle]="{ width: usedPercent + '%' }"
-                     [attr.data-content]="name + ' in current year used ' + summary.used + ' days from allowance'"
+                     [ngStyle]="{ width: usedPercent() + '%' }"
+                     [attr.data-content]="name() + ' in current year used ' + summary().used + ' days from allowance'"
                      data-placement="top"
                      data-toggle="popover"
                      data-trigger="focus hover">
-                    {{summary.used}} days used so far
+                    {{summary().used}} days used so far
                 </div>
                 <div class="progress-bar progress-bar-warning"
-                     [ngStyle]="{ width: remainingPercent + '%' }"
-                     [attr.data-content]="name + ' in current year has ' + summary.remaining + ' remaining days in allowance'"
+                     [ngStyle]="{ width: remainingPercent() + '%' }"
+                     [attr.data-content]="name() + ' in current year has ' + summary().remaining + ' remaining days in allowance'"
                      data-placement="top"
                      data-toggle="popover"
                      data-trigger="focus hover">
-                   {{summary.remaining}} days remaining in current year
+                   {{summary().remaining}} days remaining in current year
                 </div>
             </div>
         </div>
 
         <div class="form-group">
-            <label class="control-label">Days available for {{name}} to take this year</label>
-            <p>{{summary.remaining}} out of {{summary.total}} in allowance</p>
+            <label class="control-label">Days available for {{name()}} to take this year</label>
+            <p>{{summary().remaining}} out of {{summary().total}} in allowance</p>
         </div>
 
         <div class="form-group">
             <label class="control-label">Is Accrued Allowance?</label>
-            <p>{{summary.isAccrued ? 'Yes' : 'No'}}</p>
+            <p>{{summary().isAccrued ? 'Yes' : 'No'}}</p>
             <span class="help-block">
                 The way of available allowance calculation is defined on team level. <a [routerLink]="['..','team',0]">More details <i class="fa fa-angle-double-right"></i></a>
             </span>
@@ -76,7 +76,7 @@
 
         <div class="form-group">
             <div class="col-md-12">
-                <button id="save_changes_btn" (click)="save()" type="button" [disabled]="submitting" class="btn btn-success pull-right single-click">Save changes</button>
+                <button id="save_changes_btn" (click)="save()" type="button" [disabled]="submitting()" class="btn btn-success pull-right single-click">Save changes</button>
             </div>
         </div>
     </form>

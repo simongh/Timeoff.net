@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, DestroyRef, EventEmitter, Input, Output } from '@angular/core';
+import { Component, DestroyRef, EventEmitter, Output, input, signal } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -18,19 +18,16 @@ import { UsersService } from '../users.service';
     imports: [CommonModule, RouterLink, FlashComponent, RouterLinkActive],
 })
 export class UserDetailsComponent {
-    @Input()
-    public name!: string;
+    public name = input.required<string>();
 
-    @Input()
-    public isActive!: boolean;
+    public isActive = input.required<boolean>();
 
-    @Input()
-    public id!: number;
+    public id = input.required<number>();
 
     @Output()
     public deleting = new EventEmitter();
 
-    public submitting = false;
+    public submitting = signal(false);
 
     constructor(
         private destroyed: DestroyRef,
@@ -40,14 +37,14 @@ export class UserDetailsComponent {
     ) {}
 
     public delete() {
-        this.submitting = true;
+        this.submitting.set(true);
         this.usersSvc
-            .deleteUser(this.id)
+            .deleteUser(this.id())
             .pipe(takeUntilDestroyed(this.destroyed))
             .subscribe({
                 next: () => {
                     this.msgsSvc.isSuccess('Employee data removed', true);
-                    this.submitting = false;
+                    this.submitting.set(false);
 
                     this.router.navigate(['users']);
                 },
@@ -56,7 +53,7 @@ export class UserDetailsComponent {
                         this.msgsSvc.hasErrors(e.error.errors);
                     }
                     this.msgsSvc.isError('Unable to remove employee');
-                    this.submitting = false;
+                    this.submitting.set(false);
                 },
             });
     }

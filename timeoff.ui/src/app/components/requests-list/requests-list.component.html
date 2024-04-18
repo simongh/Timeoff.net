@@ -19,12 +19,12 @@
                 </thead>
 
                 <tbody>
-                    <tr *ngFor="let r of requests" class="leave-request-row">
+                    <tr *ngFor="let r of requests()" class="leave-request-row">
                         <td data-tom-leave-dates="1">
                             <a class="leave-details-summary-trigger" [attr.data-leave-id]="r.id" href="#">
-                                {{r.startDate | date: dateFormat}} ({{r.startPart | datePart}})
+                                {{r.startDate | date: dateFormat()}} ({{r.startPart | datePart}})
                                 <i class="fa fa-long-arrow-right"></i>
-                                {{r.endDate | date: dateFormat}} ({{r.endPart | datePart}})
+                                {{r.endDate | date: dateFormat()}} ({{r.endPart | datePart}})
                             </a>
                         </td>
                         <td>

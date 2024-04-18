@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { LeaveSummary } from '@services/calendar/leave-summary.model';
@@ -11,6 +11,5 @@ import { LeaveSummary } from '@services/calendar/leave-summary.model';
     styleUrl: './leave-summary.component.scss',
 })
 export class LeaveSummaryComponent {
-    @Input()
-    public items: LeaveSummary[] = [];
+    public items = input<LeaveSummary[]>([]);
 }

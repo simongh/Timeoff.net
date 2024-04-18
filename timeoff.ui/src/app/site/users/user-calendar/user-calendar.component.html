@@ -1,17 +1,17 @@
-<user-details [id]="id" [isActive]="calendar.isActive" [name]="calendar.firstName + ' ' + calendar.lastName">
+<user-details [id]="id()" [isActive]="calendar.isActive" [name]="calendar.firstName + ' ' + calendar.lastName">
 <div class="col-md-9">
 
     <user-breadcrumb [name]="calendar.firstName + ' ' + calendar.lastName"/>
 
     <div class="row">
         <div class="col-xs-2">
-            <a class="btn btn-default" routerLink="." [queryParams]="{year: lastYear}"><span aria-hidden="true" class="fa fa-chevron-left"></span> {{lastYear}} </a>
+            <a class="btn btn-default" routerLink="." [queryParams]="{year: lastYear()}"><span aria-hidden="true" class="fa fa-chevron-left"></span> {{lastYear()}} </a>
         </div>
         <div class="col-xs-8 calendar-section-caption">
-            <h3>{{currentYear}}</h3>
+            <h3>{{currentYear()}}</h3>
         </div>
         <div class="col-xs-2">
-            <a class="btn btn-default pull-right" routerLink="." [queryParams]="{year: nextYear}">{{nextYear}} <span aria-hidden="true" class="fa fa-chevron-right"></span></a>
+            <a class="btn btn-default pull-right" routerLink="." [queryParams]="{year: nextYear()}">{{nextYear()}} <span aria-hidden="true" class="fa fa-chevron-right"></span></a>
         </div>
     </div>
 
@@ -45,7 +45,7 @@
     </div>
 
     <div class="row clearfix">
-        <calendar [monthCount]="12" monthFormat="MMMM" [start]="start" colStyle="col-md-4" [holidays]="calendar.holidays"/>
+        <calendar [monthCount]="12" monthFormat="MMMM" [start]="start()" colStyle="col-md-4" [holidays]="calendar.holidays"/>
         <!-- @for (int i = 0; i < Model.Calendar.Months; i++)
         {
                    <div class="col-md-4 month_container">

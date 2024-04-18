@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 import { LoggedInUserService } from '@services/logged-in-user/logged-in-user.service';
@@ -11,17 +11,11 @@ import { LoggedInUserService } from '@services/logged-in-user/logged-in-user.ser
     imports: [CommonModule, RouterLink],
 })
 export class HeaderComponent {
-    public get showTeamView() {
-        return this.currentUser.showTeamView;
-    }
+    private currentUser = inject(LoggedInUserService);
 
-    public get isAdmin() {
-        return this.currentUser.isAdmin;
-    }
+    protected readonly showTeamView = this.currentUser.showTeamView;
 
-    public get isSignedIn() {
-        return this.currentUser.isUserLoggedIn;
-    }
+    protected readonly isAdmin = this.currentUser.isAdmin;
 
-    constructor(private currentUser: LoggedInUserService) {}
+    protected readonly isSignedIn = this.currentUser.isUserLoggedIn;
 }

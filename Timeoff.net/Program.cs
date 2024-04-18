@@ -30,6 +30,13 @@ namespace Timeoff
                 {
                     options.LoginPath = "/login";
                     options.LogoutPath = "/logout";
+
+                    options.Events.OnRedirectToAccessDenied =
+                        options.Events.OnRedirectToLogin = c =>
+                            {
+                                c.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                                return Task.CompletedTask;
+                            };
                 })
                 .AddJwtBearer(options =>
                 {

@@ -1,9 +1,18 @@
-import { Component, DestroyRef, OnInit } from '@angular/core';
+import {
+    Component,
+    DestroyRef,
+    OnInit,
+    booleanAttribute,
+    computed,
+    effect,
+    numberAttribute,
+    signal,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { switchMap } from 'rxjs';
 import { startOfMonth, startOfYear } from 'date-fns';
+import { injectQueryParams } from 'ngxtension/inject-query-params';
 
 import { FlashComponent } from '@components/flash/flash.component';
 import { CalendarComponent } from '@components/calendar/calendar.component';
@@ -28,67 +37,50 @@ import { PublicHolidayModel } from '@models/public-holiday.model';
     ],
     providers: [CalendarService],
 })
-export class HomeComponent implements OnInit {
-    public name: string = '';
+export class HomeComponent {
+    public name = signal('');
 
-    public get year(): number {
-        return this.start.getFullYear();
-    }
+    protected year = injectQueryParams((p) => numberAttribute(p['year'] ?? new Date().getFullYear()));
 
-    public get nextYear(): number {
-        return this.start.getFullYear() + 1;
-    }
+    protected nextYear = computed(() => this.year() + 1);
 
-    public get lastYear(): number {
-        return this.start.getFullYear() - 1;
-    }
+    protected lastYear = computed(() => this.year() - 1);
 
-    public showFullYear: boolean = false;
+    protected showFullYear = injectQueryParams((p) => booleanAttribute(p['showFullYear'] ?? false));
 
-    public allowanceSummary = {} as AllowanceSummaryModel;
+    public allowanceSummary = signal({} as AllowanceSummaryModel);
 
-    public holidays: PublicHolidayModel[] = [];
+    public holidays = signal<PublicHolidayModel[]>([]);
 
-    public managerName: string = 'manager';
+    protected managerName = signal('manager');
 
-    public managerEmail: string = 'manager@email';
+    protected managerEmail = signal('manager@email');
 
-    public teamName: string = 'team';
+    protected teamName = signal('team');
 
-    public teamId: number = 0;
+    protected teamId = signal(0);
 
-    public start!: Date;
+    public start = computed(() => {
+        if (this.showFullYear()) {
+            return new Date(this.year(), 0, 1);
+        } else {
+            return startOfMonth(new Date());
+        }
+    });
 
     constructor(
-        private readonly route: ActivatedRoute,
         private readonly destroyed: DestroyRef,
         private readonly calendarSvc: CalendarService
-    ) {}
-
-    public ngOnInit(): void {
-        this.route.queryParamMap
-            .pipe(
-                takeUntilDestroyed(this.destroyed),
-                switchMap((p) => {
-                    this.showFullYear = p.has('showFullYear');
-
-                    if (this.showFullYear) {
-                        if (p.has('year')) {
-                            this.start = startOfYear(new Date(Number.parseInt(p.get('year')!), 0, 1));
-                        } else {
-                            this.start = startOfYear(new Date());
-                        }
-                    } else {
-                        this.start = startOfMonth(new Date());
-                    }
-
-                    return this.calendarSvc.get(this.year);
-                })
-            )
-            .subscribe((calendar) => {
-                this.allowanceSummary = calendar.summary;
-                this.holidays = calendar.holidays;
-                this.name = `${calendar.firstName} ${calendar.lastName}`;
-            });
+    ) {
+        effect(() => {
+            this.calendarSvc
+                .get(this.year())
+                .pipe(takeUntilDestroyed(this.destroyed))
+                .subscribe((calendar) => {
+                    this.allowanceSummary.set(calendar.summary);
+                    this.holidays.set(calendar.holidays);
+                    this.name.set(`${calendar.firstName} ${calendar.lastName}`);
+                });
+        });
     }
 }

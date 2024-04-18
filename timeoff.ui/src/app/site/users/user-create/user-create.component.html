@@ -81,7 +81,7 @@
                 <label for="startDate" class="col-md-3 control-label">Started on</label>
                 <div class="col-md-3 date input-group">
                     <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                    <input class="form-control" date-picker type="text" formControlName="startDate" for="startDate" data-date-autoclose="1" data-provide="datepicker" [attr.data-date-format]="dateFormat" data-date-week-start="1" aria-describedby="start_date_help"/>
+                    <input class="form-control" date-picker type="text" formControlName="startDate" for="startDate" data-date-autoclose="1" data-provide="datepicker" [attr.data-date-format]="dateFormat()" data-date-week-start="1" aria-describedby="start_date_help"/>
                     <validator-message controlName="startDate" validatorName="required">A start date is required</validator-message>
                 </div>
                 <span id="start_date_help" class="help-block col-md-6">Date when employee started (inclusive)</span>
@@ -91,10 +91,10 @@
                 <label for="endDate" class="col-md-3 control-label">Ended on</label>
                 <div class="col-md-3 date input-group">
                     <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                    <input class="form-control" date-picker type="text" formControlName="endDate" for="endDate" data-date-autoclose="1" data-provide="datepicker" [attr.data-date-format]="dateFormat" data-date-week-start="1" aria-describedby="end_date_help"/>
+                    <input class="form-control" date-picker type="text" formControlName="endDate" for="endDate" data-date-autoclose="1" data-provide="datepicker" [attr.data-date-format]="dateFormat()" data-date-week-start="1" aria-describedby="end_date_help"/>
                 </div>
                 <span id="end_date_help" class="help-block col-md-6">
-                    <div>Date when employee leaves {{companyName}}.</div>
+                    <div>Date when employee leaves {{companyName()}}.</div>
                     <div>After this date the user is no longer able to access the application.</div>
                     <div>This is a way of deactivating user accounts.</div>
                 </span>
@@ -123,7 +123,7 @@
 
             <div class="form-group">
                 <div class="col-md-offset-3 col-md-3">
-                    <button (click)="add()" type="button" id="add_new_user_btn" class="btn btn-success pull-right single-click">Add new employee</button>
+                    <button (click)="add()" [disabled]="submitting()" type="button" id="add_new_user_btn" class="btn btn-success pull-right single-click">Add new employee</button>
                 </div>
             </div>
         </form>

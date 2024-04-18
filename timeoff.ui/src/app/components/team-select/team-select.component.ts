@@ -1,4 +1,4 @@
-import { Component, DestroyRef, Input, OnInit } from '@angular/core';
+import { Component, DestroyRef, effect, input, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
@@ -14,24 +14,21 @@ import { TeamModel } from '@services/company/team.model';
     styleUrl: './team-select.component.scss',
     providers: [CompanyService],
 })
-export class TeamSelectComponent implements OnInit {
-    public teams: TeamModel[] = [];
+export class TeamSelectComponent {
+    protected readonly teams = signal<TeamModel[]>([]);
 
-    @Input()
-    public control!: FormControl<number | null>;
+    public control = input.required<FormControl<number | null>>();
 
-    @Input()
-    public for: string = '';
+    public for = input('');
 
-    @Input()
-    public allowAll = false;
+    public allowAll = input(false);
 
-    constructor(private destroyed: DestroyRef, private readonly companySvc: CompanyService) {}
-
-    public ngOnInit(): void {
-        this.companySvc
-            .getTeams()
-            .pipe(takeUntilDestroyed(this.destroyed))
-            .subscribe((teams) => (this.teams = teams));
+    constructor(private destroyed: DestroyRef, private readonly companySvc: CompanyService) {
+        effect(() => {
+            this.companySvc
+                .getTeams()
+                .pipe(takeUntilDestroyed(this.destroyed))
+                .subscribe((teams) => this.teams.set(teams));
+        });
     }
 }

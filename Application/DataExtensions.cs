@@ -94,5 +94,20 @@ namespace Timeoff.Application
                 Sunday = schedule.Sunday == WorkingDay.WholeDay,
             };
         }
+
+        public static ResultModels.TokenResult ToResult(this Entities.User user, string token)
+        {
+            return new()
+            {
+                Success = true,
+                Name = $"{user.FirstName} {user.LastName}",
+                CompanyName = user.Company.Name,
+                DateFormat = user.Company.DateFormat,
+                ShowTeamView = !user.Company.IsTeamViewHidden,
+                IsAdmin = user.IsAdmin,
+                Token = token,
+                Expires = DateTime.UtcNow.AddMinutes(5),
+            };
+        }
     }
 }

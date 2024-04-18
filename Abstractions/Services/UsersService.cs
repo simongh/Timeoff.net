@@ -74,6 +74,7 @@ namespace Timeoff.Services
             var token = new JwtSecurityToken(
                 claims: identity.Claims,
                 audience: _options.SiteUrl,
+                issuer: _options.SiteUrl,
                 expires: DateTimeOffset.UtcNow.AddMinutes(5).UtcDateTime,
                 signingCredentials: signingCreds);
 

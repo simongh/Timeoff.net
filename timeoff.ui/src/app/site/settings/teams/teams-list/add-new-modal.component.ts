@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, DestroyRef, EventEmitter, Output } from '@angular/core';
+import { Component, DestroyRef, EventEmitter, Output, signal } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -31,7 +31,7 @@ export class AddNewModalComponent {
     @Output()
     public added = new EventEmitter();
 
-    public submitting = false;
+    protected submitting = signal(false);
 
     constructor(
         private readonly teamsSvc: TeamsService,
@@ -45,7 +45,7 @@ export class AddNewModalComponent {
         if (this.form.invalid) {
             return;
         }
-        this.submitting = true;
+        this.submitting.set(true);
         this.teamsSvc
             .create()
             .pipe(takeUntilDestroyed(this.destroyed))
@@ -54,7 +54,7 @@ export class AddNewModalComponent {
                     this.msgSvc.isSuccess('New team added');
                     this.added.emit();
                     this.form.reset();
-                    this.submitting = false;
+                    this.submitting.set(false);
                 },
                 error: (e: HttpErrorResponse) => {
                     if (e.status == 400) {
@@ -63,7 +63,7 @@ export class AddNewModalComponent {
                         this.msgSvc.isError('Unable to add new team');
                     }
 
-                    this.submitting = false;
+                    this.submitting.set(false);
                 },
             });
     }

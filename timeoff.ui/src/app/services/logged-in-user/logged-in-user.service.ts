@@ -1,72 +1,57 @@
-import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Injectable, computed, signal } from '@angular/core';
+import { catchError, of, tap } from 'rxjs';
+
 import { LoggedInUserModel } from '@models/logged-in-user.model';
 
 @Injectable({
     providedIn: 'root',
 })
 export class LoggedInUserService {
-    public get companyName(): string {
-        return sessionStorage.getItem('companyName') || '';
-    }
+    public readonly companyName = computed(() => this.user().companyName || '');
 
-    public get userName(): string {
-        return sessionStorage.getItem('userName') || '';
-    }
+    public readonly userName = computed(() => this.user().name || '');
 
-    public get showTeamView(): boolean {
-        return !!sessionStorage.getItem('showTeamView');
-    }
+    public readonly showTeamView = computed(() => !!this.user().showTeamView);
 
-    public get isAdmin(): boolean {
-        return !!sessionStorage.getItem('isAdmin');
-    }
+    public readonly isAdmin = computed(() => !!this.user().isAdmin);
 
-    public get token(): string | null {
-        return sessionStorage.getItem('token');
-    }
+    public readonly token = computed(() => this.user().token ?? null);
 
-    public get expires(): Date | null {
-        const value = sessionStorage.getItem('expires');
+    public readonly expires = computed(() => {
+        const value = this.user().expires;
         return !!value ? new Date(value) : null;
-    }
+    });
 
-    public get dateFormat(): string {
-        const value = sessionStorage.getItem('dateFormat');
+    public readonly dateFormat = computed(()=> {
+        const value = this.user().dateFormat;
         return value || 'yyyy-MM-dd';
-    }
+    });
 
-    public get isUserLoggedIn() {
-        return !!this.token;
-    }
+    public readonly isUserLoggedIn = computed(()=> !!this.token());
 
-    constructor() {}
+    private user = signal({} as LoggedInUserModel);
 
-    public load(user: LoggedInUserModel) {
-        sessionStorage.setItem('companyName',user.companyName!);
-        sessionStorage.setItem('userName',user.name!);
+    constructor(private readonly client: HttpClient) {}
 
-        if (user.showTeamView) {
-            sessionStorage.setItem('showTeamView', 'true');
+    public load(user: LoggedInUserModel | null) {
+        if (!user) {
+            this.clear();
         } else {
-            sessionStorage.removeItem('showTeamView');
+            this.user.set(user);
         }
-
-        if (user.isAdmin) {
-            sessionStorage.setItem('isAdmin', 'true');
-        } else {
-            sessionStorage.removeItem('isAdmin');
-        }
-
-        sessionStorage.setItem('token', user.token!);
-        sessionStorage.setItem('expires', user.expires!.toString());
     }
 
     public clear() {
-        sessionStorage.clear();
+        this.user.set({} as LoggedInUserModel);
     }
 
-    public extend(token: string, expires: Date) {
-        sessionStorage.setItem('token',token);
-        sessionStorage.setItem('expires',expires.toString());
+    public extend() {
+        return this.client.get<LoggedInUserModel>('/api/account/token').pipe(
+            catchError(() => {
+                return of(null);
+            }),
+            tap((u) => this.load(u))
+        );
     }
 }

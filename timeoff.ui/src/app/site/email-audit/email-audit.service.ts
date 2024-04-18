@@ -16,7 +16,7 @@ export class EmailAuditService {
     public searchForm = this.fb.group({
         start: ['' as dateString | null],
         end: ['' as dateString | null],
-        userId: [''],
+        userId: [null as number | null],
     });
 
     public currentPage: number = 1;

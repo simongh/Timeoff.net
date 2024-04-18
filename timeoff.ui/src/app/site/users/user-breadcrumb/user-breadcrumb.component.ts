@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 @Component({
@@ -9,6 +9,5 @@ import { RouterLink } from '@angular/router';
     styleUrl: './user-breadcrumb.component.scss',
 })
 export class UserBreadcrumbComponent {
-    @Input()
-    public name!: string;
+    public name = input.required<string>();
 }

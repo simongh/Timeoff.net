@@ -32,10 +32,15 @@ namespace Timeoff.Api
         [Authorize(Policy = "cookies")]
         public async Task<IActionResult> TokenAsync()
         {
-            return Ok(await _mediator.Send(new Application.GetToken.GetTokenCommand
+            var result = await _mediator.Send(new Application.GetToken.GetTokenCommand
             {
                 User = (User.Identity as ClaimsIdentity)!
-            }));
+            });
+
+            if (result.Success)
+                return Ok(result);
+            else
+                return StatusCode(StatusCodes.Status403Forbidden);
         }
 
         [HttpPost("logout")]

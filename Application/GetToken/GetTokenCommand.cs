@@ -1,26 +1,40 @@
 ﻿using MediatR;
+using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
-using Timeoff.Services;
 
 namespace Timeoff.Application.GetToken
 {
     public record GetTokenCommand : IRequest<ResultModels.TokenResult>
     {
-        public ClaimsIdentity User { get; init; }
+        public ClaimsIdentity User { get; init; } = null!;
     }
 
-    internal class GetTokenCommandHandler(Services.IUsersService usersService)
+    internal class GetTokenCommandHandler(
+        Services.IUsersService usersService,
+        Services.ICurrentUserService currentUserService,
+        IDataContext dataContext)
         : IRequestHandler<GetTokenCommand, ResultModels.TokenResult>
     {
-        private readonly IUsersService _usersService = usersService;
+        private readonly Services.IUsersService _usersService = usersService;
+        private readonly Services.ICurrentUserService _currentUserService = currentUserService;
+        private readonly IDataContext _dataContext = dataContext;
 
         public async Task<ResultModels.TokenResult> Handle(GetTokenCommand request, CancellationToken cancellationToken)
         {
-            return new()
+            var user = await _dataContext.Users
+                .Where(u => u.UserId == _currentUserService.UserId)
+                .Include(u => u.Company)
+                .FirstOrDefaultAsync(cancellationToken);
+
+            if (user?.IsActive != true)
             {
-                Token = _usersService.CreateJwt(request.User),
-                Expires = DateTimeOffset.UtcNow.AddMinutes(5),
-            };
+                return new()
+                {
+                    Success = false,
+                };
+            }
+
+            return user.ToResult(_usersService.CreateJwt(request.User));
         }
     }
 }

@@ -1,5 +1,5 @@
 import { NgClass, NgIf } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, Input, computed, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 @Component({
@@ -9,17 +9,11 @@ import { RouterLink } from '@angular/router';
     imports: [NgIf, RouterLink, NgClass],
 })
 export class PagerComponent {
-    @Input()
-    public totalPages!: number;
+    public totalPages = input.required<number>();
 
-    @Input()
-    public currentPage!: number;
+    public currentPage = input.required<number>();
 
-    public get nextPage() {
-        return this.currentPage + 1;
-    }
+    protected readonly nextPage = computed(() => this.currentPage() + 1);
 
-    public get previousPage() {
-        return this.currentPage - 1;
-    }
+    protected readonly previousPage = computed(() => this.currentPage() - 1);
 }

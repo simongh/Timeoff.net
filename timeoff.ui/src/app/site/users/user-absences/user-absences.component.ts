@@ -1,10 +1,10 @@
-import { ChangeDetectorRef, Component, DestroyRef, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, DestroyRef, computed, effect, numberAttribute, signal } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
-import { switchMap } from 'rxjs';
+import { injectParams } from 'ngxtension/inject-params';
 
 import { YesPipe } from '@components/yes.pipe';
 import { RequestsListComponent } from '@components/requests-list/requests-list.component';
@@ -34,26 +34,22 @@ import { UserDetailsComponent } from '../user-details/user-details.component';
         RouterLink,
     ],
 })
-export class UserAbsencesComponent implements OnInit {
-    public id: number = 0;
+export class UserAbsencesComponent {
+    public id = injectParams((p) => numberAttribute(p['id']));
 
     public get form() {
         return this.usersSvc.adjustmentForm;
     }
 
-    public name!: string;
+    public name = signal('');
 
-    public isActive!: boolean;
+    public isActive = signal(false);
 
-    public summary: AllowanceSummaryModel;
+    public summary =signal({} as AllowanceSummaryModel);
 
-    public get usedPercent() {
-        return (this.summary.used / this.summary.total) * 100;
-    }
+    public usedPercent = computed(()=>(this.summary().used / this.summary().total) * 100);
 
-    public get remainingPercent() {
-        return (this.summary.remaining / this.summary.total) * 100;
-    }
+    public remainingPercent = computed(()=> (this.summary().remaining / this.summary().total) * 100);
 
     public get groupedRequests() {
         return Object.entries(
@@ -67,7 +63,7 @@ export class UserAbsencesComponent implements OnInit {
         );
     }
 
-    public submitting = false;
+    public submitting = signal(false);
 
     private leave: LeaveRequestModel[] = [];
 
@@ -79,54 +75,42 @@ export class UserAbsencesComponent implements OnInit {
         private readonly msgsSvc: MessagesService,
         private readonly cd: ChangeDetectorRef
     ) {
-        this.summary = {
-            used: 0,
-            total: 0,
-        } as AllowanceSummaryModel;
-    }
-
-    public ngOnInit(): void {
-        this.route.paramMap
-            .pipe(
-                takeUntilDestroyed(this.destroyed),
-                switchMap((p) => {
-                    this.id = Number.parseInt(p.get('id')!);
-
-                    return this.calendarSvc.get(new Date().getFullYear(), this.id);
-                })
-            )
+        effect(()=> {
+            this.calendarSvc.get(new Date().getFullYear(), this.id())
+            .pipe(takeUntilDestroyed(this.destroyed))
             .subscribe((calendar) => {
-                this.summary = calendar.summary;
-                this.name = `${calendar.firstName} ${calendar.lastName}`;
-                this.isActive = calendar.isActive;
+                this.summary.set(calendar.summary);
+                this.name.set(`${calendar.firstName} ${calendar.lastName}`);
+                this.isActive.set(calendar.isActive);
 
                 this.usersSvc.fillAdjustments(calendar.summary);
             });
+        })
     }
 
     public save() {
-        this.submitting = true;
+        this.submitting.set(true);
 
         this.usersSvc
-            .updateAdjustments(this.id)
+            .updateAdjustments(this.id())
             .pipe(takeUntilDestroyed(this.destroyed))
             .subscribe({
                 next: () => {
                     this.msgsSvc.isSuccess('Adjustments save');
 
-                    const diff = this.summary.adjustment - this.form.value.adjustment!;
-                    this.summary.total = this.summary.total - diff;
-                    this.summary.remaining = this.summary.remaining - diff;
+                    const diff = this.summary().adjustment - this.form.value.adjustment!;
+                    this.summary().total = this.summary().total - diff;
+                    this.summary().remaining = this.summary().remaining - diff;
 
-                    this.summary.adjustment = this.form.value.adjustment!;
+                    this.summary().adjustment = this.form.value.adjustment!;
 
-                    this.submitting = false;
+                    this.submitting.set(false);
 
                     this.cd.detectChanges();
                 },
                 error: (e: HttpErrorResponse) => {
                     this.msgsSvc.isError('Unable to save adjustments');
-                    this.submitting = false;
+                    this.submitting.set(false);
                 },
             });
     }

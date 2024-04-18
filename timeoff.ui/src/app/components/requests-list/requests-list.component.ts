@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LeaveRequestModel } from '../../models/leave-request.model';
 import { DatePartPipe } from '../date-part.pipe';
@@ -11,8 +11,7 @@ import { DatePartPipe } from '../date-part.pipe';
     imports: [CommonModule, DatePartPipe],
 })
 export class RequestsListComponent {
-    @Input()
-    public requests: LeaveRequestModel[] = [];
+    public requests = input<LeaveRequestModel[]>([]);
 
-    public dateFormat = 'yyyy-MM-dd';
+    public dateFormat = input('yyyy-MM-dd');
 }

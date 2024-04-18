@@ -2,7 +2,7 @@
 
 <div class="row">
     <div class="col-md-6 lead">
-        Public holidays for {{companyName}}`s account in {{currentYear}}
+        Public holidays for {{companyName()}}`s account in {{currentYear()}}
     </div>
     <div class="col-md-3 col-md-offset-3">
         <div class="btn-group pull-right">
@@ -12,7 +12,7 @@
                 <span class="sr-only">Toggle Dropdown</span>
             </button>
             <ul class="dropdown-menu">
-                <li><a href="#" id="publicholiday-import-btn">Import default holidays for {{currentYear}}</a></li>
+                <li><a href="#" id="publicholiday-import-btn">Import default holidays for {{currentYear()}}</a></li>
                 <li><a href="#" id="add_new_team" data-toggle="modal" data-target="#add_new_public_holiday_modal">Add new public holiday</a></li>
             </ul>
         </div>
@@ -24,13 +24,13 @@
 <flash-message/>
 <div class="row">
     <div class="col-xs-2">
-        <a class="btn btn-default" routerLink="." [queryParams]="{year: lastYear}"><span aria-hidden="true" class="fa fa-chevron-left"></span> {{lastYear}} </a>
+        <a class="btn btn-default" routerLink="." [queryParams]="{year: lastYear()}"><span aria-hidden="true" class="fa fa-chevron-left"></span> {{lastYear()}} </a>
     </div>
     <div class="col-xs-8 calendar-section-caption">
-        <strong>January - December {{currentYear}}</strong>
+        <strong>January - December {{currentYear()}}</strong>
     </div>
     <div class="col-xs-2">
-        <a class="btn btn-default pull-right" routerLink="." [queryParams]="{year:nextYear}">{{nextYear}} <span aria-hidden="true" class="fa fa-chevron-right"></span></a>
+        <a class="btn btn-default pull-right" routerLink="." [queryParams]="{year:nextYear()}">{{nextYear()}} <span aria-hidden="true" class="fa fa-chevron-right"></span></a>
     </div>
 </div>
 
@@ -39,7 +39,7 @@
 <div class="row clearfix">
     <div class="col-md-8">
         <div class="row">
-            <calendar monthFormat="MMMM" [start]="start" [monthCount]="12" [holidays]="holidays" colStyle="col-md-4"/>
+            <calendar monthFormat="MMMM" [start]="start()" [monthCount]="12" [holidays]="holidays()" colStyle="col-md-4"/>
         </div>
     </div>
 
@@ -56,7 +56,6 @@
             <div class="col-md-12 tst-no-public-holidays text-center">No public holiday records</div>
         </div>
 
-        <!-- <form id="import_publicholiday_form" method="post" asp-action="import" asp-controller="PublicHoliday" asp-route-year="@Model.CurrentYear"></form> -->
         <form id="update_publicholiday_form">
             <ng-container *ngFor="let h of holidaysForm.controls">
                 <div class="row" [formGroup]="h">
@@ -98,4 +97,4 @@
 
 <div class="row">&nbsp;</div>
 
-<add-new-modal [year]="currentYear" (added)="create()"/>
+<add-new-modal [year]="currentYear()" (added)="create()"/>

@@ -1,9 +1,10 @@
-import { Component, DestroyRef, OnInit } from '@angular/core';
+import { Component, DestroyRef, OnInit, numberAttribute, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { switchMap } from 'rxjs';
+import { injectQueryParams } from 'ngxtension/inject-query-params';
 
 import { FlashComponent } from '@components/flash/flash.component';
 import { DatePickerDirective } from '@components/date-picker.directive';
@@ -23,30 +24,26 @@ import { LoggedInUserService } from '@services/logged-in-user/logged-in-user.ser
     providers: [EmailAuditService, CompanyService],
     templateUrl: './email-audit.component.html',
     styleUrl: './email-audit.component.scss',
-    imports: [ReactiveFormsModule, CommonModule, PagerComponent, FlashComponent,DatePickerDirective],
+    imports: [ReactiveFormsModule, CommonModule, PagerComponent, FlashComponent, DatePickerDirective],
 })
 export class EmailAuditComponent implements OnInit {
     public get form() {
         return this.searchSvc.searchForm;
     }
 
-    public get dateFormat() {
-        return this.currentUser.dateFormat;
-    }
+    protected readonly dateFormat = this.currentUser.dateFormat;
 
-    public users: UserModel[] = [];
+    protected readonly users = signal<UserModel[]>([]);
 
-    public emails: EmailModel[] = [];
+    protected readonly emails = signal<EmailModel[]>([]);
 
-    public searching = false;
+    protected readonly searching = signal(false);
 
-    public get currentPage() {
-        return this.searchSvc.currentPage;
-    }
+    protected readonly currentPage = injectQueryParams((p) => numberAttribute(p['page'] ?? 1));
 
-    public get totalPages() {
-        return this.searchSvc.totalPages;
-    }
+    protected readonly user = injectQueryParams((p) => numberAttribute(p['user']));
+
+    protected readonly totalPages = signal(0);
 
     constructor(
         private readonly searchSvc: EmailAuditService,
@@ -54,7 +51,7 @@ export class EmailAuditComponent implements OnInit {
         private readonly companySvc: CompanyService,
         private readonly destroyed: DestroyRef,
         private readonly route: ActivatedRoute,
-        private readonly currentUser: LoggedInUserService,
+        private readonly currentUser: LoggedInUserService
     ) {}
 
     public ngOnInit(): void {
@@ -62,7 +59,7 @@ export class EmailAuditComponent implements OnInit {
             .getUsers()
             .pipe(takeUntilDestroyed(this.destroyed))
             .subscribe((data) => {
-                this.users = data;
+                this.users.set(data);
             });
 
         this.find();
@@ -75,7 +72,7 @@ export class EmailAuditComponent implements OnInit {
 
     public reset() {
         this.form.reset({
-            userId: '',
+            userId: null,
             start: '',
             end: '',
         });
@@ -83,39 +80,29 @@ export class EmailAuditComponent implements OnInit {
     }
 
     public searchByUser(userId: number) {
-        this.form.controls.userId.setValue(userId.toString());
+        this.form.controls.userId.setValue(userId);
 
         this.search();
     }
 
     private find() {
-        this.searching = true;
+        this.searching.set(true);
 
-        this.route.queryParamMap
-            .pipe(
-                takeUntilDestroyed(this.destroyed),
-                switchMap((p) => {
-                    if (p.has('page')) {
-                        this.searchSvc.currentPage = Number.parseInt(p.get('page')!);
-                    } else {
-                        this.searchSvc.currentPage = 1;
-                    }
+        this.searchSvc.currentPage = this.currentPage();
+        this.searchSvc.searchForm.controls.userId.setValue(this.user());
 
-                    if (p.has('user')) {
-                        this.form.controls.userId.setValue(p.get('user')!);
-                    }
-
-                    return this.searchSvc.search();
-                })
-            )
+        this.searchSvc
+            .search()
+            .pipe(takeUntilDestroyed(this.destroyed))
             .subscribe({
                 next: (data) => {
-                    this.emails = data;
-                    this.searching = false;
+                    this.emails.set(data);
+                    this.searching.set(false);
+                    this.totalPages.set(this.searchSvc.totalPages);
                 },
                 error: () => {
                     this.msgsSvc.isError('Unable to retrieve emails');
-                    this.emails = [];
+                    this.emails.set([]);
                 },
             });
     }
