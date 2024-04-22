@@ -11,7 +11,7 @@ import { LoggedInUserService } from '@services/logged-in-user/logged-in-user.ser
     imports: [CommonModule, RouterLink],
 })
 export class HeaderComponent {
-    private currentUser = inject(LoggedInUserService);
+    private readonly currentUser = inject(LoggedInUserService);
 
     protected readonly showTeamView = this.currentUser.showTeamView;
 

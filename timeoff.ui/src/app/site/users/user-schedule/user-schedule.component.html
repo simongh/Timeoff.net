@@ -1,4 +1,4 @@
-<user-details [id]="id" [name]="fullName" [isActive]="userEnabled">
+<user-details [id]="id()" [name]="fullName" [isActive]="userEnabled">
     <div class="col-md-9">
 
         <form [formGroup]="form" id="company_schedule_form">
@@ -15,17 +15,19 @@
                     Current employee uses <strong><a data-vpp="link-to-company-schedule" routerLink="/settings">company wide</a></strong> schedule.
                 </p>
                 <div class="input-group">
-                    <schedule [days]="this.form.controls.schedule.controls"/>
+                    <schedule [days]="this.form.controls.schedule"/>
                 </div>
 
             </div>
             <div class="form-group">
-                <div *ngIf="form.controls.scheduleOverride.value" class="pull-right">
-                    <button type="button" (click)="reset()" [disabled]="submitting" name="action" class="btn btn-default" value="reset">Move employee to company wide schedule</button>
-                    <button type="button" (click)="update()" [disabled]="submitting" class="btn btn-success">Save employee specific schedule</button>
-                </div>
-                <div *ngIf="!form.controls.scheduleOverride.value" class="pull-right">
-                    <button type="button" (click)="update()" [disabled]="submitting" class="btn btn-success">Override company wide schedule</button>
+                <div class="pull-right">
+                    @if (form.controls.scheduleOverride.value) {
+                    <button type="button" (click)="reset()" [disabled]="submitting()" name="action" class="btn btn-default" value="reset">Move employee to company wide schedule</button>
+                    <button type="button" (click)="update()" [disabled]="submitting()" class="btn btn-success">Save employee specific schedule</button>
+                    }
+                    @else {
+                        <button type="button" (click)="update()" [disabled]="submitting()" class="btn btn-success">Override company wide schedule</button>
+                    }
                 </div>
             </div>
         </form>

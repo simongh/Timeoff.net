@@ -1,11 +1,11 @@
 <h1>Team View</h1>
 
 <div class="row">
-    <div class="col-md-6 lead">{{name}}'s team <a routerLink="/feeds" data-toggle="tooltip" data-placement="right" title="Export Team View to external calendars"><span class="fa fa-rss"></span></a></div>
+    <div class="col-md-6 lead">{{name()}}'s team <a routerLink="/feeds" data-toggle="tooltip" data-placement="right" title="Export Team View to external calendars"><span class="fa fa-rss"></span></a></div>
     <div class="col-md-3 col-md-offset-3">
         <div class="btn-group btn-group-sm pull-right" role="group">
-            <a routerLink="." [queryParams]="{year: year, month: month}" class="btn btn-default" [attr.disabled]="grouped ? null : 'disabled'">All</a>
-            <a routerLink="." [queryParams]="{year: year, month: month, grouped: true}" class="btn btn-default" [attr.disabled]="grouped ? 'disabled' : null">By team</a>
+            <a routerLink="." [queryParams]="{year: year(), month: month()}" class="btn btn-default" [attr.disabled]="grouped() ? null : 'disabled'">All</a>
+            <a routerLink="." [queryParams]="{year: year(), month: month(), grouped: true}" class="btn btn-default" [attr.disabled]="grouped() ? 'disabled' : null">By team</a>
         </div>
     </div>
 </div>
@@ -15,29 +15,26 @@
 <nav>
     <div class="row">
         <div class="col-xs-2">
-            <a routerLink="." [queryParams]="lastParams" class="btn btn-link btn-lg"><span aria-hidden="true" class="fa fa-chevron-left"></span>&nbsp;{{last | date: 'MMM'}}</a>
+            <a routerLink="." [queryParams]="lastParams()" class="btn btn-link btn-lg"><span aria-hidden="true" class="fa fa-chevron-left"></span>&nbsp;{{last() | date: 'MMM'}}</a>
         </div>
 
         <div class="col-xs-8 calendar-section-caption">
-            <button id="team_view_month_select_btn" date-picker (selected)="dateselected($event)" class="btn btn-link btn-lg" data-tom="/teamview" data-provide="datepicker" data-date-format="yyyy-mm" data-date-autoclose="1" data-date-min-view-mode="months">{{start | date: 'MMMM yyyy'}} <i class="fa fa-angle-down"></i></button>
+            <button id="team_view_month_select_btn" date-picker (selected)="dateselected($event)" class="btn btn-link btn-lg" data-tom="/teamview" data-provide="datepicker" data-date-format="yyyy-mm" data-date-autoclose="1" data-date-min-view-mode="months">{{start() | date: 'MMMM yyyy'}} <i class="fa fa-angle-down"></i></button>
         </div>
 
         <div class="col-xs-2">
-            <a class="btn btn-link btn-lg pull-right" routerLink="." [queryParams]="nextParams">{{next | date: 'MMM'}}&nbsp;<span aria-hidden="true" class="fa fa-chevron-right"></span></a>
+            <a class="btn btn-link btn-lg pull-right" routerLink="." [queryParams]="nextParams()">{{next() | date: 'MMM'}}&nbsp;<span aria-hidden="true" class="fa fa-chevron-right"></span></a>
         </div>
     </div>
 </nav>
 
 <div class="row">&nbsp;</div>
-
-<ng-container *ngIf="grouped">
-    <month-view *ngFor="let t of teams" [team]="t" [selectedDate]="start" [selectedTeam]="team" [results]="results" [teams]="teams"/>
-</ng-container>
-
-<ng-container *ngIf="!grouped">
-    <month-view [selectedDate]="start" [selectedTeam]="team" [results]="results" [teams]="teams"/>
-</ng-container>
-
+@if (grouped()) {
+    <month-view *ngFor="let t of teams()" [team]="t" [selectedDate]="start()" [selectedTeam]="team()" [results]="results" [teams]="teams()"/>
+}
+@else {
+    <month-view [selectedDate]="start()" [selectedTeam]="team()" [results]="results" [teams]="teams()"/>
+}
 <!-- @if (Model.Grouped)
 {
     var index = 0;

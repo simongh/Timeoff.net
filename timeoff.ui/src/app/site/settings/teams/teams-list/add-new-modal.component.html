@@ -18,7 +18,7 @@
                     <div class="form-group">
                         <label for="allowance" class="control-label">Allowance:</label>
                         <select class="form-control" formControlName="allowance" id="allowance">
-                            <option *ngFor="let d of allowance" [value]="d">{{d == 0 ? 'None' : d}}</option>
+                            <option *ngFor="let d of allowance()" [value]="d">{{d == 0 ? 'None' : d}}</option>
                         </select>
                     </div>
 

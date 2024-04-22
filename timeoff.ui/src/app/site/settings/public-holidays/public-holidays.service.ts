@@ -6,6 +6,8 @@ import { formatDate } from '@angular/common';
 import { yearValidator } from '@components/validators';
 
 import { PublicHolidayModel } from '@models/public-holiday.model';
+import { LoggedInUserService } from '@services/logged-in-user/logged-in-user.service';
+import { format } from 'date-fns';
 
 export interface holidayFormControls {
     id: FormControl<number | null>;
@@ -20,7 +22,11 @@ export class PublicHolidaysService {
 
     public addForm!: HolidayFormGroup;
 
-    constructor(private readonly client: HttpClient, private readonly fb: FormBuilder) {
+    constructor(
+        private readonly client: HttpClient,
+        private readonly fb: FormBuilder,
+        private readonly currentUser: LoggedInUserService
+    ) {
         this.setAddForm(0);
     }
 
@@ -43,7 +49,7 @@ export class PublicHolidaysService {
         return this.fb.group({
             id: data.id,
             name: [data.name, Validators.required],
-            date: [data.date ? formatDate(data.date, 'yyyy-MM-dd', 'en') : null, yearValidator(year)],
+            date: [data.date ? format(data.date, this.currentUser.dateFormat()) : null, yearValidator(year)],
         });
     }
 

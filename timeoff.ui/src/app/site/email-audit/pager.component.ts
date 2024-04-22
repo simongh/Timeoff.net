@@ -9,9 +9,9 @@ import { RouterLink } from '@angular/router';
     imports: [NgIf, RouterLink, NgClass],
 })
 export class PagerComponent {
-    public totalPages = input.required<number>();
+    public readonly totalPages = input.required<number>();
 
-    public currentPage = input.required<number>();
+    public readonly currentPage = input.required<number>();
 
     protected readonly nextPage = computed(() => this.currentPage() + 1);
 

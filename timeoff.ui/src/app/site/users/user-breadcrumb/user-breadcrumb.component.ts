@@ -9,5 +9,5 @@ import { RouterLink } from '@angular/router';
     styleUrl: './user-breadcrumb.component.scss',
 })
 export class UserBreadcrumbComponent {
-    public name = input.required<string>();
+    public readonly name = input.required<string>();
 }

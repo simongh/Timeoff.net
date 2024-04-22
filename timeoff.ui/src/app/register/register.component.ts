@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { combineLatest } from 'rxjs';
+import { computedAsync } from 'ngxtension/computed-async';
 
 import { FlashComponent } from '@components/flash/flash.component';
 import { listValidator } from '@components/validators';
@@ -20,19 +21,19 @@ import { RegisterService } from './register.service';
     selector: 'register-page',
     standalone: true,
     templateUrl: 'register.component.html',
-    providers: [RegisterService],
+    providers: [RegisterService, CompanyService],
     imports: [FlashComponent, ReactiveFormsModule, CommonModule, ValidatorMessageComponent],
 })
-export class RegisterComponent implements OnInit {
+export class RegisterComponent {
     protected get registerForm() {
         return this.registerSvc.form;
     }
 
-    protected readonly countries = signal<Country[]>([]);
+    protected readonly countries = computedAsync(() => this.companySvc.countries(), { initialValue: [] });
 
-    protected readonly timezones = signal<TimeZoneModel[]>([]);
+    protected readonly timezones = computedAsync(() => this.companySvc.timeZones(), { initialValue: [] });
 
-    protected submitting = signal(false);
+    protected readonly submitting = signal(false);
 
     constructor(
         private readonly registerSvc: RegisterService,
@@ -40,18 +41,6 @@ export class RegisterComponent implements OnInit {
         private readonly msgsSvc: MessagesService,
         private destroyed: DestroyRef
     ) {}
-
-    public ngOnInit(): void {
-        combineLatest([this.companySvc.countries(), this.companySvc.timeZones()])
-            .pipe(takeUntilDestroyed(this.destroyed))
-            .subscribe(([countries, timezones]) => {
-                this.countries.set(countries);
-                this.timezones.set(timezones);
-
-                this.registerForm.controls.country.addValidators(listValidator(this.countries().map((c) => c.code)));
-                this.registerForm.controls.timezone.addValidators(listValidator(this.timezones().map((t) => t.name)));
-            });
-    }
 
     public register() {
         this.registerForm.markAllAsTouched();

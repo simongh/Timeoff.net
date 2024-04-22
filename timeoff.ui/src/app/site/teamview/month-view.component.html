@@ -6,32 +6,32 @@
                     <td class="team-view-header" colspan="2">
                         <div class="dropdown pull-left" *ngIf="!team">
                             <button class="btn btn-default dropdown-toggle left-column-cell" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                <ng-container *ngIf="!!selectedTeam">{{selectedTeamName}}</ng-container>
+                                <ng-container *ngIf="!!selectedTeam">{{selectedTeamName()}}</ng-container>
                                 <ng-container *ngIf="!selectedTeam">All teams</ng-container>
                                 &nbsp;<span class="caret"></span>
                             </button>
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                                <li><a routerLink="." [queryParams]="{year: selectedDate.getFullYear(), month: selectedDate.getMonth() + 1}">All</a></li>
+                                <li><a routerLink="." [queryParams]="{year: selectedDate().getFullYear(), month: selectedDate().getMonth() + 1}">All</a></li>
                                 <li role="separator" class="divider"></li>
-                                <li *ngFor="let t of teams"><a routerLink="." [queryParams]="{year: selectedDate.getFullYear(), month: selectedDate.getMonth() +1, team: t.id}">{{t.name}}</a></li>
+                                <li *ngFor="let t of teams()"><a routerLink="." [queryParams]="{year: selectedDate().getFullYear(), month: selectedDate().getMonth() +1, team: t.id}">{{t.name}}</a></li>
                             </ul>
                         </div>
                         
-                        <div class="pull-left" *ngIf="!!team">
-                            <h3>{{team.name}}</h3>
+                        <div class="pull-left" *ngIf="!!team()">
+                            <h3>{{team()!.name}}</h3>
                         </div>
                     </td>
 
-                    <td *ngFor="let d of days" colspan="2" class="team-view-header"><b>{{d | date: 'EEEEEE'}}</b></td>
+                    <td *ngFor="let d of days()" colspan="2" class="team-view-header"><b>{{d | date: 'EEEEEE'}}</b></td>
 
                 </tr>
             </thead>
 
             <tbody>
-                <tr *ngFor="let u of rows" class="teamview-user-list-row" [attr.data-vpp-user-list-row]="u.id">
+                <tr *ngFor="let u of rows()" class="teamview-user-list-row" [attr.data-vpp-user-list-row]="u.id">
                     <td class="left-column-cell cross-link user-details-summary-trigger" [attr.data-user-id]="u.id">
-                        <a *ngIf="isAdmin" [routerLink]="['/users',u.id]">{{u.name}}</a>
-                        <span *ngIf="!isAdmin">{{u.name}}</span>
+                        <a *ngIf="isAdmin()" [routerLink]="['/users',u.id]">{{u.name}}</a>
+                        <span *ngIf="!isAdmin()">{{u.name}}</span>
                     </td>
                     <td>
                         <span class="teamview-deducted-days"

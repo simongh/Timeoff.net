@@ -1,19 +1,19 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Output, signal } from '@angular/core';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 
-import { ValidatorMessageComponent } from "@components/validator-message/validator-message.component";
+import { ValidatorMessageComponent } from '@components/validator-message/validator-message.component';
 
 @Component({
     selector: 'remove-company-modal',
     standalone: true,
     templateUrl: './remove-company-modal.component.html',
     styleUrl: './remove-company-modal.component.scss',
-    imports: [ValidatorMessageComponent, ReactiveFormsModule]
+    imports: [ValidatorMessageComponent, ReactiveFormsModule],
 })
 export class RemoveCompanyModalComponent {
-    public companyName =new FormControl<string>('',[Validators.required])
+    protected readonly companyName = new FormControl<string>('', [Validators.required]);
 
-    public submitting = false;
+    protected readonly submitting = signal(false);
 
     @Output()
     public onDelete = new EventEmitter<string>();

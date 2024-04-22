@@ -38,11 +38,11 @@ export class UserCreateComponent {
         return this.usersSvc.form;
     }
 
-    protected dateFormat = this.currentUser.dateFormat;
+    protected readonly dateFormat = this.currentUser.dateFormat;
 
-    protected companyName = this.currentUser.companyName;
+    protected readonly companyName = this.currentUser.companyName;
 
-    protected submitting = signal(false);
+    protected readonly submitting = signal(false);
 
     constructor(
         private readonly currentUser: LoggedInUserService,
@@ -67,7 +67,7 @@ export class UserCreateComponent {
             .subscribe({
                 next: () => {
                     this.messagesSvc.isSuccess('New user account successfully added', true);
-                    this.router.navigate(['users']);
+                    this.router.navigateByUrl('/users');
                 },
                 error: (e: HttpErrorResponse) => {
                     if (e.status == 400) {

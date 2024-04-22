@@ -1,4 +1,4 @@
-import { datePart } from '@components/types';
+import { datePart } from '@models/types';
 import { UserModel } from '@services/company/user.model';
 
 export interface LeaveRequestModel {

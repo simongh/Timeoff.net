@@ -6,7 +6,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 
 import { ValidatorMessageComponent } from '@components/validator-message/validator-message.component';
 import { UserListComponent } from '@components/user-select/user-select.component';
-import { getAllowances } from '@components/allowances';
+import { getAllowances } from '@models/allowances';
 
 import { UserModel } from '@services/company/user.model';
 import { MessagesService } from '@services/messages/messages.service';
@@ -20,9 +20,7 @@ import { TeamsService } from '../teams.service';
     imports: [CommonModule, ReactiveFormsModule, ValidatorMessageComponent, UserListComponent],
 })
 export class AddNewModalComponent {
-    public allowance: number[] = getAllowances();
-
-    public users: UserModel[] = [];
+    protected readonly allowance = getAllowances();
 
     public get form() {
         return this.teamsSvc.form;
@@ -31,7 +29,7 @@ export class AddNewModalComponent {
     @Output()
     public added = new EventEmitter();
 
-    protected submitting = signal(false);
+    protected readonly submitting = signal(false);
 
     constructor(
         private readonly teamsSvc: TeamsService,

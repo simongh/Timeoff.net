@@ -26,7 +26,7 @@
                                 <label for="country" class="col-md-4 control-label">Country</label>
                                 <div class="col-md-8">
                                     <select class="form-control" id="country" formControlName="country">
-                                        <option *ngFor="let country of countries" [value]="country.code">{{ country.code}}: {{country.name}}</option>
+                                        <option *ngFor="let country of countries()" [value]="country.code">{{ country.code}}: {{country.name}}</option>
                                     </select>
                                 </div>
                             </div>
@@ -34,7 +34,7 @@
                                 <label for="dateFormat" class="col-md-4 control-label">Date format</label>
                                 <div class="col-md-8">
                                     <select class="form-control" id="dateFormat" formControlName="dateFormat">
-                                        <option *ngFor="let df of dateFormats" [value]="df">{{df}}</option>
+                                        <option *ngFor="let df of dateFormats()" [value]="df">{{df}}</option>
                                     </select>
                                 </div>
                             </div>
@@ -43,7 +43,7 @@
                                 <label for="timeZone" class="col-md-4 control-label">Time zone</label>
                                 <div class="col-md-8">
                                     <select class="form-control" id="timeZone" formControlName="timeZone">
-                                        <option *ngFor="let tz of timeZones" [value]="tz.id">{{tz.name}}</option>
+                                        <option *ngFor="let tz of timeZones()" [value]="tz.id">{{tz.name}}</option>
                                     </select>
                                 </div>
                             </div>
@@ -52,7 +52,7 @@
                                 <label for="carryOver" class="col-md-4 control-label">Carried over days</label>
                                 <div class="col-md-8">
                                     <select class="form-control" id="carryOver" formControlName="carryOver">
-                                        <option *ngFor="let d of carryOverDays" [value]="d">{{ d == 0 ? 'None' : d == 1000 ? 'All' : d}}</option>
+                                        <option *ngFor="let d of carryOverDays()" [value]="d">{{ d == 0 ? 'None' : d == 1000 ? 'All' : d}}</option>
                                     </select>
                                     <p>
                                         <em>Number of days in employee allowance that are carried over to the next year.</em>
@@ -89,7 +89,7 @@
 
                             <div class="form-group">
                                 <div class="col-md-offset-2 col-md-10">
-                                    <button type="button" (click)="save()" class="btn btn-success pull-right single-click" [disabled]="submitting">Save changes</button>
+                                    <button type="button" (click)="save()" class="btn btn-success pull-right single-click" [disabled]="submitting()">Save changes</button>
                                 </div>
                             </div>
                         </form>
@@ -130,7 +130,7 @@
                             </div>
                             <div class="form-group">
                                 <div class="col-md-offset-2 col-md-11">
-                                    <button type="button" (click)="saveSchedule()" class="btn btn-success pull-right single-click">Save schedule</button>
+                                    <button type="button" (click)="saveSchedule()" [disabled]="submitting()" class="btn btn-success pull-right single-click">Save schedule</button>
                                 </div>
                             </div>
                         </form>
@@ -141,13 +141,13 @@
                             </div>
                             <div class="form-group">
                                 <div class="col-md-offset-2">
-                                    <p><em>This action will carry over unused allowance for each employee from <strong>{{lastYear}}</strong> to the current year, <strong>{{currentYear}}</strong>.</em></p>
+                                    <p><em>This action will carry over unused allowance for each employee from <strong>{{lastYear()}}</strong> to the current year, <strong>{{currentYear()}}</strong>.</em></p>
                                     <p><em>Please note, employees allowance is going to be updated.</em></p>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <form class="col-md-offset-2 col-md-11" id="calculate_carry_over_form" method="post" asp-controller="Settings" asp-action="carryOverUnusedAllowance">
-                                    <button class="btn btn-success pull-right single-click" type="submit"><i class="fa fa-share"></i> Carry over allowance</button>
+                                    <button class="btn btn-success pull-right single-click" type="button" [disabled]="submitting()"><i class="fa fa-share"></i> Carry over allowance</button>
                                 </form>
                             </div>
                         </div>
@@ -214,7 +214,7 @@
                             <input type="number" class="form-control" formControlName="limit" min="0" max="365">
                         </div>
                         <div class="col-md-1">
-                            <button class="btn btn-default pull-right leavetype-remove-btn" (click)="removeLeaveType(leave.value.id!)" [attr.data-tom-leave-type-order]="leave.controls.id.value"><span class="fa fa-remove"></span></button>
+                            <button class="btn btn-default pull-right leavetype-remove-btn" (click)="removeLeaveType(leave.value.id!)" [disabled]="submitting()" [attr.data-tom-leave-type-order]="leave.controls.id.value"><span class="fa fa-remove"></span></button>
                         </div>
                     </div>
                     <div class="row">&nbsp;</div>
@@ -225,7 +225,7 @@
                     <div class="col-md-12">
                         <div class="pull-right">
                             <button class="btn btn-default" data-toggle="modal" data-target="#add_new_leave_type_modal" type="button" id="add_new_leave_type_btn">Add new</button>
-                            <button type="button" (click)="updateLeaveTypes()" class="btn btn-success single-click">Save changes</button>
+                            <button type="button" (click)="updateLeaveTypes()" [disabled]="submitting()" class="btn btn-success single-click">Save changes</button>
                         </div>
                     </div>
                 </div>

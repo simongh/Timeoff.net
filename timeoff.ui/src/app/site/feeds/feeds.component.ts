@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { NgIf } from '@angular/common';
 import { RouterLink } from '@angular/router';
 
@@ -13,9 +13,7 @@ import { LoggedInUserService } from '@services/logged-in-user/logged-in-user.ser
     styleUrl: './feeds.component.scss',
 })
 export class FeedsComponent {
-    public get showTeamView() {
-        return this.currentUser.showTeamView;
-    }
-
-    constructor(private readonly currentUser: LoggedInUserService) {}
+    private readonly currentUser = inject(LoggedInUserService);
+    
+    protected readonly showTeamView = this.currentUser.showTeamView;
 }

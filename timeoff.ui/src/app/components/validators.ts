@@ -10,13 +10,16 @@ export function compareValidator(field1: string, field2: string): ValidatorFn {
     };
 }
 
-export function listValidator(values: string[]): ValidatorFn {
+export function listValidator(valuesFn: ()=> string[]): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
-        return values.some((v) => control.value === v)
+        const items = valuesFn();
+        const result = items.some((v) => control.value === v)
             ? null
             : {
                   invalidItem: true,
               };
+
+            return result;
     };
 }
 

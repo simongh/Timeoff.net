@@ -11,7 +11,7 @@ type RegisterFormGroup = ReturnType<RegisterService['createForm']>;
 export class RegisterService {
     public readonly form: RegisterFormGroup;
 
-    constructor(private readonly fb: FormBuilder, private readonly client: HttpClient, private destroyed: DestroyRef) {
+    constructor(private readonly fb: FormBuilder, private readonly client: HttpClient) {
         this.form = this.createForm();
     }
 
@@ -29,7 +29,7 @@ export class RegisterService {
                 password: ['', [Validators.required, Validators.minLength(8)]],
                 confirmPassword: ['', [Validators.required]],
                 country: ['GB'],
-                timezone: [''],
+                timezone: ['', [Validators.required]],
             },
             {
                 validators: [compareValidator('password', 'confirmPassword')],

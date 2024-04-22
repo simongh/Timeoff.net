@@ -29,9 +29,9 @@
                                     <input type="text" formControlName="end" class="form-control" date-picker placeholder="End Date" data-provide="datepicker" data-date-autoclose="1" [attr.data-date-format]="dateFormat()" data-date-week-start="1"/>
                                 </div>
                                 <div class="form-group">
-                                    <select class="form-control" formControlName="userId">
-                                        <option value="">Employee to filter by</option>
-                                        <option *ngFor="let u of users()" value="{{u.id}}">{{u.name}}</option>
+                                    <select class="form-control" formControlName="user">
+                                        <option [value]="null">Employee to filter by</option>
+                                        <option *ngFor="let u of users()" [value]="u.id">{{u.name}}</option>
                                     </select>
                                 </div> 
 
@@ -54,41 +54,42 @@
                 </tr>
                 </thead>
                 <tbody>
-                    <tr *ngIf="emails.length === 0">
+                    <tr *ngIf="emails().length === 0">
                         <td colspan="3">
                         <div class="text-center">No emails recorded yet</div>
                         </td>
                     </tr>
 
-                <ng-container *ngFor="let e of emails()">
+                    @for (e of emails(); track $index)
+                    {
                     <tr id="heading_@item.Id" class="vpp-email-audit-entry-header">
-                    <td class="user-link-cell">
-                        <a (click)="searchByUser(e.user.id)">{{e.user.name}}</a>
-                    </td>
-                    <td>
-                        <a class="collapsed" data-toggle="collapse" data-parent="#email_list" href="#collapse_@item.Id">
-                        {{e.subject}}
-                        </a>
-                    </td>
-                    <td>
-                        {{e.createdAt | date: dateFormat + ' HH:mm:ss'}}
-                    </td>
+                        <td class="user-link-cell">
+                            <a (click)="searchByUser(e.user.id)">{{e.user.name}}</a>
+                        </td>
+                        <td>
+                            <a class="collapsed" data-toggle="collapse" data-parent="#email_list" href="#collapse_{{$index}}">
+                            {{e.subject}}
+                            </a>
+                        </td>
+                        <td>
+                            {{e.createdAt | date: dateFormat() + ' HH:mm:ss'}}
+                        </td>
                     </tr>
-                    <tr id="collapse_@item.Id" class="collapse">
-                    <td colspan=3>
-                        <address>
-                            <strong>To Email:</strong>
-                            <a href="mailto:#">{{e.email}}</a>
-                        </address>
-                        <pre>{{e.body}}</pre>
-                    </td>
+                    <tr id="collapse_{{$index}}" class="collapse">
+                        <td colspan=3>
+                            <address>
+                                <strong>To Email:</strong>
+                                <a href="mailto:#">{{e.email}}</a>
+                            </address>
+                            <pre>{{e.body}}</pre>
+                        </td>
                     </tr>
-                </ng-container>
+                    }
                 </tbody>
             </table>
 
             <div class="text-center">
-                <pager *ngIf="emails.length > 0" [totalPages]="totalPages()" [currentPage]="currentPage()"/>
+                <pager *ngIf="emails().length > 0" [totalPages]="totalPages()" [currentPage]="currentPage()"/>
             </div>
         </div>
     </div>

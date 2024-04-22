@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, Input, computed, inject, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { eachDayOfInterval, endOfMonth, formatDate } from 'date-fns';
 
@@ -7,6 +7,7 @@ import { TeamModel } from '@services/company/team.model';
 import { TeamViewModel } from './team-view.model';
 import { RowModel } from './row.model';
 import { DayModel } from './day.model';
+import { LoggedInUserService } from '@services/logged-in-user/logged-in-user.service';
 
 @Component({
     standalone: true,
@@ -16,44 +17,39 @@ import { DayModel } from './day.model';
     imports: [CommonModule, RouterLink],
 })
 export class MonthViewComponent {
-    @Input()
-    public team: TeamModel | null = null;
+    public readonly team = input<TeamModel | null>(null);
 
-    @Input()
-    public selectedDate!: Date;
+    public readonly selectedDate = input.required<Date>();
 
-    @Input()
-    public selectedTeam!: number | null;
+    public readonly selectedTeam = input.required<number | null>();
 
-    @Input()
-    public teams!: TeamModel[];
+    public readonly teams = input.required<TeamModel[]>();
 
-    @Input()
-    public results!: TeamViewModel;
+    public readonly results = input.required<TeamViewModel>();
 
-    public isAdmin = true;
+    protected readonly isAdmin = inject(LoggedInUserService).isAdmin;
 
-    public get selectedTeamName() {
-        return this.teams.find((t) => t.id === this.selectedTeam)?.name;
-    }
+    protected readonly selectedTeamName = computed(() => this.teams().find((t) => t.id === this.selectedTeam())?.name);
 
-    public get days() {
+    protected readonly days = computed(() => {
         return eachDayOfInterval({
-            start: this.selectedDate,
-            end: endOfMonth(this.selectedDate),
+            start: this.selectedDate(),
+            end: endOfMonth(this.selectedDate()),
         });
-    }
+    });
 
-    public get rows() {
-        return this.results.users.map(
+    protected readonly rows = computed(()=> {
+        return this.results().users.map(
             (u) =>
                 ({
                     name: u.name,
                     id: u.id,
                     total: u.total,
-                    summary: `In ${formatDate(this.selectedDate,'MMMM, yyyy')} ${u.name} used ${u.total} days from allowance`,
-                    days: this.days.map((d) => new DayModel(d, u, this.results.holidays)),
+                    summary: `In ${formatDate(this.selectedDate(), 'MMMM, yyyy')} ${u.name} used ${
+                        u.total
+                    } days from allowance`,
+                    days: this.days().map((d) => new DayModel(d, u, this.results().holidays)),
                 } as RowModel)
         );
-    }
+    });
 }

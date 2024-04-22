@@ -1,10 +1,10 @@
-import { Component, DestroyRef, OnInit } from '@angular/core';
+import { Component, DestroyRef, OnInit, numberAttribute, signal } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
-import { switchMap } from 'rxjs';
+import { injectParams } from 'ngxtension/inject-params';
 
 import { ScheduleComponent } from '@components/schedule/schedule.component';
 
@@ -30,84 +30,77 @@ import { UserBreadcrumbComponent } from '../user-breadcrumb/user-breadcrumb.comp
     ],
 })
 export class UserScheduleComponent implements OnInit {
-    public id!: number;
+    protected readonly id = injectParams((p) => numberAttribute(p['id']));
 
-    public get form() {
+    protected get form() {
         return this.usersSvc.form;
     }
 
-    public get fullName() {
+    protected get fullName() {
         return this.usersSvc.fullName;
     }
 
-    public get userEnabled() {
+    protected get userEnabled() {
         return this.usersSvc.userEnabled;
     }
 
-    public get schedule() {
+    protected get schedule() {
         return this.form.controls.schedule;
     }
 
-    public submitting = false;
+    protected readonly submitting = signal(false);
 
     constructor(
-        private readonly route: ActivatedRoute,
         private destroyed: DestroyRef,
         private readonly usersSvc: UsersService,
         private readonly msgsSvc: MessagesService
     ) {}
 
     public ngOnInit(): void {
-        this.route.paramMap
-            .pipe(
-                takeUntilDestroyed(this.destroyed),
-                switchMap((p) => {
-                    this.id = Number.parseInt(p.get('id')!);
-
-                    return this.usersSvc.getUser(this.id);
-                })
-            )
+        this.usersSvc
+            .getUser(this.id())
+            .pipe(takeUntilDestroyed(this.destroyed))
             .subscribe((user) => {
                 this.usersSvc.fillForm(user);
             });
     }
 
     public update() {
-        this.submitting = true;
+        this.submitting.set(true);
 
         this.usersSvc
-            .updateSchedule(this.id)
+            .updateSchedule(this.id())
             .pipe(takeUntilDestroyed(this.destroyed))
             .subscribe({
                 next: () => {
                     this.form.controls.scheduleOverride.setValue(true);
                     this.msgsSvc.isSuccess('Schedule Updated');
-                    this.submitting = false;
+                    this.submitting.set(false);
                 },
                 error: (e: HttpErrorResponse) => {
                     this.msgsSvc.isError('Unabled to update schedule');
-                    this.submitting = false;
+                    this.submitting.set(false);
                 },
             });
     }
 
     public reset() {
-        this.submitting = true;
+        this.submitting.set(true);
 
         this.usersSvc
-            .resetSchedule(this.id)
+            .resetSchedule(this.id())
             .pipe(takeUntilDestroyed(this.destroyed))
             .subscribe({
                 next: (schedule) => {
                     this.form.controls.scheduleOverride.setValue(false);
-                    this.usersSvc.fillSchedule(schedule);
+                    this.form.controls.schedule.setValue(schedule);
 
                     this.msgsSvc.isSuccess('Schedule updated');
-                    this.submitting = false;
+                    this.submitting.set(false);
                 },
                 error: (e: HttpErrorResponse) => {
                     this.msgsSvc.isError('Unabled to update schedule');
-                    this.submitting = false;
+                    this.submitting.set(false);
                 },
             });
     }

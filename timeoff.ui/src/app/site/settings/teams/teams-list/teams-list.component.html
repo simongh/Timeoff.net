@@ -10,9 +10,12 @@
 <div class="row">&nbsp;</div>
 
 <div class="row">
-    <div *ngIf="teams.length == 0" class="col-md-4">No team records</div>
-    <div *ngIf="teams.length > 0" class="col-md-12">
-        <table class="table table-hover">
+    <div class="col-md-12">
+        @if (teams().length == 0) {
+            No team records
+        }
+        @else {
+            <table class="table table-hover">
             <thead>
                 <tr>
                     <th>Name</th>
@@ -45,7 +48,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let team of teams" data-vpp-team-list-mode="readonly">
+                <tr *ngFor="let team of teams()" data-vpp-team-list-mode="readonly">
                     <td><a routerLink="./{{team.id}}" data-vpp-team-name=1>{{team.name}}</a></td>
                     <td><a routerLink="/users/{{team.manager.id}}">{{team.manager.name}}</a></td>
                     <td>{{team.allowance}}</td>
@@ -56,7 +59,7 @@
                 </tr>
             </tbody>
         </table>
+        }
     </div>
-
 </div>
 <add-new-modal (added)="added()"/>

@@ -9,7 +9,7 @@ namespace Timeoff.Application.EmailAudit
 
         public DateTime? End { get; init; }
 
-        public int? UserId { get; init; }
+        public int? User { get; init; }
 
         public int Page { get; init; } = 1;
     }
@@ -37,9 +37,9 @@ namespace Timeoff.Application.EmailAudit
                 query = query.Where(e => e.CreatedAt <= request.End.Value);
             }
 
-            if (request.UserId.HasValue)
+            if (request.User.HasValue)
             {
-                query = query.Where(e => e.UserId == request.UserId.Value);
+                query = query.Where(e => e.UserId == request.User.Value);
             }
 
             var pager = new PagerResult

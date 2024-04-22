@@ -1,12 +1,13 @@
 import { CommonModule } from '@angular/common';
-import { Component, DestroyRef, OnInit } from '@angular/core';
+import { Component, DestroyRef, OnInit, computed, signal } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { HttpErrorResponse } from '@angular/common/http';
 import { combineLatest } from 'rxjs';
 
-import { dateFormats } from '@components/date-formats';
+import { dateFormats } from '@models/date-formats';
+
 import { FlashComponent } from '@components/flash/flash.component';
 import { ScheduleComponent } from '@components/schedule/schedule.component';
 
@@ -37,23 +38,29 @@ import { LeaveTypeModalComponent } from './leave-type-modal/leave-type-modal.com
     ],
 })
 export class HomeComponent implements OnInit {
-    public countries!: Country[];
+    protected readonly countries = signal<Country[]>([]);
 
-    public dateFormats: string[] = dateFormats;
+    protected readonly dateFormats = signal(dateFormats);
 
-    public timeZones!: TimeZoneModel[];
+    protected readonly timeZones = signal<TimeZoneModel[]>([]);
 
-    public carryOverDays: number[] = [];
+    protected readonly carryOverDays = computed(() => {
+        const days = Array<number>();
+        for (let i = 0; i < 22; i++) {
+            days.push(i);
+        }
+        days.push(1000);
 
-    public get currentYear() {
-        return new Date().getFullYear();
+        return days;
+    });
+
+    protected readonly currentYear = computed(() => new Date().getFullYear());
+
+    protected readonly lastYear = computed(()=> this.currentYear() - 1);
+
+    protected get companyName() {
+        return this.companySvc.settingsForm.value.name;
     }
-
-    public get lastYear() {
-        return this.currentYear - 1;
-    }
-
-    public companyName: string = '';
 
     public get settingsForm() {
         return this.companySvc.settingsForm;
@@ -72,29 +79,24 @@ export class HomeComponent implements OnInit {
     }
 
     public get days() {
-        return this.companySvc.settingsForm.controls.schedule.controls;
+        return this.companySvc.settingsForm.controls.schedule;
     }
 
-    public submitting = false;
+    protected readonly submitting = signal(false);
 
     constructor(
         private destroyed: DestroyRef,
         private readonly router: Router,
         private readonly companySvc: CompanyService,
         private readonly msgsSvc: MessagesService
-    ) {
-        for (let i = 0; i < 22; i++) {
-            this.carryOverDays.push(i);
-        }
-        this.carryOverDays.push(1000);
-    }
+    ) {}
 
     public ngOnInit(): void {
         combineLatest([this.companySvc.timeZones(), this.companySvc.countries(), this.companySvc.getSettings()])
             .pipe(takeUntilDestroyed(this.destroyed))
             .subscribe(([timeZones, countries, data]) => {
-                this.timeZones = timeZones;
-                this.countries = countries;
+                this.timeZones.set(timeZones);
+                this.countries.set(countries);
 
                 this.settingsForm.setValue({
                     name: data.name,
@@ -104,7 +106,7 @@ export class HomeComponent implements OnInit {
                     showHoliday: data.showHoliday,
                     country: data.country,
                     carryOver: data.carryOver,
-                    schedule: [],
+                    schedule: data.schedule,
                 });
 
                 this.companySvc.fillSchedule(data.schedule);
@@ -119,18 +121,18 @@ export class HomeComponent implements OnInit {
             return;
         }
 
-        this.submitting = true;
+        this.submitting.set(true);
 
         this.companySvc
             .saveSettings()
             .pipe(takeUntilDestroyed(this.destroyed))
             .subscribe({
                 next: () => {
-                    this.submitting = false;
+                    this.submitting.set(false);
                     this.msgsSvc.isSuccess('Company details updated');
                 },
                 error: (e: HttpErrorResponse) => {
-                    this.submitting = false;
+                    this.submitting.set(false);
                     if (e.status == 400) {
                         this.msgsSvc.hasErrors(e.error.errors);
                     } else {
@@ -148,7 +150,7 @@ export class HomeComponent implements OnInit {
             return;
         }
 
-        this.submitting = true;
+        this.submitting.set(true);
 
         this.companySvc
             .saveSchedule()
@@ -156,7 +158,7 @@ export class HomeComponent implements OnInit {
             .subscribe({
                 next: () => {
                     this.msgsSvc.isSuccess('Schedule updated');
-                    this.submitting = false;
+                    this.submitting.set(false);
                 },
                 error: (e: HttpErrorResponse) => {
                     if (e.status == 400) {
@@ -164,7 +166,7 @@ export class HomeComponent implements OnInit {
                     } else {
                         this.msgsSvc.isError('Unable to update schedule');
                     }
-                    this.submitting = false;
+                    this.submitting.set(false);
                 },
             });
     }
@@ -197,6 +199,5 @@ export class HomeComponent implements OnInit {
         this.companySvc.resetLeaveTypeForm();
     }
 
-    public removeLeaveType(id: number)
-    {}
+    public removeLeaveType(id: number) {}
 }

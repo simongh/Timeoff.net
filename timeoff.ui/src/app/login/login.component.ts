@@ -24,7 +24,7 @@ export class LoginComponent {
 
     protected readonly submitting = signal(false);
 
-    public get loginForm() {
+    protected get loginForm() {
         return this.authService.loginForm;
     }
 

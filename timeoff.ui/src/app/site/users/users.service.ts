@@ -4,16 +4,17 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { endOfToday, formatDate, isAfter, parseISO } from 'date-fns';
 import { UserModel } from './user.model';
 
-import { dateString } from '@components/types';
+import { dateString } from '@models/types';
+import { createScheduleForm } from '@components/schedule/schedule-form';
 
 import { AllowanceSummaryModel } from '@services/calendar/allowance-summary.model';
 
-import { ScheduleModel } from '../../models/schedule.model';
+import { ScheduleModel } from '@models/schedule.model';
+
 import { UserAbsencesModel } from './user-absences.model';
 import { UserListModel } from './user-list.model';
 
 type UserFromGroup = ReturnType<UsersService['createUserForm']>;
-
 type AdjustmentFormGroup = ReturnType<UsersService['createAdjustmentForm']>;
 
 @Injectable()
@@ -63,7 +64,7 @@ export class UsersService {
     public updateUser(id: number) {
         return this.client.put<void>(`/api/users/${id}`, {
             ...this.form.value,
-            endDate: this.form.value.endDate == "" ? null : this.form.value.endDate,
+            endDate: this.form.value.endDate == '' ? null : this.form.value.endDate,
         });
     }
 
@@ -76,15 +77,7 @@ export class UsersService {
     }
 
     public updateSchedule(id: number) {
-        return this.updateUserSchedule(id, {
-            monday: this.form.value.schedule![0]!,
-            tuesday: this.form.value.schedule![1]!,
-            wednesday: this.form.value.schedule![2]!,
-            thursday: this.form.value.schedule![3]!,
-            friday: this.form.value.schedule![4]!,
-            saturday: this.form.value.schedule![5]!,
-            sunday: this.form.value.schedule![6]!,
-        });
+        return this.updateUserSchedule(id, this.form.value.schedule as ScheduleModel);
     }
 
     public resetSchedule(id: number) {
@@ -110,17 +103,9 @@ export class UsersService {
             startDate: formatDate(model.startDate, 'yyyy-MM-dd'),
             endDate: model.endDate ? formatDate(model.endDate, 'yyyy-MM-dd') : null,
             isActive: model.isActive,
-            schedule: [],
+            schedule: model.schedule,
             scheduleOverride: model.scheduleOverride,
         });
-
-        this.fillSchedule(model.schedule);
-    }
-
-    public fillSchedule(schedule: ScheduleModel) {
-        this.form.controls.schedule.clear();
-
-        Object.values(schedule).map((s) => this.form.controls.schedule.push(this.fb.control(s, { nonNullable: true })));
     }
 
     public fillAdjustments(model: AllowanceSummaryModel) {
@@ -144,7 +129,7 @@ export class UsersService {
                 startDate: [null as dateString | null, Validators.required],
                 endDate: [null as dateString | null],
                 isActive: [true],
-                schedule: this.fb.array<boolean>([]),
+                schedule: createScheduleForm(this.fb),
                 scheduleOverride: [false],
             },
             {

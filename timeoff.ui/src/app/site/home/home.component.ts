@@ -1,17 +1,8 @@
-import {
-    Component,
-    DestroyRef,
-    OnInit,
-    booleanAttribute,
-    computed,
-    effect,
-    numberAttribute,
-    signal,
-} from '@angular/core';
+import { Component, DestroyRef, OnInit, booleanAttribute, computed, numberAttribute, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { ActivatedRoute, RouterLink } from '@angular/router';
-import { startOfMonth, startOfYear } from 'date-fns';
+import { RouterLink } from '@angular/router';
+import { startOfMonth } from 'date-fns';
 import { injectQueryParams } from 'ngxtension/inject-query-params';
 
 import { FlashComponent } from '@components/flash/flash.component';
@@ -37,30 +28,30 @@ import { PublicHolidayModel } from '@models/public-holiday.model';
     ],
     providers: [CalendarService],
 })
-export class HomeComponent {
-    public name = signal('');
+export class HomeComponent implements OnInit {
+    protected readonly name = signal('');
 
-    protected year = injectQueryParams((p) => numberAttribute(p['year'] ?? new Date().getFullYear()));
+    protected readonly year = injectQueryParams((p) => numberAttribute(p['year'] ?? new Date().getFullYear()));
 
-    protected nextYear = computed(() => this.year() + 1);
+    protected readonly nextYear = computed(() => this.year() + 1);
 
-    protected lastYear = computed(() => this.year() - 1);
+    protected readonly lastYear = computed(() => this.year() - 1);
 
-    protected showFullYear = injectQueryParams((p) => booleanAttribute(p['showFullYear'] ?? false));
+    protected readonly showFullYear = injectQueryParams((p) => booleanAttribute(p['showFullYear'] ?? false));
 
-    public allowanceSummary = signal({} as AllowanceSummaryModel);
+    protected readonly allowanceSummary = signal({} as AllowanceSummaryModel);
 
-    public holidays = signal<PublicHolidayModel[]>([]);
+    protected readonly holidays = signal<PublicHolidayModel[]>([]);
 
-    protected managerName = signal('manager');
+    protected readonly managerName = signal('manager');
 
-    protected managerEmail = signal('manager@email');
+    protected readonly managerEmail = signal('manager@email');
 
-    protected teamName = signal('team');
+    protected readonly teamName = signal('team');
 
-    protected teamId = signal(0);
+    protected readonly teamId = signal(0);
 
-    public start = computed(() => {
+    protected readonly start = computed(() => {
         if (this.showFullYear()) {
             return new Date(this.year(), 0, 1);
         } else {
@@ -68,19 +59,16 @@ export class HomeComponent {
         }
     });
 
-    constructor(
-        private readonly destroyed: DestroyRef,
-        private readonly calendarSvc: CalendarService
-    ) {
-        effect(() => {
-            this.calendarSvc
-                .get(this.year())
-                .pipe(takeUntilDestroyed(this.destroyed))
-                .subscribe((calendar) => {
-                    this.allowanceSummary.set(calendar.summary);
-                    this.holidays.set(calendar.holidays);
-                    this.name.set(`${calendar.firstName} ${calendar.lastName}`);
-                });
-        });
+    constructor(private readonly destroyed: DestroyRef, private readonly calendarSvc: CalendarService) {}
+
+    public ngOnInit(): void {
+        this.calendarSvc
+            .get(this.year())
+            .pipe(takeUntilDestroyed(this.destroyed))
+            .subscribe((calendar) => {
+                this.allowanceSummary.set(calendar.summary);
+                this.holidays.set(calendar.holidays);
+                this.name.set(`${calendar.firstName} ${calendar.lastName}`);
+            });
     }
 }

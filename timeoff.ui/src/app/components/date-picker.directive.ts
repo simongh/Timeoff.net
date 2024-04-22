@@ -1,6 +1,5 @@
 import { AfterViewInit, Directive, ElementRef, EventEmitter, Optional, Output } from '@angular/core';
 import { NgControl } from '@angular/forms';
-import { By } from '@angular/platform-browser';
 import { formatISO, isValid, parseISO } from 'date-fns';
 
 declare var $: any;

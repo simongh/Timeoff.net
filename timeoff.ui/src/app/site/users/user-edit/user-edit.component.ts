@@ -1,10 +1,11 @@
-import { Component, DestroyRef, OnInit } from '@angular/core';
+import { Component, DestroyRef, OnInit, numberAttribute, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { switchMap } from 'rxjs';
+import { injectParams } from 'ngxtension/inject-params';
 
 import { DatePickerDirective } from '@components/date-picker.directive';
 import { TeamSelectComponent } from '@components/team-select/team-select.component';
@@ -15,6 +16,7 @@ import { MessagesService } from '@services/messages/messages.service';
 import { UsersService } from '../users.service';
 import { UserBreadcrumbComponent } from '../user-breadcrumb/user-breadcrumb.component';
 import { UserDetailsComponent } from '../user-details/user-details.component';
+import { LoggedInUserService } from '@services/logged-in-user/logged-in-user.service';
 
 @Component({
     selector: 'user-edit',
@@ -34,43 +36,37 @@ import { UserDetailsComponent } from '../user-details/user-details.component';
     ],
 })
 export class UserEditComponent implements OnInit {
-    public companyName = '';
+    protected readonly companyName = this.currentUser.companyName;
 
-    public dateFormat = 'yyyy-mm-dd';
+    protected readonly dateFormat = this.currentUser.dateFormat;
 
-    public id = 0;
+    protected readonly id = injectParams((p) => numberAttribute(p['id']));
 
-    public get form() {
+    protected get form() {
         return this.usersSvc.form;
     }
 
-    public get fullName() {
+    protected get fullName() {
         return this.usersSvc.fullName;
     }
 
-    public get userEnabled() {
+    protected get userEnabled() {
         return this.usersSvc.userEnabled;
     }
 
-    public submitting = false;
+    protected readonly submitting = signal(false);
 
     constructor(
-        private readonly route: ActivatedRoute,
         private destroyed: DestroyRef,
         private readonly usersSvc: UsersService,
-        private readonly msgsSvc: MessagesService
+        private readonly msgsSvc: MessagesService,
+        private readonly currentUser: LoggedInUserService
     ) {}
 
     public ngOnInit(): void {
-        this.route.paramMap
-            .pipe(
-                takeUntilDestroyed(this.destroyed),
-                switchMap((p) => {
-                    this.id = Number.parseInt(p.get('id')!);
-
-                    return this.usersSvc.getUser(this.id);
-                })
-            )
+        this.usersSvc
+            .getUser(this.id())
+            .pipe(takeUntilDestroyed(this.destroyed))
             .subscribe((user) => {
                 this.usersSvc.fillForm(user);
             });
@@ -83,14 +79,14 @@ export class UserEditComponent implements OnInit {
             return;
         }
 
-        this.submitting = true;
+        this.submitting.set(true);
 
         this.usersSvc
-            .updateUser(this.id)
+            .updateUser(this.id())
             .pipe(takeUntilDestroyed(this.destroyed))
             .subscribe({
                 next: () => {
-                    this.submitting = false;
+                    this.submitting.set(false);
                     this.msgsSvc.isSuccess(`Details for ${this.fullName} were updated`);
                 },
                 error: (e: HttpErrorResponse) => {
@@ -100,25 +96,25 @@ export class UserEditComponent implements OnInit {
                         this.msgsSvc.isError('Unable to update details');
                     }
 
-                    this.submitting = false;
+                    this.submitting.set(false);
                 },
             });
     }
 
     public resetPassword() {
-        this.submitting = true;
+        this.submitting.set(true);
 
         this.usersSvc
-            .resetPassword(this.id)
+            .resetPassword(this.id())
             .pipe(takeUntilDestroyed(this.destroyed))
             .subscribe({
                 next: () => {
-                    this.submitting = false;
+                    this.submitting.set(false);
                     this.msgsSvc.isSuccess('Password reset');
                 },
                 error: () => {
                     this.msgsSvc.isError('Unable to reset password');
-                    this.submitting = false;
+                    this.submitting.set(false);
                 },
             });
     }
