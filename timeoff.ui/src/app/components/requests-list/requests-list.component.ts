@@ -11,7 +11,7 @@ import { DatePartPipe } from '../date-part.pipe';
     imports: [CommonModule, DatePartPipe],
 })
 export class RequestsListComponent {
-    public requests = input<LeaveRequestModel[]>([]);
+    public readonly requests = input<LeaveRequestModel[]>([]);
 
-    public dateFormat = input('yyyy-MM-dd');
+    public readonly dateFormat = input('yyyy-MM-dd');
 }

@@ -1,11 +1,12 @@
-import { Component, DestroyRef, OnInit, computed, numberAttribute, signal } from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { Component, DestroyRef, computed, numberAttribute, signal } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
 import { switchMap } from 'rxjs';
 import { startOfYear } from 'date-fns';
+import { injectQueryParams } from 'ngxtension/inject-query-params';
 
 import { FlashComponent } from '@components/flash/flash.component';
 import { CalendarComponent } from '@components/calendar/calendar.component';
@@ -13,12 +14,12 @@ import { ValidatorMessageComponent } from '@components/validator-message/validat
 import { DatePickerDirective } from '@components/date-picker.directive';
 
 import { MessagesService } from '@services/messages/messages.service';
+import { LoggedInUserService } from '@services/logged-in-user/logged-in-user.service';
 
 import { PublicHolidayModel } from '@models/public-holiday.model';
 
 import { PublicHolidaysService } from './public-holidays.service';
 import { AddNewModalComponent } from './add-new-modal.component';
-import { LoggedInUserService } from '@services/logged-in-user/logged-in-user.service';
 
 @Component({
     standalone: true,
@@ -35,24 +36,25 @@ import { LoggedInUserService } from '@services/logged-in-user/logged-in-user.ser
         DatePickerDirective,
     ],
 })
-export class PublicHolidaysComponent implements OnInit {
-    protected companyName = computed(() => this.currentUser.companyName);
+export class PublicHolidaysComponent {
+    protected readonly companyName = this.currentUser.companyName;
 
-    protected dateFormat = computed(() => this.currentUser.dateFormat);
+    protected readonly dateFormat = this.currentUser.dateFormat;
 
-    protected currentYear = signal(new Date().getFullYear());
+    protected readonly currentYear = injectQueryParams((p) => numberAttribute(p['year'] ?? new Date().getFullYear()));
 
-    protected nextYear = computed(() => this.currentYear() + 1);
+    protected readonly nextYear = computed(() => this.currentYear() + 1);
 
-    protected lastYear = computed(() => this.currentYear() - 1);
+    protected readonly lastYear = computed(() => this.currentYear() - 1);
 
-    protected start = computed(() => {
-        var d = startOfYear(new Date());
+    protected readonly start = computed(() => {
+        this.getHolidays();
+        const d = startOfYear(new Date());
         d.setFullYear(this.currentYear());
         return d;
     });
 
-    protected holidays = signal<PublicHolidayModel[]>([]);
+    protected readonly holidays = signal<PublicHolidayModel[]>([]);
 
     protected get holidaysForm() {
         return this.holidaySvc.holidays;
@@ -63,11 +65,7 @@ export class PublicHolidaysComponent implements OnInit {
         private readonly msgsSvc: MessagesService,
         private readonly currentUser: LoggedInUserService,
         private destroyed: DestroyRef,
-        private readonly route: ActivatedRoute
-    ) {}
-
-    public ngOnInit(): void {
-        this.getHolidays();
+    ) {
     }
 
     public remove(id?: number | null) {
@@ -123,19 +121,9 @@ export class PublicHolidaysComponent implements OnInit {
     }
 
     public getHolidays() {
-        this.route.queryParamMap
-            .pipe(
-                takeUntilDestroyed(this.destroyed),
-                switchMap((r) => {
-                    if (r.has('year')) {
-                        this.currentYear.set(numberAttribute(r.get('year')!));
-                    } else {
-                        this.currentYear.set(new Date().getFullYear());
-                    }
-
-                    return this.holidaySvc.get(this.currentYear());
-                })
-            )
+        this.holidaySvc
+            .get(this.currentYear())
+            .pipe(takeUntilDestroyed(this.destroyed))
             .subscribe({
                 next: (data) => {
                     this.loadHolidays(data);

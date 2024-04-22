@@ -1,8 +1,6 @@
-import { dateString } from '@components/types';
+import { dateString } from '@models/types';
 
-import { TeamModel } from '@services/company/team.model';
-
-import { ScheduleModel } from '../../models/schedule.model';
+import { ScheduleModel } from '@models/schedule.model';
 
 export interface UserModel {
     id: number;

@@ -15,10 +15,10 @@
 
 <div class="col-md-3 list-group">
   <a class="list-group-item selected-item">General details</a>
-  <a routerLink="/users" [queryParams]="{team: id}" class="list-group-item">Employees from team</a>
+  <a routerLink="/users" [queryParams]="{team: id()}" class="list-group-item">Employees from team</a>
 </div>
 
-<form method="POST" [formGroup]="editForm" id="team_edit_form">
+<form [formGroup]="editForm" id="team_edit_form">
 
     <div class="col-md-7">
 
@@ -72,7 +72,7 @@
             <label for="allowance">Allowance</label>
 
             <select class="form-control" formControlName="allowance" id="allowance">
-                <option *ngFor="let a of allowances" value="{{a}}">{{a == 0 ? "None":a}}</option>
+                <option *ngFor="let a of allowances()" value="{{a}}">{{a == 0 ? "None":a}}</option>
             </select>
         </div>
 

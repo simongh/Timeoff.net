@@ -1,10 +1,9 @@
-import { Component, DestroyRef, effect, input, signal } from '@angular/core';
+import { Component, inject, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { computedAsync } from 'ngxtension/computed-async';
 
 import { CompanyService } from '@services/company/company.service';
-import { TeamModel } from '@services/company/team.model';
 
 @Component({
     selector: 'team-select',
@@ -15,20 +14,13 @@ import { TeamModel } from '@services/company/team.model';
     providers: [CompanyService],
 })
 export class TeamSelectComponent {
-    protected readonly teams = signal<TeamModel[]>([]);
+    private readonly companySvc = inject(CompanyService); 
+
+    protected readonly teams = computedAsync(() => this.companySvc.getTeams(), { initialValue: [] });
 
     public control = input.required<FormControl<number | null>>();
 
     public for = input('');
 
     public allowAll = input(false);
-
-    constructor(private destroyed: DestroyRef, private readonly companySvc: CompanyService) {
-        effect(() => {
-            this.companySvc
-                .getTeams()
-                .pipe(takeUntilDestroyed(this.destroyed))
-                .subscribe((teams) => this.teams.set(teams));
-        });
-    }
 }

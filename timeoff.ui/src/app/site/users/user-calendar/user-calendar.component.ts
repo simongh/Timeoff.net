@@ -1,9 +1,9 @@
-import { Component, DestroyRef, OnInit, computed, effect, numberAttribute, signal } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Component, computed, inject, numberAttribute } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { UserBreadcrumbComponent } from '../user-breadcrumb/user-breadcrumb.component';
 import { injectParams } from 'ngxtension/inject-params';
 import { injectQueryParams } from 'ngxtension/inject-query-params';
+import { computedAsync } from 'ngxtension/computed-async';
 
 import { CalendarComponent } from '@components/calendar/calendar.component';
 import { AllowanceBreakdownComponent } from '@components/allowance-breakdown/allowance-breakdown.component';
@@ -31,23 +31,22 @@ import { UserDetailsComponent } from '../user-details/user-details.component';
     ],
 })
 export class UserCalendarComponent {
-    public id = injectParams((p) => numberAttribute(p['id']));
+    private readonly calendarSvc = inject(CalendarService);
 
-    public currentYear = injectQueryParams((p) => numberAttribute(p['year'] ?? new Date().getFullYear()));
+    protected readonly id = injectParams((p) => numberAttribute(p['id']));
 
-    public nextYear = computed(() => this.currentYear() + 1);
+    protected readonly currentYear = injectQueryParams((p) => numberAttribute(p['year'] ?? new Date().getFullYear()));
 
-    public lastYear = computed(() => this.currentYear() - 1);
+    protected readonly nextYear = computed(() => this.currentYear() + 1);
 
-    public start = computed(() => new Date(this.currentYear(), 0, 1));
+    protected readonly lastYear = computed(() => this.currentYear() - 1);
 
-    public calendar: CalendarModel;
+    protected readonly start = computed(() => {
+        return new Date(this.currentYear(), 0, 1);
+    });
 
-    constructor(
-        private destroyed: DestroyRef,
-        private readonly calendarSvc: CalendarService
-    ) {
-        this.calendar = {
+    protected readonly calendar = computedAsync(() => this.calendarSvc.get(this.currentYear(), this.id()), {
+        initialValue: {
             holidays: [],
             firstName: '',
             lastName: '',
@@ -66,16 +65,6 @@ export class UserCalendarComponent {
                 remaining: 0,
                 leaveSummary: [],
             },
-        } as CalendarModel;
-
-        effect(()=> {
-            this.calendarSvc.get(this.currentYear(), this.id())
-            .pipe(
-                takeUntilDestroyed(this.destroyed),
-            )
-            .subscribe((calendar) => {
-                this.calendar = calendar;
-            });
-        });
-    }
+        } as CalendarModel,
+    });
 }

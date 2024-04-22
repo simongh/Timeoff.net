@@ -47,7 +47,7 @@
                                 <label for="leave_type_id">Leave type</label>
                                 <select class="form-control" id="leave_type_id" formControlName="leaveType">
                                     <option [value]="null">All</option>
-                                    <option *ngFor="let lt of leaveTypes" value="{{lt.id}}">{{lt.name}}</option>
+                                    <option *ngFor="let lt of leaveTypes()" value="{{lt.id}}">{{lt.name}}</option>
                                 </select>
                             </div>
                         </div>
@@ -62,7 +62,7 @@
                                         data-trigger="focus hover">
                                     <i class="fa fa-download"></i> .csv
                                 </button>
-                                <button class="btn btn-success single-click" [disabled]="submitting" type="button">Update results</button>
+                                <button class="btn btn-success single-click" [disabled]="submitting()" type="button">Update results</button>
                             </div>
                         </div>
                     </div>
@@ -75,10 +75,12 @@
     <span class="col-md-12">Leaves</span>
 </div>
 <div class="row">
-    <div *ngIf="results.length == 0" class="col-md-12 text-muted">
+    @if (results().length == 0) {
+    <div class="col-md-12 text-muted">
         There are no leave requests.
     </div>
-    <div *ngIf="results.length > 0" class="col-md-12">
+    } @else {
+    <div class="col-md-12">
         <p class="visible-xs-block"><em class="text-muted">Scroll table horizontally</em></p>
         <div class="table-responsive">
 <!--                 <table class="table table-hover user-requests-table">
@@ -115,4 +117,5 @@
             </table> -->
         </div>
     </div>
+    }   
 </div>

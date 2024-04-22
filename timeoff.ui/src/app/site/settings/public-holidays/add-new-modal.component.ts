@@ -22,7 +22,7 @@ export class AddNewModalComponent {
         return this.holidaySvc.addForm!;
     }
 
-    protected dateFormat = computed(()=> this.currentUser.dateFormat);
+    protected readonly dateFormat = this.currentUser.dateFormat;
 
     @Input()
     public set year(value: number) {
@@ -32,7 +32,7 @@ export class AddNewModalComponent {
     @Output()
     public added = new EventEmitter();
 
-    protected submitting = signal(false);
+    protected readonly submitting = signal(false);
 
     constructor(
         private readonly holidaySvc: PublicHolidaysService,

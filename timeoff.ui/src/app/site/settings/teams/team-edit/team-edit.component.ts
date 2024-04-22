@@ -1,15 +1,15 @@
-import { Component, DestroyRef, Input, OnInit } from '@angular/core';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { Component, DestroyRef, OnInit, numberAttribute } from '@angular/core';
+import { Router, RouterLink } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { HttpErrorResponse } from '@angular/common/http';
-import { switchMap } from 'rxjs';
+import { injectParams } from 'ngxtension/inject-params';
 
 import { FlashComponent } from '@components/flash/flash.component';
 import { ValidatorMessageComponent } from '@components/validator-message/validator-message.component';
 import { UserListComponent } from '@components/user-select/user-select.component';
-import { getAllowances } from '@components/allowances';
+import { getAllowances } from '@models/allowances';
 
 import { MessagesService } from '@services/messages/messages.service';
 
@@ -39,12 +39,11 @@ export class TeamEditComponent implements OnInit {
         return this.teamSvc.form;
     }
 
-    public allowances = getAllowances();
+    protected readonly allowances = getAllowances();
 
-    public id!: number;
+    protected readonly id = injectParams((p) => numberAttribute(p['id']));
 
     constructor(
-        private readonly route: ActivatedRoute,
         private destroyed: DestroyRef,
         private readonly router: Router,
         private readonly teamSvc: TeamsService,
@@ -52,19 +51,9 @@ export class TeamEditComponent implements OnInit {
     ) {}
 
     public ngOnInit(): void {
-        this.route.paramMap
-            .pipe(
-                takeUntilDestroyed(this.destroyed),
-                switchMap((p) => {
-                    if (p.has('id')) {
-                        this.id = Number.parseInt(p.get('id')!);
-                    } else {
-                        throw new Error('No team id specified');
-                    }
-
-                    return this.teamSvc.get(this.id);
-                })
-            )
+        this.teamSvc
+            .get(this.id())
+            .pipe(takeUntilDestroyed(this.destroyed))
             .subscribe((data) => {
                 this.editForm.setValue({
                     name: data.name,
@@ -85,7 +74,7 @@ export class TeamEditComponent implements OnInit {
 
         const f = this.editForm.value;
         this.teamSvc
-            .update(this.id)
+            .update(this.id())
             .pipe(takeUntilDestroyed(this.destroyed))
             .subscribe({
                 next: () => this.messagesSvc.isSuccess(`Team ${this.name} was updated`),
@@ -101,7 +90,7 @@ export class TeamEditComponent implements OnInit {
 
     public delete() {
         this.teamSvc
-            .delete(this.id)
+            .delete(this.id())
             .pipe(takeUntilDestroyed(this.destroyed))
             .subscribe({
                 next: () => {

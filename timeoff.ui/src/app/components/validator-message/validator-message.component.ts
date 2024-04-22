@@ -1,5 +1,5 @@
 import { NgIf } from '@angular/common';
-import { Component, Host, Input, Optional, SkipSelf } from '@angular/core';
+import { Component, Host, Input, Optional, SkipSelf, computed, input } from '@angular/core';
 import { ControlContainer, FormControl } from '@angular/forms';
 
 @Component({
@@ -10,36 +10,36 @@ import { ControlContainer, FormControl } from '@angular/forms';
     styleUrl: './validator-message.component.scss',
 })
 export class ValidatorMessageComponent {
-    @Input()
-    public control!: FormControl;
+    public readonly control = input<FormControl | null>(null);
+    
+    public readonly controlName = input<string | null>(null);
 
-    @Input()
-    public controlName!: string;
+    public readonly validatorName = input<string | null>(null);
 
-    @Input()
-    public validatorName: string | null = null;
+    private readonly parent: ControlContainer;
 
-    private parent: ControlContainer;
-
-    constructor(@Optional() @Host() @SkipSelf() parent: ControlContainer) {
-        this.parent = parent;
-    }
-
-    protected get hasError(): boolean {
-        const control = !!this.control ? this.control : this.parent.control?.get(this.controlName);
+    protected get hasError() {
+        const control = this.control() || this.parent.control?.get(this.controlName()!);
 
         if (!control) {
             throw new Error(`Control was not found for validator ${this.validatorName}`);
         }
 
         if (control.touched) {
-            if (this.validatorName) {
-                return control.hasError(this.validatorName) || (control.parent?.hasError(this.validatorName) ?? false);
+            if (this.validatorName()) {
+                return (
+                    control.hasError(this.validatorName()!) ||
+                    (control.parent?.hasError(this.validatorName()!) ?? false)
+                );
             } else {
                 return control.errors != null;
             }
         } else {
             return false;
         }
+    };
+
+    constructor(@Optional() @Host() @SkipSelf() parent: ControlContainer) {
+        this.parent = parent;
     }
 }

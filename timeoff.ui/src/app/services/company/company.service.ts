@@ -1,10 +1,14 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
+
+import { createScheduleForm } from '@components/schedule/schedule-form';
+
+import { ScheduleModel } from '@models/schedule.model';
+
 import { TeamModel } from './team.model';
 import { UserModel } from './user.model';
 import { SettingsModel } from './settings.model';
-import { ScheduleModel } from '../../models/schedule.model';
 import { LeaveTypeModel } from './leave-type.model';
 import { Country } from './country.model';
 import { TimeZoneModel } from './time-zone.model';
@@ -50,15 +54,7 @@ export class CompanyService {
     public saveSchedule() {
         const schedule = this.settingsForm.value.schedule!;
 
-        return this.client.put<void>('/api/company/schedule', {
-            monday: schedule[0],
-            tuesday: schedule[1],
-            wednesday: schedule![2],
-            thursday: schedule[3],
-            friday: schedule[4],
-            saturday: schedule[5],
-            sunday: schedule[6],
-        });
+        return this.client.put<void>('/api/company/schedule', schedule);
     }
 
     public updateLeaveTypes() {
@@ -69,11 +65,6 @@ export class CompanyService {
     }
 
     public fillSchedule(schedule: ScheduleModel) {
-        this.settingsForm.controls.schedule.clear();
-
-        Object.values(schedule).map((s) =>
-            this.settingsForm.controls.schedule.push(this.fb.control(s, { nonNullable: true }))
-        );
     }
 
     public fillLeaveTypes(types: LeaveTypeModel[]) {
@@ -115,7 +106,7 @@ export class CompanyService {
             carryOver: [5, [Validators.min(0), Validators.max(1000)]],
             showHoliday: [false],
             hideTeamView: [false],
-            schedule: this.fb.array<boolean>([]),
+            schedule: createScheduleForm(this.fb),
         });
 
         return form;

@@ -2,10 +2,9 @@ import { Injectable } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { endOfMonth, formatDate, formatISO, parseISO, startOfMonth } from 'date-fns';
 
-import { dateString } from '@components/types';
+import { dateString } from '@models/types';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { AllowanceModel } from './allowance.model';
-import { map } from 'rxjs';
 
 type SearchFormGroup = ReturnType<AllowanceUsageService['createForm']>;
 

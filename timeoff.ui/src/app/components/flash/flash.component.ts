@@ -13,9 +13,9 @@ import { FlashModel } from './flash.model';
     providers: [],
 })
 export class FlashComponent implements OnInit {
-    private messages = signal(new FlashModel());
+    private readonly messages = signal(new FlashModel());
 
-    protected readonly errors = computed(()=> {
+    protected readonly errors = computed(() => {
         if (this.messages().isError) {
             return this.messages().messages;
         } else {
@@ -23,7 +23,7 @@ export class FlashComponent implements OnInit {
         }
     });
 
-    protected readonly success = computed(()=> {
+    protected readonly success = computed(() => {
         if (!this.messages().isError) {
             return this.messages().messages;
         } else {
@@ -31,18 +31,16 @@ export class FlashComponent implements OnInit {
         }
     });
 
-    constructor(private readonly msgSvc: MessagesService, private destroyed: DestroyRef) {
-        effect(()=>{
-            this.msgSvc
+    constructor(private readonly msgSvc: MessagesService, private destroyed: DestroyRef) {}
+
+    public ngOnInit(): void {
+        this.msgSvc
             .getMessages()
             .pipe(takeUntilDestroyed(this.destroyed))
             .subscribe((m) => {
                 this.messages.set(m);
             });
-        })
-    }
 
-    public ngOnInit(): void {
         this.msgSvc.clearStored();
     }
 }

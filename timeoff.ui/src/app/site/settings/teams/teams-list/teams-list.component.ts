@@ -1,4 +1,4 @@
-import { Component, DestroyRef, OnInit, ViewChild } from '@angular/core';
+import { Component, DestroyRef, OnInit, ViewChild, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
@@ -17,7 +17,7 @@ import { AddNewModalComponent } from './add-new-modal.component';
     imports: [FlashComponent, CommonModule, RouterLink, YesPipe, AddNewModalComponent],
 })
 export class TeamsListComponent implements OnInit {
-    public teams: TeamModel[] = [];
+    protected readonly teams = signal<TeamModel[]>([]);
 
     constructor(private readonly teamSvc: TeamsService, private destroyed: DestroyRef) {}
 
@@ -34,7 +34,7 @@ export class TeamsListComponent implements OnInit {
             .getTeams()
             .pipe(takeUntilDestroyed(this.destroyed))
             .subscribe((t) => {
-                this.teams = t;
+                this.teams.set(t);
             });
     }
 }

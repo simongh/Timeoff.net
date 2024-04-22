@@ -1,7 +1,7 @@
 <div class="modal fade" id="add_new_leave_type_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form id="leave_type_new_form" [formGroup]="form">
+            <form id="leave_type_new_form" [formGroup]="form()">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title">Add new Leave Type</h4>
@@ -27,7 +27,7 @@
 
                     <div class="form-group">
                         <div class="dropdown" data-tom-color-picker="1">
-                            <colour-picker [control]="form.controls.colour">Pick up color for new type</colour-picker>
+                            <colour-picker [control]="form().controls.colour">Pick up color for new type</colour-picker>
                             <!-- <button type="button" class="btn btn-default dropdown-toggle leave_type_color_1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-paint-brush"></i> Pick up color for new type</button>
                             <ul class="dropdown-menu">
                                 <partial name="_OptionsForColourPicker" />

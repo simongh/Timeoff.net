@@ -11,5 +11,5 @@ import { LeaveSummary } from '@services/calendar/leave-summary.model';
     styleUrl: './leave-summary.component.scss',
 })
 export class LeaveSummaryComponent {
-    public items = input<LeaveSummary[]>([]);
+    public readonly items = input<LeaveSummary[]>([]);
 }

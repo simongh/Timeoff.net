@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, DestroyRef, OnInit } from '@angular/core';
+import { Component, DestroyRef, OnInit, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
@@ -23,15 +23,15 @@ import { ReactiveFormsModule } from '@angular/forms';
     providers: [CompanyService, LeaveService],
 })
 export class LeaveComponent implements OnInit {
-    public results: LeaveResultModel[] = [];
+    protected readonly results = signal<LeaveResultModel[]>([]);
 
-    public leaveTypes: LeaveTypeModel[] = [];
+    protected readonly leaveTypes = signal<LeaveTypeModel[]>([]);
 
-    public get form() {
+    protected get form() {
         return this.leaveSvc.form;
     }
 
-    public submitting = false;
+    protected readonly submitting = signal(false);
     
     constructor(
         private readonly companySvc: CompanyService,
@@ -44,7 +44,7 @@ export class LeaveComponent implements OnInit {
             .getLeaveTypes()
             .pipe(takeUntilDestroyed(this.destroyed))
             .subscribe((data) => {
-                this.leaveTypes = data;
+                this.leaveTypes.set(data);
             });
     }
 }

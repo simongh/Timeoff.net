@@ -18,16 +18,16 @@ import { UsersService } from '../users.service';
     imports: [CommonModule, RouterLink, FlashComponent, RouterLinkActive],
 })
 export class UserDetailsComponent {
-    public name = input.required<string>();
+    public readonly name = input.required<string>();
 
-    public isActive = input.required<boolean>();
+    public readonly isActive = input.required<boolean>();
 
-    public id = input.required<number>();
+    public readonly id = input.required<number>();
 
     @Output()
     public deleting = new EventEmitter();
 
-    public submitting = signal(false);
+    protected readonly submitting = signal(false);
 
     constructor(
         private destroyed: DestroyRef,
@@ -46,7 +46,7 @@ export class UserDetailsComponent {
                     this.msgsSvc.isSuccess('Employee data removed', true);
                     this.submitting.set(false);
 
-                    this.router.navigate(['users']);
+                    this.router.navigateByUrl('/users');
                 },
                 error: (e: HttpErrorResponse) => {
                     if (e.status == 400) {

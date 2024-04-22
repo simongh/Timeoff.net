@@ -1,7 +1,7 @@
 <h1>Allowance usage</h1>
 
 <div class="row">
-    <div class="col-md-6 lead">Shows allowance usage in {{prettyDateRange}}</div>
+    <div class="col-md-6 lead">Shows allowance usage in {{prettyDateRange()}}</div>
 </div>
 
 <flash-message/>
@@ -60,7 +60,7 @@
                                         data-trigger="focus hover">
                                     <i class="fa fa-download"></i> .csv
                                 </button>
-                                <button class="btn btn-success" (click)="update()" [disabled]="submitting" type="button">Update results</button>
+                                <button class="btn btn-success" (click)="update()" [disabled]="submitting()" type="button">Update results</button>
                             </div>
                         </div>
                     </div>
@@ -77,21 +77,21 @@
 
 <div class="row">
 
-    <div *ngIf="results.length == 0" class="col-md-12 text-muted">
-        There are no users in selected department {{prettyDateRange}}
+    <div *ngIf="results().length == 0" class="col-md-12 text-muted">
+        There are no users in selected department {{prettyDateRange()}}
     </div>
 
-    <div class="col-md-12" *ngIf="results.length > 0">
+    <div class="col-md-12" *ngIf="results().length > 0">
         <table class="table table-hover">
             <thead>
                 <tr>
                     <th>Employee full name</th>
-                    <th *ngFor="let lt of leaveTypes">{{lt.name}}</th>
-                    <th>Days deducted from allowance<br>in {{ prettyDateRange }}</th>
+                    <th *ngFor="let lt of leaveTypes()">{{lt.name}}</th>
+                    <th>Days deducted from allowance<br>in {{ prettyDateRange() }}</th>
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let u of results" [attr.data-vpp-user-list-row]="u.id">
+                <tr *ngFor="let u of results()" [attr.data-vpp-user-list-row]="u.id">
                     <td><a [routerLink]="['/users',u.id]">{{ u.firstName }} {{ u.lastName }}</a></td>
                     <td *ngFor="let a of u.totals">{{ a }}</td>
                     <td>{{ u.allowanceUsed }}</td>

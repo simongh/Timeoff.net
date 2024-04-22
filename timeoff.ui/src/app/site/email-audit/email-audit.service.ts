@@ -1,10 +1,10 @@
 import { FormBuilder } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { Injectable, numberAttribute } from '@angular/core';
 import { map } from 'rxjs';
 
 import { EmailModel } from './email.model';
-import { dateString } from '@components/types';
+import { dateString } from '@models/types';
 
 interface QueryResult {
     pages: number;
@@ -16,7 +16,7 @@ export class EmailAuditService {
     public searchForm = this.fb.group({
         start: ['' as dateString | null],
         end: ['' as dateString | null],
-        userId: [null as number | null],
+        user: [null as number | null],
     });
 
     public currentPage: number = 1;
@@ -26,19 +26,24 @@ export class EmailAuditService {
     constructor(private readonly fb: FormBuilder, private readonly client: HttpClient) {}
 
     public search() {
-        return this.client
-            .get<QueryResult>('/api/audit/email', {
-                params: {
-                    ...this.searchForm.value,
-                    page: this.currentPage,
-                } as any,
-            })
-            .pipe(
-                map((result) => {
-                    this.totalPages = result.pages;
+        const options = {
+            params: new HttpParams()
+                .set('page', this.currentPage)
+                .set('start', this.searchForm.value.start!)
+                .set('end', this.searchForm.value.end!),
+        };
 
-                    return result.results;
-                })
-            );
+        const u = this.searchForm.controls.user.value;
+        if (!!u && u.toString() != 'null') {
+            options.params = options.params.append('user', u);
+        }
+
+        return this.client.get<QueryResult>('/api/audit/email', options).pipe(
+            map((result) => {
+                this.totalPages = result.pages;
+
+                return result.results;
+            })
+        );
     }
 }

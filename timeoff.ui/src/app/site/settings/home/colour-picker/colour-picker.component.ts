@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, computed, input } from '@angular/core';
 import { FormControl } from '@angular/forms';
 
 @Component({
@@ -9,14 +9,13 @@ import { FormControl } from '@angular/forms';
     imports: [CommonModule],
 })
 export class ColourPickerComponent {
-    public get colour() {
-        return this.control?.value;
-    }
+    protected readonly colour = computed(()=> {
+        return this.control().value;
+    })
 
-    @Input()
-    public control!: FormControl<string | null>;
+    public readonly control = input.required<FormControl<string | null>>();
 
     public pick(colour: string) {
-        this.control.setValue(colour);
+        this.control().setValue(colour);
     }
 }

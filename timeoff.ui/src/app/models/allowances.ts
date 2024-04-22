@@ -1,3 +1,5 @@
+import { signal } from '@angular/core';
+
 export function getAllowances() {
     const allowance = new Array<number>();
 
@@ -5,5 +7,5 @@ export function getAllowances() {
         allowance.push(index);
     }
 
-    return allowance;
+    return signal(allowance).asReadonly();
 }

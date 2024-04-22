@@ -1,10 +1,9 @@
-import { Component, DestroyRef, effect, input, signal } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Component, inject, input } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { computedAsync } from 'ngxtension/computed-async';
 
 import { CompanyService } from '@services/company/company.service';
-import { UserModel } from '@services/company/user.model';
 
 @Component({
     selector: 'user-select',
@@ -15,18 +14,11 @@ import { UserModel } from '@services/company/user.model';
     providers: [CompanyService],
 })
 export class UserListComponent {
-    protected readonly users = signal<UserModel[]>([]);
+    private readonly companySvc = inject(CompanyService);
 
-    public for = input('');
+    protected readonly users = computedAsync(() => this.companySvc.getUsers(), { initialValue: [] });
 
-    public control = input.required<FormControl<number | null>>();
+    public readonly for = input('');
 
-    constructor(private destroyed: DestroyRef, private readonly companySvc: CompanyService) {
-        effect(() => {
-            this.companySvc
-                .getUsers()
-                .pipe(takeUntilDestroyed(this.destroyed))
-                .subscribe((users) => this.users.set(users));
-        });
-    }
+    public readonly control = input.required<FormControl<number | null>>();
 }

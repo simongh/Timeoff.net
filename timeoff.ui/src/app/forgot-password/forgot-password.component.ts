@@ -21,7 +21,7 @@ export class ForgotPasswordComponent {
         return this.passwordSvc.passwordForm;
     }
 
-    protected submitting = signal(false);
+    protected readonly submitting = signal(false);
 
     constructor(
         private passwordSvc: AuthService,

@@ -1,5 +1,5 @@
-import { ChangeDetectorRef, Component, DestroyRef, computed, effect, numberAttribute, signal } from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { Component, DestroyRef, OnInit, computed, numberAttribute, signal } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -34,22 +34,22 @@ import { UserDetailsComponent } from '../user-details/user-details.component';
         RouterLink,
     ],
 })
-export class UserAbsencesComponent {
-    public id = injectParams((p) => numberAttribute(p['id']));
+export default class UserAbsencesComponent implements OnInit {
+    protected readonly id = injectParams((p) => numberAttribute(p['id']));
 
-    public get form() {
+    protected get form() {
         return this.usersSvc.adjustmentForm;
     }
 
-    public name = signal('');
+    protected readonly name = signal('');
 
-    public isActive = signal(false);
+    protected readonly isActive = signal(false);
 
-    public summary =signal({} as AllowanceSummaryModel);
+    protected readonly summary = signal({} as AllowanceSummaryModel);
 
-    public usedPercent = computed(()=>(this.summary().used / this.summary().total) * 100);
+    protected readonly usedPercent = computed(() => (this.summary().used / this.summary().total) * 100);
 
-    public remainingPercent = computed(()=> (this.summary().remaining / this.summary().total) * 100);
+    protected readonly remainingPercent = computed(() => (this.summary().remaining / this.summary().total) * 100);
 
     public get groupedRequests() {
         return Object.entries(
@@ -63,20 +63,20 @@ export class UserAbsencesComponent {
         );
     }
 
-    public submitting = signal(false);
+    protected readonly submitting = signal(false);
 
     private leave: LeaveRequestModel[] = [];
 
     constructor(
-        private readonly route: ActivatedRoute,
         private destroyed: DestroyRef,
         private readonly usersSvc: UsersService,
         private readonly calendarSvc: CalendarService,
-        private readonly msgsSvc: MessagesService,
-        private readonly cd: ChangeDetectorRef
-    ) {
-        effect(()=> {
-            this.calendarSvc.get(new Date().getFullYear(), this.id())
+        private readonly msgsSvc: MessagesService
+    ) {}
+
+    public ngOnInit(): void {
+        this.calendarSvc
+            .get(new Date().getFullYear(), this.id())
             .pipe(takeUntilDestroyed(this.destroyed))
             .subscribe((calendar) => {
                 this.summary.set(calendar.summary);
@@ -85,7 +85,6 @@ export class UserAbsencesComponent {
 
                 this.usersSvc.fillAdjustments(calendar.summary);
             });
-        })
     }
 
     public save() {
@@ -98,15 +97,16 @@ export class UserAbsencesComponent {
                 next: () => {
                     this.msgsSvc.isSuccess('Adjustments save');
 
-                    const diff = this.summary().adjustment - this.form.value.adjustment!;
-                    this.summary().total = this.summary().total - diff;
-                    this.summary().remaining = this.summary().remaining - diff;
+                    this.summary.update((s) => {
+                        const diff = s.adjustment - this.form.value.adjustment!;
+                        s.total = s.total - diff;
+                        s.remaining = s.remaining - diff;
 
-                    this.summary().adjustment = this.form.value.adjustment!;
+                        s.adjustment = this.form.value.adjustment!;
+                        return { ...s };
+                    });
 
                     this.submitting.set(false);
-
-                    this.cd.detectChanges();
                 },
                 error: (e: HttpErrorResponse) => {
                     this.msgsSvc.isError('Unable to save adjustments');

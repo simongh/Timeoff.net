@@ -1,9 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component, DestroyRef, OnInit } from '@angular/core';
+import { Component, DestroyRef, OnInit, computed, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
-import { formatDate, parseISO } from 'date-fns';
+import { formatDate } from 'date-fns';
+import { computedAsync } from 'ngxtension/computed-async';
 
 import { FlashComponent } from '@components/flash/flash.component';
 import { DatePickerDirective } from '@components/date-picker.directive';
@@ -25,32 +26,32 @@ import { map, switchMap } from 'rxjs';
     imports: [FlashComponent, CommonModule, RouterLink, ReactiveFormsModule, DatePickerDirective, TeamSelectComponent],
 })
 export class AllowanceUsageComponent implements OnInit {
-    public results: AllowanceModel[] = [];
+    protected readonly results = signal<AllowanceModel[]>([]);
 
     public get form() {
         return this.allowanceSvc.form;
     }
 
-    public get prettyDateRange() {
+    protected readonly prettyDateRange = computed(() => {
         const parts = Array<string>();
-        parts.push(formatDate(this.start, 'LLL'));
+        parts.push(formatDate(this.start(), 'LLL'));
 
-        if (this.start.getMonth() != this.end.getMonth()) {
+        if (this.start().getMonth() != this.end().getMonth()) {
             parts.push('-');
-            parts.push(formatDate(this.end, 'MMM'));
+            parts.push(formatDate(this.end(), 'MMM'));
         }
-        parts.push(formatDate(this.end, 'yyyy'));
+        parts.push(formatDate(this.end(), 'yyyy'));
 
         return parts.join(' ');
-    }
+    });
 
-    public leaveTypes: LeaveTypeModel[] = [];
+    protected readonly leaveTypes = signal<LeaveTypeModel[]>([]);
 
-    public submitting = false;
+    protected readonly submitting = signal(false);
 
-    private start = new Date();
+    private readonly start = signal(new Date());
 
-    private end = new Date();
+    private readonly end = signal(new Date());
 
     constructor(
         private destroyed: DestroyRef,
@@ -73,7 +74,7 @@ export class AllowanceUsageComponent implements OnInit {
                 })
             )
             .subscribe((data) => {
-                this.leaveTypes = data.leaveTypes;
+                this.leaveTypes.set(data.leaveTypes);
                 this.loadResults(data.results);
             });
     }
@@ -83,25 +84,25 @@ export class AllowanceUsageComponent implements OnInit {
             return;
         }
 
-        this.submitting = true;
+        this.submitting.set(true);
 
         this.allowanceSvc
             .getResults()
             .pipe(takeUntilDestroyed(this.destroyed))
             .subscribe((data) => {
                 this.loadResults(data);
-                this.submitting = false;
+                this.submitting.set(false);
             });
     }
 
-    private loadResults(results: AllowanceModel[]) {
-        this.results = results.map((d) => {
-            d.totals = this.leaveTypes.map((l) => d.leaveSummary.find((s) => s.id == l.id)?.allowanceUsed ?? 0);
+    private loadResults(data: AllowanceModel[]) {
+        this.results.set(data.map((d) => {
+            d.totals = this.leaveTypes().map((l) => d.leaveSummary.find((s) => s.id == l.id)?.allowanceUsed ?? 0);
 
             return d;
-        });
+        }));
 
-        this.start = this.allowanceSvc.start;
-        this.end = this.allowanceSvc.end;
+        this.start.set(this.allowanceSvc.start);
+        this.end.set(this.allowanceSvc.end);
     }
 }
