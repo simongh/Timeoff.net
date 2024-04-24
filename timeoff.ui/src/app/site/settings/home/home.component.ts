@@ -16,9 +16,8 @@ import { MessagesService } from '@services/messages/messages.service';
 import { TimeZoneModel } from '@services/company/time-zone.model';
 import { Country } from '@services/company/country.model';
 
-import { RemoveCompanyModalComponent } from './remove-company-modal/remove-company-modal.component';
-import { ColourPickerComponent } from './colour-picker/colour-picker.component';
-import { LeaveTypeModalComponent } from './leave-type-modal/leave-type-modal.component';
+import { RemoveCompanyComponent } from './remove-company/remove-company.component';
+import { LeaveTypesComponent } from './leave-types/leave-types.component';
 
 @Component({
     selector: 'app-home',
@@ -29,12 +28,11 @@ import { LeaveTypeModalComponent } from './leave-type-modal/leave-type-modal.com
     imports: [
         CommonModule,
         ReactiveFormsModule,
-        ColourPickerComponent,
-        LeaveTypeModalComponent,
         RouterLink,
         FlashComponent,
         ScheduleComponent,
-        RemoveCompanyModalComponent,
+        RemoveCompanyComponent,
+        LeaveTypesComponent,
     ],
 })
 export class HomeComponent implements OnInit {
@@ -56,7 +54,7 @@ export class HomeComponent implements OnInit {
 
     protected readonly currentYear = computed(() => new Date().getFullYear());
 
-    protected readonly lastYear = computed(()=> this.currentYear() - 1);
+    protected readonly lastYear = computed(() => this.currentYear() - 1);
 
     protected get companyName() {
         return this.companySvc.settingsForm.value.name;
@@ -64,18 +62,6 @@ export class HomeComponent implements OnInit {
 
     public get settingsForm() {
         return this.companySvc.settingsForm;
-    }
-
-    public get leaveTypes() {
-        return this.companySvc.leaveTypes;
-    }
-
-    public get leaveTypeForm() {
-        return this.companySvc.leaveTypeForm;
-    }
-
-    public get firstType() {
-        return this.companySvc.first;
     }
 
     public get days() {
@@ -170,34 +156,4 @@ export class HomeComponent implements OnInit {
                 },
             });
     }
-
-    public deleteCompany(name: string) {
-        this.companySvc
-            .deleteCompany(name)
-            .pipe(takeUntilDestroyed(this.destroyed))
-            .subscribe({
-                next: () => {
-                    this.router.navigateByUrl('/logout');
-                },
-                error: (e: HttpErrorResponse) => {
-                    if (e.status == 400) {
-                        this.msgsSvc.hasErrors(e.error.errors);
-                    } else {
-                        this.msgsSvc.isError('Unable to delete company');
-                    }
-                },
-            });
-    }
-
-    public updateLeaveTypes() {
-        this.companySvc.updateLeaveTypes().pipe(takeUntilDestroyed(this.destroyed)).subscribe();
-    }
-
-    public addLeaveType() {
-        this.leaveTypes.push(this.leaveTypeForm);
-
-        this.companySvc.resetLeaveTypeForm();
-    }
-
-    public removeLeaveType(id: number) {}
 }

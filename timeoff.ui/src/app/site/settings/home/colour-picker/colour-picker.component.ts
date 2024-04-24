@@ -9,9 +9,9 @@ import { FormControl } from '@angular/forms';
     imports: [CommonModule],
 })
 export class ColourPickerComponent {
-    protected readonly colour = computed(()=> {
+    protected get colour() {
         return this.control().value;
-    })
+    }
 
     public readonly control = input.required<FormControl<string | null>>();
 

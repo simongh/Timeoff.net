@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, computed, signal } from '@angular/core';
-import { catchError, of, tap } from 'rxjs';
+import { Subject, catchError, of, tap } from 'rxjs';
 
 import { LoggedInUserModel } from '@models/logged-in-user.model';
 
@@ -32,6 +32,8 @@ export class LoggedInUserService {
 
     private user = signal({} as LoggedInUserModel);
 
+    public readonly refresh$ = new Subject();
+
     constructor(private readonly client: HttpClient) {}
 
     public load(user: LoggedInUserModel | null) {
@@ -53,5 +55,9 @@ export class LoggedInUserService {
             }),
             tap((u) => this.load(u))
         );
+    }
+
+    public refresh() {
+        this.refresh$.next([]);
     }
 }

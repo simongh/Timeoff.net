@@ -67,6 +67,7 @@ export class UserCreateComponent {
             .subscribe({
                 next: () => {
                     this.messagesSvc.isSuccess('New user account successfully added', true);
+                    this.currentUser.refresh();
                     this.router.navigateByUrl('/users');
                 },
                 error: (e: HttpErrorResponse) => {
