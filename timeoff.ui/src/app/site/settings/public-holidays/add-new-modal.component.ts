@@ -18,16 +18,11 @@ import { LoggedInUserService } from '@services/logged-in-user/logged-in-user.ser
     imports: [ReactiveFormsModule, ValidatorMessageComponent, DatePickerDirective],
 })
 export class AddNewModalComponent {
-    public get form() {
+    protected get form() {
         return this.holidaySvc.addForm!;
     }
 
     protected readonly dateFormat = this.currentUser.dateFormat;
-
-    @Input()
-    public set year(value: number) {
-        this.holidaySvc.setAddForm(value);
-    }
 
     @Output()
     public added = new EventEmitter();

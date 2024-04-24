@@ -6,22 +6,22 @@ namespace Timeoff.Application.BookAbsence
     {
         public BookCommandValidator()
         {
-            RuleFor(m => m.To)
-                .GreaterThanOrEqualTo(m => m.From);
+            RuleFor(m => m.End)
+                .GreaterThanOrEqualTo(m => m.Start);
 
-            When(m => m.From == m.To, () =>
+            When(m => m.Start == m.End, () =>
             {
-                RuleFor(m => m.FromPart)
+                RuleFor(m => m.StartPart)
                     .NotEqual(LeavePart.Afternoon)
-                    .When(m => m.ToPart == LeavePart.Morning);
+                    .When(m => m.EndPart == LeavePart.Morning);
 
-                RuleFor(m => m.FromPart)
+                RuleFor(m => m.StartPart)
                     .NotEqual(LeavePart.All)
-                    .When(m => m.ToPart != LeavePart.All);
+                    .When(m => m.EndPart != LeavePart.All);
 
-                RuleFor(m => m.ToPart)
+                RuleFor(m => m.EndPart)
                     .NotEqual(LeavePart.All)
-                    .When(m => m.FromPart != LeavePart.All);
+                    .When(m => m.StartPart != LeavePart.All);
             });
         }
     }

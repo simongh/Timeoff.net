@@ -86,8 +86,9 @@ export class UserEditComponent implements OnInit {
             .pipe(takeUntilDestroyed(this.destroyed))
             .subscribe({
                 next: () => {
-                    this.submitting.set(false);
                     this.msgsSvc.isSuccess(`Details for ${this.fullName} were updated`);
+                    this.currentUser.refresh();
+                    this.submitting.set(false);
                 },
                 error: (e: HttpErrorResponse) => {
                     if (e.status == 400) {

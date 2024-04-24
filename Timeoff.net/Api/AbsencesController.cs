@@ -1,11 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using MediatR;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Timeoff.Api
 {
     [Route("api/absences")]
     [ApiController]
-    public class AbsencesController : ControllerBase
+    public class AbsencesController(IMediator mediator) : ControllerBase
     {
+        private readonly IMediator _mediator = mediator;
+
         [HttpGet]
         public Task<IActionResult> ListAsync()
         {
@@ -13,9 +16,14 @@ namespace Timeoff.Api
         }
 
         [HttpPost]
-        public Task<IActionResult> CreateAsync()
+        public async Task<IActionResult> CreateAsync(Application.BookAbsence.BookCommand command)
         {
-            throw new NotImplementedException();
+            if (command == null)
+                return BadRequest();
+
+            await _mediator.Send(command);
+
+            return NoContent();
         }
 
         [HttpGet("{id:int}")]

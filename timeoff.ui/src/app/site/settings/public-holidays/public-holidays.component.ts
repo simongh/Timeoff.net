@@ -64,9 +64,8 @@ export class PublicHolidaysComponent {
         private readonly holidaySvc: PublicHolidaysService,
         private readonly msgsSvc: MessagesService,
         private readonly currentUser: LoggedInUserService,
-        private destroyed: DestroyRef,
-    ) {
-    }
+        private destroyed: DestroyRef
+    ) {}
 
     public remove(id?: number | null) {
         if (!id) {
@@ -120,7 +119,7 @@ export class PublicHolidaysComponent {
             });
     }
 
-    public getHolidays() {
+    private getHolidays() {
         this.holidaySvc
             .get(this.currentYear())
             .pipe(takeUntilDestroyed(this.destroyed))
@@ -132,19 +131,12 @@ export class PublicHolidaysComponent {
     }
 
     public create() {
-        this.holidaySvc
-            .get(this.currentYear())
-            .pipe(takeUntilDestroyed(this.destroyed))
-            .subscribe({
-                next: (data) => {
-                    this.loadHolidays(data);
-                },
-                error: (e: HttpErrorResponse) => {},
-            });
+        this.getHolidays();
     }
 
     private loadHolidays(data: PublicHolidayModel[]) {
         this.holidaysForm.clear();
+        this.holidaySvc.setAddForm(this.currentYear());
 
         data.map((h) => {
             this.holidaySvc.holidays.push(this.holidaySvc.newForm(h, this.currentYear()));

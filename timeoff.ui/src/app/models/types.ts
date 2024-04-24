@@ -1,9 +1,9 @@
 export type dateString = string;
 
 export enum datePart {
-    morning = 'morning',
-    afternoon = 'afternoon',
-    wholeDay = 'wholeDay',
+    morning = 'Morning',
+    afternoon = 'Afternoon',
+    wholeDay = 'All',
 }
 
 export function datePartList() {

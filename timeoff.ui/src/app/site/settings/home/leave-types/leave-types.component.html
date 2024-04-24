@@ -1,0 +1,71 @@
+<div class="panel panel-default">
+    <div class="panel-heading">
+        Leave Types
+    </div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-md-6">
+                <label class="control-label">Leave Type Name</label>
+                <p><em>Tick one to always be on top of the list</em></p>
+            </div>
+            <div class="col-md-offset-3 col-md-2">
+                <label class="control-label">Limit</label>
+                <p><em>Days/year</em></p>
+            </div>
+        </div>
+
+        <div class="row">&nbsp;</div>
+
+        <div class="row" *ngIf="leaveTypes.length === 0">
+            <div class="col-md-4">No Leave type records</div>
+        </div>
+        @for (leave of leaveTypes.controls; track $index)
+        {
+            <div class="row" [formGroup]="leave">
+                <div class="col-md-6">
+                    <div class="input-group">
+                        <span class="input-group-addon">
+                            <input type="radio" [formControl]="firstType" [value]="leave.controls.id.value" name="first"/>
+                        </span>
+                        <input type="text" class="form-control" formControlName="name" [attr.data-tom-leave-type-order]="leave.controls.name.value"/>
+
+                        <div class="input-group-btn" data-tom-color-picker="1" [attr.data-tom-leave-type-order]="leave.controls.colour.valid">
+                            <colour-picker [control]="leave.controls.colour"/>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="col-md-3">
+                    <div>
+                        <input type="checkbox" id="useAllowance-{{$index}}" formControlName="useAllowance" value="true">
+                        <label for="useAllowance-{{$index}}" class="control-label">Use allowance</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="autoApprove-{{$index}}" formControlName="autoApprove" value="true">
+                        <label for="autoApprove-{{$index}}" class="control-label">Auto approve</label>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <input type="number" class="form-control" formControlName="limit" min="0" max="365">
+                </div>
+                <div class="col-md-1">
+                    <button class="btn btn-default pull-right leavetype-remove-btn" (click)="removeLeaveType(leave.value.id!)" [disabled]="submitting()" [attr.data-tom-leave-type-order]="leave.controls.id.value"><span class="fa fa-remove"></span></button>
+                </div>
+            </div>
+            <div class="row">&nbsp;</div>
+        }
+        <div class="row">&nbsp;</div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="pull-right">
+                    <button class="btn btn-default" data-toggle="modal" data-target="#add_new_leave_type_modal" type="button" id="add_new_leave_type_btn">Add new</button>
+                    <button type="button" (click)="updateLeaveTypes()" [disabled]="submitting()" class="btn btn-success single-click">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<leave-type-modal [form]="leaveTypeForm" (addedLeaveType)="addLeaveType()"/>

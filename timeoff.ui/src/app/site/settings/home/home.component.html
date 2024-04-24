@@ -96,7 +96,6 @@
                     </div>
 
                     <div class="col-md-offset-1 col-md-5">
-
                         <div class="form-horizontal">
                             <div class="form-group">
                                 <label for="" class="col-md-7 control-label">Backup employees' leave data</label>
@@ -163,74 +162,7 @@
 <div class="row">
 
     <div class="col-md-7">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                Leave Types
-            </div>
-            <div class="panel-body">
-                <div class="row">
-                    <div class="col-md-6">
-                        <label class="control-label">Leave Type Name</label>
-                        <p><em>Tick one to always be on top of the list</em></p>
-                    </div>
-                    <div class="col-md-offset-3 col-md-2">
-                        <label class="control-label">Limit</label>
-                        <p><em>Days/year</em></p>
-                    </div>
-                </div>
-
-                <div class="row">&nbsp;</div>
-
-                <div class="row" *ngIf="leaveTypes.length === 0">
-                    <div class="col-md-4">No Leave type records</div>
-                </div>
-                <ng-container *ngFor="let leave of leaveTypes.controls; let i=index">
-                    <div class="row" [formGroup]="leave">
-                        <div class="col-md-6">
-                            <div class="input-group">
-                                <span class="input-group-addon">
-                                    <input type="radio" [formControl]="firstType" [value]="leave.controls.id.value" name="first"/>
-                                </span>
-                                <input type="text" class="form-control" formControlName="name" [attr.data-tom-leave-type-order]="leave.controls.name.value"/>
-
-                                <div class="input-group-btn" data-tom-color-picker="1" [attr.data-tom-leave-type-order]="leave.controls.colour.valid">
-                                    <colour-picker [control]="leave.controls.colour"/>
-                                </div>
-                            </div>
-
-                        </div>
-
-                        <div class="col-md-3">
-                            <div>
-                                <input type="checkbox" id="useAllowance-{{i}}" formControlName="useAllowance" value="true">
-                                <label for="useAllowance-{{i}}" class="control-label">Use allowance</label>
-                            </div>
-                            <div>
-                                <input type="checkbox" id="autoApprove-{{i}}" formControlName="autoApprove" value="true">
-                                <label for="autoApprove-{{i}}" class="control-label">Auto approve</label>
-                            </div>
-                        </div>
-                        <div class="col-md-2">
-                            <input type="number" class="form-control" formControlName="limit" min="0" max="365">
-                        </div>
-                        <div class="col-md-1">
-                            <button class="btn btn-default pull-right leavetype-remove-btn" (click)="removeLeaveType(leave.value.id!)" [disabled]="submitting()" [attr.data-tom-leave-type-order]="leave.controls.id.value"><span class="fa fa-remove"></span></button>
-                        </div>
-                    </div>
-                    <div class="row">&nbsp;</div>
-                </ng-container>
-                <div class="row">&nbsp;</div>
-
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="pull-right">
-                            <button class="btn btn-default" data-toggle="modal" data-target="#add_new_leave_type_modal" type="button" id="add_new_leave_type_btn">Add new</button>
-                            <button type="button" (click)="updateLeaveTypes()" [disabled]="submitting()" class="btn btn-success single-click">Save changes</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <leave-types/>
     </div>
 
     <div class="col-md-5 setting-general-2nd-column">
@@ -249,32 +181,6 @@
 
 <div class="row">
     <div class="col-md-12">
-        <div class="panel panel-danger">
-            <div class="panel-heading">
-                <i class="fa fa-bomb"></i> Danger zone
-            </div>
-            <div class="panel-body">
-                <div class="col-md-12">
-                    <div class="form-horizontal">
-                        <div class="form-group">
-                            <label for="" class="control-label">Remove company account</label>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-md-6">
-                                <p><em>Completely erase data associated with {{companyName}}'s account.</em></p>
-                                <p><em> This is action cannot be reverted.</em></p>
-                                <p><em> It is strongly recommended to <a href="/settings/company/backup">download</a> employees leave data first.</em></p>
-                            </div>
-                            <div class="col-md-6">
-                                <button class="btn btn-danger pull-right" data-toggle="modal" data-target="#remove_company_modal" type="button"><i class="fa fa-remove"></i> Delete company account</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <remove-company companyName="companyName"/>
     </div>
 </div>
-
-<leave-type-modal [form]="leaveTypeForm" (addedLeaveType)="addLeaveType()"/>
-<remove-company-modal (onDelete)="deleteCompany($event)"/>

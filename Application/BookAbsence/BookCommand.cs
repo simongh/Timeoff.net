@@ -11,13 +11,13 @@ namespace Timeoff.Application.BookAbsence
 
         public int LeaveType { get; init; }
 
-        public LeavePart FromPart { get; init; }
+        public LeavePart StartPart { get; init; }
 
-        public DateTime From { get; init; }
+        public DateTime Start { get; init; }
 
-        public LeavePart ToPart { get; init; }
+        public LeavePart EndPart { get; init; }
 
-        public DateTime To { get; init; }
+        public DateTime End { get; init; }
 
         public string? Comment { get; init; }
         public IEnumerable<ValidationFailure>? Failures { get; set; }
@@ -82,10 +82,10 @@ namespace Timeoff.Application.BookAbsence
 
             var absence = new Entities.Leave
             {
-                DateStart = request.From,
-                DayPartStart = request.FromPart,
-                DateEnd = request.To,
-                DayPartEnd = request.ToPart,
+                DateStart = request.Start,
+                DayPartStart = request.StartPart,
+                DateEnd = request.End,
+                DayPartEnd = request.EndPart,
                 LeaveTypeId = request.LeaveType,
                 Days = days,
                 EmployeeComment = request.Comment,
@@ -197,17 +197,17 @@ namespace Timeoff.Application.BookAbsence
             var matching = await _dataContext.Leaves
                 .Where(a => a.UserId == UserId)
                 .Where(a =>
-                    a.DateStart >= request.From && a.DateStart <= request.To
-                    || a.DateEnd >= request.From && a.DateEnd <= request.To
+                    a.DateStart >= request.Start && a.DateStart <= request.End
+                    || a.DateEnd >= request.Start && a.DateEnd <= request.End
                     )
                 .ToArrayAsync();
 
             foreach (var item in matching)
             {
-                if (item.DayPartStart != LeavePart.Afternoon && request.ToPart != LeavePart.Morning)
+                if (item.DayPartStart != LeavePart.Afternoon && request.EndPart != LeavePart.Morning)
                     return false;
 
-                if (item.DayPartEnd != LeavePart.Morning && request.FromPart != LeavePart.Afternoon)
+                if (item.DayPartEnd != LeavePart.Morning && request.StartPart != LeavePart.Afternoon)
                     return false;
             }
 
