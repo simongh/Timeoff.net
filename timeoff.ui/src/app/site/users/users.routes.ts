@@ -6,6 +6,7 @@ import { UserEditComponent } from './user-edit/user-edit.component';
 import { UserScheduleComponent } from './user-schedule/user-schedule.component';
 import { UserCalendarComponent } from './user-calendar/user-calendar.component';
 import UserAbsencesComponent from './user-absences/user-absences.component';
+import { UsersComponent } from './users.component';
 
 export const usersRoutes: Routes = [
     {
@@ -22,18 +23,24 @@ export const usersRoutes: Routes = [
     },
     {
         path: ':id',
-        component: UserEditComponent,
-    },
-    {
-        path: ':id/schedule',
-        component: UserScheduleComponent,
-    },
-    {
-        path: ':id/calendar',
-        component: UserCalendarComponent,
-    },
-    {
-        path: ':id/absences',
-        component: UserAbsencesComponent,
+        component: UsersComponent,
+        children: [
+            {
+                path: '',
+                component: UserEditComponent
+            },
+            {
+                path: 'schedule',
+                component: UserScheduleComponent,
+            },
+            {
+                path: 'calendar',
+                component: UserCalendarComponent,
+            },
+            {
+                path: 'absences',
+                component: UserAbsencesComponent,
+            },
+                ]
     },
 ];

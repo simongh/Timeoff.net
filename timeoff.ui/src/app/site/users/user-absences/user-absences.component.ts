@@ -3,7 +3,6 @@ import { RouterLink } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
-import { HttpErrorResponse } from '@angular/common/http';
 import { injectParams } from 'ngxtension/inject-params';
 
 import { YesPipe } from '@components/yes.pipe';
@@ -19,16 +18,14 @@ import { LeaveRequestModel } from '@models/leave-request.model';
 
 import { UsersService } from '../users.service';
 import { UserBreadcrumbComponent } from '../user-breadcrumb/user-breadcrumb.component';
-import { UserDetailsComponent } from '../user-details/user-details.component';
 
 @Component({
     selector: 'user-absences',
     standalone: true,
     templateUrl: './user-absences.component.html',
     styleUrl: './user-absences.component.scss',
-    providers: [UsersService, CalendarService],
+    providers: [CalendarService],
     imports: [
-        UserDetailsComponent,
         UserBreadcrumbComponent,
         CommonModule,
         YesPipe,
@@ -40,15 +37,9 @@ import { UserDetailsComponent } from '../user-details/user-details.component';
     ]
 })
 export default class UserAbsencesComponent implements OnInit {
-    protected readonly id = injectParams((p) => numberAttribute(p['id']));
-
     protected get form() {
         return this.usersSvc.adjustmentForm;
     }
-
-    protected readonly name = signal('');
-
-    protected readonly isActive = signal(false);
 
     protected readonly summary = signal({} as AllowanceSummaryModel);
 
@@ -56,6 +47,8 @@ export default class UserAbsencesComponent implements OnInit {
 
     protected readonly remainingPercent = computed(() => (this.summary().remaining / this.summary().total) * 100);
 
+    protected readonly name = computed(() => this.usersSvc.fullName);
+    
     protected groupedRequests = computed(() => {
         return Object.entries(
             this.leave().reduce((groups, item) => {
@@ -81,12 +74,10 @@ export default class UserAbsencesComponent implements OnInit {
 
     public ngOnInit(): void {
         this.calendarSvc
-            .get(new Date().getFullYear(), this.id())
+            .get(new Date().getFullYear(), this.usersSvc.id)
             .pipe(takeUntilDestroyed(this.destroyed))
             .subscribe((calendar) => {
                 this.summary.set(calendar.summary);
-                this.name.set(`${calendar.firstName} ${calendar.lastName}`);
-                this.isActive.set(calendar.isActive);
 
                 this.usersSvc.fillAdjustments(calendar.summary);
             });
@@ -96,7 +87,7 @@ export default class UserAbsencesComponent implements OnInit {
         this.submitting.set(true);
 
         this.usersSvc
-            .updateAdjustments(this.id())
+            .updateAdjustments(this.usersSvc.id)
             .pipe(takeUntilDestroyed(this.destroyed))
             .subscribe({
                 next: () => {
@@ -111,10 +102,6 @@ export default class UserAbsencesComponent implements OnInit {
                         return { ...s };
                     });
 
-                    this.submitting.set(false);
-                },
-                error: (e: HttpErrorResponse) => {
-                    this.msgsSvc.isError('Unable to save adjustments');
                     this.submitting.set(false);
                 },
             });

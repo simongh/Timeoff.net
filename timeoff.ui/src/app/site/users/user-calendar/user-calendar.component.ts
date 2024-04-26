@@ -11,20 +11,17 @@ import { LeaveSummaryComponent } from '@components/leave-summary/leave-summary.c
 
 import { CalendarService } from '@services/calendar/calendar.service';
 import { CalendarModel } from '@services/calendar/calendar.model';
-
 import { UsersService } from '../users.service';
-import { UserDetailsComponent } from '../user-details/user-details.component';
 
 @Component({
     selector: 'user-calendar',
     standalone: true,
     templateUrl: './user-calendar.component.html',
     styleUrl: './user-calendar.component.scss',
-    providers: [UsersService, CalendarService],
+    providers: [CalendarService],
     imports: [
         RouterLink,
         UserBreadcrumbComponent,
-        UserDetailsComponent,
         CalendarComponent,
         AllowanceBreakdownComponent,
         LeaveSummaryComponent,
@@ -33,7 +30,7 @@ import { UserDetailsComponent } from '../user-details/user-details.component';
 export class UserCalendarComponent {
     private readonly calendarSvc = inject(CalendarService);
 
-    protected readonly id = injectParams((p) => numberAttribute(p['id']));
+    private readonly userSvc = inject(UsersService);
 
     protected readonly currentYear = injectQueryParams((p) => numberAttribute(p['year'] ?? new Date().getFullYear()));
 
@@ -45,7 +42,7 @@ export class UserCalendarComponent {
         return new Date(this.currentYear(), 0, 1);
     });
 
-    protected readonly calendar = computedAsync(() => this.calendarSvc.get(this.currentYear(), this.id()), {
+    protected readonly calendar = computedAsync(() => this.calendarSvc.get(this.currentYear(), this.userSvc.id), {
         initialValue: {
             holidays: [],
             firstName: '',

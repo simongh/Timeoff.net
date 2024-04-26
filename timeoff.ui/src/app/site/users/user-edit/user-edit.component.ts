@@ -1,4 +1,4 @@
-import { Component, DestroyRef, OnInit, numberAttribute, signal } from '@angular/core';
+import { Component, DestroyRef, numberAttribute, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -14,16 +14,13 @@ import { LoggedInUserService } from '@services/logged-in-user/logged-in-user.ser
 
 import { UsersService } from '../users.service';
 import { UserBreadcrumbComponent } from '../user-breadcrumb/user-breadcrumb.component';
-import { UserDetailsComponent } from '../user-details/user-details.component';
 
 @Component({
     selector: 'user-edit',
     standalone: true,
     templateUrl: './user-edit.component.html',
     styleUrl: './user-edit.component.scss',
-    providers: [UsersService],
     imports: [
-        UserDetailsComponent,
         RouterLink,
         UserBreadcrumbComponent,
         ReactiveFormsModule,
@@ -33,7 +30,7 @@ import { UserDetailsComponent } from '../user-details/user-details.component';
         ValidatorMessageComponent,
     ],
 })
-export class UserEditComponent implements OnInit {
+export class UserEditComponent {
     protected readonly companyName = this.currentUser.companyName;
 
     protected readonly dateFormat = this.currentUser.dateFormat;
@@ -48,10 +45,6 @@ export class UserEditComponent implements OnInit {
         return this.usersSvc.fullName;
     }
 
-    protected get userEnabled() {
-        return this.usersSvc.userEnabled;
-    }
-
     protected readonly submitting = signal(false);
 
     constructor(
@@ -60,15 +53,6 @@ export class UserEditComponent implements OnInit {
         private readonly msgsSvc: MessagesService,
         private readonly currentUser: LoggedInUserService
     ) {}
-
-    public ngOnInit(): void {
-        this.usersSvc
-            .getUser(this.id())
-            .pipe(takeUntilDestroyed(this.destroyed))
-            .subscribe((user) => {
-                this.usersSvc.fillForm(user);
-            });
-    }
 
     public save() {
         this.form.markAllAsTouched();
