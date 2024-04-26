@@ -1,36 +1,30 @@
-<user-details [id]="id()" [name]="fullName" [isActive]="userEnabled">
-    <div class="col-md-9">
+<form [formGroup]="schedule" id="company_schedule_form">
 
-        <form [formGroup]="form" id="company_schedule_form">
+    <div class="form-group">
+        <label for="" class="control-label">Schedule</label>
 
-            <user-breadcrumb [name]="fullName"/>
-
-            <div class="form-group">
-                <label for="" class="control-label">Schedule</label>
-
-                <p *ngIf="form.controls.scheduleOverride.value" class="help-block">
-                    Current employee has <strong data-vpp="declare-user-specific-schedule">custom</strong> schedule.
-                </p>
-                <p *ngIf="!form.controls.scheduleOverride.value" class="help-block">
-                    Current employee uses <strong><a data-vpp="link-to-company-schedule" routerLink="/settings">company wide</a></strong> schedule.
-                </p>
-                <div class="input-group">
-                    <schedule [days]="this.form.controls.schedule"/>
-                </div>
-
-            </div>
-            <div class="form-group">
-                <div class="pull-right">
-                    @if (form.controls.scheduleOverride.value) {
-                    <button type="button" (click)="reset()" [disabled]="submitting()" name="action" class="btn btn-default" value="reset">Move employee to company wide schedule</button>
-                    <button type="button" (click)="update()" [disabled]="submitting()" class="btn btn-success">Save employee specific schedule</button>
-                    }
-                    @else {
-                        <button type="button" (click)="update()" [disabled]="submitting()" class="btn btn-success">Override company wide schedule</button>
-                    }
-                </div>
-            </div>
-        </form>
+        <p class="help-block">
+            @if (override) {
+                Current employee has <strong data-vpp="declare-user-specific-schedule">custom</strong> schedule.
+            }
+            @else {
+                Current employee uses <strong><a data-vpp="link-to-company-schedule" routerLink="/settings">company wide</a></strong> schedule.
+            }
+        </p>
+        <div class="input-group">
+            <schedule [days]="this.schedule"/>
+        </div>
 
     </div>
-</user-details>
+    <div class="form-group">
+        <div class="pull-right">
+            @if (override) {
+            <button type="button" (click)="reset()" [disabled]="submitting()" name="action" class="btn btn-default" value="reset">Move employee to company wide schedule</button>
+            <button type="button" (click)="update()" [disabled]="submitting()" class="btn btn-success">Save employee specific schedule</button>
+            }
+            @else {
+                <button type="button" (click)="update()" [disabled]="submitting()" class="btn btn-success">Override company wide schedule</button>
+            }
+        </div>
+    </div>
+</form>

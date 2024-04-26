@@ -1,4 +1,4 @@
-import { Component, DestroyRef, OnInit, numberAttribute, signal } from '@angular/core';
+import { Component, DestroyRef, numberAttribute, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -10,7 +10,6 @@ import { ScheduleComponent } from '@components/schedule/schedule.component';
 import { MessagesService } from '@services/messages/messages.service';
 
 import { UsersService } from '../users.service';
-import { UserDetailsComponent } from '../user-details/user-details.component';
 import { UserBreadcrumbComponent } from '../user-breadcrumb/user-breadcrumb.component';
 
 @Component({
@@ -18,9 +17,7 @@ import { UserBreadcrumbComponent } from '../user-breadcrumb/user-breadcrumb.comp
     standalone: true,
     templateUrl: './user-schedule.component.html',
     styleUrl: './user-schedule.component.scss',
-    providers: [UsersService],
     imports: [
-        UserDetailsComponent,
         UserBreadcrumbComponent,
         ReactiveFormsModule,
         CommonModule,
@@ -28,23 +25,13 @@ import { UserBreadcrumbComponent } from '../user-breadcrumb/user-breadcrumb.comp
         ScheduleComponent,
     ],
 })
-export class UserScheduleComponent implements OnInit {
-    protected readonly id = injectParams((p) => numberAttribute(p['id']));
-
-    protected get form() {
-        return this.usersSvc.form;
-    }
-
-    protected get fullName() {
-        return this.usersSvc.fullName;
-    }
-
-    protected get userEnabled() {
-        return this.usersSvc.userEnabled;
-    }
-
+export class UserScheduleComponent {
     protected get schedule() {
-        return this.form.controls.schedule;
+        return this.usersSvc.form.controls.schedule;
+    }
+
+    protected get override() {
+        return this.usersSvc.form.value.scheduleOverride;
     }
 
     protected readonly submitting = signal(false);
@@ -55,24 +42,15 @@ export class UserScheduleComponent implements OnInit {
         private readonly msgsSvc: MessagesService
     ) {}
 
-    public ngOnInit(): void {
-        this.usersSvc
-            .getUser(this.id())
-            .pipe(takeUntilDestroyed(this.destroyed))
-            .subscribe((user) => {
-                this.usersSvc.fillForm(user);
-            });
-    }
-
     public update() {
         this.submitting.set(true);
 
         this.usersSvc
-            .updateSchedule(this.id())
+            .updateSchedule(this.usersSvc.id)
             .pipe(takeUntilDestroyed(this.destroyed))
             .subscribe({
                 next: () => {
-                    this.form.controls.scheduleOverride.setValue(true);
+                    this.usersSvc.form.controls.scheduleOverride.setValue(true);
                     this.msgsSvc.isSuccess('Schedule Updated');
                     this.submitting.set(false);
                 },
@@ -83,12 +61,12 @@ export class UserScheduleComponent implements OnInit {
         this.submitting.set(true);
 
         this.usersSvc
-            .resetSchedule(this.id())
+            .resetSchedule(this.usersSvc.id)
             .pipe(takeUntilDestroyed(this.destroyed))
             .subscribe({
                 next: (schedule) => {
-                    this.form.controls.scheduleOverride.setValue(false);
-                    this.form.controls.schedule.setValue(schedule);
+                    this.usersSvc.form.controls.scheduleOverride.setValue(false);
+                    this.usersSvc.form.controls.schedule.setValue(schedule);
 
                     this.msgsSvc.isSuccess('Schedule updated');
                     this.submitting.set(false);

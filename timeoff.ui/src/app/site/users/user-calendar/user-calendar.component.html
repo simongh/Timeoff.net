@@ -1,91 +1,83 @@
-<user-details [id]="id()" [isActive]="calendar().isActive" [name]="calendar().firstName + ' ' + calendar().lastName">
-<div class="col-md-9">
+<div class="row">
+    <div class="col-xs-2">
+        <a class="btn btn-default" routerLink="." [queryParams]="{year: lastYear()}"><span aria-hidden="true" class="fa fa-chevron-left"></span> {{lastYear()}} </a>
+    </div>
+    <div class="col-xs-8 calendar-section-caption">
+        <h3>{{currentYear()}}</h3>
+    </div>
+    <div class="col-xs-2">
+        <a class="btn btn-default pull-right" routerLink="." [queryParams]="{year: nextYear()}">{{nextYear()}} <span aria-hidden="true" class="fa fa-chevron-right"></span></a>
+    </div>
+</div>
 
-    <user-breadcrumb [name]="calendar().firstName + ' ' + calendar().lastName"/>
+<div class="row main-row_header">
+    <div class="col-md-12"><hr /></div>
+</div>
 
-    <div class="row">
-        <div class="col-xs-2">
-            <a class="btn btn-default" routerLink="." [queryParams]="{year: lastYear()}"><span aria-hidden="true" class="fa fa-chevron-left"></span> {{lastYear()}} </a>
-        </div>
-        <div class="col-xs-8 calendar-section-caption">
-            <h3>{{currentYear()}}</h3>
-        </div>
-        <div class="col-xs-2">
-            <a class="btn btn-default pull-right" routerLink="." [queryParams]="{year: nextYear()}">{{nextYear()}} <span aria-hidden="true" class="fa fa-chevron-right"></span></a>
-        </div>
+<div class="row">
+
+    <div class="col-md-4 top-leave-type-statistics">
+        <dl>
+            <dt data-tom-days-available-in-allowance>{{calendar().summary.available}}</dt>
+            <dd>Days available</dd>
+            <dd>out of <span data-tom-total-days-in-allowance>{{calendar().summary.total}}</span> in allowance</dd>
+        </dl>
     </div>
 
-    <div class="row main-row_header">
-        <div class="col-md-12"><hr /></div>
+    <div class="col-md-4 secondary-leave-type-statistics hidden-xs">
+        <allowance-breakdown [summary]="calendar().summary"/>
     </div>
 
-    <div class="row">
-
-        <div class="col-md-4 top-leave-type-statistics">
-            <dl>
-                <dt data-tom-days-available-in-allowance>{{calendar().summary.available}}</dt>
-                <dd>Days available</dd>
-                <dd>out of <span data-tom-total-days-in-allowance>{{calendar().summary.total}}</span> in allowance</dd>
-            </dl>
-        </div>
-
-        <div class="col-md-4 secondary-leave-type-statistics hidden-xs">
-            <allowance-breakdown [summary]="calendar().summary"/>
-        </div>
-
-        <div class="col-md-4 secondary-leave-type-statistics hidden-xs">
-            <leave-summary [items]="calendar().summary.leaveSummary"/>
-        </div>
-
-    </div>
-
-
-    <div class="row main-row_header">
-        <div class="col-md-12"><hr /></div>
-    </div>
-
-    <div class="row clearfix">
-        <calendar [monthCount]="12" monthFormat="MMMM" [start]="start()" colStyle="col-md-4" [holidays]="calendar().holidays"/>
-        <!-- @for (int i = 0; i < Model.Calendar.Months; i++)
-        {
-                   <div class="col-md-4 month_container">
-                <table class="calendar_month month_@Model.Calendar.CurrentMonth(i).ToString("MMMM")">
-                <thead>
-                    <tr>
-                            <td colspan="14">@Model.Calendar.CurrentMonth(i).ToString("MMMM")</td>
-                    </tr>
-                    <tr>
-                        <td colspan="2">M</td>
-                        <td colspan="2">T</td>
-                        <td colspan="2">W</td>
-                        <td colspan="2">T</td>
-                        <td colspan="2">F</td>
-                        <td colspan="2">S</td>
-                        <td colspan="2">S</td>
-                    </tr>
-                </thead>
-                <tbody>
-                @{
-                    var count = 0;
-                }
-                @foreach (var item in Model.Calendar.GetWeeks(i,Model.LeaveRequested))
-                    {
-                        if (count %7 == 0)
-                        {
-                            @:<tr>
-                        }
-                        <partial name="_CalendarCell" model="item"/>
-                        @if (count %7 == 7)
-                        {
-                            @:</tr>
-                        }
-                        count++;
-                    }
-                </tbody>
-            </table>
-        </div>
-        } -->
+    <div class="col-md-4 secondary-leave-type-statistics hidden-xs">
+        <leave-summary [items]="calendar().summary.leaveSummary"/>
     </div>
 
 </div>
-</user-details>
+
+
+<div class="row main-row_header">
+    <div class="col-md-12"><hr /></div>
+</div>
+
+<div class="row clearfix">
+    <calendar [monthCount]="12" monthFormat="MMMM" [start]="start()" colStyle="col-md-4" [holidays]="calendar().holidays"/>
+    <!-- @for (int i = 0; i < Model.Calendar.Months; i++)
+    {
+                <div class="col-md-4 month_container">
+            <table class="calendar_month month_@Model.Calendar.CurrentMonth(i).ToString("MMMM")">
+            <thead>
+                <tr>
+                        <td colspan="14">@Model.Calendar.CurrentMonth(i).ToString("MMMM")</td>
+                </tr>
+                <tr>
+                    <td colspan="2">M</td>
+                    <td colspan="2">T</td>
+                    <td colspan="2">W</td>
+                    <td colspan="2">T</td>
+                    <td colspan="2">F</td>
+                    <td colspan="2">S</td>
+                    <td colspan="2">S</td>
+                </tr>
+            </thead>
+            <tbody>
+            @{
+                var count = 0;
+            }
+            @foreach (var item in Model.Calendar.GetWeeks(i,Model.LeaveRequested))
+                {
+                    if (count %7 == 0)
+                    {
+                        @:<tr>
+                    }
+                    <partial name="_CalendarCell" model="item"/>
+                    @if (count %7 == 7)
+                    {
+                        @:</tr>
+                    }
+                    count++;
+                }
+            </tbody>
+        </table>
+    </div>
+    } -->
+</div>

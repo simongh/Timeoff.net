@@ -19,7 +19,7 @@ type AdjustmentFormGroup = ReturnType<UsersService['createAdjustmentForm']>;
 
 @Injectable()
 export class UsersService {
-    public form: UserFromGroup;
+    public readonly form: UserFromGroup;
 
     public adjustmentForm: AdjustmentFormGroup;
 
@@ -37,6 +37,8 @@ export class UsersService {
             return isActive;
         }
     }
+
+    public id: number = 0;
 
     constructor(private readonly client: HttpClient, private readonly fb: FormBuilder) {
         this.form = this.createUserForm();
@@ -58,6 +60,7 @@ export class UsersService {
     }
 
     public getUser(id: number) {
+        this.id = id;
         return this.client.get<UserModel>(`/api/users/${id}`);
     }
 
