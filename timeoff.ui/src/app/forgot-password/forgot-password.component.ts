@@ -24,8 +24,8 @@ export class ForgotPasswordComponent {
     protected readonly submitting = signal(false);
 
     constructor(
-        private passwordSvc: AuthService,
-        private msgsSvc: MessagesService,
+        private readonly passwordSvc: AuthService,
+        private readonly msgsSvc: MessagesService,
         private destroyed: DestroyRef
     ) {}
 
@@ -42,10 +42,6 @@ export class ForgotPasswordComponent {
                     this.msgsSvc.isSuccess(`Password reset email sent to ${this.passwordForm.controls.email.value}`);
 
                     this.passwordForm.reset();
-                    this.submitting.set(false);
-                },
-                error: () => {
-                    this.msgsSvc.isError('Unable to send reset email. Please try again later');
                     this.submitting.set(false);
                 },
             });

@@ -65,11 +65,6 @@ export class LoginComponent {
 
                     this.submitting.set(false);
                 },
-                error: () => {
-                    this.submitting.set(false);
-
-                    this.msgsSvc.isError('Login failed');
-                },
             });
     }
 }

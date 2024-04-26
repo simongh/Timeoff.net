@@ -1,10 +1,8 @@
 import { Component, DestroyRef, OnInit, numberAttribute, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { RouterLink } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { HttpErrorResponse } from '@angular/common/http';
-import { switchMap } from 'rxjs';
 import { injectParams } from 'ngxtension/inject-params';
 
 import { DatePickerDirective } from '@components/date-picker.directive';
@@ -12,11 +10,11 @@ import { TeamSelectComponent } from '@components/team-select/team-select.compone
 import { ValidatorMessageComponent } from '@components/validator-message/validator-message.component';
 
 import { MessagesService } from '@services/messages/messages.service';
+import { LoggedInUserService } from '@services/logged-in-user/logged-in-user.service';
 
 import { UsersService } from '../users.service';
 import { UserBreadcrumbComponent } from '../user-breadcrumb/user-breadcrumb.component';
 import { UserDetailsComponent } from '../user-details/user-details.component';
-import { LoggedInUserService } from '@services/logged-in-user/logged-in-user.service';
 
 @Component({
     selector: 'user-edit',
@@ -90,15 +88,6 @@ export class UserEditComponent implements OnInit {
                     this.currentUser.refresh();
                     this.submitting.set(false);
                 },
-                error: (e: HttpErrorResponse) => {
-                    if (e.status == 400) {
-                        this.msgsSvc.hasErrors(e.error.errors);
-                    } else {
-                        this.msgsSvc.isError('Unable to update details');
-                    }
-
-                    this.submitting.set(false);
-                },
             });
     }
 
@@ -112,10 +101,6 @@ export class UserEditComponent implements OnInit {
                 next: () => {
                     this.submitting.set(false);
                     this.msgsSvc.isSuccess('Password reset');
-                },
-                error: () => {
-                    this.msgsSvc.isError('Unable to reset password');
-                    this.submitting.set(false);
                 },
             });
     }

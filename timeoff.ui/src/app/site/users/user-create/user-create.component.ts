@@ -3,7 +3,6 @@ import { Router, RouterLink } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
-import { HttpErrorResponse } from '@angular/common/http';
 
 import { FlashComponent } from '@components/flash/flash.component';
 import { ValidatorMessageComponent } from '@components/validator-message/validator-message.component';
@@ -69,15 +68,6 @@ export class UserCreateComponent {
                     this.messagesSvc.isSuccess('New user account successfully added', true);
                     this.currentUser.refresh();
                     this.router.navigateByUrl('/users');
-                },
-                error: (e: HttpErrorResponse) => {
-                    if (e.status == 400) {
-                        this.messagesSvc.hasErrors(e.error.errors);
-                    } else {
-                        this.messagesSvc.isError('Unable to add new user');
-                    }
-
-                    this.submitting.set(false);
                 },
             });
     }

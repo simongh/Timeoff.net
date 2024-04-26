@@ -48,15 +48,6 @@ export class AuthService {
         private readonly fb: FormBuilder
     ) {}
 
-    public getToken() {
-        return of('token').pipe(
-            catchError((e) => {
-                this.loggedInUser.clear();
-                throw e;
-            }),
-        );
-    }
-
     public login() {
         return this.client.post<LoginResult>('/api/account/login', this.loginForm.value);
     }

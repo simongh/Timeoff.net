@@ -10,13 +10,13 @@ import { ControlContainer, FormControl } from '@angular/forms';
     styleUrl: './validator-message.component.scss',
 })
 export class ValidatorMessageComponent {
+    private readonly parent: ControlContainer;
+
     public readonly control = input<FormControl | null>(null);
-    
+
     public readonly controlName = input<string | null>(null);
 
     public readonly validatorName = input<string | null>(null);
-
-    private readonly parent: ControlContainer;
 
     protected get hasError() {
         const control = this.control() || this.parent.control?.get(this.controlName()!);
@@ -37,7 +37,7 @@ export class ValidatorMessageComponent {
         } else {
             return false;
         }
-    };
+    }
 
     constructor(@Optional() @Host() @SkipSelf() parent: ControlContainer) {
         this.parent = parent;

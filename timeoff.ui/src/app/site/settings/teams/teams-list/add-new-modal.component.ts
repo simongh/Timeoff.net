@@ -8,7 +8,6 @@ import { ValidatorMessageComponent } from '@components/validator-message/validat
 import { UserListComponent } from '@components/user-select/user-select.component';
 import { getAllowances } from '@models/allowances';
 
-import { UserModel } from '@services/company/user.model';
 import { MessagesService } from '@services/messages/messages.service';
 
 import { TeamsService } from '../teams.service';
@@ -22,12 +21,12 @@ import { TeamsService } from '../teams.service';
 export class AddNewModalComponent {
     protected readonly allowance = getAllowances();
 
-    public get form() {
+    protected get form() {
         return this.teamsSvc.form;
     }
 
     @Output()
-    public added = new EventEmitter();
+    public readonly added = new EventEmitter();
 
     protected readonly submitting = signal(false);
 
@@ -52,15 +51,6 @@ export class AddNewModalComponent {
                     this.msgSvc.isSuccess('New team added');
                     this.added.emit();
                     this.form.reset();
-                    this.submitting.set(false);
-                },
-                error: (e: HttpErrorResponse) => {
-                    if (e.status == 400) {
-                        this.msgSvc.hasErrors(e.error.errors);
-                    } else {
-                        this.msgSvc.isError('Unable to add new team');
-                    }
-
                     this.submitting.set(false);
                 },
             });

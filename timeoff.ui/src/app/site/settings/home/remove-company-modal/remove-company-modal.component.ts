@@ -16,7 +16,7 @@ export class RemoveCompanyModalComponent {
     protected readonly submitting = signal(false);
 
     @Output()
-    public onDelete = new EventEmitter<string>();
+    public readonly onDelete = new EventEmitter<string>();
 
     public delete() {
         this.companyName.markAllAsTouched();

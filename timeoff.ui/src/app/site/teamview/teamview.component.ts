@@ -51,9 +51,9 @@ export class TeamviewComponent implements OnInit {
 
     protected readonly teams = signal<TeamModel[]>([]);
 
-    public results: TeamViewModel = {
+    protected readonly results = signal<TeamViewModel>({
         users: [] as UserSummaryModel[],
-    } as TeamViewModel;
+    } as TeamViewModel);
 
     constructor(
         private readonly destroyed: DestroyRef,
@@ -68,7 +68,7 @@ export class TeamviewComponent implements OnInit {
             .pipe(takeUntilDestroyed(this.destroyed))
             .subscribe(([results, teams]) => {
                 this.teams.set(teams);
-                this.results = results;
+                this.results.set(results);
             });
     }
 

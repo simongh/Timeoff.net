@@ -1,9 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, DestroyRef, OnInit, computed, signal } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { RouterLink } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { HttpErrorResponse } from '@angular/common/http';
 import { combineLatest } from 'rxjs';
 
 import { dateFormats } from '@models/date-formats';
@@ -72,7 +71,6 @@ export class HomeComponent implements OnInit {
 
     constructor(
         private destroyed: DestroyRef,
-        private readonly router: Router,
         private readonly companySvc: CompanyService,
         private readonly msgsSvc: MessagesService
     ) {}
@@ -117,14 +115,6 @@ export class HomeComponent implements OnInit {
                     this.submitting.set(false);
                     this.msgsSvc.isSuccess('Company details updated');
                 },
-                error: (e: HttpErrorResponse) => {
-                    this.submitting.set(false);
-                    if (e.status == 400) {
-                        this.msgsSvc.hasErrors(e.error.errors);
-                    } else {
-                        this.msgsSvc.isError('Unable to save changes');
-                    }
-                },
             });
     }
 
@@ -144,14 +134,6 @@ export class HomeComponent implements OnInit {
             .subscribe({
                 next: () => {
                     this.msgsSvc.isSuccess('Schedule updated');
-                    this.submitting.set(false);
-                },
-                error: (e: HttpErrorResponse) => {
-                    if (e.status == 400) {
-                        this.msgsSvc.hasErrors(e.error.errors);
-                    } else {
-                        this.msgsSvc.isError('Unable to update schedule');
-                    }
                     this.submitting.set(false);
                 },
             });

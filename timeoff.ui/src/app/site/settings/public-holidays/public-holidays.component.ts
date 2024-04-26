@@ -3,7 +3,6 @@ import { RouterLink } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
-import { HttpErrorResponse } from '@angular/common/http';
 import { switchMap } from 'rxjs';
 import { startOfYear } from 'date-fns';
 import { injectQueryParams } from 'ngxtension/inject-query-params';
@@ -85,13 +84,6 @@ export class PublicHolidaysComponent {
                     this.loadHolidays(data);
                     this.msgsSvc.isSuccess('Holiday was successfully removed');
                 },
-                error: (error: HttpErrorResponse) => {
-                    if (error.status == 400) {
-                        this.msgsSvc.hasErrors(error.error.errors);
-                    } else {
-                        this.msgsSvc.isError('Unable to remove holiday');
-                    }
-                },
             });
     }
 
@@ -108,13 +100,6 @@ export class PublicHolidaysComponent {
                 next: (data) => {
                     this.loadHolidays(data);
                     this.msgsSvc.isSuccess('Holidays updated');
-                },
-                error: (e: HttpErrorResponse) => {
-                    if (e.status == 400) {
-                        this.msgsSvc.hasErrors(e.error.errors);
-                    } else {
-                        this.msgsSvc.isError('Unable to update holidays');
-                    }
                 },
             });
     }

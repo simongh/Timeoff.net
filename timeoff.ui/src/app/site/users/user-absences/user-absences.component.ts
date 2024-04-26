@@ -8,13 +8,16 @@ import { injectParams } from 'ngxtension/inject-params';
 
 import { YesPipe } from '@components/yes.pipe';
 import { RequestsListComponent } from '@components/requests-list/requests-list.component';
+import { AllowanceBreakdownComponent } from "@components/allowance-breakdown/allowance-breakdown.component";
+import { LeaveSummaryComponent } from "@components/leave-summary/leave-summary.component";
 
 import { CalendarService } from '@services/calendar/calendar.service';
 import { AllowanceSummaryModel } from '@services/calendar/allowance-summary.model';
 import { MessagesService } from '@services/messages/messages.service';
 
+import { LeaveRequestModel } from '@models/leave-request.model';
+
 import { UsersService } from '../users.service';
-import { LeaveRequestModel } from '../../../models/leave-request.model';
 import { UserBreadcrumbComponent } from '../user-breadcrumb/user-breadcrumb.component';
 import { UserDetailsComponent } from '../user-details/user-details.component';
 
@@ -32,7 +35,9 @@ import { UserDetailsComponent } from '../user-details/user-details.component';
         RequestsListComponent,
         ReactiveFormsModule,
         RouterLink,
-    ],
+        AllowanceBreakdownComponent,
+        LeaveSummaryComponent
+    ]
 })
 export default class UserAbsencesComponent implements OnInit {
     protected readonly id = injectParams((p) => numberAttribute(p['id']));
@@ -51,9 +56,9 @@ export default class UserAbsencesComponent implements OnInit {
 
     protected readonly remainingPercent = computed(() => (this.summary().remaining / this.summary().total) * 100);
 
-    public get groupedRequests() {
+    protected groupedRequests = computed(() => {
         return Object.entries(
-            this.leave.reduce((groups, item) => {
+            this.leave().reduce((groups, item) => {
                 const year = item.startDate.getFullYear();
 
                 (groups[year] ||= []).push(item);
@@ -61,11 +66,11 @@ export default class UserAbsencesComponent implements OnInit {
                 return groups;
             }, {} as Record<number, LeaveRequestModel[]>)
         );
-    }
+    });
 
     protected readonly submitting = signal(false);
 
-    private leave: LeaveRequestModel[] = [];
+    private readonly leave = signal<LeaveRequestModel[]>([]);
 
     constructor(
         private destroyed: DestroyRef,

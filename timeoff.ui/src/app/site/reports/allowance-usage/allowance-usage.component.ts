@@ -4,7 +4,6 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { formatDate } from 'date-fns';
-import { computedAsync } from 'ngxtension/computed-async';
 
 import { FlashComponent } from '@components/flash/flash.component';
 import { DatePickerDirective } from '@components/date-picker.directive';
@@ -28,7 +27,7 @@ import { map, switchMap } from 'rxjs';
 export class AllowanceUsageComponent implements OnInit {
     protected readonly results = signal<AllowanceModel[]>([]);
 
-    public get form() {
+    protected get form() {
         return this.allowanceSvc.form;
     }
 

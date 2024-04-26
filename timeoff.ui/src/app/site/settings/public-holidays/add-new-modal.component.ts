@@ -25,7 +25,7 @@ export class AddNewModalComponent {
     protected readonly dateFormat = this.currentUser.dateFormat;
 
     @Output()
-    public added = new EventEmitter();
+    public readonly added = new EventEmitter();
 
     protected readonly submitting = signal(false);
 
@@ -58,16 +58,6 @@ export class AddNewModalComponent {
 
                     this.added.emit();
                     this.form.reset();
-                    this.submitting.set(false);
-                },
-                error: (e: HttpErrorResponse) => {
-                    if (e.status == 400) {
-                        this.msgsSvc.hasErrors(e.error.errors);
-                    } else {
-                        this.msgsSvc.isError('Unable to add holiday');
-                    }
-
-                    this.added.emit();
                     this.submitting.set(false);
                 },
             });

@@ -14,7 +14,7 @@ export class LeaveTypeModalComponent {
     public readonly form = input.required<LeaveTypeFormGroup>();
 
     @Output()
-    public addedLeaveType = new EventEmitter();
+    public readonly addedLeaveType = new EventEmitter();
 
     public addNew() {
         this.addedLeaveType.emit();

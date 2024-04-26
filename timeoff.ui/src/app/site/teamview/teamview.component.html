@@ -30,10 +30,10 @@
 
 <div class="row">&nbsp;</div>
 @if (grouped()) {
-    <month-view *ngFor="let t of teams()" [team]="t" [selectedDate]="start()" [selectedTeam]="team()" [results]="results" [teams]="teams()"/>
+    <month-view *ngFor="let t of teams()" [team]="t" [selectedDate]="start()" [selectedTeam]="team()" [results]="results()" [teams]="teams()"/>
 }
 @else {
-    <month-view [selectedDate]="start()" [selectedTeam]="team()" [results]="results" [teams]="teams()"/>
+    <month-view [selectedDate]="start()" [selectedTeam]="team()" [results]="results()" [teams]="teams()"/>
 }
 <!-- @if (Model.Grouped)
 {

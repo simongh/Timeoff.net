@@ -65,12 +65,6 @@ export class ResetPasswordComponent {
                     this.submitting.set(false);
                     this.passwordForm.reset();
                 },
-                error: (e: HttpErrorResponse) => {
-                    if (e.status === 400) {
-                        this.msgsSvc.hasErrors(e.error.errors);
-                    } else this.msgsSvc.isError('Unable to reset password. Please try again later');
-                    this.submitting.set(false);
-                },
             });
     }
 }
