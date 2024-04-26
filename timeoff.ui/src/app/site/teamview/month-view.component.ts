@@ -1,13 +1,14 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, computed, inject, input } from '@angular/core';
+import { Component, computed, inject, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { eachDayOfInterval, endOfMonth, formatDate } from 'date-fns';
 
 import { TeamModel } from '@services/company/team.model';
+import { LoggedInUserService } from '@services/logged-in-user/logged-in-user.service';
+
 import { TeamViewModel } from './team-view.model';
 import { RowModel } from './row.model';
 import { DayModel } from './day.model';
-import { LoggedInUserService } from '@services/logged-in-user/logged-in-user.service';
 
 @Component({
     standalone: true,

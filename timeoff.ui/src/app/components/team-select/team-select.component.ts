@@ -18,9 +18,9 @@ export class TeamSelectComponent {
 
     protected readonly teams = computedAsync(() => this.companySvc.getTeams(), { initialValue: [] });
 
-    public control = input.required<FormControl<number | null>>();
+    public readonly control = input.required<FormControl<number | null>>();
 
-    public for = input('');
+    public readonly for = input('');
 
-    public allowAll = input(false);
+    public readonly allowAll = input(false);
 }

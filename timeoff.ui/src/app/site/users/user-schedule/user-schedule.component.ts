@@ -1,9 +1,8 @@
 import { Component, DestroyRef, OnInit, numberAttribute, signal } from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { RouterLink } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { HttpErrorResponse } from '@angular/common/http';
 import { injectParams } from 'ngxtension/inject-params';
 
 import { ScheduleComponent } from '@components/schedule/schedule.component';
@@ -77,10 +76,6 @@ export class UserScheduleComponent implements OnInit {
                     this.msgsSvc.isSuccess('Schedule Updated');
                     this.submitting.set(false);
                 },
-                error: (e: HttpErrorResponse) => {
-                    this.msgsSvc.isError('Unabled to update schedule');
-                    this.submitting.set(false);
-                },
             });
     }
 
@@ -96,10 +91,6 @@ export class UserScheduleComponent implements OnInit {
                     this.form.controls.schedule.setValue(schedule);
 
                     this.msgsSvc.isSuccess('Schedule updated');
-                    this.submitting.set(false);
-                },
-                error: (e: HttpErrorResponse) => {
-                    this.msgsSvc.isError('Unabled to update schedule');
                     this.submitting.set(false);
                 },
             });

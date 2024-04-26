@@ -6,7 +6,7 @@ import { CompanyService } from '@services/company/company.service';
 
 import { ColourPickerComponent } from '../colour-picker/colour-picker.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { LeaveTypeModalComponent } from "../leave-type-modal/leave-type-modal.component";
+import { LeaveTypeModalComponent } from '../leave-type-modal/leave-type-modal.component';
 
 @Component({
     selector: 'leave-types',
@@ -14,7 +14,7 @@ import { LeaveTypeModalComponent } from "../leave-type-modal/leave-type-modal.co
     templateUrl: './leave-types.component.html',
     styleUrl: './leave-types.component.scss',
     providers: [],
-    imports: [ColourPickerComponent, CommonModule, ReactiveFormsModule, LeaveTypeModalComponent]
+    imports: [ColourPickerComponent, CommonModule, ReactiveFormsModule, LeaveTypeModalComponent],
 })
 export class LeaveTypesComponent {
     protected get leaveTypes() {

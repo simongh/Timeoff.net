@@ -1,9 +1,7 @@
 import { Component, DestroyRef, input } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 
-import { MessagesService } from '@services/messages/messages.service';
 import { CompanyService } from '@services/company/company.service';
 
 import { RemoveCompanyModalComponent } from '../remove-company-modal/remove-company-modal.component';
@@ -20,7 +18,6 @@ export class RemoveCompanyComponent {
 
     constructor(
         private readonly companySvc: CompanyService,
-        private readonly msgsSvc: MessagesService,
         private destroyed: DestroyRef,
         private readonly router: Router
     ) {}
@@ -32,13 +29,6 @@ export class RemoveCompanyComponent {
             .subscribe({
                 next: () => {
                     this.router.navigateByUrl('/logout');
-                },
-                error: (e: HttpErrorResponse) => {
-                    if (e.status == 400) {
-                        this.msgsSvc.hasErrors(e.error.errors);
-                    } else {
-                        this.msgsSvc.isError('Unable to delete company');
-                    }
                 },
             });
     }

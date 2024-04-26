@@ -2,7 +2,6 @@ import { CommonModule } from '@angular/common';
 import { Component, DestroyRef, EventEmitter, Output, input, signal } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { HttpErrorResponse } from '@angular/common/http';
 
 import { FlashComponent } from '@components/flash/flash.component';
 
@@ -25,7 +24,7 @@ export class UserDetailsComponent {
     public readonly id = input.required<number>();
 
     @Output()
-    public deleting = new EventEmitter();
+    public readonly deleting = new EventEmitter();
 
     protected readonly submitting = signal(false);
 
@@ -38,6 +37,7 @@ export class UserDetailsComponent {
 
     public delete() {
         this.submitting.set(true);
+
         this.usersSvc
             .deleteUser(this.id())
             .pipe(takeUntilDestroyed(this.destroyed))
@@ -47,13 +47,6 @@ export class UserDetailsComponent {
                     this.submitting.set(false);
 
                     this.router.navigateByUrl('/users');
-                },
-                error: (e: HttpErrorResponse) => {
-                    if (e.status == 400) {
-                        this.msgsSvc.hasErrors(e.error.errors);
-                    }
-                    this.msgsSvc.isError('Unable to remove employee');
-                    this.submitting.set(false);
                 },
             });
     }

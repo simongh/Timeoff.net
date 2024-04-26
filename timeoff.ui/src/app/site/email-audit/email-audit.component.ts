@@ -1,7 +1,6 @@
 import { Component, DestroyRef, OnInit, numberAttribute, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { injectQueryParams } from 'ngxtension/inject-query-params';
 import { computedAsync } from 'ngxtension/computed-async';
@@ -10,7 +9,6 @@ import { FlashComponent } from '@components/flash/flash.component';
 import { DatePickerDirective } from '@components/date-picker.directive';
 
 import { MessagesService } from '@services/messages/messages.service';
-import { UserModel } from '@services/company/user.model';
 import { CompanyService } from '@services/company/company.service';
 
 import { PagerComponent } from './pager.component';
@@ -50,7 +48,6 @@ export class EmailAuditComponent implements OnInit {
         private readonly msgsSvc: MessagesService,
         private readonly companySvc: CompanyService,
         private readonly destroyed: DestroyRef,
-        private readonly route: ActivatedRoute,
         private readonly currentUser: LoggedInUserService
     ) {}
 
@@ -94,10 +91,6 @@ export class EmailAuditComponent implements OnInit {
                     this.emails.set(data);
                     this.searching.set(false);
                     this.totalPages.set(this.searchSvc.totalPages);
-                },
-                error: () => {
-                    this.msgsSvc.isError('Unable to retrieve emails');
-                    this.emails.set([]);
                 },
             });
     }

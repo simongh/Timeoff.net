@@ -59,11 +59,6 @@ export class RegisterComponent {
                     );
                     this.registerForm.reset();
                 },
-                error: (e: HttpErrorResponse) => {
-                    this.msgsSvc.hasErrors(e.error.errors);
-
-                    this.submitting.set(false);
-                },
             });
     }
 }
