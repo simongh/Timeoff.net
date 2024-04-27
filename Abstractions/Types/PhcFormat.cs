@@ -14,21 +14,21 @@ namespace Timeoff.Types
 
         public int Version { get; init; } = CURRENT_FORMAT;
 
-        public byte[] Hash { get; set; } = Array.Empty<byte>();
+        public byte[] Hash { get; set; } = [];
 
-        public byte[] Salt { get; init; } = Array.Empty<byte>();
+        public byte[] Salt { get; init; } = [];
 
-        public bool ShouldUpgrade => HashAlgorithm != HashAlgorithmName.SHA256 || IterationCount != PBKDF2_ITERATIONS;
+        public readonly bool ShouldUpgrade => HashAlgorithm != HashAlgorithmName.SHA256 || IterationCount != PBKDF2_ITERATIONS;
 
         public PhcFormat()
         { }
 
-        public override string ToString()
+        public override readonly string ToString()
         {
             return $"$pbkdf2-{HashName}$v={Version}$i={IterationCount}${Convert.ToBase64String(Salt)}${Convert.ToBase64String(Hash)}";
         }
 
-        private string HashName
+        private readonly string HashName
         {
             get
             {
@@ -63,9 +63,9 @@ namespace Timeoff.Types
             foreach (var item in parts[1..^2])
             {
                 if (item.StartsWith('v'))
-                    version = int.Parse(item.Substring(2));
+                    version = int.Parse(item[2..]);
                 if (item.StartsWith('i'))
-                    i = int.Parse(item.Substring(2));
+                    i = int.Parse(item[2..]);
             }
 
             HashAlgorithmName? ha = parts[0] switch
@@ -103,7 +103,7 @@ namespace Timeoff.Types
         /// <param name="a">The first byte array.</param>
         /// <param name="b">The second byte array.</param>
         /// <returns>True if both byte arrays are equal. False otherwise.</returns>
-        public bool Equals(byte[]? other)
+        public readonly bool Equals(byte[]? other)
         {
             if (other == null)
                 return false;

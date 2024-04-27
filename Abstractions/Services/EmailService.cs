@@ -2,16 +2,11 @@
 
 namespace Timeoff.Services
 {
-    internal class EmailService
+    internal class EmailService(IOptions<Types.Options> options)
     {
-        private readonly Types.Options _options;
+        private readonly Types.Options _options = options.Value;
 
-        public EmailService(IOptions<Types.Options> options)
-        {
-            _options = options.Value;
-        }
-
-        public async Task Send(Entities.EmailAudit email)
+        public async Task SendAsync(Entities.EmailAudit email)
         {
             if (!_options.Email.SendEmails)
                 return;

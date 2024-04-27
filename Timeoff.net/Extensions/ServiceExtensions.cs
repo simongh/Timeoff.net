@@ -8,7 +8,6 @@ namespace Timeoff
         public static IServiceCollection AddWebServices(this IServiceCollection services)
         {
             services.AddScoped<Services.ICurrentUserService, Services.CurrentUserService>();
-            services.AddScoped<Services.IFlashMessageService, Services.FlashMessageService>();
             services.AddHttpContextAccessor();
             services.AddMediatR(options =>
              {
@@ -63,6 +62,7 @@ namespace Timeoff
             {
                 opts.SerializerOptions.Converters.Clear();
                 opts.SerializerOptions.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase));
+                opts.SerializerOptions.Converters.Add(new JsonStringEnumConverter());
                 opts.SerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
                 opts.SerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
             });

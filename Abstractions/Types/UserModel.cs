@@ -8,8 +8,6 @@
 
         public string LastName { get; init; } = null!;
 
-        public string Name => $"{FirstName} {LastName}";
-
         public bool IsActive { get; init; }
     }
 }

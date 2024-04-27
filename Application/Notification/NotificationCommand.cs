@@ -7,18 +7,13 @@ namespace Timeoff.Application.Notification
     {
     }
 
-    internal class NotificationCommandHandler : IRequestHandler<NotificationCommand, NotificationsSummaryResult>
+    internal class NotificationCommandHandler(
+        IDataContext dataContext,
+        Services.ICurrentUserService userService)
+        : IRequestHandler<NotificationCommand, NotificationsSummaryResult>
     {
-        private readonly IDataContext _dataContext;
-        private readonly Services.ICurrentUserService _userService;
-
-        public NotificationCommandHandler(
-            IDataContext dataContext,
-            Services.ICurrentUserService userService)
-        {
-            _dataContext = dataContext;
-            _userService = userService;
-        }
+        private readonly IDataContext _dataContext = dataContext;
+        private readonly Services.ICurrentUserService _userService = userService;
 
         public async Task<NotificationsSummaryResult> Handle(NotificationCommand request, CancellationToken cancellationToken)
         {
@@ -29,14 +24,14 @@ namespace Timeoff.Application.Notification
 
             return new()
             {
-                Data = new List<NotificationResult>
-                {
-                    new NotificationResult
+                Data =
+                [
+                    new ()
                     {
                         Type = "pending_request",
                         Count = count,
                     },
-                },
+                ],
             };
         }
     }

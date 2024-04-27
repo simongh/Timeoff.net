@@ -6,18 +6,13 @@ namespace Timeoff.Application.IntegrationApi
     {
     }
 
-    internal class GetIntegrationApiCommandHandler : IRequestHandler<GetIntegrationApiCommand, IntegrationResult>
+    internal class GetIntegrationApiCommandHandler(
+        IDataContext dataContext,
+        Services.ICurrentUserService currentUserService)
+        : IRequestHandler<GetIntegrationApiCommand, IntegrationResult>
     {
-        private readonly IDataContext _dataContext;
-        private readonly Services.ICurrentUserService _currentUserService;
-
-        public GetIntegrationApiCommandHandler(
-            IDataContext dataContext,
-            Services.ICurrentUserService currentUserService)
-        {
-            _dataContext = dataContext;
-            _currentUserService = currentUserService;
-        }
+        private readonly IDataContext _dataContext = dataContext;
+        private readonly Services.ICurrentUserService _currentUserService = currentUserService;
 
         public async Task<IntegrationResult> Handle(GetIntegrationApiCommand request, CancellationToken cancellationToken)
         {

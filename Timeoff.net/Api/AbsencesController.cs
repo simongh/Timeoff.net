@@ -1,10 +1,12 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Timeoff.Api
 {
     [Route("api/absences")]
     [ApiController]
+    [Authorize(Policy = "token")]
     public class AbsencesController(IMediator mediator) : ControllerBase
     {
         private readonly IMediator _mediator = mediator;

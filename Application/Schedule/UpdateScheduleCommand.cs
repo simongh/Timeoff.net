@@ -7,18 +7,12 @@ namespace Timeoff.Application.Schedule
     {
     }
 
-    internal class UpdateScheduleCommandHandler : IRequestHandler<UpdateScheduleCommand, ResultModels.ApiResult>
+    internal class UpdateScheduleCommandHandler(
+        IDataContext dataContext,
+        Services.ICurrentUserService currentUserService) : IRequestHandler<UpdateScheduleCommand, ResultModels.ApiResult>
     {
-        private readonly IDataContext _dataContext;
-        private readonly Services.ICurrentUserService _currentUserService;
-
-        public UpdateScheduleCommandHandler(
-            IDataContext dataContext,
-            Services.ICurrentUserService currentUserService)
-        {
-            _dataContext = dataContext;
-            _currentUserService = currentUserService;
-        }
+        private readonly IDataContext _dataContext = dataContext;
+        private readonly Services.ICurrentUserService _currentUserService = currentUserService;
 
         public async Task<ResultModels.ApiResult> Handle(UpdateScheduleCommand request, CancellationToken cancellationToken)
         {

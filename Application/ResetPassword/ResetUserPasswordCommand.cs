@@ -8,24 +8,17 @@ namespace Timeoff.Application.ResetPassword
         public int Id { get; init; }
     }
 
-    internal class ResetUserPasswordCommandHandler : IRequestHandler<ResetUserPasswordCommand>
+    internal class ResetUserPasswordCommandHandler(
+        IDataContext dataContext,
+        Services.ICurrentUserService currentUserService,
+        Services.IUsersService usersService,
+        Services.IEmailTemplateService emailTemplateService)
+        : IRequestHandler<ResetUserPasswordCommand>
     {
-        private readonly IDataContext _dataContext;
-        private readonly Services.ICurrentUserService _currentUserService;
-        private readonly Services.IUsersService _usersService;
-        private readonly Services.IEmailTemplateService _emailTemplateService;
-
-        public ResetUserPasswordCommandHandler(
-            IDataContext dataContext,
-            Services.ICurrentUserService currentUserService,
-            Services.IUsersService usersService,
-            Services.IEmailTemplateService emailTemplateService)
-        {
-            _dataContext = dataContext;
-            _currentUserService = currentUserService;
-            _usersService = usersService;
-            _emailTemplateService = emailTemplateService;
-        }
+        private readonly IDataContext _dataContext = dataContext;
+        private readonly Services.ICurrentUserService _currentUserService = currentUserService;
+        private readonly Services.IUsersService _usersService = usersService;
+        private readonly Services.IEmailTemplateService _emailTemplateService = emailTemplateService;
 
         public async Task Handle(ResetUserPasswordCommand request, CancellationToken cancellationToken)
         {

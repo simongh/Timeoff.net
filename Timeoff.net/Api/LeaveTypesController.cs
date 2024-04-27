@@ -1,10 +1,12 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Timeoff.Api
 {
     [Route("api/company/leave-types")]
     [ApiController]
+    [Authorize(Policy = "token", Roles = Roles.Admin)]
     public class LeaveTypesController(IMediator mediator) : ControllerBase
     {
         private readonly IMediator _mediator = mediator;

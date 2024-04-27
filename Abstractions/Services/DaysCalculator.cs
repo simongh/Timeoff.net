@@ -2,14 +2,9 @@
 
 namespace Timeoff.Services
 {
-    internal class DaysCalculator : IDaysCalculator
+    internal class DaysCalculator(IDataContext dataContext) : IDaysCalculator
     {
-        private readonly IDataContext _dataContext;
-
-        public DaysCalculator(IDataContext dataContext)
-        {
-            _dataContext = dataContext;
-        }
+        private readonly IDataContext _dataContext = dataContext;
 
         public async Task CalculateDaysAsync(Entities.Leave leave)
         {

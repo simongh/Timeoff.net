@@ -8,18 +8,13 @@ namespace Timeoff.Application.LeaveSummary
         public int Id { get; init; }
     }
 
-    internal class SummaryCommandHandler : IRequestHandler<SummaryCommand, SummaryViewModel>
+    internal class SummaryCommandHandler(
+        IDataContext dataContext,
+        Services.ICurrentUserService currentUserService)
+        : IRequestHandler<SummaryCommand, SummaryViewModel>
     {
-        private readonly IDataContext _dataContext;
-        private readonly Services.ICurrentUserService _currentUserService;
-
-        public SummaryCommandHandler(
-            IDataContext dataContext,
-            Services.ICurrentUserService currentUserService)
-        {
-            _dataContext = dataContext;
-            _currentUserService = currentUserService;
-        }
+        private readonly IDataContext _dataContext = dataContext;
+        private readonly Services.ICurrentUserService _currentUserService = currentUserService;
 
         public async Task<SummaryViewModel> Handle(SummaryCommand request, CancellationToken cancellationToken)
         {

@@ -17,8 +17,6 @@ namespace Timeoff.Application.Settings
 
         public async Task<SettingsResult> Handle(GetSettingsCommand request, CancellationToken cancellationToken)
         {
-            //var leaveTypes =await _dataContext.LeaveTypes.ToModelsAsync(_currentUserService.CompanyId);
-
             return await _dataContext.Companies
                 .Where(c => c.CompanyId == _currentUserService.CompanyId)
                 .Select(c => new SettingsResult

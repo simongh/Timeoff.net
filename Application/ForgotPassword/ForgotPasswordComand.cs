@@ -10,21 +10,15 @@ namespace Timeoff.Application.ForgotPassword
         public IEnumerable<ValidationFailure>? Failures { get; set; }
     }
 
-    internal class ForgotPasswordCommandHandler : IRequestHandler<ForgotPasswordComand>
+    internal class ForgotPasswordCommandHandler(
+        IDataContext dataContext,
+        Services.IEmailTemplateService emailTemplateService,
+        Services.IUsersService usersService)
+        : IRequestHandler<ForgotPasswordComand>
     {
-        private readonly IDataContext _dataContext;
-        private readonly Services.IEmailTemplateService _emailTemplateService;
-        private readonly Services.IUsersService _usersService;
-
-        public ForgotPasswordCommandHandler(
-            IDataContext dataContext,
-            Services.IEmailTemplateService emailTemplateService,
-            Services.IUsersService usersService)
-        {
-            _dataContext = dataContext;
-            _emailTemplateService = emailTemplateService;
-            _usersService = usersService;
-        }
+        private readonly IDataContext _dataContext = dataContext;
+        private readonly Services.IEmailTemplateService _emailTemplateService = emailTemplateService;
+        private readonly Services.IUsersService _usersService = usersService;
 
         public async Task Handle(ForgotPasswordComand request, CancellationToken cancellationToken)
         {

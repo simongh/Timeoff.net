@@ -6,14 +6,9 @@ namespace Timeoff.Controllers
 {
     [Route("audit")]
     [Authorize(Roles = "Admin")]
-    public class AuditController : Controller
+    public class AuditController(IMediator mediator) : Controller
     {
-        private readonly IMediator _mediator;
-
-        public AuditController(IMediator mediator)
-        {
-            _mediator = mediator;
-        }
+        private readonly IMediator _mediator = mediator;
 
         //[HttpGet("email")]
         //public async Task<IActionResult> EmailsAsync([FromQuery] Application.EmailAudit.EmailAuditQuery command)

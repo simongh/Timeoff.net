@@ -1,11 +1,10 @@
 ﻿using FluentValidation.Results;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Timeoff.Commands;
 
 namespace Timeoff.Application.BookAbsence
 {
-    public record BookCommand : IRequest, IValidated
+    public record BookCommand : IRequest<ResultModels.ApiResult>, Commands.IValidated
     {
         public int? Employee { get; init; }
 
@@ -23,14 +22,12 @@ namespace Timeoff.Application.BookAbsence
         public IEnumerable<ValidationFailure>? Failures { get; set; }
     }
 
-    internal class BookCommandHandler : IRequestHandler<BookCommand>
+    internal class BookCommandHandler : IRequestHandler<BookCommand, ResultModels.ApiResult>
     {
         private readonly IDataContext _dataContext;
         private readonly Services.ICurrentUserService _currentUserService;
         private readonly Services.INewLeaveService _leaveService;
         private readonly Services.IDaysCalculator _daysCalculator;
-
-        private int UserId { get; set; }
 
         public BookCommandHandler(
             IDataContext dataContext,
@@ -44,16 +41,22 @@ namespace Timeoff.Application.BookAbsence
             _daysCalculator = daysCalculator;
         }
 
-        public async Task Handle(BookCommand request, CancellationToken cancellationToken)
+        public async Task<ResultModels.ApiResult> Handle(BookCommand request, CancellationToken cancellationToken)
         {
             if (!request.Failures.IsValid())
-                return;
+                return new()
+                {
+                    Errors = request.Failures.Select(e => e.ErrorMessage)
+                };
 
             if (request.Employee != null)
             {
                 if (!(await _leaveService.EmployeesIManageAsync()).Any(i => i.Id == request.Employee))
                 {
-                    return;
+                    return new()
+                    {
+                        Errors = ["The  employee is not managed by the current user"]
+                    };
                 }
             }
             var leaveType = await _dataContext.LeaveTypes
@@ -62,7 +65,10 @@ namespace Timeoff.Application.BookAbsence
                 .FirstOrDefaultAsync();
             if (leaveType == null)
             {
-                return;
+                return new()
+                {
+                    Errors = ["The selected leave type could not be found"]
+                };
             }
 
             var user = (await _dataContext.Users
@@ -73,9 +79,12 @@ namespace Timeoff.Application.BookAbsence
                 .FirstOrDefaultAsync())
                 ?? throw new NotFoundException();
 
-            if (!await CheckOverlappingBookingsAsync(request))
+            if (!await CheckOverlappingBookingsAsync(request, user.UserId))
             {
-                return;
+                return new()
+                {
+                    Errors = ["The requested absence overlaps another absence"]
+                };
             }
 
             var days = 0d;
@@ -91,13 +100,13 @@ namespace Timeoff.Application.BookAbsence
                 EmployeeComment = request.Comment,
                 User = user,
                 Status = LeaveStatus.New,
-                ApproverId = await GetApproverAsync(),
+                ApproverId = await GetApproverAsync(user.UserId),
             };
 
             if (leaveType.UseAllowance)
                 await _daysCalculator.CalculateDaysAsync(absence);
 
-            if (absence.ApproverId == absence.UserId)
+            if (absence.ApproverId == user.UserId)
             {
                 absence.Status = LeaveStatus.Approved;
                 absence.DecidedOn = DateTime.Today;
@@ -105,6 +114,8 @@ namespace Timeoff.Application.BookAbsence
 
             _dataContext.Leaves.Add(absence);
             await _dataContext.SaveChangesAsync();
+
+            return new();
         }
 
         //private async Task<double> AdjustForCalendarAsync(BookCommand request)
@@ -175,10 +186,10 @@ namespace Timeoff.Application.BookAbsence
         //    };
         //}
 
-        private async Task<int> GetApproverAsync()
+        private async Task<int> GetApproverAsync(int userId)
         {
             var user = await _dataContext.Users
-                 .Where(u => u.UserId == UserId)
+                 .Where(u => u.UserId == userId)
                  .Select(u => new
                  {
                      u.AutoApprove,
@@ -187,15 +198,15 @@ namespace Timeoff.Application.BookAbsence
                  .FirstAsync();
 
             if (user.AutoApprove)
-                return UserId;
+                return userId;
             else
                 return user.ManagerId!.Value;
         }
 
-        private async Task<bool> CheckOverlappingBookingsAsync(BookCommand request)
+        private async Task<bool> CheckOverlappingBookingsAsync(BookCommand request, int userId)
         {
             var matching = await _dataContext.Leaves
-                .Where(a => a.UserId == UserId)
+                .Where(a => a.UserId == userId)
                 .Where(a =>
                     a.DateStart >= request.Start && a.DateStart <= request.End
                     || a.DateEnd >= request.Start && a.DateEnd <= request.End

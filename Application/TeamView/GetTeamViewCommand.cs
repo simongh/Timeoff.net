@@ -14,18 +14,13 @@ namespace Timeoff.Application.TeamView
         public bool Grouped { get; init; }
     }
 
-    internal class GetTeamViewCommandHandler : IRequestHandler<GetTeamViewCommand, TeamViewModel>
+    internal class GetTeamViewCommandHandler(
+        IDataContext dataContext,
+        Services.ICurrentUserService currentUserService)
+        : IRequestHandler<GetTeamViewCommand, TeamViewModel>
     {
-        private readonly IDataContext _dataContext;
-        private readonly Services.ICurrentUserService _currentUserService;
-
-        public GetTeamViewCommandHandler(
-            IDataContext dataContext,
-            Services.ICurrentUserService currentUserService)
-        {
-            _dataContext = dataContext;
-            _currentUserService = currentUserService;
-        }
+        private readonly IDataContext _dataContext = dataContext;
+        private readonly Services.ICurrentUserService _currentUserService = currentUserService;
 
         public async Task<TeamViewModel> Handle(GetTeamViewCommand request, CancellationToken cancellationToken)
         {

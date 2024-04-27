@@ -17,13 +17,13 @@ namespace Timeoff.Application.Company
         public async Task<IEnumerable<ResultModels.ListResult>> Handle(LeaveTypesQuery request, CancellationToken cancellationToken)
         {
             return await _dataContext.LeaveTypes.Where(lt => lt.CompanyId == _currentUserService.CompanyId)
-                 .OrderBy(lt => lt.Name)
-                 .Select(lt => new ResultModels.ListResult
-                 {
-                     Id = lt.LeaveTypeId,
-                     Name = lt.Name,
-                 })
-                 .ToArrayAsync();
+                .OrderBy(lt => lt.Name)
+                .Select(lt => new ResultModels.ListResult
+                {
+                    Id = lt.LeaveTypeId,
+                    Name = lt.Name,
+                })
+                .ToArrayAsync();
         }
     }
 }
