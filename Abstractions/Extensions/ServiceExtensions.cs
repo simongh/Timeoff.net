@@ -19,7 +19,6 @@ namespace Timeoff
 
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(Behaviours.ValidationBehaviour<,>));
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(Behaviours.UnhandledExceptionBehaviour<,>));
-            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(Behaviours.FlashResultBehaviour<,>));
 
             return services;
         }

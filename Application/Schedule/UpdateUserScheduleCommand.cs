@@ -10,18 +10,13 @@ namespace Timeoff.Application.Schedule
         public Types.ScheduleModel? Schedule { get; set; }
     }
 
-    internal class UpdateUserScheduleCommandHandler : IRequestHandler<UpdateUserScheduleCommand, Types.ScheduleModel>
+    internal class UpdateUserScheduleCommandHandler(
+        IDataContext dataContext,
+        Services.ICurrentUserService currentUserService)
+        : IRequestHandler<UpdateUserScheduleCommand, Types.ScheduleModel>
     {
-        private readonly IDataContext _dataContext;
-        private readonly Services.ICurrentUserService _currentUserService;
-
-        public UpdateUserScheduleCommandHandler(
-            IDataContext dataContext,
-            Services.ICurrentUserService currentUserService)
-        {
-            _dataContext = dataContext;
-            _currentUserService = currentUserService;
-        }
+        private readonly IDataContext _dataContext = dataContext;
+        private readonly Services.ICurrentUserService _currentUserService = currentUserService;
 
         public async Task<Types.ScheduleModel> Handle(UpdateUserScheduleCommand request, CancellationToken cancellationToken)
         {

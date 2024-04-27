@@ -1,5 +1,11 @@
 ﻿namespace Timeoff
 {
+    public static class Roles
+    {
+        public const string Admin = "Admin";
+        public const string User = "User";
+    }
+
     public enum WorkingDay : byte
     {
         WholeDay,

@@ -4,14 +4,10 @@ using System.Security.Claims;
 
 namespace Timeoff.Services
 {
-    internal class CurrentUserService : ICurrentUserService
+    internal class CurrentUserService(IHttpContextAccessor httpContextAccessor)
+        : ICurrentUserService
     {
-        private readonly IHttpContextAccessor _httpContextAccessor;
-
-        public CurrentUserService(IHttpContextAccessor httpContextAccessor)
-        {
-            _httpContextAccessor = httpContextAccessor;
-        }
+        private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
 
         public int UserId
         {
@@ -37,7 +33,7 @@ namespace Timeoff.Services
 
         public string AuthenticationScheme => CookieAuthenticationDefaults.AuthenticationScheme;
 
-        public bool IsAdmin => _httpContextAccessor.HttpContext!.User.IsInRole("Admin");
+        public bool IsAdmin => _httpContextAccessor.HttpContext!.User.IsInRole(Roles.Admin);
 
         public Task SignInAsync(ClaimsPrincipal principal)
         {

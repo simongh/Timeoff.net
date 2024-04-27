@@ -9,27 +9,19 @@ namespace Timeoff.Application.CreateUser
         public IEnumerable<ValidationFailure>? Failures { get; set; }
     }
 
-    internal class CreateCommandHandler : IRequestHandler<CreateCommand, ResultModels.ApiResult>
+    internal class CreateCommandHandler(
+        IDataContext dataContext,
+        Services.ICurrentUserService currentUserService,
+        Services.INewLeaveService leaveService,
+        Services.IUsersService usersService,
+        Services.IEmailTemplateService templateService)
+        : IRequestHandler<CreateCommand, ResultModels.ApiResult>
     {
-        private readonly IDataContext _dataContext;
-        private readonly Services.ICurrentUserService _currentUserService;
-        private readonly Services.INewLeaveService _leaveService;
-        private readonly Services.IUsersService _usersService;
-        private readonly Services.IEmailTemplateService _templateService;
-
-        public CreateCommandHandler(
-            IDataContext dataContext,
-            Services.ICurrentUserService currentUserService,
-            Services.INewLeaveService leaveService,
-            Services.IUsersService usersService,
-            Services.IEmailTemplateService templateService)
-        {
-            _dataContext = dataContext;
-            _currentUserService = currentUserService;
-            _leaveService = leaveService;
-            _usersService = usersService;
-            _templateService = templateService;
-        }
+        private readonly IDataContext _dataContext = dataContext;
+        private readonly Services.ICurrentUserService _currentUserService = currentUserService;
+        private readonly Services.INewLeaveService _leaveService = leaveService;
+        private readonly Services.IUsersService _usersService = usersService;
+        private readonly Services.IEmailTemplateService _templateService = templateService;
 
         public async Task<ResultModels.ApiResult> Handle(CreateCommand request, CancellationToken cancellationToken)
         {

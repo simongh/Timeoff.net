@@ -53,7 +53,7 @@ namespace Timeoff.Application.Login
                         new ("companyid",user.CompanyId.ToString()),
                         new ("dateformat",user.Company.DateFormat),
                         new ("showTeamView",(!user.Company.IsTeamViewHidden).ToString()),
-                        new (ClaimTypes.Role, user.IsAdmin ? "Admin" : "User")
+                        new (ClaimTypes.Role, user.IsAdmin ? Roles.Admin : Roles.User)
                     ], _currentUserService.AuthenticationScheme);
 
                     await _currentUserService.SignInAsync(new(userId));

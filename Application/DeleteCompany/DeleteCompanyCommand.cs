@@ -8,18 +8,13 @@ namespace Timeoff.Application.DeleteCompany
         public string? Name { get; init; }
     }
 
-    internal class DeleteCompanyCommandHandler : IRequestHandler<DeleteCompanyCommand, ResultModels.ApiResult>
+    internal class DeleteCompanyCommandHandler(
+        IDataContext dataContext,
+        Services.ICurrentUserService currentUserService)
+        : IRequestHandler<DeleteCompanyCommand, ResultModels.ApiResult>
     {
-        private readonly IDataContext _dataContext;
-        private readonly Services.ICurrentUserService _currentUserService;
-
-        public DeleteCompanyCommandHandler(
-            IDataContext dataContext,
-            Services.ICurrentUserService currentUserService)
-        {
-            _dataContext = dataContext;
-            _currentUserService = currentUserService;
-        }
+        private readonly IDataContext _dataContext = dataContext;
+        private readonly Services.ICurrentUserService _currentUserService = currentUserService;
 
         public async Task<ResultModels.ApiResult> Handle(DeleteCompanyCommand request, CancellationToken cancellationToken)
         {

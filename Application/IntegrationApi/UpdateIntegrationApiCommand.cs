@@ -10,18 +10,13 @@ namespace Timeoff.Application.IntegrationApi
         public bool Regenerate { get; init; }
     }
 
-    internal class UpdateIntegrationApiCommandHandler : IRequestHandler<UpdateIntegrationApiCommand, IntegrationResult>
+    internal class UpdateIntegrationApiCommandHandler(
+        IDataContext dataContext,
+        Services.ICurrentUserService currentUserService)
+        : IRequestHandler<UpdateIntegrationApiCommand, IntegrationResult>
     {
-        private readonly IDataContext _dataContext;
-        private readonly Services.ICurrentUserService _currentUserService;
-
-        public UpdateIntegrationApiCommandHandler(
-            IDataContext dataContext,
-            Services.ICurrentUserService currentUserService)
-        {
-            _dataContext = dataContext;
-            _currentUserService = currentUserService;
-        }
+        private readonly IDataContext _dataContext = dataContext;
+        private readonly Services.ICurrentUserService _currentUserService = currentUserService;
 
         public async Task<IntegrationResult> Handle(UpdateIntegrationApiCommand request, CancellationToken cancellationToken)
         {
@@ -38,7 +33,6 @@ namespace Timeoff.Application.IntegrationApi
             await _dataContext.SaveChangesAsync();
 
             return await _dataContext.GetIntegrationApiAsync(_currentUserService.CompanyId);
-            //result.Messages = ResultModels.FlashResult.Success("Settings were saved");
         }
     }
 }

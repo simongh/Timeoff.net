@@ -1,6 +1,5 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Timeoff.Services;
 
 namespace Timeoff.Application.Users
 {
@@ -14,7 +13,7 @@ namespace Timeoff.Application.Users
         : IRequestHandler<UsersListQuery, IEnumerable<ResultModels.ListResult>>
     {
         private readonly IDataContext _dataContext = dataContext;
-        private readonly ICurrentUserService _currentUserService = currentUserService;
+        private readonly Services.ICurrentUserService _currentUserService = currentUserService;
 
         public async Task<IEnumerable<ResultModels.ListResult>> Handle(UsersListQuery request, CancellationToken cancellationToken)
         {

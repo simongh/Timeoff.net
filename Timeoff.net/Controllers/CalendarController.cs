@@ -13,15 +13,15 @@ namespace Timeoff.Controllers
             _mediator = mediator;
         }
 
-        [HttpPost("bookleave")]
-        public async Task<IActionResult> BookAsync(Application.BookAbsence.BookCommand command)
-        {
-            await _mediator.Send(command);
+        //[HttpPost("bookleave")]
+        //public async Task<IActionResult> BookAsync(Application.BookAbsence.BookCommand command)
+        //{
+        //    await _mediator.Send(command);
 
-            var result = _mediator.Send(new Application.Calendar.GetCalendarCommand());
+        //    var result = _mediator.Send(new Application.Calendar.GetCalendarCommand());
 
-            return View("Index", result);
-        }
+        //    return View("Index", result);
+        //}
 
         //[HttpGet]
         //[Route("~/")]

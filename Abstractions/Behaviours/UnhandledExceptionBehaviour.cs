@@ -3,14 +3,10 @@ using Microsoft.Extensions.Logging;
 
 namespace Timeoff.Behaviours
 {
-    internal class UnhandledExceptionBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> where TRequest : IRequest<TResponse>
+    internal class UnhandledExceptionBehaviour<TRequest, TResponse>(ILogger<TRequest> logger)
+        : IPipelineBehavior<TRequest, TResponse> where TRequest : IRequest<TResponse>
     {
-        private readonly ILogger _logger;
-
-        public UnhandledExceptionBehaviour(ILogger<TRequest> logger)
-        {
-            _logger = logger;
-        }
+        private readonly ILogger _logger = logger;
 
         public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
         {

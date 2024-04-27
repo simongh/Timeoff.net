@@ -9,18 +9,13 @@ namespace Timeoff.Application.Settings
         public IEnumerable<ValidationFailure>? Failures { get; set; }
     }
 
-    internal class UpdateSettingsCommandHandler : IRequestHandler<UpdateSettingsCommand, ResultModels.ApiResult>
+    internal class UpdateSettingsCommandHandler(
+        IDataContext dataContext,
+        Services.ICurrentUserService currentUserService)
+        : IRequestHandler<UpdateSettingsCommand, ResultModels.ApiResult>
     {
-        private readonly IDataContext _dataContext;
-        private readonly Services.ICurrentUserService _currentUserService;
-
-        public UpdateSettingsCommandHandler(
-            IDataContext dataContext,
-            Services.ICurrentUserService currentUserService)
-        {
-            _dataContext = dataContext;
-            _currentUserService = currentUserService;
-        }
+        private readonly IDataContext _dataContext = dataContext;
+        private readonly Services.ICurrentUserService _currentUserService = currentUserService;
 
         public async Task<ResultModels.ApiResult> Handle(UpdateSettingsCommand request, CancellationToken cancellationToken)
         {

@@ -1,20 +1,24 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Timeoff.Api
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Policy = "token")]
     public class CompanyController(IMediator mediator) : ControllerBase
     {
         private readonly IMediator _mediator = mediator;
 
+        [Authorize(Roles = Roles.Admin)]
         [HttpGet("")]
         public async Task<IActionResult> GetAsync()
         {
             return Ok(await _mediator.Send(new Application.Settings.GetSettingsCommand()));
         }
 
+        [Authorize(Roles = Roles.Admin)]
         [HttpDelete("")]
         public async Task<IActionResult> DeleteAsync(Application.DeleteCompany.DeleteCompanyCommand command)
         {
@@ -41,12 +45,14 @@ namespace Timeoff.Api
             return Ok(await _mediator.Send(new Application.Users.UsersListQuery()));
         }
 
+        [AllowAnonymous]
         [HttpGet("countries")]
         public async Task<IActionResult> CountriesAsync()
         {
             return Ok((await _mediator.Send(new Application.Company.ListsCommand())).Countries);
         }
 
+        [AllowAnonymous]
         [HttpGet("time-zones")]
         public async Task<IActionResult> TimeZonesAsync()
         {
@@ -59,6 +65,7 @@ namespace Timeoff.Api
             return Ok(await _mediator.Send(new Application.Company.LeaveTypesQuery()));
         }
 
+        [Authorize(Roles = Roles.Admin)]
         [HttpPut("settings")]
         public async Task<IActionResult> UpdateSettingsAsync(Application.Settings.UpdateSettingsCommand command)
         {
@@ -73,6 +80,7 @@ namespace Timeoff.Api
                 return BadRequest(result);
         }
 
+        [Authorize(Roles = Roles.Admin)]
         [HttpPut("schedule")]
         public async Task<IActionResult> UpdateScheduleAsync(Application.Schedule.UpdateScheduleCommand command)
         {

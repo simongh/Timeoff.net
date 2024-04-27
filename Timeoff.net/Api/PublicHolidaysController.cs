@@ -1,10 +1,12 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Timeoff.Api
 {
     [Route("api/public-holidays")]
     [ApiController]
+    [Authorize(Policy = "token")]
     public class PublicHolidaysController(IMediator mediator) : ControllerBase
     {
         private readonly IMediator _mediator = mediator;
@@ -15,6 +17,7 @@ namespace Timeoff.Api
             return Ok(await _mediator.Send(query));
         }
 
+        [Authorize(Roles = Roles.Admin)]
         [HttpPost]
         public async Task<IActionResult> CreateAsync(Application.PublicHolidays.UpdatePublicHolidayCommand model)
         {
@@ -31,6 +34,7 @@ namespace Timeoff.Api
                 return BadRequest(result);
         }
 
+        [Authorize(Roles = Roles.Admin)]
         [HttpPut]
         public async Task<IActionResult> UpdateAsync(Application.PublicHolidays.UpdatePublicHolidayCommand model)
         {
@@ -48,6 +52,7 @@ namespace Timeoff.Api
                 return BadRequest(result);
         }
 
+        [Authorize(Roles = Roles.Admin)]
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> DeleteAsync([FromRoute] Application.DeletePublicHoliday.DeleteHolidayCommand command)
         {

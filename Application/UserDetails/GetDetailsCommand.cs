@@ -7,18 +7,13 @@ namespace Timeoff.Application.UserDetails
         public int Id { get; init; }
     }
 
-    internal class GetUserDetailsCommandHandler : IRequestHandler<GetDetailsCommand, DetailsViewModel>
+    internal class GetUserDetailsCommandHandler(
+        IDataContext dataContext,
+        Services.ICurrentUserService currentUserService)
+        : IRequestHandler<GetDetailsCommand, DetailsViewModel>
     {
-        private readonly IDataContext _dataContext;
-        private readonly Services.ICurrentUserService _currentUserService;
-
-        public GetUserDetailsCommandHandler(
-            IDataContext dataContext,
-            Services.ICurrentUserService currentUserService)
-        {
-            _dataContext = dataContext;
-            _currentUserService = currentUserService;
-        }
+        private readonly IDataContext _dataContext = dataContext;
+        private readonly Services.ICurrentUserService _currentUserService = currentUserService;
 
         public async Task<DetailsViewModel> Handle(GetDetailsCommand request, CancellationToken cancellationToken)
         {

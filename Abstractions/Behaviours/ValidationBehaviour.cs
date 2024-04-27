@@ -4,14 +4,10 @@ using Timeoff.Commands;
 
 namespace Timeoff.Behaviours
 {
-    internal class ValidationBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> where TRequest : notnull
+    internal class ValidationBehaviour<TRequest, TResponse>(IEnumerable<IValidator<TRequest>> validators)
+        : IPipelineBehavior<TRequest, TResponse> where TRequest : notnull
     {
-        private readonly IEnumerable<IValidator<TRequest>> _validators;
-
-        public ValidationBehaviour(IEnumerable<IValidator<TRequest>> validators)
-        {
-            _validators = validators;
-        }
+        private readonly IEnumerable<IValidator<TRequest>> _validators = validators;
 
         public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
         {

@@ -12,18 +12,13 @@ namespace Timeoff.Application.Users
         public IEnumerable<ValidationFailure>? Failures { get; set; }
     }
 
-    internal class UpdateAbsencesCommandHandler : IRequestHandler<UpdateAbsencesCommand, ResultModels.AllowanceSummaryResult>
+    internal class UpdateAbsencesCommandHandler(
+        IDataContext dataContext,
+        Services.ICurrentUserService currentUserService)
+        : IRequestHandler<UpdateAbsencesCommand, ResultModels.AllowanceSummaryResult>
     {
-        private readonly IDataContext _dataContext;
-        private readonly Services.ICurrentUserService _currentUserService;
-
-        public UpdateAbsencesCommandHandler(
-            IDataContext dataContext,
-            Services.ICurrentUserService currentUserService)
-        {
-            _dataContext = dataContext;
-            _currentUserService = currentUserService;
-        }
+        private readonly IDataContext _dataContext = dataContext;
+        private readonly Services.ICurrentUserService _currentUserService = currentUserService;
 
         public async Task<ResultModels.AllowanceSummaryResult> Handle(UpdateAbsencesCommand request, CancellationToken cancellationToken)
         {

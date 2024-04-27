@@ -5,14 +5,35 @@ namespace Timeoff.Services
 {
     internal class EmailTemplateService : IEmailTemplateService
     {
-        private static HandlebarsTemplate<object, object> _wrapper;
+        private static HandlebarsTemplate<object, object> _wrapper = null!;
+        private static SemaphoreSlim _lock = new(1);
 
         public Types.Options Options { get; }
 
         public EmailTemplateService(IOptions<Types.Options> options)
         {
             Options = options.Value;
-            _wrapper ??= CreateWrapper("wrapper");
+            ConfigureWrapper();
+        }
+
+        private async void ConfigureWrapper()
+        {
+            if (_wrapper != null)
+                return;
+
+            try
+            {
+                await _lock.WaitAsync();
+
+                if (_wrapper != null)
+                    return;
+
+                _wrapper = CreateWrapper("wrapper");
+            }
+            finally
+            {
+                _lock.Release();
+            }
         }
 
         private string GetTemplate(string name)

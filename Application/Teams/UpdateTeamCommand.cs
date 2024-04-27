@@ -13,18 +13,13 @@ namespace Timeoff.Application.Teams
         public IEnumerable<ValidationFailure>? Failures { get; set; }
     }
 
-    internal class UpdateTeamCommandHandler : IRequestHandler<UpdateTeamCommand, ResultModels.ApiResult>
+    internal class UpdateTeamCommandHandler(
+        IDataContext dataContext,
+        Services.ICurrentUserService currentUserService)
+        : IRequestHandler<UpdateTeamCommand, ResultModels.ApiResult>
     {
-        private readonly IDataContext _dataContext;
-        private readonly Services.ICurrentUserService _currentUserService;
-
-        public UpdateTeamCommandHandler(
-            IDataContext dataContext,
-            Services.ICurrentUserService currentUserService)
-        {
-            _dataContext = dataContext;
-            _currentUserService = currentUserService;
-        }
+        private readonly IDataContext _dataContext = dataContext;
+        private readonly Services.ICurrentUserService _currentUserService = currentUserService;
 
         public async Task<ResultModels.ApiResult> Handle(UpdateTeamCommand request, CancellationToken cancellationToken)
         {

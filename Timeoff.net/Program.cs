@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using System.Text.Json.Serialization;
 using Timeoff.Application;
 
 namespace Timeoff
@@ -48,32 +47,28 @@ namespace Timeoff
                         ValidateLifetime = true,
                         ValidateIssuerSigningKey = true,
                         ValidIssuer = builder.Configuration["timeoff:siteUrl"],
-                        ValidAudience = builder.Configuration["timonoff:siteUrl"],
+                        ValidAudience = builder.Configuration["timeoff:siteUrl"],
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["timeoff:secret"]!))
                     };
                 });
 
-            builder.Services.AddControllersWithViews()
-                .AddJsonOptions(options =>
-                {
-                    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
-                });
+            builder.Services.AddControllersWithViews();
+            //.AddJsonOptions(options =>
+            //{
+            //    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+            //});
 
-            builder.Services.AddAuthorization(options =>
-            {
-                options.DefaultPolicy = new AuthorizationPolicyBuilder()
+            builder.Services.AddAuthorizationBuilder()
+                .SetDefaultPolicy(new AuthorizationPolicyBuilder()
                     .RequireAuthenticatedUser()
-                    .Build();
-
-                options.AddPolicy("tokens", policy => policy
+                    .Build())
+                .AddPolicy("token", policy => policy
                     .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
                     .RequireAuthenticatedUser()
-                    .Build());
-
-                options.AddPolicy("cookies", policy => policy
+                    .Build())
+                .AddPolicy("cookies", policy => policy
                     .AddAuthenticationSchemes(CookieAuthenticationDefaults.AuthenticationScheme)
                     .RequireAuthenticatedUser());
-            });
 
             var app = builder.Build();
 
