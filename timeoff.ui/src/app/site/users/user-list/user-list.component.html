@@ -52,8 +52,13 @@
             <tr *ngFor="let u of users()" [attr.data-vpp-user-row]="u.id">
                 <td class="user-link-cell">
                     <a routerLink="/users/{{u.id}}">
-                        <s *ngIf="!u.isActive">{{u.name}}</s>
-                        <ng-container *ngIf="!!u.isActive">{{u.name}}</ng-container>
+                        @if (!!u.isActive) {
+                            {{u.firstName + ' ' + u.lastName}} 
+                        }
+                        @else {
+                            <s>{{u.firstName + ' ' + u.lastName}}</s>
+
+                        }
                     </a>
                 </td>
                 <td class="user_team"><a routerLink="/settings/teams/{{u.team.id}}">{{u.team.name}}</a></td>

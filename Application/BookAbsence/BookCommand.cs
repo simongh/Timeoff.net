@@ -22,24 +22,19 @@ namespace Timeoff.Application.BookAbsence
         public IEnumerable<ValidationFailure>? Failures { get; set; }
     }
 
-    internal class BookCommandHandler : IRequestHandler<BookCommand, ResultModels.ApiResult>
+    internal class BookCommandHandler(
+        IDataContext dataContext,
+        Services.ICurrentUserService currentUserService,
+        Services.INewLeaveService leaveService,
+        Services.IDaysCalculator daysCalculator,
+        IMediator mediator)
+        : IRequestHandler<BookCommand, ResultModels.ApiResult>
     {
-        private readonly IDataContext _dataContext;
-        private readonly Services.ICurrentUserService _currentUserService;
-        private readonly Services.INewLeaveService _leaveService;
-        private readonly Services.IDaysCalculator _daysCalculator;
-
-        public BookCommandHandler(
-            IDataContext dataContext,
-            Services.ICurrentUserService currentUserService,
-            Services.INewLeaveService leaveService,
-            Services.IDaysCalculator daysCalculator)
-        {
-            _dataContext = dataContext;
-            _currentUserService = currentUserService;
-            _leaveService = leaveService;
-            _daysCalculator = daysCalculator;
-        }
+        private readonly IDataContext _dataContext = dataContext;
+        private readonly Services.ICurrentUserService _currentUserService = currentUserService;
+        private readonly Services.INewLeaveService _leaveService = leaveService;
+        private readonly Services.IDaysCalculator _daysCalculator = daysCalculator;
+        private readonly IMediator _mediator = mediator;
 
         public async Task<ResultModels.ApiResult> Handle(BookCommand request, CancellationToken cancellationToken)
         {
@@ -106,85 +101,35 @@ namespace Timeoff.Application.BookAbsence
             if (leaveType.UseAllowance)
                 await _daysCalculator.CalculateDaysAsync(absence);
 
+            NewApprovalMessage? message = null;
             if (absence.ApproverId == user.UserId)
             {
                 absence.Status = LeaveStatus.Approved;
                 absence.DecidedOn = DateTime.Today;
             }
+            else
+            {
+                var count = await _dataContext.Leaves
+                    .Where(a => a.ApproverId == absence.ApproverId)
+                    .Where(a => a.Status == LeaveStatus.New || a.Status == LeaveStatus.PendingRevoke)
+                    .CountAsync();
+                message = new()
+                {
+                    Approver = absence.ApproverId,
+                    Count = count,
+                };
+            }
 
             _dataContext.Leaves.Add(absence);
             await _dataContext.SaveChangesAsync();
 
+            if (message != null)
+            {
+                await _mediator.Publish(message);
+            }
+
             return new();
         }
-
-        //private async Task<double> AdjustForCalendarAsync(BookCommand request)
-        //{
-        //    var schedule = await _dataContext.Users
-        //        .Where(u => u.CompanyId == _currentUserService.CompanyId)
-        //        .Where(u => u.UserId == UserId)
-        //        .Select(u => new
-        //        {
-        //            UserSchedule = u.Schedule,
-        //            CustomerSchedule = u.Company.Schedule,
-        //            Holidays = u.Team.IncludePublicHolidays
-        //                ? u.Company.PublicHolidays.Select(h => h.Date)
-        //                : new DateTime[0]
-        //        })
-        //        .FirstAsync();
-
-        //    var days = 0d;
-        //    var when = request.From;
-        //    for (int i = 1; when <= request.To; i++)
-        //    {
-        //        var workday = FromSchedule(when, schedule.UserSchedule ?? schedule.CustomerSchedule);
-
-        //        var toAdd = 1d;
-
-        //        if (workday == WorkingDay.None || schedule.Holidays.Contains(when))
-        //            toAdd = 0;
-        //        else
-        //        {
-        //            if (i == 0 && request.FromPart == LeavePart.Afternoon)
-        //            {
-        //                if (workday == WorkingDay.Afternoon)
-        //                    toAdd = 0.5;
-        //                else
-        //                    toAdd = 0;
-        //            }
-        //            else if (when == request.To && request.ToPart == LeavePart.Morning)
-        //            {
-        //                if (workday == WorkingDay.Morning)
-        //                    toAdd = 0.5;
-        //                else
-        //                    toAdd = 0;
-        //            }
-        //            else if (workday != WorkingDay.WholeDay)
-        //            {
-        //                toAdd = 0.5;
-        //            }
-        //        }
-
-        //        days += toAdd;
-        //        when = request.From.AddDays(i);
-        //    }
-
-        //    return days;
-        //}
-
-        //private WorkingDay FromSchedule(DateTime when, Entities.Schedule schedule)
-        //{
-        //    return when.DayOfWeek switch
-        //    {
-        //        DayOfWeek.Monday => schedule.Monday,
-        //        DayOfWeek.Tuesday => schedule.Tuesday,
-        //        DayOfWeek.Wednesday => schedule.Wednesday,
-        //        DayOfWeek.Thursday => schedule.Thursday,
-        //        DayOfWeek.Friday => schedule.Friday,
-        //        DayOfWeek.Saturday => schedule.Saturday,
-        //        DayOfWeek.Sunday => schedule.Sunday,
-        //    };
-        //}
 
         private async Task<int> GetApproverAsync(int userId)
         {

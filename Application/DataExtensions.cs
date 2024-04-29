@@ -70,9 +70,17 @@ namespace Timeoff.Application
                     StartPart = l.DayPartStart,
                     EndDate = l.DateEnd,
                     EndPart = l.DayPartEnd,
-                    Approver = l.Approver.FirstName + " " + l.Approver.LastName,
+                    Approver = new()
+                    {
+                        Id = l.ApproverId,
+                        Name = l.Approver.FirstName + " " + l.Approver.LastName,
+                    },
                     Status = l.Status,
-                    Type = l.LeaveType.Name,
+                    Type = new()
+                    {
+                        Name = l.LeaveType.Name,
+                        Colour = l.LeaveType.Colour,
+                    },
                     Comment = l.EmployeeComment,
                     Days = l.Days,
                     Id = l.LeaveId,

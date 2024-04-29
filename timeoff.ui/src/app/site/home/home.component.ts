@@ -14,6 +14,7 @@ import { AllowanceSummaryModel } from '@services/calendar/allowance-summary.mode
 import { CalendarService } from '@services/calendar/calendar.service';
 
 import { PublicHolidayModel } from '@models/public-holiday.model';
+import { LeaveRequestModel } from '@models/leave-request.model';
 
 @Component({
     standalone: true,
@@ -43,6 +44,8 @@ export class HomeComponent implements OnInit {
 
     protected readonly holidays = signal<PublicHolidayModel[]>([]);
 
+    protected readonly absences = signal<LeaveRequestModel[]>([]);
+
     protected readonly managerName = signal('manager');
 
     protected readonly managerEmail = signal('manager@email');
@@ -68,6 +71,7 @@ export class HomeComponent implements OnInit {
             .subscribe((calendar) => {
                 this.allowanceSummary.set(calendar.summary);
                 this.holidays.set(calendar.holidays);
+                this.absences.set(calendar.leaveRequested);
                 this.name.set(`${calendar.firstName} ${calendar.lastName}`);
             });
     }

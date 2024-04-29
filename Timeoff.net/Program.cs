@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using System.Text.Json.Serialization;
 using Timeoff.Application;
 
 namespace Timeoff
@@ -50,13 +51,31 @@ namespace Timeoff
                         ValidAudience = builder.Configuration["timeoff:siteUrl"],
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["timeoff:secret"]!))
                     };
+
+                    options.Events = new()
+                    {
+                        OnMessageReceived = context =>
+                        {
+                            var accessToken = context.Request.Query["access_token"];
+
+                            // If the request is for our hub...
+                            var path = context.HttpContext.Request.Path;
+                            if (!string.IsNullOrEmpty(accessToken) &&
+                                (path.StartsWithSegments("/hubs")))
+                            {
+                                // Read the token out of the query string
+                                context.Token = accessToken;
+                            }
+                            return Task.CompletedTask;
+                        }
+                    };
                 });
 
-            builder.Services.AddControllersWithViews();
-            //.AddJsonOptions(options =>
-            //{
-            //    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
-            //});
+            builder.Services.AddControllersWithViews().AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+            });
+            builder.Services.AddSignalR();
 
             builder.Services.AddAuthorizationBuilder()
                 .SetDefaultPolicy(new AuthorizationPolicyBuilder()
@@ -90,6 +109,7 @@ namespace Timeoff
             app.UseAuthentication();
             app.UseAuthorization();
             app.MapControllers().RequireAuthorization();
+            app.MapHub<Services.RequestsHub>("/hubs/requests");
             app.MapFallbackToFile("/index.html");
 
             app.Run();

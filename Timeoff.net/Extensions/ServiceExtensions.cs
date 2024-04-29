@@ -1,4 +1,6 @@
-﻿using System.Text.Json;
+﻿using MediatR;
+using Microsoft.AspNetCore.SignalR;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace Timeoff
@@ -10,9 +12,11 @@ namespace Timeoff
             services.AddScoped<Services.ICurrentUserService, Services.CurrentUserService>();
             services.AddHttpContextAccessor();
             services.AddMediatR(options =>
-             {
-                 options.RegisterServicesFromAssembly(typeof(IDataContext).Assembly);
-             });
+            {
+                options.RegisterServicesFromAssembly(typeof(IDataContext).Assembly);
+            });
+            services.AddTransient<INotificationHandler<Application.BookAbsence.NewApprovalMessage>, Services.NewApprovalMessageHandler>();
+            services.AddSingleton<IUserIdProvider, Services.UserIdProvider>();
 
             return services;
         }
