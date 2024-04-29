@@ -29,10 +29,15 @@
                     <li class="dropdown" id="header-notification-dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
                             <span class="fa fa-bell-o"></span>
-                            <span class="label label-info notification-badge hidden"></span>
+                            <span *ngIf="notifications.count() > 0" class="label label-info notification-badge">{{notifications.count()}}</span>
                         </a>
                         <ul class="dropdown-menu" role="menu">
-                            <li class="dropdown-header">No notifications</li>
+                            @if (notifications.count() == 0) {
+                                <li class="dropdown-header">No notifications</li>
+                            }
+                            @else {
+                                <li><a routerLink="/requests">{{notifications.count()}} requests to process</a></li>
+                            }
                         </ul>
                     </li>
                     <li *ngIf="isAdmin()" class="dropdown hidden-xs">

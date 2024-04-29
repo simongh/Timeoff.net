@@ -14,9 +14,9 @@
 
         public int Id { get; init; }
 
-        public string Approver { get; init; } = null!;
+        public ListResult Approver { get; init; } = null!;
 
-        public string Type { get; init; } = null!;
+        public LeaveTypeResult Type { get; init; } = null!;
 
         public double Days { get; init; }
 

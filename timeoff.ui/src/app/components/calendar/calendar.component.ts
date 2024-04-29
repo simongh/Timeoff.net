@@ -13,6 +13,7 @@ import {
 import { PublicHolidayModel } from '@models/public-holiday.model';
 
 import { DayModel } from './day.model';
+import { LeaveRequestModel } from '@models/leave-request.model';
 
 @Component({
     selector: 'calendar',
@@ -31,6 +32,8 @@ export class CalendarComponent {
     public readonly colStyle = input('col-md-3');
 
     public readonly holidays = input<PublicHolidayModel[]>([]);
+
+    public readonly absences = input<LeaveRequestModel[]>([]);
 
     protected readonly weeks = computed(() => {
         const today = new Date();
@@ -55,7 +58,7 @@ export class CalendarComponent {
                 })
                     .filter((day) => day.getMonth() == m.getMonth())
                     .map((day) => {
-                        return new DayModel(day, this.holidays());
+                        return new DayModel(day, this.holidays(), this.absences());
                     }),
             })),
         }));

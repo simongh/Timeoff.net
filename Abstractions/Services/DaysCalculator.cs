@@ -12,7 +12,7 @@ namespace Timeoff.Services
             if (leave.User.Team.IncludePublicHolidays)
                 holidays = await HolidaysAsync(leave.User.CompanyId, leave.DateStart.Year);
             else
-                holidays = Array.Empty<DateTime>();
+                holidays = [];
 
             CalculateDays(leave, leave.User.Schedule ?? leave.User.Company.Schedule, holidays);
         }

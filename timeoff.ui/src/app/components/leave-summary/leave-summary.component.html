@@ -1,11 +1,14 @@
 <dl>
     <dt>Used</dt>
-    <dd *ngFor="let s of items()">
+    @for (s of items(); track $index) {
+    <dd>
         <em>{{s.name}}:</em>
         <span class="pull-right">
             {{s.total}}{{ s.allowance > 0 ? ' out of ' + s.allowance : ''}}
         </span>
     </dd>
-
-    <dd *ngIf="items.length == 0" class="text-muted">No approved requests so far</dd>
+    }
+    @empty {
+    <dd class="text-muted">No approved requests so far</dd>
+    }
 </dl>

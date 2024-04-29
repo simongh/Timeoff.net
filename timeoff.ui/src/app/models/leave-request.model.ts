@@ -9,7 +9,12 @@ export interface LeaveRequestModel {
     endPart: datePart;
     days: number;
     approver: UserModel;
-    type: string;
+    type: LeaveTypeModel;
     comment: string;
     status: string;
+}
+
+interface LeaveTypeModel {
+    name: string;
+    colour: string;
 }
