@@ -18,15 +18,15 @@ namespace Timeoff.Application.PublicHolidays
 
         public async Task<IEnumerable<ResultModels.PublicHolidayResult>> Handle(PublicHolidaysQuery request, CancellationToken cancellationToken)
         {
-            return await _dataContext.PublicHolidays
-                .Where(h => h.CompanyId == _currentUserService.CompanyId)
+            return await _dataContext.Calendar
+                .Where(h => h.CompanyId == _currentUserService.CompanyId && h.IsHoliday)
                 .Where(h => h.Date.Year == request.Year)
                 .OrderBy(h => h.Date)
                 .Select(h => new ResultModels.PublicHolidayResult
                 {
                     Date = h.Date,
-                    Name = h.Name,
-                    Id = h.PublicHolidayId,
+                    Name = h.Name!,
+                    Id = h.CalendarId,
                 })
                 .ToArrayAsync();
         }

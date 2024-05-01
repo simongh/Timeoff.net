@@ -23,13 +23,13 @@ namespace Timeoff.Application.Calendar
                 months = 4;
             }
 
-            var holidays = await dataContext.PublicHolidays
-                .Where(h => h.CompanyId == companyId && h.Date >= startDate && h.Date < startDate.AddMonths(months + 1))
+            var holidays = await dataContext.Calendar
+                .Where(h => h.CompanyId == companyId && h.IsHoliday && h.Date >= startDate && h.Date < startDate.AddMonths(months + 1))
                 .Select(h => new ResultModels.PublicHolidayResult
                 {
-                    Id = h.PublicHolidayId,
+                    Id = h.CalendarId,
                     Date = h.Date,
-                    Name = h.Name,
+                    Name = h.Name!,
                 })
                 .ToArrayAsync();
 

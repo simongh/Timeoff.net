@@ -29,6 +29,8 @@ namespace Timeoff
 
         public DbSet<Entities.UserFeed> Feeds { get; set; }
 
+        public DbSet<Entities.Calendar> Calendar { get; set; }
+
         public DataContext()
         { }
 

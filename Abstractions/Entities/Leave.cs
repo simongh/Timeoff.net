@@ -4,9 +4,9 @@
     {
         public LeaveStatus Status { get; set; }
 
-        public string? EmployeeComment { get; set; }
+        public string? EmployeeComment { get; init; }
 
-        public string? ApproverComment { get; set; }
+        public string? ApproverComment { get; init; }
 
         public DateTime? DecidedOn { get; set; }
 
@@ -20,23 +20,25 @@
 
         public double Days { get; set; }
 
-        public int LeaveId { get; private set; }
+        public int LeaveId { get; init; }
 
-        public int UserId { get; set; }
+        public int UserId { get; init; }
 
-        public User User { get; set; } = null!;
+        public User User { get; init; } = null!;
 
-        public int ApproverId { get; set; }
+        public int ApproverId { get; init; }
 
-        public User Approver { get; set; } = null!;
+        public User Approver { get; init; } = null!;
 
-        public int LeaveTypeId { get; set; }
+        public int LeaveTypeId { get; init; }
 
-        public LeaveType LeaveType { get; set; } = null!;
+        public LeaveType LeaveType { get; init; } = null!;
 
         public DateTime CreatedAt { get; init; }
 
         //public ICollection<Comment> Comments { get; set; }
+
+        public ICollection<Calendar> Calendar { get; init; } = new HashSet<Calendar>();
 
         public byte[]? RowVersion { get; init; } = null!;
     }

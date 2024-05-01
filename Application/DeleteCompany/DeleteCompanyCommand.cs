@@ -69,10 +69,10 @@ namespace Timeoff.Application.DeleteCompany
 
                 _dataContext.Teams.RemoveRange(teams);
 
-                var holidays = await _dataContext.PublicHolidays
+                var holidays = await _dataContext.Calendar
                     .Where(h => h.CompanyId == _currentUserService.CompanyId)
                     .ToArrayAsync();
-                _dataContext.PublicHolidays.RemoveRange(holidays);
+                _dataContext.Calendar.RemoveRange(holidays);
 
                 var company = await _dataContext.Companies
                     .Where(c => c.CompanyId == _currentUserService.CompanyId)
