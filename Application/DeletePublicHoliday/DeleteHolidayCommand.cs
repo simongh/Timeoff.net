@@ -10,18 +10,16 @@ namespace Timeoff.Application.DeletePublicHoliday
 
     internal class DeleteHolidayCommandHandler(
         IDataContext dataContext,
-        Services.ICurrentUserService currentUserService,
         Services.IDaysCalculator adjuster)
         : IRequestHandler<DeleteHolidayCommand, ResultModels.ApiResult>
     {
         private readonly IDataContext _dataContext = dataContext;
-        private readonly Services.ICurrentUserService _currentUserService = currentUserService;
         private readonly Services.IDaysCalculator _adjuster = adjuster;
 
         public async Task<ResultModels.ApiResult> Handle(DeleteHolidayCommand request, CancellationToken cancellationToken)
         {
             var holiday = await _dataContext.Calendar
-                .Where(h => h.CalendarId == request.Id && h.CompanyId == _currentUserService.CompanyId)
+                .Where(h => h.CalendarId == request.Id)
                 .FirstOrDefaultAsync();
 
             if (holiday == null)
@@ -36,7 +34,7 @@ namespace Timeoff.Application.DeletePublicHoliday
                 _dataContext.Calendar.Remove(holiday);
                 await _dataContext.SaveChangesAsync();
 
-                await _adjuster.AdjustForHolidaysAsync(new[] { (holiday.Date, holiday.Date) }, _currentUserService.CompanyId);
+                await _adjuster.AdjustForHolidaysAsync(new[] { (holiday.Date, holiday.Date) });
             }
 
             return new();

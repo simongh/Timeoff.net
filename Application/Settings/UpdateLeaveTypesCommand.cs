@@ -43,7 +43,6 @@ namespace Timeoff.Application.Settings
             return new()
             {
                 Result = await _dataContext.LeaveTypes
-                    .Where(lt => lt.CompanyId == _currentUserService.CompanyId)
                     .ToModels()
                     .AsQueryable()
                     .ToArrayAsync(),

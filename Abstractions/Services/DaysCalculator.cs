@@ -10,7 +10,7 @@ namespace Timeoff.Services
         {
             IEnumerable<DateTime> holidays;
             if (leave.User.Team.IncludePublicHolidays)
-                holidays = await HolidaysAsync(leave.User.CompanyId, leave.DateStart.Year);
+                holidays = await HolidaysAsync(leave.DateStart.Year);
             else
                 holidays = [];
 
@@ -54,33 +54,32 @@ namespace Timeoff.Services
             };
         }
 
-        private async Task<IEnumerable<DateTime>> HolidaysAsync(int companyId, int year)
+        private async Task<IEnumerable<DateTime>> HolidaysAsync(int year)
         {
             return await _dataContext.Calendar
-                .Where(p => p.Date.Year == year && p.CompanyId == companyId && p.IsHoliday)
+                .Where(p => p.Date.Year == year)
                 .Select(p => p.Date)
                 .ToArrayAsync();
         }
 
-        public async Task AdjustForHolidaysAsync(IEnumerable<(DateTime original, DateTime modified)> changed, int companyId)
+        public async Task AdjustForHolidaysAsync(IEnumerable<(DateTime original, DateTime modified)> changed)
         {
             foreach (var change in changed)
             {
                 if (change.original != change.modified)
                 {
-                    await AdjustForDate(change.original, companyId);
+                    await AdjustForDate(change.original);
                 }
 
-                await AdjustForDate(change.modified, companyId);
+                await AdjustForDate(change.modified);
             }
 
             await _dataContext.SaveChangesAsync();
         }
 
-        private async Task AdjustForDate(DateTime when, int companyId)
+        private async Task AdjustForDate(DateTime when)
         {
             var leaves = await _dataContext.Leaves
-                .Where(l => l.User.CompanyId == companyId)
                 .Where(l => l.DateStart <= when && l.DateEnd >= when)
                 .Where(l => l.LeaveType.UseAllowance)
                 .Include(l => l.User.Schedule)
@@ -88,7 +87,7 @@ namespace Timeoff.Services
                 .Include(l => l.User.Team)
                 .ToArrayAsync();
 
-            var holidays = await HolidaysAsync(companyId, when.Year);
+            var holidays = await HolidaysAsync(when.Year);
 
             foreach (var leave in leaves)
             {

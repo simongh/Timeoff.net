@@ -1,10 +1,16 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
+using Timeoff.Services;
 
 namespace Timeoff
 {
-    internal class DataContext : DbContext, IDataContext
+    internal class DataContext(
+        DbContextOptions options,
+        Services.ICurrentUserService currentUserService)
+        : DbContext(options), IDataContext
     {
+        private readonly ICurrentUserService _currentUserService = currentUserService;
+
         //public DbSet<Entities.Audit> Audits { get; set; }
 
         public DbSet<Entities.PublicHoliday> PublicHolidays { get; set; }
@@ -31,16 +37,25 @@ namespace Timeoff
 
         public DbSet<Entities.Calendar> Calendar { get; set; }
 
-        public DataContext()
-        { }
+        //public DataContext()
+        //{ }
 
-        public DataContext(DbContextOptions options) : base(options)
-        { }
+        //public DataContext(DbContextOptions options) : base(options)
+        //{ }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .ApplyConfigurationsFromAssembly(typeof(DataContext).Assembly);
+
+            modelBuilder.Entity<Entities.Calendar>().HasQueryFilter(m => m.CompanyId == _currentUserService.CompanyId);
+            modelBuilder.Entity<Entities.EmailAudit>().HasQueryFilter(m => m.CompanyId == _currentUserService.CompanyId);
+            modelBuilder.Entity<Entities.LeaveType>().HasQueryFilter(m => m.CompanyId == _currentUserService.CompanyId);
+            modelBuilder.Entity<Entities.User>().HasQueryFilter(m => m.CompanyId == _currentUserService.CompanyId);
+            modelBuilder.Entity<Entities.Schedule>().HasQueryFilter(m => m.CompanyId == _currentUserService.CompanyId);
+            modelBuilder.Entity<Entities.Team>().HasQueryFilter(m => m.CompanyId == _currentUserService.CompanyId);
+            modelBuilder.Entity<Entities.Leave>().HasQueryFilter(m => m.User.CompanyId == _currentUserService.CompanyId);
+            modelBuilder.Entity<Entities.UserAllowanceAdjustment>().HasQueryFilter(m => m.User.CompanyId == _currentUserService.CompanyId);
 
             base.OnModelCreating(modelBuilder);
         }

@@ -11,12 +11,10 @@ namespace Timeoff.Application.Users
 
     internal class UpdateUserCommandHandler(
         IDataContext dataContext,
-        Services.ICurrentUserService currentUserService,
         Services.INewLeaveService leaveService)
         : IRequestHandler<UpdateUserCommand, ResultModels.ApiResult>
     {
         private readonly IDataContext _dataContext = dataContext;
-        private readonly Services.ICurrentUserService _currentUserService = currentUserService;
         private readonly Services.INewLeaveService _leaveService = leaveService;
 
         public async Task<ResultModels.ApiResult> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
@@ -28,7 +26,7 @@ namespace Timeoff.Application.Users
             }
 
             var teamValid = await _dataContext.Teams
-                .Where(d => d.CompanyId == _currentUserService.CompanyId && d.TeamId == request.Team)
+                .Where(d => d.TeamId == request.Team)
                 .AnyAsync();
             if (!teamValid)
             {
@@ -36,7 +34,6 @@ namespace Timeoff.Application.Users
             }
 
             var user = await _dataContext.Users
-                .Where(u => u.CompanyId == _currentUserService.CompanyId)
                 .Where(u => u.UserId == request.Id)
                 .FirstOrDefaultAsync();
             if (user == null)
@@ -48,7 +45,6 @@ namespace Timeoff.Application.Users
                 if (!request.IsAdmin || !request.IsActive)
                 {
                     var otherAdmins = await _dataContext.Users
-                         .Where(u => u.CompanyId == _currentUserService.CompanyId)
                          .Where(u => u.IsAdmin && u.UserId != request.Id)
                          .AnyAsync();
 

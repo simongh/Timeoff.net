@@ -19,7 +19,7 @@ namespace Timeoff.Application.LeaveSummary
         public async Task<SummaryViewModel> Handle(SummaryCommand request, CancellationToken cancellationToken)
         {
             return await _dataContext.Leaves
-                .Where(l => l.LeaveId == request.Id && l.User.CompanyId == _currentUserService.CompanyId)
+                .Where(l => l.LeaveId == request.Id)
                 .Select(l => new SummaryViewModel
                 {
                     StartDate = l.DateStart,

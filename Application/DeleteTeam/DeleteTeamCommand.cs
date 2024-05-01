@@ -8,18 +8,15 @@ namespace Timeoff.Application.DeleteTeam
         public int Id { get; init; }
     }
 
-    internal class DeleteTeamCommandHandler(
-        IDataContext dataContext,
-        Services.ICurrentUserService currentUserService)
+    internal class DeleteTeamCommandHandler(IDataContext dataContext)
         : IRequestHandler<DeleteTeamCommand>
     {
         private readonly IDataContext _dataContext = dataContext;
-        private readonly Services.ICurrentUserService _currentUserService = currentUserService;
 
         public async Task Handle(DeleteTeamCommand request, CancellationToken cancellationToken)
         {
             var team = await _dataContext.Teams
-                .Where(d => d.TeamId == request.Id && d.CompanyId == _currentUserService.CompanyId)
+                .Where(d => d.TeamId == request.Id)
                 .Select(d => new
                 {
                     Team = d,

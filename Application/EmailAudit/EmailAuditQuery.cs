@@ -14,18 +14,14 @@ namespace Timeoff.Application.EmailAudit
         public int Page { get; init; } = 1;
     }
 
-    internal class EmailAuditQueryHandler(
-        IDataContext dataContext,
-        Services.ICurrentUserService currentUserService)
+    internal class EmailAuditQueryHandler(IDataContext dataContext)
         : IRequestHandler<EmailAuditQuery, QueryResult>
     {
         private readonly IDataContext _dataContext = dataContext;
-        private readonly Services.ICurrentUserService _currentUserService = currentUserService;
 
         public async Task<QueryResult> Handle(EmailAuditQuery request, CancellationToken cancellationToken)
         {
-            var query = _dataContext.EmailAudits
-                .Where(e => e.CompanyId == _currentUserService.CompanyId);
+            var query = _dataContext.EmailAudits.AsQueryable();
 
             if (request.Start.HasValue)
             {

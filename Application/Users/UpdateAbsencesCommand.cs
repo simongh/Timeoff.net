@@ -12,25 +12,22 @@ namespace Timeoff.Application.Users
         public IEnumerable<ValidationFailure>? Failures { get; set; }
     }
 
-    internal class UpdateAbsencesCommandHandler(
-        IDataContext dataContext,
-        Services.ICurrentUserService currentUserService)
+    internal class UpdateAbsencesCommandHandler(IDataContext dataContext)
         : IRequestHandler<UpdateAbsencesCommand, ResultModels.AllowanceSummaryResult>
     {
         private readonly IDataContext _dataContext = dataContext;
-        private readonly Services.ICurrentUserService _currentUserService = currentUserService;
 
         public async Task<ResultModels.AllowanceSummaryResult> Handle(UpdateAbsencesCommand request, CancellationToken cancellationToken)
         {
             if (!await _dataContext.Users
-                .Where(u => u.UserId == request.Id && u.CompanyId == _currentUserService.CompanyId)
+                .Where(u => u.UserId == request.Id)
                 .AnyAsync())
             {
                 throw new NotFoundException();
             }
 
             var adj = await _dataContext.UserAllowanceAdjustments
-                .Where(u => u.User.CompanyId == _currentUserService.CompanyId && u.UserId == request.Id)
+                .Where(u => u.UserId == request.Id)
                 .Where(u => u.Year == DateTime.Today.Year)
                 .FirstOrDefaultAsync();
 

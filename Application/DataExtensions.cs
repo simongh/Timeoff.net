@@ -24,7 +24,6 @@ namespace Timeoff.Application
                 .Select(u => new
                 {
                     u.Team.Allowance,
-                    u.CompanyId,
                     Adjustment = u.Adjustments.Where(a => a.Year == year).FirstOrDefault(),
                     u.StartDate,
                     u.EndDate,
@@ -33,7 +32,6 @@ namespace Timeoff.Application
                 .FirstAsync();
 
             var leaves = await dataContext.LeaveTypes
-               .Where(lt => lt.CompanyId == allowance.CompanyId)
                .OrderBy(lt => lt.SortOrder)
                .Select(lt => new ResultModels.LeaveSummaryResult
                {

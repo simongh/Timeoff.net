@@ -14,24 +14,21 @@ namespace Timeoff.Application.AllowanceUsage
 
     internal class AllowanceByTimeQueryHandler(
         IDataContext dataContext,
-        Services.ICurrentUserService currentUserService,
         Services.IDaysCalculator daysCalculator)
         : IRequestHandler<AllowanceUsageQuery, IEnumerable<UserSummaryResult>>
     {
         private readonly IDataContext _dataContext = dataContext;
-        private readonly Services.ICurrentUserService _currentUserService = currentUserService;
         private readonly Services.IDaysCalculator _daysCalculator = daysCalculator;
 
         public async Task<IEnumerable<UserSummaryResult>> Handle(AllowanceUsageQuery request, CancellationToken cancellationToken)
         {
             var holidays = await _dataContext.Calendar
-                .Where(h => h.CompanyId == _currentUserService.CompanyId && h.IsHoliday)
+                .Where(h => h.IsHoliday)
                 .Where(h => h.Date >= request.StartDate && h.Date <= request.EndDate)
                 .Select(h => h.Date)
                 .ToArrayAsync();
 
-            var query = _dataContext.Users
-                .Where(u => u.CompanyId == _currentUserService.CompanyId);
+            var query = _dataContext.Users.AsQueryable();
 
             if (request.Team.HasValue)
                 query = query.Where(u => u.TeamId == request.Team.Value);

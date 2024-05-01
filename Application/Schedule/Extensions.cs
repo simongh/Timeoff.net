@@ -4,10 +4,10 @@ namespace Timeoff.Application.Schedule
 {
     internal static class Extensions
     {
-        public static async Task<Types.ScheduleModel> GetUserScheduleModelAsync(this IDataContext dataContext, int companyId, int userId)
+        public static async Task<Types.ScheduleModel> GetUserScheduleModelAsync(this IDataContext dataContext, int userId)
         {
             var schedule = await dataContext.Users
-                .Where(u => u.CompanyId == companyId && u.UserId == userId)
+                .Where(u => u.UserId == userId)
                 .Select(u => new
                 {
                     User = u.Schedule,

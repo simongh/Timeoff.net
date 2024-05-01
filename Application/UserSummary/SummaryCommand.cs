@@ -27,7 +27,7 @@ namespace Timeoff.Application.UserSummary
                 ?? new();
 
             var user = await _dataContext.Users
-                .Where(u => u.UserId == request.Id && u.CompanyId == _currentUserService.CompanyId)
+                .Where(u => u.UserId == request.Id)
                 .Select(u => new SummaryViewModel
                 {
                     Name = u.FirstName + " " + u.LastName,

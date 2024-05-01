@@ -11,18 +11,15 @@ namespace Timeoff.Application.Teams
         public IEnumerable<ValidationFailure>? Failures { get; set; }
     }
 
-    internal class GetTeamCommandHandler(
-        IDataContext dataContext,
-        Services.ICurrentUserService currentUserService)
+    internal class GetTeamCommandHandler(IDataContext dataContext)
         : IRequestHandler<GetTeamCommand, TeamResult>
     {
         private readonly IDataContext _dataContext = dataContext;
-        private readonly Services.ICurrentUserService _currentUserService = currentUserService;
 
         public async Task<TeamResult> Handle(GetTeamCommand request, CancellationToken cancellationToken)
         {
             var team = await _dataContext.Teams
-                .Where(d => d.TeamId == request.Id && d.CompanyId == _currentUserService.CompanyId)
+                .Where(d => d.TeamId == request.Id)
                 .Select(d => new TeamResult
                 {
                     Id = d.TeamId,

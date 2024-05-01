@@ -30,64 +30,29 @@ namespace Timeoff.Application.DeleteCompany
                 };
             }
 
-            var tx = _dataContext.BeginTransaction();
+            using var tx = _dataContext.BeginTransaction();
             try
             {
-                var schedule = await _dataContext.Schedules
-                    .Where(s => s.CompanyId == _currentUserService.CompanyId)
-                    .ToArrayAsync();
-                _dataContext.Schedules.RemoveRange(schedule);
+                await _dataContext.Schedules.ExecuteDeleteAsync();
+                await _dataContext.EmailAudits.ExecuteDeleteAsync();
+                await _dataContext.Leaves.ExecuteDeleteAsync();
+                await _dataContext.LeaveTypes.ExecuteDeleteAsync();
 
-                var emails = await _dataContext.EmailAudits
-                    .Where(e => e.CompanyId == _currentUserService.CompanyId)
-                    .ToArrayAsync();
-                _dataContext.EmailAudits.RemoveRange(emails);
+                await _dataContext.Teams.ExecuteUpdateAsync(m => m.SetProperty(p => p.ManagerId, (int?)null));
 
-                var leaves = await _dataContext.Leaves
-                    .Where(a => a.User.CompanyId == _currentUserService.CompanyId)
-                    .ToArrayAsync();
-                _dataContext.Leaves.RemoveRange(leaves);
+                await _dataContext.Users.ExecuteDeleteAsync();
+                await _dataContext.Teams.ExecuteDeleteAsync();
+                await _dataContext.Calendar.ExecuteDeleteAsync();
 
-                var leaveTypes = await _dataContext.LeaveTypes
-                    .Where(t => t.CompanyId == _currentUserService.CompanyId)
-                    .ToArrayAsync();
-                _dataContext.LeaveTypes.RemoveRange(leaveTypes);
-
-                var teams = await _dataContext.Teams
-                    .Where(d => d.CompanyId == _currentUserService.CompanyId)
-                    .ToArrayAsync();
-                foreach (var d in teams)
-                {
-                    d.ManagerId = null;
-                }
-                await _dataContext.SaveChangesAsync();
-
-                var users = await _dataContext.Users
-                    .Where(u => u.CompanyId == _currentUserService.CompanyId)
-                    .ToArrayAsync();
-                _dataContext.Users.RemoveRange(users);
-
-                _dataContext.Teams.RemoveRange(teams);
-
-                var holidays = await _dataContext.Calendar
-                    .Where(h => h.CompanyId == _currentUserService.CompanyId)
-                    .ToArrayAsync();
-                _dataContext.Calendar.RemoveRange(holidays);
-
-                var company = await _dataContext.Companies
+                await _dataContext.Companies
                     .Where(c => c.CompanyId == _currentUserService.CompanyId)
-                    .ToArrayAsync();
-                _dataContext.Companies.RemoveRange(company);
-
-                await _dataContext.SaveChangesAsync();
+                    .ExecuteDeleteAsync();
 
                 await tx.CommitAsync();
                 return new();
             }
             catch
             {
-                tx.Dispose();
-
                 return new()
                 {
                     Errors = ["Unable to delete company. A database error occurred"]

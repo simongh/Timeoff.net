@@ -20,7 +20,7 @@ namespace Timeoff.Application.PublicHolidays
         private readonly IDataContext _dataContext = dataContext;
         private readonly Services.ICurrentUserService _currentUserService = currentUserService;
         private readonly Services.IDaysCalculator _adjuster = adjuster;
-        private List<(DateTime original, DateTime modified)> _changes = new();
+        private List<(DateTime original, DateTime modified)> _changes = [];
 
         public async Task<ResultModels.ApiResult> Handle(UpdatePublicHolidayCommand request, CancellationToken cancellationToken)
         {
@@ -32,7 +32,7 @@ namespace Timeoff.Application.PublicHolidays
                 await _dataContext.SaveChangesAsync();
 
                 if (_changes.Any())
-                    await _adjuster.AdjustForHolidaysAsync(_changes, _currentUserService.CompanyId);
+                    await _adjuster.AdjustForHolidaysAsync(_changes);
             }
 
             return new()
