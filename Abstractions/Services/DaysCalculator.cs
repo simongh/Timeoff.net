@@ -56,8 +56,8 @@ namespace Timeoff.Services
 
         private async Task<IEnumerable<DateTime>> HolidaysAsync(int companyId, int year)
         {
-            return await _dataContext.PublicHolidays
-                .Where(p => p.Date.Year == year && p.CompanyId == companyId)
+            return await _dataContext.Calendar
+                .Where(p => p.Date.Year == year && p.CompanyId == companyId && p.IsHoliday)
                 .Select(p => p.Date)
                 .ToArrayAsync();
         }

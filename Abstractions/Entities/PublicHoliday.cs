@@ -6,11 +6,11 @@
 
         public DateTime Date { get; set; }
 
-        public int PublicHolidayId { get; private set; }
+        public int PublicHolidayId { get; init; }
 
-        public int CompanyId { get; set; }
+        public int CompanyId { get; init; }
 
-        public Company Company { get; set; } = null!;
+        public Company Company { get; init; } = null!;
 
         public byte[]? RowVersion { get; init; } = null!;
     }

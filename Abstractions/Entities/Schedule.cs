@@ -15,15 +15,15 @@
         public WorkingDay Saturday { get; set; } = WorkingDay.None;
         public WorkingDay Sunday { get; set; } = WorkingDay.None;
 
-        public int ScheduleId { get; private set; }
+        public int ScheduleId { get; init; }
 
-        public int? UserId { get; set; }
+        public int? UserId { get; init; }
 
-        public User? User { get; set; }
+        public User? User { get; init; }
 
-        public int? CompanyId { get; set; }
+        public int? CompanyId { get; init; }
 
-        public Company? Company { get; set; }
+        public Company? Company { get; init; }
 
         public byte[]? RowVersion { get; init; } = null!;
     }

@@ -50,10 +50,11 @@ namespace Timeoff.Application.PublicHolidays
 
             foreach (var item in toAdd)
             {
-                _dataContext.PublicHolidays.Add(new()
+                _dataContext.Calendar.Add(new()
                 {
                     Date = item.Date,
                     Name = item.Name,
+                    IsHoliday = true,
                     CompanyId = _currentUserService.CompanyId,
                 });
 
@@ -70,13 +71,13 @@ namespace Timeoff.Application.PublicHolidays
             if (!ids.Any())
                 return;
 
-            var items = await _dataContext.PublicHolidays
-                .Where(h => ids.Contains(h.PublicHolidayId))
+            var items = await _dataContext.Calendar
+                .Where(h => ids.Contains(h.CalendarId) && h.IsHoliday)
                 .ToArrayAsync();
 
             foreach (var item in items)
             {
-                var m = request.PublicHolidays.First(h => h.Id == item.PublicHolidayId);
+                var m = request.PublicHolidays.First(h => h.Id == item.CalendarId);
 
                 if (m.Date != item.Date)
                     _changes.Add((item.Date, m.Date));

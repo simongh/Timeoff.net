@@ -70,13 +70,13 @@ namespace Timeoff.Application.TeamView
             var start = new DateTime(request.Year, request.Month, 1);
             var end = start.AddMonths(1);
 
-            var holidays = await _dataContext.PublicHolidays
-                .Where(h => h.CompanyId == _currentUserService.CompanyId && h.Date >= start && h.Date < end)
+            var holidays = await _dataContext.Calendar
+                .Where(h => h.CompanyId == _currentUserService.CompanyId && h.IsHoliday && h.Date >= start && h.Date < end)
                 .Select(h => new ResultModels.PublicHolidayResult
                 {
-                    Id = h.PublicHolidayId,
+                    Id = h.CalendarId,
                     Date = h.Date,
-                    Name = h.Name,
+                    Name = h.Name!,
                 })
                 .AsNoTracking()
                 .ToArrayAsync();

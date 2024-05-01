@@ -20,8 +20,9 @@ namespace Timeoff.Application.DeletePublicHoliday
 
         public async Task<ResultModels.ApiResult> Handle(DeleteHolidayCommand request, CancellationToken cancellationToken)
         {
-            var holiday = await _dataContext.PublicHolidays
-                .FirstOrDefaultAsync(h => h.PublicHolidayId == request.Id && h.CompanyId == _currentUserService.CompanyId);
+            var holiday = await _dataContext.Calendar
+                .Where(h => h.CalendarId == request.Id && h.CompanyId == _currentUserService.CompanyId)
+                .FirstOrDefaultAsync();
 
             if (holiday == null)
             {
@@ -32,7 +33,7 @@ namespace Timeoff.Application.DeletePublicHoliday
             }
             else
             {
-                _dataContext.PublicHolidays.Remove(holiday);
+                _dataContext.Calendar.Remove(holiday);
                 await _dataContext.SaveChangesAsync();
 
                 await _adjuster.AdjustForHolidaysAsync(new[] { (holiday.Date, holiday.Date) }, _currentUserService.CompanyId);

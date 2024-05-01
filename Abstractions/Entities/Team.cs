@@ -10,15 +10,15 @@
 
         public bool IsAccrued { get; set; }
 
-        public int TeamId { get; private set; }
+        public int TeamId { get; init; }
 
         public int? ManagerId { get; set; }
 
         public User? Manager { get; set; }
 
-        public int CompanyId { get; set; }
+        public int CompanyId { get; init; }
 
-        public Company Company { get; set; } = null!;
+        public Company Company { get; init; } = null!;
 
         public byte[]? RowVersion { get; init; } = null!;
         public ICollection<User> Users { get; set; } = new HashSet<User>();

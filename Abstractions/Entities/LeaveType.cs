@@ -14,13 +14,15 @@
 
         public bool AutoApprove { get; set; }
 
-        public int LeaveTypeId { get; private set; }
+        public int LeaveTypeId { get; init; }
 
-        public int CompanyId { get; set; }
+        public int CompanyId { get; init; }
 
-        public Company Company { get; set; } = null!;
+        public Company Company { get; init; } = null!;
 
         public byte[]? RowVersion { get; init; } = null!;
         public ICollection<Leave> Leaves { get; set; } = new HashSet<Leave>();
+
+        public ICollection<Calendar> Calendar { get; set; } = new HashSet<Calendar>();
     }
 }

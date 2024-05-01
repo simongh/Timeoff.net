@@ -2,22 +2,22 @@
 {
     public class EmailAudit
     {
-        public string Email { get; set; } = null!;
+        public string Email { get; init; } = null!;
 
-        public string Subject { get; set; } = null!;
+        public string Subject { get; init; } = null!;
 
-        public string Body { get; set; } = null!;
+        public string Body { get; init; } = null!;
 
-        public DateTime CreatedAt { get; set; }
+        public DateTime CreatedAt { get; init; }
 
-        public int EmailAuditId { get; private set; }
+        public int EmailAuditId { get; init; }
 
-        public int CompanyId { get; set; }
+        public int CompanyId { get; init; }
 
-        public Company Company { get; set; } = null!;
+        public Company Company { get; init; } = null!;
 
-        public int UserId { get; set; }
+        public int UserId { get; init; }
 
-        public User User { get; set; } = null!;
+        public User User { get; init; } = null!;
     }
 }

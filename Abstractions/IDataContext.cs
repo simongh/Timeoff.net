@@ -7,7 +7,7 @@ namespace Timeoff
     public interface IDataContext
     {
         //DbSet<Audit> Audits { get; set; }
-        DbSet<PublicHoliday> PublicHolidays { get; set; }
+        //DbSet<PublicHoliday> PublicHolidays { get; set; }
 
         //DbSet<Comment> Comments { get; set; }
         DbSet<Company> Companies { get; set; }
@@ -20,6 +20,7 @@ namespace Timeoff
         DbSet<Schedule> Schedules { get; set; }
         DbSet<UserAllowanceAdjustment> UserAllowanceAdjustments { get; set; }
         DbSet<User> Users { get; set; }
+        DbSet<Calendar> Calendar { get; set; }
 
         IDbContextTransaction BeginTransaction();
 

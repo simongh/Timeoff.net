@@ -24,8 +24,8 @@ namespace Timeoff.Application.AllowanceUsage
 
         public async Task<IEnumerable<UserSummaryResult>> Handle(AllowanceUsageQuery request, CancellationToken cancellationToken)
         {
-            var holidays = await _dataContext.PublicHolidays
-                .Where(h => h.CompanyId == _currentUserService.CompanyId)
+            var holidays = await _dataContext.Calendar
+                .Where(h => h.CompanyId == _currentUserService.CompanyId && h.IsHoliday)
                 .Where(h => h.Date >= request.StartDate && h.Date <= request.EndDate)
                 .Select(h => h.Date)
                 .ToArrayAsync();

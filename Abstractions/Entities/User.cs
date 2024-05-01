@@ -26,11 +26,11 @@
 
         public bool IsActive => EndDate == null || DateTime.Today > EndDate;
 
-        public int UserId { get; private set; }
+        public int UserId { get; init; }
 
-        public int CompanyId { get; set; }
+        public int CompanyId { get; init; }
 
-        public Company Company { get; set; } = null!;
+        public Company Company { get; init; } = null!;
 
         public int TeamId { get; set; }
 
