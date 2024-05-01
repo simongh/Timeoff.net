@@ -8,25 +8,17 @@ namespace Timeoff.Application.DeleteUser
         public int Id { get; init; }
     }
 
-    internal class DeleteUserCommandHandler : IRequestHandler<DeleteUserCommand, ResultModels.ApiResult>
+    internal class DeleteUserCommandHandler(IDataContext dataContext)
+        : IRequestHandler<DeleteUserCommand, ResultModels.ApiResult>
     {
-        private readonly IDataContext _dataContext;
-        private readonly Services.ICurrentUserService _currentUserService;
-
-        public DeleteUserCommandHandler(
-            IDataContext dataContext,
-            Services.ICurrentUserService currentUserService)
-        {
-            _dataContext = dataContext;
-            _currentUserService = currentUserService;
-        }
+        private readonly IDataContext _dataContext = dataContext;
 
         public async Task<ResultModels.ApiResult> Handle(DeleteUserCommand request, CancellationToken cancellationToken)
         {
             var errors = new List<string>();
 
             var user = await _dataContext.Users
-                .Where(u => u.UserId == request.Id && u.CompanyId == _currentUserService.CompanyId)
+                .Where(u => u.UserId == request.Id)
                 .FirstOrDefaultAsync()
                 ?? throw new NotFoundException();
 

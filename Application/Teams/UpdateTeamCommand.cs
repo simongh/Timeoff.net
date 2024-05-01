@@ -28,7 +28,6 @@ namespace Timeoff.Application.Teams
             if (request.Failures.IsValid())
             {
                 var managerFound = await _dataContext.Users
-                    .Where(u => u.CompanyId == _currentUserService.CompanyId)
                     .Where(u => u.UserId == request.Manager)
                     .AnyAsync();
 
@@ -52,7 +51,7 @@ namespace Timeoff.Application.Teams
                 else
                 {
                     team = await _dataContext.Teams
-                        .Where(d => d.TeamId == request.Id.Value && d.CompanyId == _currentUserService.CompanyId)
+                        .Where(d => d.TeamId == request.Id.Value)
                         .FirstOrDefaultAsync();
 
                     if (team == null)

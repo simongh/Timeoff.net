@@ -4,10 +4,9 @@ namespace Timeoff.Application.UserDetails
 {
     internal static class Extensions
     {
-        public static async Task<DetailsViewModel?> GetUserDetailsAsync(this IDataContext dataContext, int companyId, int userId)
+        public static async Task<DetailsViewModel?> GetUserDetailsAsync(this IDataContext dataContext, int userId)
         {
             var model = await dataContext.Users
-                .Where(u => u.CompanyId == companyId)
                 .Where(u => u.UserId == userId)
                 .Select(u => new
                 {

@@ -46,8 +46,7 @@ namespace Timeoff.Application.TeamView
 
         private async Task<IEnumerable<ResultModels.ListItem>> GetTeamsAsync()
         {
-            var teams = _dataContext.Teams
-               .Where(t => t.CompanyId == _currentUserService.CompanyId);
+            var teams = _dataContext.Teams.AsQueryable();
 
             if (!_currentUserService.IsAdmin)
             {
@@ -71,7 +70,7 @@ namespace Timeoff.Application.TeamView
             var end = start.AddMonths(1);
 
             var holidays = await _dataContext.Calendar
-                .Where(h => h.CompanyId == _currentUserService.CompanyId && h.IsHoliday && h.Date >= start && h.Date < end)
+                .Where(h => h.IsHoliday && h.Date >= start && h.Date < end)
                 .Select(h => new ResultModels.PublicHolidayResult
                 {
                     Id = h.CalendarId,
@@ -125,7 +124,7 @@ namespace Timeoff.Application.TeamView
 
         private async Task<IEnumerable<UserResult>> GetUsersAsync(GetTeamViewCommand request)
         {
-            var users = _dataContext.Users.ActiveUsers(_currentUserService.CompanyId);
+            var users = _dataContext.Users.ActiveUsers();
 
             if (request.Team.HasValue)
             {

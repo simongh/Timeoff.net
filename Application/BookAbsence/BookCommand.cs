@@ -55,7 +55,6 @@ namespace Timeoff.Application.BookAbsence
                 }
             }
             var leaveType = await _dataContext.LeaveTypes
-                .Where(lt => lt.CompanyId == _currentUserService.CompanyId)
                 .Where(lt => lt.LeaveTypeId == request.LeaveType)
                 .FirstOrDefaultAsync();
             if (leaveType == null)

@@ -17,7 +17,7 @@ namespace Timeoff.Application.UserDetails
 
         public async Task<DetailsViewModel> Handle(GetDetailsCommand request, CancellationToken cancellationToken)
         {
-            var result = await _dataContext.GetUserDetailsAsync(_currentUserService.CompanyId, request.Id)
+            var result = await _dataContext.GetUserDetailsAsync(request.Id)
                 ?? throw new NotFoundException();
             return result;
         }

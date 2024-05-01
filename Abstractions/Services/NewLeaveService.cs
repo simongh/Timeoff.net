@@ -34,7 +34,6 @@ namespace Timeoff.Services
                 entry.SlidingExpiration = TimeSpan.FromMinutes(60);
 
                 return await _dataContext.Users
-                    .Where(u => u.CompanyId == _currentUserService.CompanyId)
                     .Select(u => new ManagedEmployee
                     {
                         ManagerId = u.Team.ManagerId!.Value,
@@ -66,7 +65,6 @@ namespace Timeoff.Services
                 entry.SlidingExpiration = TimeSpan.FromMinutes(60);
 
                 return await _dataContext.LeaveTypes
-                    .Where(t => t.CompanyId == _currentUserService.CompanyId)
                     .OrderBy(t => t.Name)
                     .Select(t => new ListItem
                     {

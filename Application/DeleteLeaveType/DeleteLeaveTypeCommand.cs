@@ -10,18 +10,16 @@ namespace Timeoff.Application.DeleteLeaveType
 
     internal class DeleteLeaveTypeCommandHandler(
         IDataContext dataContext,
-        Services.ICurrentUserService currentUserService,
         Services.INewLeaveService leaveService)
         : IRequestHandler<DeleteLeaveTypeCommand, ResultModels.ApiResult>
     {
         private readonly IDataContext _dataContext = dataContext;
-        private readonly Services.ICurrentUserService _currentUserService = currentUserService;
         private readonly Services.INewLeaveService _leaveService = leaveService;
 
         public async Task<ResultModels.ApiResult> Handle(DeleteLeaveTypeCommand request, CancellationToken cancellationToken)
         {
             var leave = await _dataContext.LeaveTypes
-                .Where(t => t.LeaveTypeId == request.Id && t.CompanyId == _currentUserService.CompanyId)
+                .Where(t => t.LeaveTypeId == request.Id)
                 .Select(t => new
                 {
                     leave = t,

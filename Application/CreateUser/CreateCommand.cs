@@ -32,7 +32,7 @@ namespace Timeoff.Application.CreateUser
             }
 
             var teamValid = await _dataContext.Teams
-                .Where(d => d.CompanyId == _currentUserService.CompanyId && d.TeamId == request.Team)
+                .Where(d => d.TeamId == request.Team)
                 .AnyAsync();
             if (!teamValid)
             {

@@ -32,10 +32,10 @@ namespace Timeoff.Application.Login
             if (request.Failures == null)
             {
                 var user = await _dataContext.Users
-                .FindByEmail(request.Username)
-                .Where(u => u.IsActivated)
-                .Include(u => u.Company)
-                .FirstOrDefaultAsync(cancellationToken);
+                    .FindByEmail(request.Username)
+                    .Where(u => u.IsActivated)
+                    .Include(u => u.Company)
+                    .FirstOrDefaultAsync(cancellationToken);
 
                 if (user != null && _usersService.Authenticate(user.Password, request.Password))
                 {

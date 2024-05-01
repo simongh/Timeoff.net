@@ -10,18 +10,15 @@ namespace Timeoff.Application.Schedule
         public Types.ScheduleModel? Schedule { get; set; }
     }
 
-    internal class UpdateUserScheduleCommandHandler(
-        IDataContext dataContext,
-        Services.ICurrentUserService currentUserService)
+    internal class UpdateUserScheduleCommandHandler(IDataContext dataContext)
         : IRequestHandler<UpdateUserScheduleCommand, Types.ScheduleModel>
     {
         private readonly IDataContext _dataContext = dataContext;
-        private readonly Services.ICurrentUserService _currentUserService = currentUserService;
 
         public async Task<Types.ScheduleModel> Handle(UpdateUserScheduleCommand request, CancellationToken cancellationToken)
         {
             var user = await _dataContext.Users
-                .Where(u => u.UserId == request.Id && u.CompanyId == _currentUserService.CompanyId)
+                .Where(u => u.UserId == request.Id)
                 .AnyAsync();
 
             if (!user)
@@ -56,7 +53,7 @@ namespace Timeoff.Application.Schedule
 
             await _dataContext.SaveChangesAsync();
 
-            return await _dataContext.GetUserScheduleModelAsync(_currentUserService.CompanyId, request.Id);
+            return await _dataContext.GetUserScheduleModelAsync(request.Id);
         }
     }
 }

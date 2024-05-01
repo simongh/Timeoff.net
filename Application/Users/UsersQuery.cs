@@ -10,18 +10,14 @@ namespace Timeoff.Application.Users
         public bool AsCsv { get; init; }
     }
 
-    internal class UsersQueryHandler(
-        IDataContext dataContext,
-        Services.ICurrentUserService currentUserService)
+    internal class UsersQueryHandler(IDataContext dataContext)
         : IRequestHandler<UsersQuery, IEnumerable<UserInfoResult>>
     {
         private readonly IDataContext _dataContext = dataContext;
-        private readonly Services.ICurrentUserService _currentUserService = currentUserService;
 
         public async Task<IEnumerable<UserInfoResult>> Handle(UsersQuery request, CancellationToken cancellationToken)
         {
-            var query = _dataContext.Users
-                .Where(u => u.CompanyId == _currentUserService.CompanyId);
+            var query = _dataContext.Users.AsQueryable();
 
             if (request.Team.HasValue)
             {
