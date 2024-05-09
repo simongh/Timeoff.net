@@ -2,7 +2,7 @@
 {
     public class PublicHoliday
     {
-        public string Name { get; set; } = null!;
+        public required string Name { get; set; }
 
         public DateTime Date { get; set; }
 
@@ -10,8 +10,8 @@
 
         public int CompanyId { get; init; }
 
-        public Company Company { get; init; } = null!;
+        public Company? Company { get; init; }
 
-        public byte[]? RowVersion { get; init; } = null!;
+        public byte[]? RowVersion { get; init; }
     }
 }

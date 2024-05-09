@@ -2,7 +2,7 @@
 {
     public class LeaveType
     {
-        public string Name { get; set; } = null!;
+        public required string Name { get; set; }
 
         public string Colour { get; set; } = "#ffffff";
 
@@ -18,11 +18,11 @@
 
         public int CompanyId { get; init; }
 
-        public Company Company { get; init; } = null!;
+        public Company? Company { get; init; }
 
-        public byte[]? RowVersion { get; init; } = null!;
-        public ICollection<Leave> Leaves { get; set; } = new HashSet<Leave>();
+        public byte[]? RowVersion { get; init; }
+        public ICollection<Leave> Leaves { get; set; } = [];
 
-        public ICollection<Calendar> Calendar { get; set; } = new HashSet<Calendar>();
+        public ICollection<Calendar> Calendar { get; set; } = [];
     }
 }

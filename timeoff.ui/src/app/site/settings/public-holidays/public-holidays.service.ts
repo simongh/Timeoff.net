@@ -1,13 +1,14 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
-import { formatDate } from '@angular/common';
+import { format } from 'date-fns';
 
 import { yearValidator } from '@components/validators';
 
-import { PublicHolidayModel } from '@models/public-holiday.model';
 import { LoggedInUserService } from '@services/logged-in-user/logged-in-user.service';
-import { format } from 'date-fns';
+
+import { PublicHolidayModel } from '@models/public-holiday.model';
+import { CalendarDayModel } from '@models/calendar-day.model';
 
 export interface holidayFormControls {
     id: FormControl<number | null>;
@@ -27,11 +28,10 @@ export class PublicHolidaysService {
         private readonly fb: FormBuilder,
         private readonly currentUser: LoggedInUserService
     ) {
-        this.setAddForm(0);
     }
 
     public get(year: number) {
-        return this.client.get<PublicHolidayModel[]>(`/api/public-holidays/${year}`);
+        return this.client.get<CalendarDayModel[]>(`/api/public-holidays/${year}`);
     }
 
     public setAddForm(year: number) {

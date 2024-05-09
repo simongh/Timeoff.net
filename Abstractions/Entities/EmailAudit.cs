@@ -2,11 +2,11 @@
 {
     public class EmailAudit
     {
-        public string Email { get; init; } = null!;
+        public required string Email { get; init; }
 
-        public string Subject { get; init; } = null!;
+        public required string Subject { get; init; }
 
-        public string Body { get; init; } = null!;
+        public required string Body { get; init; }
 
         public DateTime CreatedAt { get; init; }
 
@@ -14,10 +14,10 @@
 
         public int CompanyId { get; init; }
 
-        public Company Company { get; init; } = null!;
+        public Company? Company { get; init; }
 
         public int UserId { get; init; }
 
-        public User User { get; init; } = null!;
+        public required User User { get; init; }
     }
 }

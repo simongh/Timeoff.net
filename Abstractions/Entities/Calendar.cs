@@ -17,13 +17,13 @@
 
         public string? Name { get; set; }
 
-        public virtual Company Company { get; init; } = null!;
+        public Company? Company { get; init; }
 
-        public virtual User? User { get; init; }
+        public User? User { get; init; }
 
-        public virtual Leave? Leave { get; init; }
+        public Leave? Leave { get; init; }
 
-        public virtual LeaveType? LeaveType { get; init; }
-        public byte[]? RowVersion { get; init; } = null!;
+        public LeaveType? LeaveType { get; init; }
+        public byte[]? RowVersion { get; init; }
     }
 }

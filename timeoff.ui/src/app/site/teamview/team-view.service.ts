@@ -9,16 +9,15 @@ export class TeamViewService {
 
     public getSummaryForUsers(start: Date, team: number | null = null) {
         return of<TeamViewModel>({
-            holidays: [],
             users: [{
                 id: 0,
                 name: 'test',
                 total: 0,
-                leaveSummary: [] as LeaveSummary[],
                 team: {
                     id: 0,
                     name: ''
                 },
+                days: [],
                 schedule: {
                     monday: true,
                     tuesday: true,

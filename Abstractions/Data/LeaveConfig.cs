@@ -14,8 +14,7 @@ namespace Timeoff.Data
                 .WithMany();
 
             builder
-                .Property(p => p.CreatedAt)
-                .HasDefaultValue(DateTime.UtcNow);
+                .Property(p => p.CreatedAt);
 
             builder
                 .Property(p => p.RowVersion)

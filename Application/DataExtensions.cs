@@ -115,5 +115,18 @@ namespace Timeoff.Application
                 Expires = DateTime.UtcNow.AddMinutes(5),
             };
         }
+
+        public static IQueryable<ResultModels.DayResult> ToModel(this IQueryable<Entities.Calendar> calendar)
+        {
+            return calendar.Select(c => new ResultModels.DayResult
+            {
+                Id = c.CalendarId,
+                Name = c.Name,
+                IsHoliday = c.IsHoliday,
+                Date = c.Date,
+                DayPart = c.LeavePart,
+                Colour = c.LeaveType!.Colour,
+            });
+        }
     }
 }

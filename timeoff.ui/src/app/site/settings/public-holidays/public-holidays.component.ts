@@ -16,6 +16,7 @@ import { MessagesService } from '@services/messages/messages.service';
 import { LoggedInUserService } from '@services/logged-in-user/logged-in-user.service';
 
 import { PublicHolidayModel } from '@models/public-holiday.model';
+import { CalendarDayModel } from '@models/calendar-day.model';
 
 import { PublicHolidaysService } from './public-holidays.service';
 import { AddNewModalComponent } from './add-new-modal.component';
@@ -53,7 +54,7 @@ export class PublicHolidaysComponent {
         return d;
     });
 
-    protected readonly holidays = signal<PublicHolidayModel[]>([]);
+    protected readonly holidays = signal<CalendarDayModel[]>([]);
 
     protected get holidaysForm() {
         return this.holidaySvc.holidays;
@@ -64,7 +65,9 @@ export class PublicHolidaysComponent {
         private readonly msgsSvc: MessagesService,
         private readonly currentUser: LoggedInUserService,
         private destroyed: DestroyRef
-    ) {}
+    ) {
+        holidaySvc.setAddForm(this.currentYear());
+    }
 
     public remove(id?: number | null) {
         if (!id) {
@@ -119,7 +122,7 @@ export class PublicHolidaysComponent {
         this.getHolidays();
     }
 
-    private loadHolidays(data: PublicHolidayModel[]) {
+    private loadHolidays(data: CalendarDayModel[]) {
         this.holidaysForm.clear();
         this.holidaySvc.setAddForm(this.currentYear());
 

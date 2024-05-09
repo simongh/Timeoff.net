@@ -2,17 +2,18 @@ import { isSameDay, isWeekend, isWithinInterval } from 'date-fns';
 import { PublicHolidayModel } from '@models/public-holiday.model';
 import { LeaveRequestModel } from '@models/leave-request.model';
 import { datePart } from '@models/types';
+import { CalendarDayModel } from '@models/calendar-day.model';
 
 export class DayModel {
     public date: Date;
 
     public morningClasses: string[] = [];
-    
+
     public afternoonClasses: string[] = [];
 
     public label: string | null = null;
 
-    constructor(date: Date, holidays: PublicHolidayModel[], absences: LeaveRequestModel[]) {
+    constructor(date: Date, days: CalendarDayModel[]) {
         this.date = date;
 
         if (isWeekend(date)) {
@@ -25,27 +26,22 @@ export class DayModel {
             this.label = 'Today';
         }
 
-        const found = holidays.find((h) => isSameDay(date, h.date!));
-        if (!!found) {
-            this.morningClasses.push('public_holiday_cell');
-            this.afternoonClasses.push('public_holiday_cell');
-            this.label = `Public Holiday: ${found.name}`;
-        }
+        const found = days.filter((h) => isSameDay(date, h.date!));
+        found.forEach((h) => {
+            if (h.isHoliday) {
+                this.morningClasses.push('public_holiday_cell');
+                this.afternoonClasses.push('public_holiday_cell');
+                this.label = `Public Holiday: ${h.name}`;
+            } else {
+                if (h.dayPart == datePart.morning || h.dayPart == datePart.wholeDay) {
+                    this.morningClasses.push(h.colour!);
+                }
 
-        const absence = absences.find((a) => isWithinInterval(date,{
-            start: a.startDate,
-            end: a.endDate
-        }));
-        if (!!absence) {
-            if (absence.startPart == datePart.morning || absence.startPart == datePart.wholeDay) {
-            this.morningClasses.push(absence.type.colour);
+                if (h.dayPart == datePart.afternoon || h.dayPart == datePart.wholeDay) {
+                    this.afternoonClasses.push(h.colour!);
+                }
+                this.label = 'Approved leave';
             }
-
-            if (absence.endPart == datePart.afternoon || absence.endPart == datePart.wholeDay) {
-                this.afternoonClasses.push(absence.type.colour);
-            }
-
-            this.label = 'Approved leave';
-        }
+        });
     }
 }

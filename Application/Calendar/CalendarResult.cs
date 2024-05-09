@@ -10,7 +10,8 @@
 
         public ResultModels.AllowanceSummaryResult Summary { get; init; } = null!;
 
-        public IEnumerable<ResultModels.PublicHolidayResult> Holidays { get; init; } = null!;
+        public IEnumerable<ResultModels.DayResult> Days { get; init; } = [];
+
         public IEnumerable<ResultModels.LeaveRequestedResult> LeaveRequested { get; init; } = null!;
     }
 }

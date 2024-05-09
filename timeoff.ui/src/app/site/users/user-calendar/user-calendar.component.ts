@@ -49,6 +49,7 @@ export class UserCalendarComponent {
             lastName: '',
             isActive: true,
             leaveRequested: [],
+            days:[],
             summary: {
                 available: 0,
                 carryOver: 0,

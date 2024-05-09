@@ -11,14 +11,14 @@ using Timeoff;
 namespace Timeoff.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230403231850_InitialCreate")]
+    [Migration("20240504110948_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "7.0.3");
+            modelBuilder.HasAnnotation("ProductVersion", "8.0.2");
 
             modelBuilder.Entity("TeamUser", b =>
                 {
@@ -35,6 +35,54 @@ namespace Timeoff.Migrations
                     b.ToTable("TeamApprovers", (string)null);
                 });
 
+            modelBuilder.Entity("Timeoff.Entities.Calendar", b =>
+                {
+                    b.Property<int>("CalendarId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("CompanyId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsHoliday")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("LeaveId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<byte?>("LeavePart")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("LeaveTypeId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("TEXT");
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("BLOB");
+
+                    b.Property<int?>("UserId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("CalendarId");
+
+                    b.HasIndex("CompanyId");
+
+                    b.HasIndex("LeaveId");
+
+                    b.HasIndex("LeaveTypeId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("calendar", (string)null);
+                });
+
             modelBuilder.Entity("Timeoff.Entities.Company", b =>
                 {
                     b.Property<int>("CompanyId")
@@ -43,9 +91,6 @@ namespace Timeoff.Migrations
 
                     b.Property<int>("CarryOver")
                         .HasColumnType("INTEGER");
-
-                    b.Property<string>("CompanyWideMessage")
-                        .HasColumnType("TEXT");
 
                     b.Property<string>("Country")
                         .IsRequired()
@@ -70,12 +115,14 @@ namespace Timeoff.Migrations
                     b.Property<bool>("LdapAuthEnabled")
                         .HasColumnType("INTEGER");
 
-                    b.Property<byte>("Mode")
-                        .HasColumnType("INTEGER");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("TEXT");
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("BLOB");
 
                     b.Property<bool>("ShareAllAbsences")
                         .HasColumnType("INTEGER");
@@ -140,6 +187,9 @@ namespace Timeoff.Migrations
                     b.Property<int>("ApproverId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("TEXT");
+
                     b.Property<DateTime>("DateEnd")
                         .HasColumnType("TEXT");
 
@@ -163,6 +213,11 @@ namespace Timeoff.Migrations
 
                     b.Property<int>("LeaveTypeId")
                         .HasColumnType("INTEGER");
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("BLOB");
 
                     b.Property<byte>("Status")
                         .HasColumnType("INTEGER");
@@ -204,6 +259,11 @@ namespace Timeoff.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("BLOB");
+
                     b.Property<int>("SortOrder")
                         .HasColumnType("INTEGER");
 
@@ -233,6 +293,11 @@ namespace Timeoff.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("BLOB");
+
                     b.HasKey("PublicHolidayId");
 
                     b.HasIndex("CompanyId");
@@ -254,6 +319,11 @@ namespace Timeoff.Migrations
 
                     b.Property<byte>("Monday")
                         .HasColumnType("INTEGER");
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("BLOB");
 
                     b.Property<byte>("Saturday")
                         .HasColumnType("INTEGER");
@@ -309,6 +379,11 @@ namespace Timeoff.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("BLOB");
+
                     b.HasKey("TeamId");
 
                     b.HasIndex("CompanyId");
@@ -355,6 +430,11 @@ namespace Timeoff.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("BLOB");
+
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("TEXT");
 
@@ -379,14 +459,19 @@ namespace Timeoff.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("Adjustment")
-                        .HasColumnType("INTEGER");
+                    b.Property<double>("Adjustment")
+                        .HasColumnType("REAL");
 
-                    b.Property<int>("CarriedOverAllowance")
-                        .HasColumnType("INTEGER");
+                    b.Property<double>("CarriedOverAllowance")
+                        .HasColumnType("REAL");
 
-                    b.Property<DateTimeOffset>("CreatedAt")
+                    b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("BLOB");
 
                     b.Property<int>("UserId")
                         .HasColumnType("INTEGER");
@@ -415,6 +500,11 @@ namespace Timeoff.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("BLOB");
+
                     b.Property<byte>("Type")
                         .HasColumnType("INTEGER");
 
@@ -441,6 +531,35 @@ namespace Timeoff.Migrations
                         .HasForeignKey("TeamApproverTeamId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Timeoff.Entities.Calendar", b =>
+                {
+                    b.HasOne("Timeoff.Entities.Company", "Company")
+                        .WithMany("Calendar")
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Timeoff.Entities.Leave", "Leave")
+                        .WithMany("Calendar")
+                        .HasForeignKey("LeaveId");
+
+                    b.HasOne("Timeoff.Entities.LeaveType", "LeaveType")
+                        .WithMany("Calendar")
+                        .HasForeignKey("LeaveTypeId");
+
+                    b.HasOne("Timeoff.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("Company");
+
+                    b.Navigation("Leave");
+
+                    b.Navigation("LeaveType");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Timeoff.Entities.EmailAudit", b =>
@@ -503,7 +622,7 @@ namespace Timeoff.Migrations
             modelBuilder.Entity("Timeoff.Entities.PublicHoliday", b =>
                 {
                     b.HasOne("Timeoff.Entities.Company", "Company")
-                        .WithMany("PublicHolidays")
+                        .WithMany()
                         .HasForeignKey("CompanyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -529,7 +648,7 @@ namespace Timeoff.Migrations
             modelBuilder.Entity("Timeoff.Entities.Team", b =>
                 {
                     b.HasOne("Timeoff.Entities.Company", "Company")
-                        .WithMany("Departments")
+                        .WithMany("Teams")
                         .HasForeignKey("CompanyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -586,22 +705,29 @@ namespace Timeoff.Migrations
 
             modelBuilder.Entity("Timeoff.Entities.Company", b =>
                 {
-                    b.Navigation("Departments");
+                    b.Navigation("Calendar");
 
                     b.Navigation("EmailAudits");
 
                     b.Navigation("LeaveTypes");
 
-                    b.Navigation("PublicHolidays");
-
                     b.Navigation("Schedule")
                         .IsRequired();
+
+                    b.Navigation("Teams");
 
                     b.Navigation("Users");
                 });
 
+            modelBuilder.Entity("Timeoff.Entities.Leave", b =>
+                {
+                    b.Navigation("Calendar");
+                });
+
             modelBuilder.Entity("Timeoff.Entities.LeaveType", b =>
                 {
+                    b.Navigation("Calendar");
+
                     b.Navigation("Leaves");
                 });
 
