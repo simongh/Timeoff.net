@@ -2,9 +2,9 @@
 {
     public class UserFeed
     {
-        public string Name { get; set; } = null!;
+        public required string Name { get; set; }
 
-        public string FeedToken { get; set; } = null!;
+        public required string FeedToken { get; set; }
 
         public FeedType Type { get; set; }
 
@@ -12,7 +12,7 @@
 
         public int UserId { get; init; }
 
-        public User User { get; init; } = null!;
-        public byte[]? RowVersion { get; init; } = null!;
+        public User? User { get; init; }
+        public byte[]? RowVersion { get; init; }
     }
 }

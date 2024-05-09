@@ -45,6 +45,7 @@ namespace Timeoff.Application.Teams
                     team = new()
                     {
                         CompanyId = _currentUserService.CompanyId,
+                        Name = "",
                     };
                     _dataContext.Teams.Add(team);
                 }

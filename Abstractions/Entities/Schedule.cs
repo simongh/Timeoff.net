@@ -25,6 +25,6 @@
 
         public Company? Company { get; init; }
 
-        public byte[]? RowVersion { get; init; } = null!;
+        public byte[]? RowVersion { get; init; }
     }
 }

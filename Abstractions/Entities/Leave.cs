@@ -24,22 +24,20 @@
 
         public int UserId { get; init; }
 
-        public User User { get; init; } = null!;
+        public User? User { get; init; }
 
         public int ApproverId { get; init; }
 
-        public User Approver { get; init; } = null!;
+        public User? Approver { get; init; }
 
         public int LeaveTypeId { get; init; }
 
-        public LeaveType LeaveType { get; init; } = null!;
+        public LeaveType? LeaveType { get; init; }
 
-        public DateTime CreatedAt { get; init; }
+        public DateTime CreatedAt { get; init; } = DateTime.Now;
 
-        //public ICollection<Comment> Comments { get; set; }
+        public ICollection<Calendar> Calendar { get; init; } = [];
 
-        public ICollection<Calendar> Calendar { get; init; } = new HashSet<Calendar>();
-
-        public byte[]? RowVersion { get; init; } = null!;
+        public byte[]? RowVersion { get; init; }
     }
 }

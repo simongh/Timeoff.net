@@ -41,9 +41,9 @@ namespace Timeoff.Application.Calendar
                 FirstName = user.FirstName,
                 LastName = user.LastName,
                 IsActive = user.IsActivated && (user.EndDate == null || user.EndDate > DateTime.Today),
-                Holidays = (await _dataContext.GetCalendarAsync(request.Year, request.FullYear)).Holidays,
+                Days = await _dataContext.GetCalendarAsync(request.Year, request.FullYear, id),
                 Summary = await _dataContext.GetAllowanceAsync(id, request.Year),
-                LeaveRequested = await _dataContext.Leaves.GetRequested(id, request.Year),
+                LeaveRequested = [],
             };
         }
     }

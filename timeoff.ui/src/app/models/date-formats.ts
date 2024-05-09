@@ -1,2 +1,2 @@
-export const dateFormats = ['yyyy-MM-dd', 'yyyy/MM/dd', 'dd MMM yy', 'dd/MM/yy', 'dd/MM/yyyy', 'MM/dd/yy'];
+export const dateFormats = ['yyyy-mm-dd', 'yyyy/mm/dd', 'dd MM yy', 'dd/M/yy', 'dd/M/yyyy', 'mm/dd/yy'];
 

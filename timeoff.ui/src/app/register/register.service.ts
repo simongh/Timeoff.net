@@ -16,7 +16,7 @@ export class RegisterService {
     }
 
     public register(): Observable<void> {
-        return this.client.post<void>('/api/register', this.form.value);
+        return this.client.post<void>('/api/account/register', this.form.value);
     }
 
     private createForm() {

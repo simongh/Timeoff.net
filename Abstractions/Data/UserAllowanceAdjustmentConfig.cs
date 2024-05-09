@@ -9,8 +9,7 @@ namespace Timeoff.Data
         {
             builder.ToTable("UserAllowanceAdjustments");
 
-            builder.Property(p => p.CreatedAt)
-                .HasDefaultValue(DateTime.UtcNow);
+            builder.Property(p => p.CreatedAt);
 
             builder
                 .Property(p => p.RowVersion)

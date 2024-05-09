@@ -49,7 +49,7 @@ export class MonthViewComponent {
                     summary: `In ${formatDate(this.selectedDate(), 'MMMM, yyyy')} ${u.name} used ${
                         u.total
                     } days from allowance`,
-                    days: this.days().map((d) => new DayModel(d, u, this.results().holidays)),
+                    days: this.days().map((d) => new DayModel(d, u)),
                 } as RowModel)
         );
     });

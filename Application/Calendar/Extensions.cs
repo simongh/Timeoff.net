@@ -4,9 +4,10 @@ namespace Timeoff.Application.Calendar
 {
     internal static class Extensions
     {
-        public static async Task<ResultModels.CalendarResult> GetCalendarAsync(this IDataContext dataContext,
+        public static async Task<IEnumerable<ResultModels.DayResult>> GetCalendarAsync(this IDataContext dataContext,
             int year,
-            bool fullYear)
+            bool fullYear,
+            int userId)
         {
             int months;
             DateTime startDate;
@@ -22,22 +23,11 @@ namespace Timeoff.Application.Calendar
                 months = 4;
             }
 
-            var holidays = await dataContext.Calendar
-                .Where(h => h.IsHoliday && h.Date >= startDate && h.Date < startDate.AddMonths(months + 1))
-                .Select(h => new ResultModels.PublicHolidayResult
-                {
-                    Id = h.CalendarId,
-                    Date = h.Date,
-                    Name = h.Name!,
-                })
-                .ToArrayAsync();
-
-            return new ResultModels.CalendarResult
-            {
-                StartDate = startDate,
-                Months = months,
-                Holidays = holidays,
-            };
+            return await dataContext.Calendar
+                 .Where(h => h.Date >= startDate && h.Date < startDate.AddMonths(months + 1))
+                 .Where(h => h.UserId == null || h.UserId == userId)
+                 .ToModel()
+                 .ToArrayAsync();
         }
     }
 }

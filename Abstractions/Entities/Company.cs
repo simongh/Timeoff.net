@@ -16,9 +16,9 @@
 
         public string? LdapAuthConfig { get; set; }
 
-        public string DateFormat { get; set; } = "yyyy-MM-dd";
+        public string DateFormat { get; set; } = "yyyy-mm-dd";
 
-        public string TimeZone { get; set; } = "Europe/London";
+        public string TimeZone { get; set; } = TimeZoneInfo.Local.DisplayName;
 
         public bool IntegrationApiEnabled { get; set; }
 
@@ -32,18 +32,14 @@
 
         public Schedule Schedule { get; set; } = null!;
 
-        public ICollection<Team> Teams { get; set; } = new HashSet<Team>();
+        public ICollection<Team> Teams { get; set; } = [];
 
-        public ICollection<User> Users { get; set; } = new HashSet<User>();
+        public ICollection<User> Users { get; set; } = [];
 
-        //public ICollection<PublicHoliday> PublicHolidays { get; set; } = new HashSet<PublicHoliday>();
+        public ICollection<EmailAudit> EmailAudits { get; set; } = [];
 
-        public ICollection<EmailAudit> EmailAudits { get; set; } = new HashSet<EmailAudit>();
+        public ICollection<LeaveType> LeaveTypes { get; set; } = [];
 
-        //public ICollection<Audit> Audits { get; set; } = new HashSet<Audit>();
-
-        public ICollection<LeaveType> LeaveTypes { get; set; } = new HashSet<LeaveType>();
-
-        public ICollection<Calendar> Calendar { get; set; } = new HashSet<Calendar>();
+        public ICollection<Calendar> Calendar { get; set; } = [];
     }
 }

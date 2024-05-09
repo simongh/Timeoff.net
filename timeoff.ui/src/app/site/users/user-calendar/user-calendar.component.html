@@ -40,7 +40,7 @@
 </div>
 
 <div class="row clearfix">
-    <calendar [monthCount]="12" monthFormat="MMMM" [start]="start()" colStyle="col-md-4" [holidays]="calendar().holidays" [absences]="calendar().leaveRequested"/>
+    <calendar [monthCount]="12" monthFormat="MMMM" [start]="start()" colStyle="col-md-4" [days]="calendar().days"/>
     <!-- @for (int i = 0; i < Model.Calendar.Months; i++)
     {
                 <div class="col-md-4 month_container">

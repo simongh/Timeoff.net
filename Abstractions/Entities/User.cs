@@ -2,15 +2,15 @@
 {
     public class User
     {
-        public string Email { get; set; } = null!;
+        public required string Email { get; set; }
 
-        public string Password { get; set; } = null!;
+        public required string Password { get; set; }
 
         public string? Token { get; set; }
 
-        public string FirstName { get; set; } = null!;
+        public required string FirstName { get; set; }
 
-        public string LastName { get; set; } = null!;
+        public required string LastName { get; set; }
 
         public bool IsActivated { get; set; }
 
@@ -30,24 +30,24 @@
 
         public int CompanyId { get; init; }
 
-        public Company Company { get; init; } = null!;
+        public Company? Company { get; init; }
 
         public int TeamId { get; set; }
 
-        public Team Team { get; set; } = null!;
+        public Team? Team { get; set; }
 
         public Schedule? Schedule { get; set; }
 
         public byte[]? RowVersion { get; init; } = null!;
 
-        public ICollection<Team> ManagedTeams { get; set; } = new HashSet<Team>();
+        public ICollection<Team> ManagedTeams { get; set; } = [];
 
-        public ICollection<Team> TeamApprover { get; set; } = new HashSet<Team>();
+        public ICollection<Team> TeamApprover { get; set; } = [];
 
-        public ICollection<Leave> Leave { get; set; } = new HashSet<Leave>();
+        public ICollection<Leave> Leave { get; set; } = [];
 
-        public ICollection<UserFeed> Feeds { get; set; } = new HashSet<UserFeed>();
+        public ICollection<UserFeed> Feeds { get; set; } = [];
 
-        public ICollection<UserAllowanceAdjustment> Adjustments { get; set; } = new HashSet<UserAllowanceAdjustment>();
+        public ICollection<UserAllowanceAdjustment> Adjustments { get; set; } = [];
     }
 }

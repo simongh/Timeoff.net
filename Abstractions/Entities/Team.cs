@@ -2,7 +2,7 @@
 {
     public class Team
     {
-        public string Name { get; set; } = null!;
+        public required string Name { get; set; }
 
         public double Allowance { get; set; } = 20;
 
@@ -18,11 +18,11 @@
 
         public int CompanyId { get; init; }
 
-        public Company Company { get; init; } = null!;
+        public Company? Company { get; init; }
 
-        public byte[]? RowVersion { get; init; } = null!;
-        public ICollection<User> Users { get; set; } = new HashSet<User>();
+        public byte[]? RowVersion { get; init; }
+        public ICollection<User> Users { get; set; } = [];
 
-        public ICollection<User> Approvers { get; set; } = new HashSet<User>();
+        public ICollection<User> Approvers { get; set; } = [];
     }
 }
