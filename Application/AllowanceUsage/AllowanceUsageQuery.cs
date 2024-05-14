@@ -33,99 +33,34 @@ namespace Timeoff.Application.AllowanceUsage
             if (request.Team.HasValue)
                 query = query.Where(u => u.TeamId == request.Team.Value);
 
-            var data = await query
-                .Select(u => new
+            return await query
+                .Select(u => new UserSummaryResult
                 {
-                    Leaves = u.Leave
-                        .Where(l => l.DateStart > request.StartDate || l.DateEnd > request.EndDate)
-                        .Select(l => new
+                    LeaveSummary = u.Calendar
+                        .Where(c => c.Date >= request.StartDate && c.Date <= request.EndDate)
+                        .Select(c => new
                         {
-                            LeaveType = l.LeaveTypeId,
-                            l.LeaveType.UseAllowance,
-                            Leave = l,
+                            c.LeaveTypeId,
+                            Day = c.LeavePart == LeavePart.All ? 1 : 0.5
+                        })
+                        .GroupBy(c => c.LeaveTypeId)
+                        .Select(c => new LeaveSummaryResult
+                        {
+                            Id = c.Key.Value,
+                            AllowanceUsed = c.Sum(l => l.Day)
                         }),
-                    Schedule = u.Schedule ?? u.Company.Schedule,
-                    u.FirstName,
-                    u.LastName,
-                    u.UserId,
+                    AllowanceUsed = u.Calendar
+                        .Where(c => c.Date >= request.StartDate && c.Date <= request.EndDate)
+                        .Where(c => c.LeaveType!.UseAllowance)
+                        .Sum(c => c.LeavePart == LeavePart.All ? 1 : 0.5),
+                    FirstName = u.FirstName,
+                    LastName = u.LastName,
+                    Id = u.UserId,
+                    IsActive = u.IsActive,
                 })
                 .OrderBy(l => l.FirstName)
                 .AsNoTracking()
                 .ToArrayAsync();
-
-            var normalised = data.Select(u => new
-            {
-                u.FirstName,
-                u.LastName,
-                u.UserId,
-                Leaves = u.Leaves.Select(l =>
-                {
-                    if (request.StartDate > l.Leave.DateStart)
-                    {
-                        l.Leave.DateStart = request.StartDate;
-                        l.Leave.DayPartStart = LeavePart.All;
-                    }
-
-                    if (l.Leave.DateEnd > request.EndDate)
-                    {
-                        l.Leave.DateEnd = request.EndDate;
-                        l.Leave.DayPartEnd = LeavePart.All;
-                    }
-
-                    _daysCalculator.CalculateDays(l.Leave, u.Schedule, holidays);
-                    return l;
-                })
-            });
-
-            return normalised
-                .Select(d => new UserSummaryResult
-                {
-                    FirstName = d.FirstName,
-                    LastName = d.LastName,
-                    Id = d.UserId,
-                    AllowanceUsed = d.Leaves
-                        .Where(l => l.UseAllowance)
-                        .Sum(l => l.Leave.Days),
-                    LeaveSummary = d.Leaves
-                        .GroupBy(d => d.LeaveType)
-                        .Select(d => new LeaveSummaryResult
-                        {
-                            Id = d.Key,
-                            AllowanceUsed = d.Sum(l => l.Leave.Days),
-                        }),
-                })
-                .ToArray();
-        }
-
-        private record LeaveSummary
-        {
-            public DateTime Start { get; init; }
-
-            public DateTime End { get; init; }
-
-            public LeavePart StartPart { get; init; }
-
-            public LeavePart EndPart { get; init; }
-
-            public int Id { get; init; }
-
-            public bool UsesAllowance { get; init; }
-
-            public double Days
-            {
-                get
-                {
-                    double result = End.Subtract(Start).Days;
-
-                    if (StartPart == LeavePart.Morning)
-                        result -= 0.5;
-
-                    if (EndPart == LeavePart.Afternoon)
-                        result -= 0.5;
-
-                    return result;
-                }
-            }
         }
     }
 }

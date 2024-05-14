@@ -6,7 +6,7 @@ namespace Timeoff.Services
     {
         private readonly IDataContext _dataContext = dataContext;
 
-        public async Task CalculateDaysAsync(Entities.Leave leave)
+        public async Task<IEnumerable<Entities.Calendar>> CalculateDaysAsync(Entities.Leave leave)
         {
             IEnumerable<DateTime> holidays;
             if (leave.User.Team.IncludePublicHolidays)
@@ -14,12 +14,12 @@ namespace Timeoff.Services
             else
                 holidays = [];
 
-            CalculateDays(leave, leave.User.Schedule ?? leave.User.Company.Schedule, holidays);
+            return CalculateDays(leave, leave.User.Schedule ?? leave.User.Company.Schedule, holidays);
         }
 
-        public void CalculateDays(Entities.Leave leave, Entities.Schedule schedule, IEnumerable<DateTime> holidays)
+        public IEnumerable<Entities.Calendar> CalculateDays(Entities.Leave leave, Entities.Schedule schedule, IEnumerable<DateTime> holidays)
         {
-            var days = 0d;
+            var days = new List<Entities.Calendar>();
             for (DateTime i = leave.DateStart; i <= leave.DateEnd; i = i.AddDays(1))
             {
                 if (holidays.Contains(i))
@@ -28,15 +28,23 @@ namespace Timeoff.Services
                 if (!IsWorkingDay(schedule, i.DayOfWeek))
                     continue;
 
+                var part = LeavePart.All;
                 if (i == leave.DateStart && leave.DayPartStart == LeavePart.Afternoon)
-                    days += 0.5;
+                    part = LeavePart.Afternoon;
                 else if (i == leave.DateEnd && leave.DayPartEnd == LeavePart.Morning)
-                    days += 0.5;
-                else
-                    days += 1;
+                    part = LeavePart.Morning;
+
+                days.Add(new Entities.Calendar
+                {
+                    Date = i,
+                    User = leave.User,
+                    CompanyId = leave.User.CompanyId,
+                    LeaveTypeId = leave.LeaveTypeId,
+                    LeavePart = part
+                });
             }
 
-            leave.Days = days;
+            return days;
         }
 
         private bool IsWorkingDay(Entities.Schedule schedule, DayOfWeek day)

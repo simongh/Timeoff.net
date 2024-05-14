@@ -81,8 +81,6 @@ namespace Timeoff.Application.BookAbsence
                 };
             }
 
-            var days = 0d;
-
             var absence = new Entities.Leave
             {
                 DateStart = request.Start,
@@ -90,15 +88,13 @@ namespace Timeoff.Application.BookAbsence
                 DateEnd = request.End,
                 DayPartEnd = request.EndPart,
                 LeaveTypeId = request.LeaveType,
-                Days = days,
                 EmployeeComment = request.Comment,
                 User = user,
                 Status = LeaveStatus.New,
                 ApproverId = await GetApproverAsync(user.UserId),
             };
 
-            if (leaveType.UseAllowance)
-                await _daysCalculator.CalculateDaysAsync(absence);
+            _dataContext.Calendar.AddRange(await _daysCalculator.CalculateDaysAsync(absence));
 
             NewApprovalMessage? message = null;
             if (absence.ApproverId == user.UserId)

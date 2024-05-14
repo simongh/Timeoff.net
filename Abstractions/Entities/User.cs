@@ -49,5 +49,7 @@
         public ICollection<UserFeed> Feeds { get; set; } = [];
 
         public ICollection<UserAllowanceAdjustment> Adjustments { get; set; } = [];
+
+        public ICollection<Calendar> Calendar { get; set; } = [];
     }
 }
