@@ -40,13 +40,17 @@
                             data-toggle="popover"
                             data-trigger="focus hover">{{u.total}}</span>
                     </td>
-                    <ng-container *ngFor="let day of u.days">
+                    @for (day of u.days; track $index) {
                         <td class="calendar_cell half_1st" [ngClass]="day.morningClasses">
-                            <span *ngIf="!day.label">{{day.date| date: 'd'}}</span>
-                            <span *ngIf="!!day.label" data-toggle="tooltip" data-placement="top" [title]="day.label">{{day.date| date: 'd'}}</span>
+                            @if (!day.label) {
+                                <span>{{day.date| date: 'd'}}</span>
+                            }
+                            @else {
+                                <span data-toggle="tooltip" data-placement="top" [title]="day.label">{{day.date| date: 'd'}}</span>
+                            }
                         </td>
                         <td class="calendar_cell half_2nd" [ngClass]="day.afternoonClasses"></td>
-                    </ng-container>
+                    }
                 </tr>
             </tbody>
         </table>

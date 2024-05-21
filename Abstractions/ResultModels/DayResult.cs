@@ -12,5 +12,7 @@
         public string? Colour { get; init; }
 
         public LeavePart? DayPart { get; init; }
+
+        public LeaveStatus? Status { get; init; }
     }
 }

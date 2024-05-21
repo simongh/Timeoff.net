@@ -126,6 +126,7 @@ namespace Timeoff.Application
                 Date = c.Date,
                 DayPart = c.LeavePart,
                 Colour = c.LeaveType!.Colour,
+                Status = c.Leave!.Status,
             });
         }
     }
