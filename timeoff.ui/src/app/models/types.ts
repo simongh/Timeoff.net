@@ -22,3 +22,11 @@ export function datePartList() {
         }
     ];
 }
+
+export enum LeaveStatus {
+    New = "New",
+    Approved = "Approved",
+    Rejected = "Rejected",
+    PendingRevoke = "PendingRevoke",
+    Cancelled = "Cancelled"
+}

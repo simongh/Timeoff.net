@@ -1,7 +1,7 @@
-import { PublicHolidayModel } from "@models/public-holiday.model";
-import { UserSummaryModel } from "./user-summary.model";
-import { getDay, isSameDay, isWeekend } from "date-fns";
-import { datePart } from "@models/types";
+import { PublicHolidayModel } from '@models/public-holiday.model';
+import { UserSummaryModel } from './user-summary.model';
+import { getDay, isSameDay, isWeekend } from 'date-fns';
+import { LeaveStatus, datePart } from '@models/types';
 
 export class DayModel {
     public date: Date;
@@ -10,13 +10,13 @@ export class DayModel {
 
     public afternoonClasses: string[] = [];
 
-    public label : string | null = null;
+    public label: string | null = null;
 
     constructor(date: Date, user: UserSummaryModel) {
-        this.date = date;    
+        this.date = date;
 
-        const weekday = (getDay(date) + 6) % 7
-        if (!Object.values(user.schedule)[weekday]){
+        const weekday = (getDay(date) + 6) % 7;
+        if (!Object.values(user.schedule)[weekday]) {
             this.morningClasses.push(' weekend_cell');
             this.afternoonClasses.push('weekend_cell');
         }
@@ -34,14 +34,24 @@ export class DayModel {
                 this.afternoonClasses.push('public_holiday_cell');
                 this.label = `Public Holiday: ${h.name}`;
             } else {
+                const colour = h.status == LeaveStatus.New ? 'leave_cell_pending' : h.colour!;
+
+                this.label = 'Holiday';
                 if (h.dayPart == datePart.morning || h.dayPart == datePart.wholeDay) {
-                    this.morningClasses.push(h.colour!);
+                    this.morningClasses.push(colour);
                 }
 
                 if (h.dayPart == datePart.afternoon || h.dayPart == datePart.wholeDay) {
-                    this.afternoonClasses.push(h.colour!);
+                    this.afternoonClasses.push(colour);
                 }
-                this.label = 'Approved leave';
+
+                if (h.status == LeaveStatus.New) {
+                    this.label += ': New absence waiting approval';
+                } else if (h.status == LeaveStatus.PendingRevoke) {
+                    this.label += ': Revoked waiting for approval';
+                } else if (h.status == LeaveStatus.Approved) {
+                    this.label += ': Approved absence';
+                }
             }
         });
     }
