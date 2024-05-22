@@ -96,5 +96,22 @@ namespace Timeoff.Api
 
             return Ok(result);
         }
+
+        [HttpPost("import")]
+        public async Task<IActionResult> ImportAsync(Application.Users.ImportCommand command)
+        {
+            var result = await _mediator.Send(command);
+
+            if (result.IsSuccess)
+                return NoContent();
+            else
+                return BadRequest(result);
+        }
+
+        [HttpGet("import")]
+        public async Task<IActionResult> ImportAsync()
+        {
+            return Ok();
+        }
     }
 }

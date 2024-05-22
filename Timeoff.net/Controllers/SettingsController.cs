@@ -27,11 +27,11 @@ namespace Timeoff.Controllers
         //    return View("index", await _mediator.Send(command));
         //}
 
-        [HttpPost("carryOverUnusedAllowance")]
-        public async Task<IActionResult> CarryOverAsync()
-        {
-            return View();
-        }
+        //[HttpPost("carryOverUnusedAllowance")]
+        //public async Task<IActionResult> CarryOverAsync()
+        //{
+        //    return View();
+        //}
 
         //[HttpPost("schedule")]
         //public async Task<IActionResult> ScheduleAsync(UpdateScheduleCommand command)
@@ -39,12 +39,12 @@ namespace Timeoff.Controllers
         //    return View("index", await _mediator.Send(command));
         //}
 
-        [HttpPost("leavetypes")]
-        public async Task<IActionResult> UpdateLeaveTypesAsync(Application.Settings.UpdateLeaveTypesCommand command)
-        {
-            var vm = await _mediator.Send(command);
-            return View("index", vm);
-        }
+        //[HttpPost("leavetypes")]
+        //public async Task<IActionResult> UpdateLeaveTypesAsync(Application.Settings.UpdateLeaveTypesCommand command)
+        //{
+        //    var vm = await _mediator.Send(command);
+        //    return View("index", vm);
+        //}
 
         //[HttpPost("leavetypes/delete")]
         //public async Task<IActionResult> DeleteLeaveTypesAsync([FromQuery] Application.Settings.DeleteLeaveTypeCommand command)
@@ -65,11 +65,11 @@ namespace Timeoff.Controllers
             return View();
         }
 
-        [HttpGet("company/backup")]
-        public async Task<IActionResult> CompanyBackupAsync()
-        {
-            return View();
-        }
+        //[HttpGet("company/backup")]
+        //public async Task<IActionResult> CompanyBackupAsync()
+        //{
+        //    return View();
+        //}
 
         //[HttpPost("company/delete")]
         //public async Task<IActionResult> CompanyDeleteAsync(Application.DeleteCompany.DeleteCompanyCommand command)

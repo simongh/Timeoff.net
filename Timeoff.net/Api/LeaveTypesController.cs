@@ -12,15 +12,42 @@ namespace Timeoff.Api
         private readonly IMediator _mediator = mediator;
 
         [HttpPut("")]
-        public async Task<IActionResult> UpdateAsync()
+        public async Task<IActionResult> UpdateAsync(Application.Settings.UpdateLeaveTypesCommand command)
         {
-            throw new NotImplementedException();
+            if (command == null)
+            {
+                return BadRequest();
+            }
+
+            var result = await _mediator.Send(command);
+
+            if (result.IsSuccess)
+            {
+                return Ok(result);
+            }
+            else
+                return BadRequest(result);
         }
 
         [HttpPost("")]
-        public async Task<IActionResult> CreateAsync()
+        public async Task<IActionResult> CreateAsync(Application.Settings.LeaveTypeRequest command)
         {
-            throw new NotImplementedException();
+            if (command == null)
+            {
+                return BadRequest();
+            }
+
+            var result = await _mediator.Send(new Application.Settings.UpdateLeaveTypesCommand
+            {
+                Add = command
+            });
+
+            if (result.IsSuccess)
+            {
+                return Ok(result);
+            }
+            else
+                return BadRequest(result);
         }
 
         [HttpDelete("{id:int}")]

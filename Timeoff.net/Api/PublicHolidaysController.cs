@@ -63,5 +63,17 @@ namespace Timeoff.Api
             else
                 return BadRequest(result);
         }
+
+        [Authorize(Roles = Roles.Admin)]
+        [HttpPost("import")]
+        public async Task<IActionResult> ImportAsync(Application.PublicHolidays.ImportCommand command)
+        {
+            var result = await _mediator.Send(command);
+
+            if (result.IsSuccess)
+                return NoContent();
+            else
+                return BadRequest(result);
+        }
     }
 }
