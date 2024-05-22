@@ -29,11 +29,11 @@ namespace Timeoff.Controllers
         //    return View("Index", vm);
         //}
 
-        [HttpPost("import")]
-        public async Task<IActionResult> ImportAsync()
-        {
-            return View();
-        }
+        //[HttpPost("import")]
+        //public async Task<IActionResult> ImportAsync()
+        //{
+        //    return View();
+        //}
 
         //[HttpPost("delete")]
         //public async Task<IActionResult> DeleteAsync(Application.PublicHolidays.DeleteHolidayCommand command)

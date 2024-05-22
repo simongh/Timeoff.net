@@ -34,23 +34,23 @@ namespace Timeoff.Controllers
         //    return View("Create", vm);
         //}
 
-        [HttpGet("import")]
-        public IActionResult Import()
-        {
-            return View();
-        }
+        //[HttpGet("import")]
+        //public IActionResult Import()
+        //{
+        //    return View();
+        //}
 
-        [HttpPost("import")]
-        public async Task<IActionResult> ImportPostAsync()
-        {
-            return View();
-        }
+        //[HttpPost("import")]
+        //public async Task<IActionResult> ImportPostAsync()
+        //{
+        //    return View();
+        //}
 
-        [HttpGet("import-sample")]
-        public async Task<IActionResult> ImportSampleAsync()
-        {
-            return View();
-        }
+        //[HttpGet("import-sample")]
+        //public async Task<IActionResult> ImportSampleAsync()
+        //{
+        //    return View();
+        //}
 
         //[HttpGet("edit/{id:int}")]
         //public async Task<IActionResult> EditAsync([FromRoute] Application.UserDetails.GetDetailsCommand command)
@@ -116,12 +116,12 @@ namespace Timeoff.Controllers
         //    return View("Index", vm);
         //}
 
-        [HttpGet("search")]
-        [HttpPost("search")]
-        public async Task<IActionResult> SearchAsync()
-        {
-            return View();
-        }
+        //[HttpGet("search")]
+        //[HttpPost("search")]
+        //public async Task<IActionResult> SearchAsync()
+        //{
+        //    return View();
+        //}
 
         //[HttpGet("")]
         //public async Task<IActionResult> IndexAsync([FromQuery] Application.Users.UsersQuery query)

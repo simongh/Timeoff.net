@@ -94,5 +94,21 @@ namespace Timeoff.Api
             else
                 return BadRequest(result);
         }
+
+        [Authorize(Roles = Roles.Admin)]
+        [HttpPost("backup")]
+        public async Task<IActionResult> BackupAsync()
+        {
+            await _mediator.Send(new Application.Company.BackupCommand());
+            return NoContent();
+        }
+
+        [Authorize(Roles = Roles.Admin)]
+        [HttpPost("carry-over")]
+        public async Task<IActionResult> CarryOverAsync()
+        {
+            await _mediator.Send(new Application.Company.CarryOverCommand());
+            return NoContent();
+        }
     }
 }
