@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { of } from 'rxjs';
 import { TeamViewModel } from './team-view.model';
-import { LeaveSummary } from '@services/calendar/leave-summary.model';
 
 @Injectable()
 export class TeamViewService {
@@ -12,11 +11,11 @@ export class TeamViewService {
             users: [{
                 id: 0,
                 name: 'test',
-                total: 0,
-                team: {
+                user: {
                     id: 0,
-                    name: ''
+                    name: 'test',
                 },
+                used: 0,
                 days: [],
                 schedule: {
                     monday: true,

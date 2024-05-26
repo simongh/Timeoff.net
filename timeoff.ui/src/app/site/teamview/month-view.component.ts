@@ -8,7 +8,7 @@ import { LoggedInUserService } from '@services/logged-in-user/logged-in-user.ser
 
 import { TeamViewModel } from './team-view.model';
 import { RowModel } from './row.model';
-import { DayModel } from './day.model';
+import { DayModel } from '@components/calendar/day.model';
 
 @Component({
     standalone: true,
@@ -40,16 +40,18 @@ export class MonthViewComponent {
     });
 
     protected readonly rows = computed(()=> {
-        return this.results().users.map(
+        return this.results().users
+        .filter((u)=> !!this.selectedTeam() ? u.id == this.selectedTeam() : true)
+        .map(
             (u) =>
                 ({
-                    name: u.name,
-                    id: u.id,
-                    total: u.total,
+                    name: u.user.name,
+                    id: u.user.id,
+                    total: u.used,
                     summary: `In ${formatDate(this.selectedDate(), 'MMMM, yyyy')} ${u.name} used ${
-                        u.total
+                        u.used
                     } days from allowance`,
-                    days: this.days().map((d) => new DayModel(d, u)),
+                    days: this.days().map((d) => new DayModel(d, u.days)),
                 } as RowModel)
         );
     });

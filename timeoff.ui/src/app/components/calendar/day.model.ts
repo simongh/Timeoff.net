@@ -1,6 +1,4 @@
-import { isSameDay, isWeekend, isWithinInterval } from 'date-fns';
-import { PublicHolidayModel } from '@models/public-holiday.model';
-import { LeaveRequestModel } from '@models/leave-request.model';
+import { isSameDay, isWeekend } from 'date-fns';
 import { datePart } from '@models/types';
 import { CalendarDayModel } from '@models/calendar-day.model';
 
