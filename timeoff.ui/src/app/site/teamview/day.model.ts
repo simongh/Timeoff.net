@@ -1,4 +1,3 @@
-import { PublicHolidayModel } from '@models/public-holiday.model';
 import { UserSummaryModel } from './user-summary.model';
 import { getDay, isSameDay, isWeekend } from 'date-fns';
 import { LeaveStatus, datePart } from '@models/types';

@@ -32,7 +32,7 @@ namespace Timeoff.Controllers
         //}
 
         [HttpGet("teamview")]
-        public async Task<IActionResult> TeamViewAsync([FromQuery] Application.TeamView.GetTeamViewCommand command)
+        public async Task<IActionResult> TeamViewAsync([FromQuery] Application.TeamView.TeamViewQuery command)
         {
             var vm = await _mediator.Send(command);
             return View(vm);

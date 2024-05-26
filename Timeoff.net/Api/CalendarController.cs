@@ -12,13 +12,17 @@ namespace Timeoff.Api
         private readonly IMediator _mediator = mediator;
 
         [HttpGet("")]
-        public async Task<IActionResult> GetAsync(int? user, int year)
+        public async Task<IActionResult> GetAsync([FromQuery] Application.Calendar.CalendarQuery query)
         {
-            return Ok(await _mediator.Send(new Application.Calendar.GetUserCalendarCommand
-            {
-                Id = user ?? 0,
-                Year = year,
-            }));
+            return Ok(await _mediator.Send(query));
+        }
+
+        [HttpGet("teams")]
+        public async Task<IActionResult> TeamsAsync([FromQuery] Application.TeamView.TeamViewQuery query)
+        {
+            var results = await _mediator.Send(query);
+
+            return Ok(results);
         }
     }
 }
