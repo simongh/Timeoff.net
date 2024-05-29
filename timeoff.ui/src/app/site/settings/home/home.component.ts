@@ -93,7 +93,6 @@ export class HomeComponent implements OnInit {
                     schedule: data.schedule,
                 });
 
-                this.companySvc.fillSchedule(data.schedule);
                 this.companySvc.fillLeaveTypes(data.leaveTypes);
             });
     }

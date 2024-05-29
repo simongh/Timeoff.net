@@ -7,6 +7,7 @@ import { CompanyService } from '@services/company/company.service';
 import { ColourPickerComponent } from '../colour-picker/colour-picker.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { LeaveTypeModalComponent } from '../leave-type-modal/leave-type-modal.component';
+import { switchMap } from 'rxjs';
 
 @Component({
     selector: 'leave-types',
@@ -41,7 +42,33 @@ export class LeaveTypesComponent {
         this.leaveTypes.push(this.leaveTypeForm);
 
         this.companySvc.resetLeaveTypeForm();
+
+        this.companySvc
+            .updateLeaveTypes()
+            .pipe(
+                takeUntilDestroyed(this.destroyed),
+                switchMap(() => {
+                    return this.companySvc.getLeaveTypes();
+                })
+            )
+            .subscribe((lt) => {
+                this.companySvc.leaveTypes.clear();
+                this.companySvc.fillLeaveTypes(lt);
+            });
     }
 
-    public removeLeaveType(id: number) {}
+    public removeLeaveType(id: number) {
+        this.companySvc
+            .removeLeaveType(id)
+            .pipe(
+                takeUntilDestroyed(this.destroyed),
+                switchMap(() => {
+                    return this.companySvc.getLeaveTypes();
+                })
+            )
+            .subscribe((lt) => {
+                this.companySvc.leaveTypes.clear();
+                this.companySvc.fillLeaveTypes(lt);
+            });
+    }
 }

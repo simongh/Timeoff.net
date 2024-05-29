@@ -13,6 +13,7 @@ import { LeaveTypeModel } from '@services/company/leave-type.model';
 import { LeaveResultModel } from './leave-result.model';
 import { LeaveService } from './leave.service';
 import { ReactiveFormsModule } from '@angular/forms';
+import { combineLatest } from 'rxjs';
 
 @Component({
     selector: 'leave',
@@ -32,7 +33,7 @@ export class LeaveComponent implements OnInit {
     }
 
     protected readonly submitting = signal(false);
-    
+
     constructor(
         private readonly companySvc: CompanyService,
         private readonly leaveSvc: LeaveService,
@@ -40,11 +41,23 @@ export class LeaveComponent implements OnInit {
     ) {}
 
     public ngOnInit(): void {
-        this.companySvc
-            .getLeaveTypes()
+        combineLatest([this.companySvc.getLeaveTypes(), this.leaveSvc.search()])
             .pipe(takeUntilDestroyed(this.destroyed))
-            .subscribe((data) => {
+            .subscribe(([data, results]) => {
                 this.leaveTypes.set(data);
+                this.results.set(results);
+            });
+    }
+
+    protected search() {
+        this.submitting.set(true);
+
+        this.leaveSvc
+            .search()
+            .pipe(takeUntilDestroyed(this.destroyed))
+            .subscribe((l) => {
+                this.results.set(l);
+                this.submitting.set(false);
             });
     }
 }

@@ -39,20 +39,20 @@ export class MonthViewComponent {
         });
     });
 
-    protected readonly rows = computed(()=> {
-        return this.results().users
-        .filter((u)=> !!this.selectedTeam() ? u.id == this.selectedTeam() : true)
-        .map(
-            (u) =>
-                ({
-                    name: u.user.name,
-                    id: u.user.id,
-                    total: u.used,
-                    summary: `In ${formatDate(this.selectedDate(), 'MMMM, yyyy')} ${u.name} used ${
-                        u.used
-                    } days from allowance`,
-                    days: this.days().map((d) => new DayModel(d, u.days)),
-                } as RowModel)
-        );
+    protected readonly rows = computed(() => {
+        return this.results()
+            .users.filter((u) => (!!this.selectedTeam() ? u.id == this.selectedTeam() : true))
+            .map(
+                (u) =>
+                    ({
+                        name: u.user.name,
+                        id: u.user.id,
+                        total: u.used,
+                        summary: `In ${formatDate(this.selectedDate(), 'MMMM, yyyy')} ${u.user.name} used ${
+                            u.used
+                        } days from allowance`,
+                        days: this.days().map((d) => new DayModel(d, u.days)),
+                    } as RowModel)
+            );
     });
 }
