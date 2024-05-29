@@ -1,11 +1,14 @@
+import { TeamModel } from "@services/company/team.model";
+import { UserModel } from "@services/company/user.model";
+
 export interface LeaveResultModel{
-    name: string;
-    team: string;
+    user: UserModel;
+    manager: UserModel;
+    team: TeamModel
     start: Date;
     end: Date;
     days: number;
     added: Date;
     status: number;
-    approver: string;
     comment: string;
 }

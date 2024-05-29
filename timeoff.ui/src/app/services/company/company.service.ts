@@ -64,9 +64,6 @@ export class CompanyService {
         });
     }
 
-    public fillSchedule(schedule: ScheduleModel) {
-    }
-
     public fillLeaveTypes(types: LeaveTypeModel[]) {
         types.map((lt) => {
             this.leaveTypes.push(this.createLeaveTypeForm(lt));
@@ -79,6 +76,10 @@ export class CompanyService {
 
     public resetLeaveTypeForm() {
         this.leaveTypeForm = this.createLeaveTypeForm();
+    }
+
+    public removeLeaveType(id: number){
+        return this.client.delete<void>(`/api/company/leave-types/${id}`);
     }
 
     public countries() {
