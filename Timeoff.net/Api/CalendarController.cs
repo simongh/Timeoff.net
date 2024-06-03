@@ -22,7 +22,7 @@ namespace Timeoff.Api
         {
             var results = await _mediator.Send(query);
 
-            return Ok(results);
+            return Ok(results.Result);
         }
     }
 }

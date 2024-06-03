@@ -35,6 +35,7 @@ namespace Timeoff.Application.Login
                     .FindByEmail(request.Username)
                     .Where(u => u.IsActivated)
                     .Include(u => u.Company)
+                    .IgnoreQueryFilters()
                     .FirstOrDefaultAsync(cancellationToken);
 
                 if (user != null && _usersService.Authenticate(user.Password, request.Password))

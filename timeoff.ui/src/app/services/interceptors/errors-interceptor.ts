@@ -18,7 +18,7 @@ export class ErrorsInterceptor implements HttpInterceptor {
         return next.handle(req).pipe(
             catchError((e: HttpErrorResponse) => {
                 if (e) {
-                    if (e.error.errors) {
+                    if (e.error?.errors) {
                         this.msgsSvc.hasErrors(e.error.errors);
                     } else {
                         this.msgsSvc.isError('Unable to handle request');

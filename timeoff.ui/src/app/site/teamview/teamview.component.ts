@@ -51,9 +51,7 @@ export class TeamviewComponent implements OnInit {
 
     protected readonly teams = signal<TeamModel[]>([]);
 
-    protected readonly results = signal<TeamViewModel>({
-        users: [] as UserSummaryModel[],
-    } as TeamViewModel);
+    protected readonly results = signal<UserSummaryModel[]>([]);
 
     constructor(
         private readonly destroyed: DestroyRef,
