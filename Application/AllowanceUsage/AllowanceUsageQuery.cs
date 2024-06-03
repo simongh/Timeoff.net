@@ -22,45 +22,65 @@ namespace Timeoff.Application.AllowanceUsage
 
         public async Task<IEnumerable<UserSummaryResult>> Handle(AllowanceUsageQuery request, CancellationToken cancellationToken)
         {
-            var holidays = await _dataContext.Calendar
-                .Where(h => h.IsHoliday)
-                .Where(h => h.Date >= request.StartDate && h.Date <= request.EndDate)
-                .Select(h => h.Date)
-                .ToArrayAsync();
-
             var query = _dataContext.Users.AsQueryable();
 
             if (request.Team.HasValue)
                 query = query.Where(u => u.TeamId == request.Team.Value);
 
-            return await query
-                .Select(u => new UserSummaryResult
+            var results = await query
+                .Select(u => new
                 {
-                    LeaveSummary = u.Calendar
+                    Calendar = u.Calendar
                         .Where(c => c.Date >= request.StartDate && c.Date <= request.EndDate)
                         .Select(c => new
                         {
                             c.LeaveTypeId,
-                            Day = c.LeavePart == LeavePart.All ? 1 : 0.5
-                        })
-                        .GroupBy(c => c.LeaveTypeId)
-                        .Select(c => new LeaveSummaryResult
-                        {
-                            Id = c.Key.Value,
-                            AllowanceUsed = c.Sum(l => l.Day)
+                            c.LeaveType.UseAllowance,
+                            Day = c.LeavePart == LeavePart.All ? 1 : 0.5,
                         }),
-                    AllowanceUsed = u.Calendar
-                        .Where(c => c.Date >= request.StartDate && c.Date <= request.EndDate)
-                        .Where(c => c.LeaveType!.UseAllowance)
-                        .Sum(c => c.LeavePart == LeavePart.All ? 1 : 0.5),
-                    FirstName = u.FirstName,
-                    LastName = u.LastName,
+                    //LeaveSummary = u.Calendar
+                    //    .Where(c => c.Date >= request.StartDate && c.Date <= request.EndDate)
+                    //    .Select(c => new
+                    //    {
+                    //        c.LeaveTypeId,
+                    //        Day = c.LeavePart == LeavePart.All ? 1 : 0.5
+                    //    })
+                    //    .GroupBy(c => c.LeaveTypeId)
+                    //    .Select(c => new LeaveSummaryResult
+                    //    {
+                    //        Id = c.Key.Value,
+                    //        AllowanceUsed = c.Sum(l => l.Day)
+                    //    }),
+                    //AllowanceUsed = u.Calendar
+                    //    .Where(c => c.Date >= request.StartDate && c.Date <= request.EndDate)
+                    //    .Where(c => c.LeaveType!.UseAllowance)
+                    //    .Sum(c => c.LeavePart == LeavePart.All ? 1 : 0.5),
+                    u.FirstName,
+                    u.LastName,
                     Id = u.UserId,
-                    IsActive = u.IsActive,
+                    u.IsActive,
                 })
                 .OrderBy(l => l.FirstName)
                 .AsNoTracking()
                 .ToArrayAsync();
+
+            return results.Select(u => new UserSummaryResult
+            {
+                LeaveSummary = u.Calendar
+                    .GroupBy(c => c.LeaveTypeId)
+                    .Select(c => new LeaveSummaryResult
+                    {
+                        Id = c.Key.Value,
+                        AllowanceUsed = c.Sum(l => l.Day)
+                    }),
+                AllowanceUsed = u.Calendar
+                    .Where(c => c.UseAllowance)
+                    .Sum(l => l.Day),
+                FirstName = u.FirstName,
+                LastName = u.LastName,
+                Id = u.Id,
+                IsActive = u.IsActive,
+            });
         }
     }
 }

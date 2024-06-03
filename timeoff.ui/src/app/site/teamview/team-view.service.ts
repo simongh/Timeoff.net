@@ -1,6 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { TeamViewModel } from './team-view.model';
 import { HttpClient, HttpParams } from '@angular/common/http';
+import { UserSummaryModel } from './user-summary.model';
 
 @Injectable()
 export class TeamViewService {
@@ -19,6 +20,6 @@ export class TeamViewService {
             options.params = options.params.append('team',team);
         }
 
-        return this.httpClient.get<TeamViewModel>('/api/calendar/teams',options);
+        return this.httpClient.get<UserSummaryModel[]>('/api/calendar/teams',options);
     }
 }

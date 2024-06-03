@@ -9,6 +9,7 @@ import { LoggedInUserService } from '@services/logged-in-user/logged-in-user.ser
 import { TeamViewModel } from './team-view.model';
 import { RowModel } from './row.model';
 import { DayModel } from '@components/calendar/day.model';
+import { UserSummaryModel } from './user-summary.model';
 
 @Component({
     standalone: true,
@@ -26,7 +27,7 @@ export class MonthViewComponent {
 
     public readonly teams = input.required<TeamModel[]>();
 
-    public readonly results = input.required<TeamViewModel>();
+    public readonly results = input.required<UserSummaryModel[]>();
 
     protected readonly isAdmin = inject(LoggedInUserService).isAdmin;
 
@@ -41,7 +42,7 @@ export class MonthViewComponent {
 
     protected readonly rows = computed(() => {
         return this.results()
-            .users.filter((u) => (!!this.selectedTeam() ? u.id == this.selectedTeam() : true))
+            .filter((u) => (!!this.selectedTeam() ? u.id == this.selectedTeam() : true))
             .map(
                 (u) =>
                     ({

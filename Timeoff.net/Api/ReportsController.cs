@@ -16,5 +16,11 @@ namespace Timeoff.Api
         {
             return Ok(await _mediator.Send(query));
         }
+
+        [HttpGet("absence-summary")]
+        public async Task<IActionResult> AbsenceSummaryAsync([FromQuery] Application.AbsenceSummary.AbsenceSummaryQuery query)
+        {
+            return NotFound();
+        }
     }
 }
