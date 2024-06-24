@@ -2,11 +2,11 @@ import { AfterViewInit, Directive, ElementRef, EventEmitter, Optional, Output } 
 import { NgControl } from '@angular/forms';
 import { formatISO, isValid, parseISO } from 'date-fns';
 
-declare var $: any;
+declare let $: any;
 
 @Directive({
     standalone: true,
-    selector: '[date-picker]',
+    selector: '[datePicker]',
 })
 export class DatePickerDirective implements AfterViewInit {
     @Output()

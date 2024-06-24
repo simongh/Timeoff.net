@@ -25,11 +25,11 @@
                                 <label>Date range</label>
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                                    <input type="text" date-picker formControlName="start" class="form-control" id="start_date" placeholder="From Day"
+                                    <input type="text" datePicker formControlName="start" class="form-control" id="start_date" placeholder="From Day"
                                             data-provide="datepicker" data-date-format="yyyy-mm-dd" data-date-autoclose="1"/>
                                     <span class="input-group-addon">(YYYY-MM-DD)</span>
                                     <span class="input-group-addon"><i class="fa fa-long-arrow-right"></i></span>
-                                    <input type="text" date-picker formControlName="end" class="form-control" id="end_date" placeholder="To Day"
+                                    <input type="text" datePicker formControlName="end" class="form-control" id="end_date" placeholder="To Day"
                                             data-provide="datepicker" data-date-format="yyyy-mm-dd" data-date-autoclose="1">
                                     <span class="input-group-addon">(YYYY-MM-DD)</span>
                                 </div>
@@ -75,7 +75,7 @@
     <span class="col-md-12">Leaves</span>
 </div>
 <div class="row">
-    @if (results().length == 0) {
+    @if (results().length === 0) {
     <div class="col-md-12 text-muted">
         There are no leave requests.
     </div>

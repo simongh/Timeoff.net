@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, input } from '@angular/core';
+import { Component, EventEmitter, Output, input } from '@angular/core';
 import { ColourPickerComponent } from '../colour-picker/colour-picker.component';
 
 import { LeaveTypeFormGroup } from '@services/company/company.service';

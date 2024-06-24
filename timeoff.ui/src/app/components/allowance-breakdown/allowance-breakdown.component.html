@@ -47,7 +47,7 @@
               data-content="Number of days already taken from allowance."
               data-placement="top"
               data-toggle="popover"
-              data-trigger="focus hover">{{ summary().used == 0 ? '-' : summary().used }}</span>
+              data-trigger="focus hover">{{ summary().used === 0 ? '-' : summary().used }}</span>
     </dd>
     <dd *ngIf="summary().isAccrued">
         <em>Locked so far</em>

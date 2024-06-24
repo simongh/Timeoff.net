@@ -1,5 +1,4 @@
 import { Component, DestroyRef, OnInit, signal } from '@angular/core';
-import { computedAsync } from 'ngxtension/computed-async';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';

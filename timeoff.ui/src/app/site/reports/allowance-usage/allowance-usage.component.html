@@ -36,11 +36,11 @@
                                 <label>Date range within single year</label>
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                                    <input type="text" date-picker formControlName="start" class="form-control" id="start_date" placeholder="From Month"
+                                    <input type="text" datePicker formControlName="start" class="form-control" id="start_date" placeholder="From Month"
                                            data-provide="datepicker" data-date-format="yyyy-mm" data-date-autoclose="1" data-date-min-view-mode="months"/>
                                     <span class="input-group-addon">(YYYY-MM)</span>
                                     <span class="input-group-addon"><i class="fa fa-long-arrow-right"></i></span>
-                                    <input type="text" formControlName="end" date-picker class="form-control" id="end_date" placeholder="To Month"
+                                    <input type="text" formControlName="end" datePicker class="form-control" id="end_date" placeholder="To Month"
                                            data-provide="datepicker" data-date-format="yyyy-mm" data-date-autoclose="1" data-date-min-view-mode="months"/>
                                     <span class="input-group-addon">(YYYY-MM)</span>
                                 </div>
@@ -77,7 +77,7 @@
 
 <div class="row">
 
-    <div *ngIf="results().length == 0" class="col-md-12 text-muted">
+    <div *ngIf="results().length === 0" class="col-md-12 text-muted">
         There are no users in selected department {{prettyDateRange()}}
     </div>
 

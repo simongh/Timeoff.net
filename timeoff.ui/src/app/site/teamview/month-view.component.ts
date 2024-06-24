@@ -6,7 +6,6 @@ import { eachDayOfInterval, endOfMonth, formatDate } from 'date-fns';
 import { TeamModel } from '@services/company/team.model';
 import { LoggedInUserService } from '@services/logged-in-user/logged-in-user.service';
 
-import { TeamViewModel } from './team-view.model';
 import { RowModel } from './row.model';
 import { DayModel } from '@components/calendar/day.model';
 import { UserSummaryModel } from './user-summary.model';
@@ -42,7 +41,7 @@ export class MonthViewComponent {
 
     protected readonly rows = computed(() => {
         return this.results()
-            .filter((u) => (!!this.selectedTeam() ? u.id == this.selectedTeam() : true))
+            .filter((u) => (this.selectedTeam() ? u.id == this.selectedTeam() : true))
             .map(
                 (u) =>
                     ({

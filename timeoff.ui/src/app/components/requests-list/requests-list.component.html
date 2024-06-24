@@ -1,5 +1,5 @@
 <div class="row">
-    <div *ngIf="requests.length == 0" class="col-md-12 text-muted">
+    <div *ngIf="requests.length === 0" class="col-md-12 text-muted">
         There are no leave requests yet.
     </div>
     <div *ngIf="requests.length > 0" class="col-md-12">
@@ -29,7 +29,7 @@
                         </td>
                         <td>
                             {{r.type}}
-                            <ng-container *ngIf="r.status == 'PendingRevoke'">
+                            <ng-container *ngIf="r.status === 'PendingRevoke'">
                                 <br/>
                                 (pended revoke)
                             </ng-container>
@@ -37,8 +37,8 @@
                         <td>{{r.days}}</td>
                         <td class="user-request-table-approver">{{r.approver.name}}</td>
                         <td>
-                            <button type="button" *ngIf="r.status == 'PendingRevoke'" class="pull-right btn btn-default btn-xs revoke-btn single-click" title="Revoke leave request. Subject of approval."><i class="fa fa-trash"></i> Revoke</button>
-                            <button type="submit" *ngIf="r.status != 'PendingRevoke'" class="pull-right btn btn-default btn-xs revoke-btn single-click" title="Cancel leave request" value="cancel"><i class="fa fa-trash"></i> Cancel</button>
+                            <button type="button" *ngIf="r.status === 'PendingRevoke'" class="pull-right btn btn-default btn-xs revoke-btn single-click" title="Revoke leave request. Subject of approval."><i class="fa fa-trash"></i> Revoke</button>
+                            <button type="submit" *ngIf="r.status !== 'PendingRevoke'" class="pull-right btn btn-default btn-xs revoke-btn single-click" title="Cancel leave request" value="cancel"><i class="fa fa-trash"></i> Cancel</button>
                             <!-- @if (item.Status == Timeoff.LeaveStatus.PendingRevoke)
                             {
                                 <form method="post" asp-controller="Request" asp-action="Revoke">

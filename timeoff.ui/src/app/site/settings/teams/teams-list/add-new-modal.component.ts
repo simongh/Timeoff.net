@@ -2,7 +2,6 @@ import { CommonModule } from '@angular/common';
 import { Component, DestroyRef, EventEmitter, Output, signal } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { HttpErrorResponse } from '@angular/common/http';
 
 import { ValidatorMessageComponent } from '@components/validator-message/validator-message.component';
 import { UserListComponent } from '@components/user-select/user-select.component';

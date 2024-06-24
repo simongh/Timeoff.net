@@ -1,9 +1,8 @@
-import { Component, DestroyRef, OnInit, computed, numberAttribute, signal } from '@angular/core';
+import { Component, DestroyRef, OnInit, computed, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
-import { injectParams } from 'ngxtension/inject-params';
 
 import { YesPipe } from '@components/yes.pipe';
 import { RequestsListComponent } from '@components/requests-list/requests-list.component';

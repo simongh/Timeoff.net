@@ -20,7 +20,7 @@ export class LoggedInUserService {
 
     public readonly expires = computed(() => {
         const value = this.user().expires;
-        return !!value ? new Date(value) : null;
+        return value ? new Date(value) : null;
     });
 
     public readonly dateFormat = computed(()=> {

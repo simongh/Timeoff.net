@@ -1,9 +1,8 @@
-import { Component, DestroyRef, numberAttribute, signal } from '@angular/core';
+import { Component, DestroyRef, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { injectParams } from 'ngxtension/inject-params';
 
 import { ScheduleComponent } from '@components/schedule/schedule.component';
 

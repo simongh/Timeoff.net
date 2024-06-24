@@ -1,5 +1,5 @@
 import { UserSummaryModel } from './user-summary.model';
-import { getDay, isSameDay, isWeekend } from 'date-fns';
+import { getDay, isSameDay } from 'date-fns';
 import { LeaveStatus, datePart } from '@models/types';
 
 export class DayModel {

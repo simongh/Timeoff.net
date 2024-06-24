@@ -1,5 +1,5 @@
 import { NgClass, NgIf } from '@angular/common';
-import { Component, Input, computed, input } from '@angular/core';
+import { Component, computed, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 @Component({

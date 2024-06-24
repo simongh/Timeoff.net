@@ -31,7 +31,7 @@ export class AllowanceUsageService {
                 .set('end', formatISO(endOfMonth(this.end), { representation: 'date' })),
         };
 
-        if (!!this.form.value.team) {
+        if (this.form.value.team) {
             options.params = options.params.append('team', this.form.value.team);
         }
 

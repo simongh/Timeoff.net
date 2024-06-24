@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, DestroyRef, OnInit, computed, effect, signal } from '@angular/core';
+import { Component, DestroyRef, OnInit, computed, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { MessagesService } from '@services/messages/messages.service';

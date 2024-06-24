@@ -17,7 +17,7 @@ export class CalendarService {
             params: new HttpParams().set('year', year),
         };
 
-        if (!!userId) {
+        if (userId) {
             options.params = options.params.append('user', userId);
         }
 

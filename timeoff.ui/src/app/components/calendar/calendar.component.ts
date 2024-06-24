@@ -39,8 +39,6 @@ export class CalendarComponent {
     public readonly days = input<CalendarDayModel[]>([]);
 
     protected readonly weeks = computed(() => {
-        const today = new Date();
-
         return eachMonthOfInterval({
             start: this.start(),
             end: addMonths(this.start(), this.monthCount() - 1),

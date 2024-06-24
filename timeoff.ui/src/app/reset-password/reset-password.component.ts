@@ -2,7 +2,6 @@ import { Component, DestroyRef, computed, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, Validators } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { HttpErrorResponse } from '@angular/common/http';
 import { injectQueryParams } from 'ngxtension/inject-query-params';
 
 import { FlashComponent } from '@components/flash/flash.component';
@@ -55,12 +54,11 @@ export class ResetPasswordComponent {
 
         this.submitting.set(true);
 
-        const f = this.passwordForm.value;
         this.authSvc
             .resetPassword()
             .pipe(takeUntilDestroyed(this.destroyed))
             .subscribe({
-                next: (r) => {
+                next: () => {
                     this.msgsSvc.isSuccess('Password updated successfully');
                     this.submitting.set(false);
                     this.passwordForm.reset();

@@ -13,7 +13,7 @@ export const authGuard = (route: ActivatedRouteSnapshot, state: RouterStateSnaps
     }
 
     return currentUser.extend().pipe(
-        map((t) => {
+        map(() => {
             if (currentUser.isUserLoggedIn()) {
                 return true;
             }
