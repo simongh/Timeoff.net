@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
-import { TeamViewModel } from './team-view.model';
 import { HttpClient, HttpParams } from '@angular/common/http';
+
 import { UserSummaryModel } from './user-summary.model';
 
 @Injectable()
@@ -16,7 +16,7 @@ export class TeamViewService {
                 .set('month', start.getMonth() + 1)
         };
 
-        if (!!team){
+        if (team){
             options.params = options.params.append('team',team);
         }
 

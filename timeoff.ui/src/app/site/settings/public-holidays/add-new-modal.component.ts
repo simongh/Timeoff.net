@@ -1,7 +1,6 @@
-import { Component, DestroyRef, EventEmitter, Input, Output, computed, signal } from '@angular/core';
+import { Component, DestroyRef, EventEmitter, Output, signal } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { HttpErrorResponse } from '@angular/common/http';
 
 import { ValidatorMessageComponent } from '@components/validator-message/validator-message.component';
 import { DatePickerDirective } from '@components/date-picker.directive';

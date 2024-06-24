@@ -18,7 +18,7 @@
         </thead>
         <tbody>
             <tr *ngFor="let week of month.weeks">
-                <td *ngIf="week.num == 0 && month.padding > 0" [attr.colspan]="2 * month.padding"></td>
+                <td *ngIf="week.num === 0 && month.padding > 0" [attr.colspan]="2 * month.padding"></td>
                 @for (day of week.days; track $index) {
                     <td class="calendar_cell half_1st" [ngClass]="day.morningClasses">
                         @if (!day.label) {

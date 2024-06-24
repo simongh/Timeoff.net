@@ -30,11 +30,11 @@ export class LeaveService {
                 .set('end', this.form.value.end!)
         };
 
-        if (!!this.form.value.leaveType){
+        if (this.form.value.leaveType){
             options.params = options.params.append('leave-type', this.form.value.leaveType)
         }
 
-        if (!!this.form.value.team) {
+        if (this.form.value.team) {
             options.params.append('team',this.form.value.team)
         }
 

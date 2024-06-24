@@ -1,7 +1,6 @@
 import { Component, computed, inject, numberAttribute } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { UserBreadcrumbComponent } from '../user-breadcrumb/user-breadcrumb.component';
-import { injectParams } from 'ngxtension/inject-params';
 import { injectQueryParams } from 'ngxtension/inject-query-params';
 import { computedAsync } from 'ngxtension/computed-async';
 

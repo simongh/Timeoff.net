@@ -4,8 +4,6 @@ import { FormBuilder, Validators } from '@angular/forms';
 
 import { createScheduleForm } from '@components/schedule/schedule-form';
 
-import { ScheduleModel } from '@models/schedule.model';
-
 import { TeamModel } from './team.model';
 import { UserModel } from './user.model';
 import { SettingsModel } from './settings.model';

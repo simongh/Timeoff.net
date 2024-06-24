@@ -39,7 +39,7 @@ export class EmailAuditComponent implements OnInit {
 
     protected readonly currentPage = injectQueryParams((p) => numberAttribute(p['page'] ?? 1));
 
-    protected readonly user = injectQueryParams((p) => (!!p['user'] ? numberAttribute(p['user']) : null));
+    protected readonly user = injectQueryParams((p) => (p['user'] ? numberAttribute(p['user']) : null));
 
     protected readonly totalPages = signal(0);
 

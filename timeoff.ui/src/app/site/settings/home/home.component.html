@@ -52,7 +52,7 @@
                                 <label for="carryOver" class="col-md-4 control-label">Carried over days</label>
                                 <div class="col-md-8">
                                     <select class="form-control" id="carryOver" formControlName="carryOver">
-                                        <option *ngFor="let d of carryOverDays()" [value]="d">{{ d == 0 ? 'None' : d == 1000 ? 'All' : d}}</option>
+                                        <option *ngFor="let d of carryOverDays()" [value]="d">{{ d === 0 ? 'None' : d === 1000 ? 'All' : d}}</option>
                                     </select>
                                     <p>
                                         <em>Number of days in employee allowance that are carried over to the next year.</em>

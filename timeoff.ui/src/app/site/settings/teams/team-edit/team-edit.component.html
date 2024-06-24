@@ -72,7 +72,7 @@
             <label for="allowance">Allowance</label>
 
             <select class="form-control" formControlName="allowance" id="allowance">
-                <option *ngFor="let a of allowances()" value="{{a}}">{{a == 0 ? "None":a}}</option>
+                <option *ngFor="let a of allowances()" value="{{a}}">{{a === 0 ? "None":a}}</option>
             </select>
         </div>
 

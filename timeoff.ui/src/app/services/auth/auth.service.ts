@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
-import { catchError, of, tap } from 'rxjs';
 
 import { compareValidator } from '@components/validators';
 

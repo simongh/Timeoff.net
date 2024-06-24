@@ -71,7 +71,6 @@ export class TeamEditComponent implements OnInit {
             return;
         }
 
-        const f = this.editForm.value;
         this.teamSvc
             .update(this.id())
             .pipe(takeUntilDestroyed(this.destroyed))

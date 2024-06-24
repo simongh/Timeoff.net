@@ -13,7 +13,6 @@ import { LeaveSummaryComponent } from '@components/leave-summary/leave-summary.c
 import { AllowanceSummaryModel } from '@services/calendar/allowance-summary.model';
 import { CalendarService } from '@services/calendar/calendar.service';
 
-import { PublicHolidayModel } from '@models/public-holiday.model';
 import { LeaveRequestModel } from '@models/leave-request.model';
 import { CalendarDayModel } from '@models/calendar-day.model';
 

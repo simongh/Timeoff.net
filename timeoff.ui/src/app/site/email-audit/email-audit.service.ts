@@ -1,6 +1,6 @@
 import { FormBuilder } from '@angular/forms';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Injectable, numberAttribute } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { map } from 'rxjs';
 
 import { EmailModel } from './email.model';

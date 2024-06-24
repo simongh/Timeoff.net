@@ -31,7 +31,7 @@ export class UsersService {
         const ending = this.form.controls.endDate.value;
         const isActive = this.form.controls.isActive.value ?? true;
 
-        if (!!ending) {
+        if (ending) {
             return isAfter(parseISO(ending), endOfToday()) && isActive;
         } else {
             return isActive;
