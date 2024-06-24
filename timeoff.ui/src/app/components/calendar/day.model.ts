@@ -1,4 +1,5 @@
 import { isSameDay, isWeekend } from 'date-fns';
+
 import { datePart } from '@models/types';
 import { CalendarDayModel } from '@models/calendar-day.model';
 

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { FlashModel } from '../../components/flash/flash.model';
 import { Subject } from 'rxjs';
+
+import { FlashModel } from '@components/flash/flash.model';
 
 @Injectable({
     providedIn: 'root',

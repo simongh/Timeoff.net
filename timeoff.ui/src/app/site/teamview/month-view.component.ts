@@ -3,11 +3,12 @@ import { Component, computed, inject, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { eachDayOfInterval, endOfMonth, formatDate } from 'date-fns';
 
+import { DayModel } from '@components/calendar/day.model';
+
 import { TeamModel } from '@services/company/team.model';
 import { LoggedInUserService } from '@services/logged-in-user/logged-in-user.service';
 
 import { RowModel } from './row.model';
-import { DayModel } from '@components/calendar/day.model';
 import { UserSummaryModel } from './user-summary.model';
 
 @Component({

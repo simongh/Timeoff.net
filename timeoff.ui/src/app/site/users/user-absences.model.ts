@@ -1,5 +1,6 @@
-import { LeaveRequestModel } from '../../models/leave-request.model';
 import { AllowanceSummaryModel } from '@services/calendar/allowance-summary.model';
+
+import { LeaveRequestModel } from '@models/leave-request.model';
 
 export interface UserAbsencesModel {
     id: number;

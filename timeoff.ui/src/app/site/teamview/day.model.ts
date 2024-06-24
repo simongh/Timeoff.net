@@ -1,6 +1,8 @@
-import { UserSummaryModel } from './user-summary.model';
 import { getDay, isSameDay } from 'date-fns';
+
 import { LeaveStatus, datePart } from '@models/types';
+
+import { UserSummaryModel } from './user-summary.model';
 
 export class DayModel {
     public date: Date;

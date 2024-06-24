@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+
 import { IntegrationModel } from './integration.model';
 
 const baseAddress = '/api/settings/integration';

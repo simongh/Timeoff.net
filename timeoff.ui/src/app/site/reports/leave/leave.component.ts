@@ -2,6 +2,8 @@ import { CommonModule } from '@angular/common';
 import { Component, DestroyRef, OnInit, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ReactiveFormsModule } from '@angular/forms';
+import { combineLatest } from 'rxjs';
 
 import { FlashComponent } from '@components/flash/flash.component';
 import { TeamSelectComponent } from '@components/team-select/team-select.component';
@@ -12,8 +14,6 @@ import { LeaveTypeModel } from '@services/company/leave-type.model';
 
 import { LeaveResultModel } from './leave-result.model';
 import { LeaveService } from './leave.service';
-import { ReactiveFormsModule } from '@angular/forms';
-import { combineLatest } from 'rxjs';
 
 @Component({
     selector: 'leave',

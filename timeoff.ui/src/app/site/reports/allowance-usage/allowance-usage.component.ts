@@ -4,6 +4,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { formatDate } from 'date-fns';
+import { map, switchMap } from 'rxjs';
 
 import { FlashComponent } from '@components/flash/flash.component';
 import { DatePickerDirective } from '@components/date-picker.directive';
@@ -14,7 +15,6 @@ import { LeaveTypeModel } from '@services/company/leave-type.model';
 
 import { AllowanceModel } from './allowance.model';
 import { AllowanceUsageService } from './allowance-usage.service';
-import { map, switchMap } from 'rxjs';
 
 @Component({
     selector: 'allowance-usage',

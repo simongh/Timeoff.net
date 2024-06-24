@@ -2,15 +2,15 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { endOfToday, formatDate, isAfter, parseISO } from 'date-fns';
-import { UserModel } from './user.model';
 
-import { dateString } from '@models/types';
 import { createScheduleForm } from '@components/schedule/schedule-form';
 
 import { AllowanceSummaryModel } from '@services/calendar/allowance-summary.model';
 
+import { dateString } from '@models/types';
 import { ScheduleModel } from '@models/schedule.model';
 
+import { UserModel } from './user.model';
 import { UserAbsencesModel } from './user-absences.model';
 import { UserListModel } from './user-list.model';
 

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output, signal } from '@angular/core';
+import { Component, output, signal } from '@angular/core';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { ValidatorMessageComponent } from '@components/validator-message/validator-message.component';
@@ -15,8 +15,7 @@ export class RemoveCompanyModalComponent {
 
     protected readonly submitting = signal(false);
 
-    @Output()
-    public readonly deleted = new EventEmitter<string>();
+    public readonly deleted = output<string>();
 
     public delete() {
         this.companyName.markAllAsTouched();

@@ -1,4 +1,4 @@
-import { AfterViewInit, Directive, ElementRef, EventEmitter, Optional, Output } from '@angular/core';
+import { AfterViewInit, Directive, ElementRef, Optional, output } from '@angular/core';
 import { NgControl } from '@angular/forms';
 import { formatISO, isValid, parseISO } from 'date-fns';
 
@@ -9,8 +9,7 @@ declare let $: any;
     selector: '[datePicker]',
 })
 export class DatePickerDirective implements AfterViewInit {
-    @Output()
-    public selected = new EventEmitter<Date>();
+    public selected = output<Date>();
 
     constructor(private elRef: ElementRef, @Optional() private ngControl: NgControl) {}
 

@@ -1,16 +1,17 @@
-import { ApplicationConfig, importProvidersFrom } from '@angular/core';
+import { ApplicationConfig } from '@angular/core';
 import { provideRouter, withComponentInputBinding } from '@angular/router';
-import { HttpClientModule } from '@angular/common/http';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
+
+import { errorsInterceptor } from '@services/interceptors/errors-interceptor';
+import { authInterceptor } from '@services/interceptors/auth-interceptor';
 
 import { routes } from './app.routes';
-import { authInterceptorProvider } from '@services/interceptors/auth-interceptor';
-import { errorsInterceptorProvider } from '@services/interceptors/errors-interceptor';
 
 export const appConfig: ApplicationConfig = {
     providers: [
         provideRouter(routes, withComponentInputBinding()),
-        importProvidersFrom(HttpClientModule),
-        authInterceptorProvider,
-        errorsInterceptorProvider,
+        provideHttpClient(withInterceptors(
+            [errorsInterceptor, authInterceptor]
+        ))
     ],
 };

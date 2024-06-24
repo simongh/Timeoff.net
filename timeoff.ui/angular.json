@@ -17,6 +17,21 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser-esbuild",
           "options": {
+            "externalDependencies": [
+              "http",
+              "https",
+              "url",
+              "util",
+              "net"
+            ],
+            "allowedCommonJsDependencies": [
+              "tough-cookie",
+              "node-fetch",
+              "fetch-cookie",
+              "abort-controller",
+              "ws",
+              "eventsource"
+            ],
             "outputPath": "dist/timeoff.ui",
             "index": "src/index.html",
             "main": "src/main.ts",

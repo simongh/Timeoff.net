@@ -1,5 +1,4 @@
 import { dateString } from '@models/types';
-
 import { ScheduleModel } from '@models/schedule.model';
 
 export interface UserModel {

@@ -32,7 +32,7 @@
                             <span *ngIf="notifications.count() > 0" class="label label-info notification-badge">{{notifications.count()}}</span>
                         </a>
                         <ul class="dropdown-menu" role="menu">
-                            @if (notifications.count() == 0) {
+                            @if (notifications.count() === 0) {
                                 <li class="dropdown-header">No notifications</li>
                             }
                             @else {

@@ -1,4 +1,4 @@
-import { Component, DestroyRef, EventEmitter, Output, signal } from '@angular/core';
+import { Component, DestroyRef, output, signal } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
@@ -23,8 +23,7 @@ export class AddNewModalComponent {
 
     protected readonly dateFormat = this.currentUser.dateFormat;
 
-    @Output()
-    public readonly added = new EventEmitter();
+    public readonly added = output();
 
     protected readonly submitting = signal(false);
 
