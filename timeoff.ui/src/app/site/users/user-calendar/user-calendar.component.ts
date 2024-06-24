@@ -2,7 +2,7 @@ import { Component, computed, inject, numberAttribute } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { UserBreadcrumbComponent } from '../user-breadcrumb/user-breadcrumb.component';
 import { injectQueryParams } from 'ngxtension/inject-query-params';
-import { computedAsync } from 'ngxtension/computed-async';
+import { derivedAsync } from 'ngxtension/derived-async';
 
 import { CalendarComponent } from '@components/calendar/calendar.component';
 import { AllowanceBreakdownComponent } from '@components/allowance-breakdown/allowance-breakdown.component';
@@ -10,6 +10,7 @@ import { LeaveSummaryComponent } from '@components/leave-summary/leave-summary.c
 
 import { CalendarService } from '@services/calendar/calendar.service';
 import { CalendarModel } from '@services/calendar/calendar.model';
+
 import { UsersService } from '../users.service';
 
 @Component({
@@ -41,7 +42,7 @@ export class UserCalendarComponent {
         return new Date(this.currentYear(), 0, 1);
     });
 
-    protected readonly calendar = computedAsync(() => this.calendarSvc.get(this.currentYear(), this.userSvc.id), {
+    protected readonly calendar = derivedAsync(() => this.calendarSvc.get(this.currentYear(), this.userSvc.id), {
         initialValue: {
             holidays: [],
             firstName: '',

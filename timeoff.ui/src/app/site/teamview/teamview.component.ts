@@ -10,12 +10,11 @@ import { DatePickerDirective } from '@components/date-picker.directive';
 
 import { TeamModel } from '@services/company/team.model';
 import { CompanyService } from '@services/company/company.service';
+import { LoggedInUserService } from '@services/logged-in-user/logged-in-user.service';
 
 import { MonthViewComponent } from './month-view.component';
 import { TeamViewService } from './team-view.service';
-import { TeamViewModel } from './team-view.model';
 import { UserSummaryModel } from './user-summary.model';
-import { LoggedInUserService } from '@services/logged-in-user/logged-in-user.service';
 
 @Component({
     selector: 'team-view',

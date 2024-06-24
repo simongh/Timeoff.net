@@ -7,15 +7,15 @@ import { combineLatest } from 'rxjs';
 import { datePartList } from '@models/types';
 
 import { DatePickerDirective } from '@components/date-picker.directive';
+import { ValidatorMessageComponent } from "@components/validator-message/validator-message.component";
 
 import { CompanyService } from '@services/company/company.service';
 import { LoggedInUserService } from '@services/logged-in-user/logged-in-user.service';
 import { MessagesService } from '@services/messages/messages.service';
 import { LeaveTypeModel } from '@services/company/leave-type.model';
+import { UserModel } from '@services/company/user.model';
 
 import { BookingService } from './booking.service';
-import { UserModel } from '@services/company/user.model';
-import { ValidatorMessageComponent } from "../validator-message/validator-message.component";
 
 @Component({
     standalone: true,

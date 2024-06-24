@@ -1,38 +1,28 @@
 import {
-    HTTP_INTERCEPTORS,
     HttpErrorResponse,
     HttpEvent,
-    HttpHandler,
-    HttpInterceptor,
+    HttpHandlerFn,
     HttpRequest,
 } from '@angular/common/http';
-import { Injectable, Provider } from '@angular/core';
-import { MessagesService } from '@services/messages/messages.service';
+import { inject } from '@angular/core';
 import { Observable, catchError } from 'rxjs';
 
-@Injectable()
-export class ErrorsInterceptor implements HttpInterceptor {
-    constructor(private readonly msgsSvc: MessagesService) {}
+import { MessagesService } from '@services/messages/messages.service';
 
-    intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        return next.handle(req).pipe(
-            catchError((e: HttpErrorResponse) => {
-                if (e) {
-                    if (e.error?.errors) {
-                        this.msgsSvc.hasErrors(e.error.errors);
-                    } else {
-                        this.msgsSvc.isError('Unable to handle request');
-                    }
+export function errorsInterceptor(req: HttpRequest<unknown>, next: HttpHandlerFn): Observable<HttpEvent<unknown>> {
+    const msgsSvc = inject(MessagesService);
+
+    return next(req).pipe(
+        catchError((e: HttpErrorResponse) => {
+            if (e) {
+                if (e.error?.errors) {
+                    msgsSvc.hasErrors(e.error.errors);
+                } else {
+                    msgsSvc.isError('Unable to handle request');
                 }
+            }
 
-                throw e;
-            })
-        );
-    }
+            throw e;
+        })
+    );
 }
-
-export const errorsInterceptorProvider: Provider = {
-    provide: HTTP_INTERCEPTORS,
-    useClass: ErrorsInterceptor,
-    multi: true,
-};

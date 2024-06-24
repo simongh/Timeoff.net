@@ -1,5 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { datePart } from '../models/types';
+
+import { datePart } from '@models/types';
 
 @Pipe({
     standalone: true,

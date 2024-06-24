@@ -2,7 +2,7 @@ import { Component, DestroyRef, signal } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { computedAsync } from 'ngxtension/computed-async';
+import { derivedAsync } from 'ngxtension/derived-async';
 
 import { FlashComponent } from '@components/flash/flash.component';
 import { ValidatorMessageComponent } from '@components/validator-message/validator-message.component';
@@ -24,9 +24,9 @@ export class RegisterComponent {
         return this.registerSvc.form;
     }
 
-    protected readonly countries = computedAsync(() => this.companySvc.countries(), { initialValue: [] });
+    protected readonly countries = derivedAsync(() => this.companySvc.countries(), { initialValue: [] });
 
-    protected readonly timezones = computedAsync(() => this.companySvc.timeZones(), { initialValue: [] });
+    protected readonly timezones = derivedAsync(() => this.companySvc.timeZones(), { initialValue: [] });
 
     protected readonly submitting = signal(false);
 

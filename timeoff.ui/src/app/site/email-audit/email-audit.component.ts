@@ -3,18 +3,18 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { injectQueryParams } from 'ngxtension/inject-query-params';
-import { computedAsync } from 'ngxtension/computed-async';
+import { derivedAsync } from 'ngxtension/derived-async';
 
 import { FlashComponent } from '@components/flash/flash.component';
 import { DatePickerDirective } from '@components/date-picker.directive';
 
 import { MessagesService } from '@services/messages/messages.service';
 import { CompanyService } from '@services/company/company.service';
+import { LoggedInUserService } from '@services/logged-in-user/logged-in-user.service';
 
 import { PagerComponent } from './pager.component';
 import { EmailModel } from './email.model';
 import { EmailAuditService } from './email-audit.service';
-import { LoggedInUserService } from '@services/logged-in-user/logged-in-user.service';
 
 @Component({
     selector: 'email-audit',
@@ -31,7 +31,7 @@ export class EmailAuditComponent implements OnInit {
 
     protected readonly dateFormat = this.currentUser.dateFormat;
 
-    protected readonly users = computedAsync(() => this.companySvc.getUsers(), { initialValue: [] });
+    protected readonly users = derivedAsync(() => this.companySvc.getUsers(), { initialValue: [] });
 
     protected readonly emails = signal<EmailModel[]>([]);
 

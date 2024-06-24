@@ -1,8 +1,9 @@
-import { Component, EventEmitter, Output, input } from '@angular/core';
-import { ColourPickerComponent } from '../colour-picker/colour-picker.component';
+import { Component, input, output } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
 
 import { LeaveTypeFormGroup } from '@services/company/company.service';
-import { ReactiveFormsModule } from '@angular/forms';
+
+import { ColourPickerComponent } from '../colour-picker/colour-picker.component';
 
 @Component({
     standalone: true,
@@ -13,8 +14,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 export class LeaveTypeModalComponent {
     public readonly form = input.required<LeaveTypeFormGroup>();
 
-    @Output()
-    public readonly addedLeaveType = new EventEmitter();
+    public readonly addedLeaveType = output();
 
     public addNew() {
         this.addedLeaveType.emit();

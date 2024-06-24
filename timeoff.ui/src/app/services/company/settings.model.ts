@@ -1,4 +1,4 @@
-import { ScheduleModel } from '../../models/schedule.model';
+import { ScheduleModel } from '@models/schedule.model';
 import { LeaveTypeModel } from './leave-type.model';
 
 export interface SettingsModel {

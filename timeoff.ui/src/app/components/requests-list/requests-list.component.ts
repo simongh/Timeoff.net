@@ -1,6 +1,8 @@
 import { Component, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { LeaveRequestModel } from '../../models/leave-request.model';
+
+import { LeaveRequestModel } from '@models/leave-request.model';
+
 import { DatePartPipe } from '../date-part.pipe';
 
 @Component({

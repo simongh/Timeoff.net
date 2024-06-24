@@ -11,10 +11,10 @@ import {
 } from 'date-fns';
 
 import { PublicHolidayModel } from '@models/public-holiday.model';
-
-import { DayModel } from './day.model';
 import { LeaveRequestModel } from '@models/leave-request.model';
 import { CalendarDayModel } from '@models/calendar-day.model';
+
+import { DayModel } from './day.model';
 
 @Component({
     selector: 'calendar',

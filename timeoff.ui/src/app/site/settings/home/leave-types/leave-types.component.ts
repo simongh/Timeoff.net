@@ -1,13 +1,13 @@
 import { CommonModule } from '@angular/common';
 import { Component, DestroyRef, signal } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { switchMap } from 'rxjs';
 
 import { CompanyService } from '@services/company/company.service';
 
 import { ColourPickerComponent } from '../colour-picker/colour-picker.component';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { LeaveTypeModalComponent } from '../leave-type-modal/leave-type-modal.component';
-import { switchMap } from 'rxjs';
 
 @Component({
     selector: 'leave-types',
