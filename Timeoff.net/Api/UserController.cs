@@ -98,6 +98,7 @@ namespace Timeoff.Api
         }
 
         [HttpPost("import")]
+        [ApiExplorerSettings(IgnoreApi = true)]
         public async Task<IActionResult> ImportAsync(Application.Users.ImportCommand command)
         {
             var result = await _mediator.Send(command);
@@ -109,6 +110,7 @@ namespace Timeoff.Api
         }
 
         [HttpGet("import")]
+        [ApiExplorerSettings(IgnoreApi = true)]
         public async Task<IActionResult> ImportAsync()
         {
             return Ok();
