@@ -77,6 +77,15 @@ namespace Timeoff
             });
             builder.Services.AddSignalR();
 
+            builder.Services.AddSwaggerGen(options =>
+            {
+                options.SwaggerDoc("v1", new()
+                {
+                    Version = "v1",
+                    Title = "TimeOff"
+                });
+            });
+
             builder.Services.AddAuthorizationBuilder()
                 .SetDefaultPolicy(new AuthorizationPolicyBuilder()
                     .RequireAuthenticatedUser()
@@ -110,6 +119,8 @@ namespace Timeoff
             app.UseAuthorization();
             app.MapControllers().RequireAuthorization();
             app.MapHub<Services.RequestsHub>("/hubs/requests");
+            app.UseSwagger();
+            app.UseSwaggerUI();
             app.MapFallbackToFile("/index.html");
 
             app.Run();

@@ -66,6 +66,7 @@ namespace Timeoff.Api
 
         [Authorize(Roles = Roles.Admin)]
         [HttpPost("import")]
+        [ApiExplorerSettings(IgnoreApi = true)]
         public async Task<IActionResult> ImportAsync(Application.PublicHolidays.ImportCommand command)
         {
             var result = await _mediator.Send(command);

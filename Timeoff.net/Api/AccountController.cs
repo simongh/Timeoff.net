@@ -14,6 +14,8 @@ namespace Timeoff.Api
 
         [AllowAnonymous]
         [HttpPost("login")]
+        [ProducesResponseType<ResultModels.TokenResult>(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> LoginAsync(Application.Login.LoginCommand command)
         {
             var result = await _mediator.Send(command);
@@ -30,6 +32,8 @@ namespace Timeoff.Api
 
         [HttpGet("token")]
         [Authorize(Policy = "cookies")]
+        [ProducesResponseType<ResultModels.TokenResult>(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<IActionResult> TokenAsync()
         {
             var result = await _mediator.Send(new Application.GetToken.GetTokenCommand
@@ -45,6 +49,7 @@ namespace Timeoff.Api
 
         [HttpPost("logout")]
         [Authorize(Policy = "cookies")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<IActionResult> LogoutAsync()
         {
             await HttpContext.SignOutAsync();
@@ -54,6 +59,7 @@ namespace Timeoff.Api
 
         [AllowAnonymous]
         [HttpPost("forgot-password")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<IActionResult> ForgotPasswordAsync(Application.ForgotPassword.ForgotPasswordComand command)
         {
             await _mediator.Send(command);
@@ -63,6 +69,8 @@ namespace Timeoff.Api
 
         [AllowAnonymous]
         [HttpPost("reset-password")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType<ResultModels.ApiResult>(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> ResetPasswordAsync(Application.ResetPassword.ResetPasswordCommand command)
         {
             var result = await _mediator.Send(command);
@@ -75,6 +83,8 @@ namespace Timeoff.Api
 
         [AllowAnonymous]
         [HttpPost("register")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType<ResultModels.ApiResult>(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> RegisterAsync(Application.Register.RegisterCommand command)
         {
             var result = await _mediator.Send(command);

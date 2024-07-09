@@ -18,6 +18,7 @@ namespace Timeoff.Api
         }
 
         [HttpPost]
+        [ProducesResponseType<ResultModels.ApiResult>(StatusCodes.Status204NoContent)]
         public async Task<IActionResult> CreateAsync(Application.BookAbsence.BookCommand command)
         {
             if (command == null)
