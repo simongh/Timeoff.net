@@ -19,7 +19,15 @@ namespace Timeoff
                 .Configure<Types.Options>(builder.Configuration.GetSection("timeoff"))
                 .AddApplicationServices(options =>
                 {
-                    options.UseSqlite(builder.Configuration.GetConnectionString("timeoff"));
+                    var provider = builder.Configuration.GetValue("Provider", "sqlite");
+                    var cs = builder.Configuration.GetConnectionString("timeoff");
+                    _ = provider switch
+                    {
+                        "sqlserver" => options
+                            .UseSqlServer(cs, sql => sql.MigrationsAssembly("Timeoff.SqlServer")),
+                        _ => options
+                            .UseSqlite(cs, sql => sql.MigrationsAssembly("Timeoff.Sqlite"))
+                    };
                 })
                 .ConfigureApplication()
                 .AddWebServices()
