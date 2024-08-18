@@ -4,44 +4,34 @@ using Timeoff.Services;
 
 namespace Timeoff
 {
-    internal class DataContext(
+    public class DataContext(
         DbContextOptions options,
         Services.ICurrentUserService currentUserService)
         : DbContext(options), IDataContext
     {
         private readonly ICurrentUserService _currentUserService = currentUserService;
 
-        //public DbSet<Entities.Audit> Audits { get; set; }
+        public DbSet<Entities.PublicHoliday> PublicHolidays => Set<Entities.PublicHoliday>();
 
-        public DbSet<Entities.PublicHoliday> PublicHolidays { get; set; }
+        public DbSet<Entities.Company> Companies => Set<Entities.Company>();
 
-        //public DbSet<Entities.Comment> Comments { get; set; }
+        public DbSet<Entities.Team> Teams => Set<Entities.Team>();
 
-        public DbSet<Entities.Company> Companies { get; set; }
+        public DbSet<Entities.EmailAudit> EmailAudits => Set<Entities.EmailAudit>();
 
-        public DbSet<Entities.Team> Teams { get; set; }
+        public DbSet<Entities.Leave> Leaves => Set<Entities.Leave>();
 
-        public DbSet<Entities.EmailAudit> EmailAudits { get; set; }
+        public DbSet<Entities.LeaveType> LeaveTypes => Set<Entities.LeaveType>();
 
-        public DbSet<Entities.Leave> Leaves { get; set; }
+        public DbSet<Entities.Schedule> Schedules => Set<Entities.Schedule>();
 
-        public DbSet<Entities.LeaveType> LeaveTypes { get; set; }
+        public DbSet<Entities.User> Users => Set<Entities.User>();
 
-        public DbSet<Entities.Schedule> Schedules { get; set; }
+        public DbSet<Entities.UserAllowanceAdjustment> UserAllowanceAdjustments => Set<Entities.UserAllowanceAdjustment>();
 
-        public DbSet<Entities.User> Users { get; set; }
+        public DbSet<Entities.UserFeed> Feeds => Set<Entities.UserFeed>();
 
-        public DbSet<Entities.UserAllowanceAdjustment> UserAllowanceAdjustments { get; set; }
-
-        public DbSet<Entities.UserFeed> Feeds { get; set; }
-
-        public DbSet<Entities.Calendar> Calendar { get; set; }
-
-        //public DataContext()
-        //{ }
-
-        //public DataContext(DbContextOptions options) : base(options)
-        //{ }
+        public DbSet<Entities.Calendar> Calendar => Set<Entities.Calendar>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

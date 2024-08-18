@@ -36,8 +36,4 @@
     <None Include="C:\workspace\Timeoff.net\Abstractions\.editorconfig" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Migrations\" />
-  </ItemGroup>
-
 </Project>
