@@ -1,5 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
-using Timeoff.Extensions;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -15,21 +15,21 @@ namespace Timeoff.Migrations
                 name: "Companies",
                 columns: table => new
                 {
-                    CompanyId = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(type: "TEXT", nullable: false),
-                    Country = table.Column<string>(type: "TEXT", nullable: false),
-                    StartOfNewYear = table.Column<byte>(type: "INTEGER", nullable: false),
-                    ShareAllAbsences = table.Column<bool>(type: "INTEGER", nullable: false),
-                    IsTeamViewHidden = table.Column<bool>(type: "INTEGER", nullable: false),
-                    LdapAuthEnabled = table.Column<bool>(type: "INTEGER", nullable: false),
-                    LdapAuthConfig = table.Column<string>(type: "TEXT", nullable: true),
-                    DateFormat = table.Column<string>(type: "TEXT", nullable: false),
-                    TimeZone = table.Column<string>(type: "TEXT", nullable: false),
-                    IntegrationApiEnabled = table.Column<bool>(type: "INTEGER", nullable: false),
-                    IntegrationApiToken = table.Column<Guid>(type: "TEXT", nullable: false),
-                    CarryOver = table.Column<int>(type: "INTEGER", nullable: false),
-                    RowVersion = table.Column<byte[]>(type: "BLOB", rowVersion: true, nullable: true)
+                    CompanyId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Country = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    StartOfNewYear = table.Column<byte>(type: "tinyint", nullable: false),
+                    ShareAllAbsences = table.Column<bool>(type: "bit", nullable: false),
+                    IsTeamViewHidden = table.Column<bool>(type: "bit", nullable: false),
+                    LdapAuthEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    LdapAuthConfig = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DateFormat = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TimeZone = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IntegrationApiEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    IntegrationApiToken = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CarryOver = table.Column<int>(type: "int", nullable: false),
+                    RowVersion = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -40,16 +40,16 @@ namespace Timeoff.Migrations
                 name: "LeaveTypes",
                 columns: table => new
                 {
-                    LeaveTypeId = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(type: "TEXT", nullable: false),
-                    Colour = table.Column<string>(type: "TEXT", nullable: false),
-                    UseAllowance = table.Column<bool>(type: "INTEGER", nullable: false),
-                    Limit = table.Column<int>(type: "INTEGER", nullable: false),
-                    SortOrder = table.Column<int>(type: "INTEGER", nullable: false),
-                    AutoApprove = table.Column<bool>(type: "INTEGER", nullable: false),
-                    CompanyId = table.Column<int>(type: "INTEGER", nullable: false),
-                    RowVersion = table.Column<byte[]>(type: "BLOB", rowVersion: true, nullable: true)
+                    LeaveTypeId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Colour = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UseAllowance = table.Column<bool>(type: "bit", nullable: false),
+                    Limit = table.Column<int>(type: "int", nullable: false),
+                    SortOrder = table.Column<int>(type: "int", nullable: false),
+                    AutoApprove = table.Column<bool>(type: "bit", nullable: false),
+                    CompanyId = table.Column<int>(type: "int", nullable: false),
+                    RowVersion = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -66,12 +66,12 @@ namespace Timeoff.Migrations
                 name: "PublicHolidays",
                 columns: table => new
                 {
-                    PublicHolidayId = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(type: "TEXT", nullable: false),
-                    Date = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    CompanyId = table.Column<int>(type: "INTEGER", nullable: false),
-                    RowVersion = table.Column<byte[]>(type: "BLOB", rowVersion: true, nullable: true)
+                    PublicHolidayId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CompanyId = table.Column<int>(type: "int", nullable: false),
+                    RowVersion = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -88,17 +88,17 @@ namespace Timeoff.Migrations
                 name: "calendar",
                 columns: table => new
                 {
-                    CalendarId = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Date = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    CompanyId = table.Column<int>(type: "INTEGER", nullable: false),
-                    UserId = table.Column<int>(type: "INTEGER", nullable: true),
-                    LeaveId = table.Column<int>(type: "INTEGER", nullable: true),
-                    LeaveTypeId = table.Column<int>(type: "INTEGER", nullable: true),
-                    LeavePart = table.Column<byte>(type: "INTEGER", nullable: true),
-                    IsHoliday = table.Column<bool>(type: "INTEGER", nullable: false),
-                    Name = table.Column<string>(type: "TEXT", nullable: true),
-                    RowVersion = table.Column<byte[]>(type: "BLOB", rowVersion: true, nullable: true)
+                    CalendarId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CompanyId = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<int>(type: "int", nullable: true),
+                    LeaveId = table.Column<int>(type: "int", nullable: true),
+                    LeaveTypeId = table.Column<int>(type: "int", nullable: true),
+                    LeavePart = table.Column<byte>(type: "tinyint", nullable: true),
+                    IsHoliday = table.Column<bool>(type: "bit", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    RowVersion = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -120,14 +120,14 @@ namespace Timeoff.Migrations
                 name: "EmailAudits",
                 columns: table => new
                 {
-                    EmailAuditId = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Email = table.Column<string>(type: "TEXT", nullable: false),
-                    Subject = table.Column<string>(type: "TEXT", nullable: false),
-                    Body = table.Column<string>(type: "TEXT", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    CompanyId = table.Column<int>(type: "INTEGER", nullable: false),
-                    UserId = table.Column<int>(type: "INTEGER", nullable: false)
+                    EmailAuditId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Subject = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Body = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CompanyId = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -144,22 +144,22 @@ namespace Timeoff.Migrations
                 name: "Leaves",
                 columns: table => new
                 {
-                    LeaveId = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Status = table.Column<byte>(type: "INTEGER", nullable: false),
-                    EmployeeComment = table.Column<string>(type: "TEXT", nullable: true),
-                    ApproverComment = table.Column<string>(type: "TEXT", nullable: true),
-                    DecidedOn = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    DateStart = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    DayPartStart = table.Column<byte>(type: "INTEGER", nullable: false),
-                    DateEnd = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    DayPartEnd = table.Column<byte>(type: "INTEGER", nullable: false),
-                    Days = table.Column<double>(type: "REAL", nullable: false),
-                    UserId = table.Column<int>(type: "INTEGER", nullable: false),
-                    ApproverId = table.Column<int>(type: "INTEGER", nullable: false),
-                    LeaveTypeId = table.Column<int>(type: "INTEGER", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    RowVersion = table.Column<byte[]>(type: "BLOB", rowVersion: true, nullable: true)
+                    LeaveId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Status = table.Column<byte>(type: "tinyint", nullable: false),
+                    EmployeeComment = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ApproverComment = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DecidedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DateStart = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DayPartStart = table.Column<byte>(type: "tinyint", nullable: false),
+                    DateEnd = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DayPartEnd = table.Column<byte>(type: "tinyint", nullable: false),
+                    Days = table.Column<double>(type: "float", nullable: false),
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    ApproverId = table.Column<int>(type: "int", nullable: false),
+                    LeaveTypeId = table.Column<int>(type: "int", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    RowVersion = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -176,18 +176,18 @@ namespace Timeoff.Migrations
                 name: "Schedules",
                 columns: table => new
                 {
-                    ScheduleId = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Monday = table.Column<byte>(type: "INTEGER", nullable: false),
-                    Tuesday = table.Column<byte>(type: "INTEGER", nullable: false),
-                    Wednesday = table.Column<byte>(type: "INTEGER", nullable: false),
-                    Thursday = table.Column<byte>(type: "INTEGER", nullable: false),
-                    Friday = table.Column<byte>(type: "INTEGER", nullable: false),
-                    Saturday = table.Column<byte>(type: "INTEGER", nullable: false),
-                    Sunday = table.Column<byte>(type: "INTEGER", nullable: false),
-                    UserId = table.Column<int>(type: "INTEGER", nullable: true),
-                    CompanyId = table.Column<int>(type: "INTEGER", nullable: true),
-                    RowVersion = table.Column<byte[]>(type: "BLOB", rowVersion: true, nullable: true)
+                    ScheduleId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Monday = table.Column<byte>(type: "tinyint", nullable: false),
+                    Tuesday = table.Column<byte>(type: "tinyint", nullable: false),
+                    Wednesday = table.Column<byte>(type: "tinyint", nullable: false),
+                    Thursday = table.Column<byte>(type: "tinyint", nullable: false),
+                    Friday = table.Column<byte>(type: "tinyint", nullable: false),
+                    Saturday = table.Column<byte>(type: "tinyint", nullable: false),
+                    Sunday = table.Column<byte>(type: "tinyint", nullable: false),
+                    UserId = table.Column<int>(type: "int", nullable: true),
+                    CompanyId = table.Column<int>(type: "int", nullable: true),
+                    RowVersion = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -203,8 +203,8 @@ namespace Timeoff.Migrations
                 name: "TeamApprovers",
                 columns: table => new
                 {
-                    ApproversUserId = table.Column<int>(type: "INTEGER", nullable: false),
-                    TeamApproverTeamId = table.Column<int>(type: "INTEGER", nullable: false)
+                    ApproversUserId = table.Column<int>(type: "int", nullable: false),
+                    TeamApproverTeamId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -215,15 +215,15 @@ namespace Timeoff.Migrations
                 name: "Teams",
                 columns: table => new
                 {
-                    TeamId = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(type: "TEXT", nullable: false),
-                    Allowance = table.Column<double>(type: "REAL", nullable: false),
-                    IncludePublicHolidays = table.Column<bool>(type: "INTEGER", nullable: false),
-                    IsAccrued = table.Column<bool>(type: "INTEGER", nullable: false),
-                    ManagerId = table.Column<int>(type: "INTEGER", nullable: true),
-                    CompanyId = table.Column<int>(type: "INTEGER", nullable: false),
-                    RowVersion = table.Column<byte[]>(type: "BLOB", rowVersion: true, nullable: true)
+                    TeamId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Allowance = table.Column<double>(type: "float", nullable: false),
+                    IncludePublicHolidays = table.Column<bool>(type: "bit", nullable: false),
+                    IsAccrued = table.Column<bool>(type: "bit", nullable: false),
+                    ManagerId = table.Column<int>(type: "int", nullable: true),
+                    CompanyId = table.Column<int>(type: "int", nullable: false),
+                    RowVersion = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -240,21 +240,21 @@ namespace Timeoff.Migrations
                 name: "Users",
                 columns: table => new
                 {
-                    UserId = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Email = table.Column<string>(type: "TEXT", nullable: false),
-                    Password = table.Column<string>(type: "TEXT", nullable: false),
-                    Token = table.Column<string>(type: "TEXT", nullable: true),
-                    FirstName = table.Column<string>(type: "TEXT", nullable: false),
-                    LastName = table.Column<string>(type: "TEXT", nullable: false),
-                    IsActivated = table.Column<bool>(type: "INTEGER", nullable: false),
-                    IsAdmin = table.Column<bool>(type: "INTEGER", nullable: false),
-                    AutoApprove = table.Column<bool>(type: "INTEGER", nullable: false),
-                    StartDate = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    EndDate = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    CompanyId = table.Column<int>(type: "INTEGER", nullable: false),
-                    TeamId = table.Column<int>(type: "INTEGER", nullable: false),
-                    RowVersion = table.Column<byte[]>(type: "BLOB", rowVersion: true, nullable: true)
+                    UserId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Token = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsActivated = table.Column<bool>(type: "bit", nullable: false),
+                    IsAdmin = table.Column<bool>(type: "bit", nullable: false),
+                    AutoApprove = table.Column<bool>(type: "bit", nullable: false),
+                    StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EndDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    CompanyId = table.Column<int>(type: "int", nullable: false),
+                    TeamId = table.Column<int>(type: "int", nullable: false),
+                    RowVersion = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -277,14 +277,14 @@ namespace Timeoff.Migrations
                 name: "UserAllowanceAdjustments",
                 columns: table => new
                 {
-                    UserAllowanceAdjustmentId = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Year = table.Column<int>(type: "INTEGER", nullable: false),
-                    Adjustment = table.Column<double>(type: "REAL", nullable: false),
-                    CarriedOverAllowance = table.Column<double>(type: "REAL", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    UserId = table.Column<int>(type: "INTEGER", nullable: false),
-                    RowVersion = table.Column<byte[]>(type: "BLOB", rowVersion: true, nullable: true)
+                    UserAllowanceAdjustmentId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Year = table.Column<int>(type: "int", nullable: false),
+                    Adjustment = table.Column<double>(type: "float", nullable: false),
+                    CarriedOverAllowance = table.Column<double>(type: "float", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    RowVersion = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -301,13 +301,13 @@ namespace Timeoff.Migrations
                 name: "UserFeeds",
                 columns: table => new
                 {
-                    UserFeedId = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(type: "TEXT", nullable: false),
-                    FeedToken = table.Column<string>(type: "TEXT", nullable: false),
-                    Type = table.Column<byte>(type: "INTEGER", nullable: false),
-                    UserId = table.Column<int>(type: "INTEGER", nullable: false),
-                    RowVersion = table.Column<byte[]>(type: "BLOB", rowVersion: true, nullable: true)
+                    UserFeedId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    FeedToken = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Type = table.Column<byte>(type: "tinyint", nullable: false),
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    RowVersion = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -379,13 +379,15 @@ namespace Timeoff.Migrations
                 name: "IX_Schedules_CompanyId",
                 table: "Schedules",
                 column: "CompanyId",
-                unique: true);
+                unique: true,
+                filter: "[CompanyId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Schedules_UserId",
                 table: "Schedules",
                 column: "UserId",
-                unique: true);
+                unique: true,
+                filter: "[UserId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_TeamApprovers_TeamApproverTeamId",
@@ -489,16 +491,6 @@ namespace Timeoff.Migrations
                 column: "ManagerId",
                 principalTable: "Users",
                 principalColumn: "UserId");
-
-            migrationBuilder.AddRowVersion("Companies");
-            migrationBuilder.AddRowVersion("Calendar");
-            migrationBuilder.AddRowVersion("Leaves");
-            migrationBuilder.AddRowVersion("LeaveTypes");
-            migrationBuilder.AddRowVersion("PublicHolidays");
-            migrationBuilder.AddRowVersion("Schedules");
-            migrationBuilder.AddRowVersion("Teams");
-            migrationBuilder.AddRowVersion("UserAllowanceAdjustments");
-            migrationBuilder.AddRowVersion("UserFeeds");
         }
 
         /// <inheritdoc />

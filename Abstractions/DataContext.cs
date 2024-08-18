@@ -1,15 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
-using Timeoff.Services;
 
 namespace Timeoff
 {
-    public class DataContext(
-        DbContextOptions options,
-        Services.ICurrentUserService currentUserService)
-        : DbContext(options), IDataContext
+    public class DataContext
+        : DbContext, IDataContext
     {
-        private readonly ICurrentUserService _currentUserService = currentUserService;
+        private readonly Services.ICurrentUserService _currentUserService = null!;
 
         public DbSet<Entities.PublicHoliday> PublicHolidays => Set<Entities.PublicHoliday>();
 
@@ -32,6 +29,17 @@ namespace Timeoff
         public DbSet<Entities.UserFeed> Feeds => Set<Entities.UserFeed>();
 
         public DbSet<Entities.Calendar> Calendar => Set<Entities.Calendar>();
+
+        public DataContext() : base()
+        { }
+
+        public DataContext(
+            DbContextOptions options,
+            Services.ICurrentUserService currentUserService)
+        : base(options)
+        {
+            _currentUserService = currentUserService;
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
