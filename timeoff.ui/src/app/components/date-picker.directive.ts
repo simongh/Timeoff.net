@@ -28,6 +28,7 @@ export class DatePickerDirective implements AfterViewInit {
             const valueDate = d ? parseISO(d) : null;
             const value = isValid(valueDate) ? valueDate : null;
             $(this.elRef.nativeElement).datepicker('update', value);
+            //console.log('vc', d);
         });
 
         $(this.elRef.nativeElement)
