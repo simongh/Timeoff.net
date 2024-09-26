@@ -7,7 +7,7 @@ import { combineLatest } from 'rxjs';
 
 import { FlashComponent } from '@components/flash/flash.component';
 import { TeamSelectComponent } from '@components/team-select/team-select.component';
-import { DatePickerDirective } from '@components/date-picker.directive';
+import { DateInputDirective } from '@components/date-input.directive';
 
 import { CompanyService } from '@services/company/company.service';
 import { LeaveTypeModel } from '@services/company/leave-type.model';
@@ -20,7 +20,7 @@ import { LeaveService } from './leave.service';
     standalone: true,
     templateUrl: './leave.component.html',
     styleUrl: './leave.component.scss',
-    imports: [RouterLink, FlashComponent, TeamSelectComponent, CommonModule, DatePickerDirective, ReactiveFormsModule],
+    imports: [RouterLink, FlashComponent, TeamSelectComponent, CommonModule, DateInputDirective, ReactiveFormsModule],
     providers: [CompanyService, LeaveService],
 })
 export class LeaveComponent implements OnInit {

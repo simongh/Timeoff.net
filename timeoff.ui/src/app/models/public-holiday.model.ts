@@ -1,5 +1,7 @@
+import { dateString } from "./types";
+
 export interface PublicHolidayModel {
     id: number | null;
-    date: Date | null;
+    date: dateString | null;
     name: string;
 }

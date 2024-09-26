@@ -7,7 +7,7 @@ import { formatDate } from 'date-fns';
 import { map, switchMap } from 'rxjs';
 
 import { FlashComponent } from '@components/flash/flash.component';
-import { DatePickerDirective } from '@components/date-picker.directive';
+import { DateInputDirective } from '@components/date-input.directive';
 import { TeamSelectComponent } from '@components/team-select/team-select.component';
 
 import { CompanyService } from '@services/company/company.service';
@@ -22,7 +22,7 @@ import { AllowanceUsageService } from './allowance-usage.service';
     templateUrl: './allowance-usage.component.html',
     styleUrl: './allowance-usage.component.scss',
     providers: [CompanyService, AllowanceUsageService],
-    imports: [FlashComponent, CommonModule, RouterLink, ReactiveFormsModule, DatePickerDirective, TeamSelectComponent],
+    imports: [FlashComponent, CommonModule, RouterLink, ReactiveFormsModule, DateInputDirective, TeamSelectComponent],
 })
 export class AllowanceUsageComponent implements OnInit {
     protected readonly results = signal<AllowanceModel[]>([]);

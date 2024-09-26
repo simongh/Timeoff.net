@@ -10,7 +10,7 @@ import { injectQueryParams } from 'ngxtension/inject-query-params';
 import { FlashComponent } from '@components/flash/flash.component';
 import { CalendarComponent } from '@components/calendar/calendar.component';
 import { ValidatorMessageComponent } from '@components/validator-message/validator-message.component';
-import { DatePickerDirective } from '@components/date-picker.directive';
+import { DateInputDirective } from '@components/date-input.directive';
 
 import { MessagesService } from '@services/messages/messages.service';
 import { LoggedInUserService } from '@services/logged-in-user/logged-in-user.service';
@@ -33,7 +33,7 @@ import { AddNewModalComponent } from './add-new-modal.component';
         ReactiveFormsModule,
         ValidatorMessageComponent,
         AddNewModalComponent,
-        DatePickerDirective,
+        DateInputDirective,
     ],
 })
 export class PublicHolidaysComponent {

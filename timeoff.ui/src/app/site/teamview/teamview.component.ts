@@ -2,11 +2,11 @@ import { CommonModule } from '@angular/common';
 import { Component, DestroyRef, OnInit, booleanAttribute, computed, numberAttribute, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router, RouterLink } from '@angular/router';
-import { addMonths, subMonths } from 'date-fns';
+import { addMonths, parseISO, subMonths } from 'date-fns';
 import { combineLatest } from 'rxjs';
 import { injectQueryParams } from 'ngxtension/inject-query-params';
 
-import { DatePickerDirective } from '@components/date-picker.directive';
+import { DateInputDirective } from '@components/date-input.directive';
 
 import { TeamModel } from '@services/company/team.model';
 import { CompanyService } from '@services/company/company.service';
@@ -15,13 +15,14 @@ import { LoggedInUserService } from '@services/logged-in-user/logged-in-user.ser
 import { MonthViewComponent } from './month-view.component';
 import { TeamViewService } from './team-view.service';
 import { UserSummaryModel } from './user-summary.model';
+import { dateString } from '@models/types';
 
 @Component({
     selector: 'team-view',
     standalone: true,
     templateUrl: './teamview.component.html',
     styleUrl: './teamview.component.scss',
-    imports: [CommonModule, RouterLink, MonthViewComponent, DatePickerDirective],
+    imports: [CommonModule, RouterLink, MonthViewComponent, DateInputDirective],
     providers: [CompanyService, TeamViewService],
 })
 export class TeamviewComponent implements OnInit {
@@ -69,9 +70,12 @@ export class TeamviewComponent implements OnInit {
             });
     }
 
-    public dateselected(e: Date) {
+    public dateselected(e: dateString | null) {
+        if (!e) {
+            return;
+        }
         this.router.navigate(['/teamview'], {
-            queryParams: this.toParams(e),
+            queryParams: this.toParams(parseISO(e)),
         });
     }
 

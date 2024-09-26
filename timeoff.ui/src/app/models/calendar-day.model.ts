@@ -1,9 +1,9 @@
-import { LeaveStatus, datePart } from "./types";
+import { LeaveStatus, datePart, dateString } from "./types";
 
 export interface CalendarDayModel{
     id: number;
     name: string;
-    date: Date;
+    date: dateString;
     isHoliday: boolean;
     colour: string | null;
     dayPart: datePart | null;

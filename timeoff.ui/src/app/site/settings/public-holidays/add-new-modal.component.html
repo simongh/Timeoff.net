@@ -19,12 +19,8 @@
                         <input type="text"
                                class="form-control"
                                id="date"
-                               datePicker
-                               formControlName="date"
-                               data-provide="datepicker"
-                               data-date-autoclose="1"
-                               [attr.data-date-format]="dateFormat()"
-                               data-date-week-start="1"/>
+                               dateInput
+                               formControlName="date"/>
                                <validator-message controlName="date" validatorName="invalidYear">The date must be in the selected year</validator-message>
                             </div>
 

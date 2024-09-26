@@ -25,12 +25,10 @@
                                 <label>Date range</label>
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                                    <input type="text" datePicker formControlName="start" class="form-control" id="start_date" placeholder="From Day"
-                                            data-provide="datepicker" data-date-format="yyyy-mm-dd" data-date-autoclose="1"/>
+                                    <input type="text" dateInput formControlName="start" class="form-control" id="start_date" placeholder="From Day" dateformat="YYYY-MM-DD" [maxDate]="form.value.end"/>
                                     <span class="input-group-addon">(YYYY-MM-DD)</span>
                                     <span class="input-group-addon"><i class="fa fa-long-arrow-right"></i></span>
-                                    <input type="text" datePicker formControlName="end" class="form-control" id="end_date" placeholder="To Day"
-                                            data-provide="datepicker" data-date-format="yyyy-mm-dd" data-date-autoclose="1">
+                                    <input type="text" dateInput formControlName="end" class="form-control" id="end_date" placeholder="To Day" dateFormat="YYYY-MM-DD" [minDate]="form.value.start"/>
                                     <span class="input-group-addon">(YYYY-MM-DD)</span>
                                 </div>
                                 <span class="help-block">Date range that that contain either start or end of date of a leave</span>

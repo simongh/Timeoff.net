@@ -3,7 +3,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { ValidatorMessageComponent } from '@components/validator-message/validator-message.component';
-import { DatePickerDirective } from '@components/date-picker.directive';
+import { DateInputDirective } from '@components/date-input.directive';
 
 import { MessagesService } from '@services/messages/messages.service';
 
@@ -14,7 +14,7 @@ import { LoggedInUserService } from '@services/logged-in-user/logged-in-user.ser
     standalone: true,
     templateUrl: 'add-new-modal.component.html',
     selector: 'add-new-modal',
-    imports: [ReactiveFormsModule, ValidatorMessageComponent, DatePickerDirective],
+    imports: [ReactiveFormsModule, ValidatorMessageComponent, DateInputDirective],
 })
 export class AddNewModalComponent {
     protected get form() {
