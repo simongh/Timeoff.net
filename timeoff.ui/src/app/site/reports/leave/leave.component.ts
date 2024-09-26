@@ -8,7 +8,7 @@ import { TippyDirective } from '@ngneat/helipopper';
 
 import { FlashComponent } from '@components/flash/flash.component';
 import { TeamSelectComponent } from '@components/team-select/team-select.component';
-import { DatePickerDirective } from '@components/date-picker.directive';
+import { DateInputDirective } from '@components/date-input.directive';
 
 import { CompanyService } from '@services/company/company.service';
 import { LeaveTypeModel } from '@services/company/leave-type.model';
@@ -26,7 +26,7 @@ import { LeaveService } from './leave.service';
         FlashComponent,
         TeamSelectComponent,
         CommonModule,
-        DatePickerDirective,
+        DateInputDirective,
         ReactiveFormsModule,
         TippyDirective,
     ],

@@ -8,7 +8,7 @@ import { map, switchMap } from 'rxjs';
 import { TippyDirective } from '@ngneat/helipopper';
 
 import { FlashComponent } from '@components/flash/flash.component';
-import { DatePickerDirective } from '@components/date-picker.directive';
+import { DateInputDirective } from '@components/date-input.directive';
 import { TeamSelectComponent } from '@components/team-select/team-select.component';
 
 import { CompanyService } from '@services/company/company.service';
@@ -28,7 +28,7 @@ import { AllowanceUsageService } from './allowance-usage.service';
         CommonModule,
         RouterLink,
         ReactiveFormsModule,
-        DatePickerDirective,
+        DateInputDirective,
         TeamSelectComponent,
         TippyDirective,
     ],

@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
-import { format } from 'date-fns';
+import { formatDate, formatISO } from 'date-fns';
 
 import { yearValidator } from '@components/validators';
 
@@ -9,11 +9,12 @@ import { LoggedInUserService } from '@services/logged-in-user/logged-in-user.ser
 
 import { PublicHolidayModel } from '@models/public-holiday.model';
 import { CalendarDayModel } from '@models/calendar-day.model';
+import { dateString } from '@models/types';
 
 export interface holidayFormControls {
     id: FormControl<number | null>;
     name: FormControl<string | null>;
-    date: FormControl<string | null>;
+    date: FormControl<dateString | null>;
 }
 export type HolidayFormGroup = ReturnType<PublicHolidaysService['newForm']>;
 
@@ -49,7 +50,7 @@ export class PublicHolidaysService {
         return this.fb.group({
             id: data.id,
             name: [data.name, Validators.required],
-            date: [data.date ? format(data.date, this.currentUser.dateFormat()) : null, yearValidator(year)],
+            date: [!data.date ? null : formatDate(data.date, 'yyyy-MM-dd'), yearValidator(year)],
         });
     }
 

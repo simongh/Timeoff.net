@@ -6,7 +6,7 @@ import { injectQueryParams } from 'ngxtension/inject-query-params';
 import { derivedAsync } from 'ngxtension/derived-async';
 
 import { FlashComponent } from '@components/flash/flash.component';
-import { DatePickerDirective } from '@components/date-picker.directive';
+import { DateInputDirective } from '@components/date-input.directive';
 
 import { MessagesService } from '@services/messages/messages.service';
 import { CompanyService } from '@services/company/company.service';
@@ -22,7 +22,7 @@ import { EmailAuditService } from './email-audit.service';
     providers: [EmailAuditService, CompanyService],
     templateUrl: './email-audit.component.html',
     styleUrl: './email-audit.component.scss',
-    imports: [ReactiveFormsModule, CommonModule, PagerComponent, FlashComponent, DatePickerDirective],
+    imports: [ReactiveFormsModule, CommonModule, PagerComponent, FlashComponent, DateInputDirective],
 })
 export class EmailAuditComponent implements OnInit {
     protected get form() {
