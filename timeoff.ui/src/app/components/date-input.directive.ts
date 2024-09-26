@@ -1,4 +1,14 @@
-import { AfterViewInit, Directive, effect, ElementRef, inject, input, OnDestroy, output } from '@angular/core';
+import {
+    AfterViewInit,
+    computed,
+    Directive,
+    effect,
+    ElementRef,
+    inject,
+    input,
+    OnDestroy,
+    output,
+} from '@angular/core';
 import { NgControl } from '@angular/forms';
 import { easepick } from '@easepick/core';
 import { AmpPlugin } from '@easepick/amp-plugin';
@@ -11,27 +21,37 @@ import { formatISO, parseISO } from 'date-fns';
     standalone: true,
 })
 export class DateInputDirective implements OnDestroy, AfterViewInit {
-    public date = input<dateString>();
+    public readonly date = input<dateString | Date>();
 
-    public dateFormat = input<string>();
+    public readonly dateFormat = input<string>('YYYY-MM-DD');
 
-    public dateUpdated = output<dateString>();
+    public readonly dateUpdated = output<dateString | null>();
 
-    public maxDate = input(undefined, {
-        transform: (v: dateString | null | undefined) => (v == null ? undefined : v),
-    });
+    public readonly maxDate = input<dateString | null | undefined>(null);
 
-    public minDate = input(undefined, {
-        transform: (v: dateString | null | undefined) => (v == null ? undefined : v),
-    });
+    public readonly minDate = input<dateString | null | undefined>(null);
 
-    private el = inject(ElementRef);
+    public readonly showReset = input(false);
 
-    private control = inject(NgControl, { optional: true });
+    private readonly el = inject(ElementRef);
+
+    private readonly control = inject(NgControl, { optional: true });
 
     private instance!: easepick.Core;
 
+    private readonly minDateAdjusted = computed(() => {
+        const d = this.minDate();
+        return d == null ? undefined : parseISO(d)!;
+    });
+
+    private readonly maxDateAdjusted = computed(() => {
+        const d = this.maxDate();
+        return d == null ? undefined : parseISO(d)!;
+    });
+
     constructor() {
+        this.init();
+
         effect(() => {
             const date = this.date();
             if (date) {
@@ -42,33 +62,29 @@ export class DateInputDirective implements OnDestroy, AfterViewInit {
             }
         });
 
-        effect(()=>{
-            const maxDate = this.maxDate();
-
-            this.instance.options.LockPlugin!.maxDate=maxDate ? parseISO(maxDate) : undefined;
+        effect(() => {
+            this.instance.options.LockPlugin!.maxDate = this.maxDateAdjusted();
             this.instance.PluginManager.reloadInstance('LockPlugin');
+            this.instance.renderAll();
         });
 
-        effect(()=>{
-            const minDate = this.minDate();
-
-            this.instance.options.LockPlugin!.minDate = minDate? parseISO(minDate) : undefined;
+        effect(() => {
+            this.instance.options.LockPlugin!.minDate = this.minDateAdjusted();
             this.instance.PluginManager.reloadInstance('LockPlugin');
-        })
+            this.instance.renderAll();
+        });
     }
 
     ngAfterViewInit(): void {
         this.control?.valueChanges?.subscribe((v) => {
-            //console.log('vc', v);
+console.log(v);
             if (v) {
                 this.instance.setDate(v);
                 this.instance.gotoDate(v);
-            } else {
+            } else if (!!this.instance.getDate()) {
                 this.instance.clear();
             }
         });
-
-        this.init();
     }
 
     ngOnDestroy(): void {
@@ -80,27 +96,29 @@ export class DateInputDirective implements OnDestroy, AfterViewInit {
             element: this.el.nativeElement,
             css: ['https://cdn.jsdelivr.net/npm/@easepick/bundle@1.2.0/dist/index.css'],
             zIndex: 20,
+            format: this.dateFormat(),
             AmpPlugin: {
                 dropdown: {
                     months: true,
                     years: true,
                 },
                 darkMode: false,
+                resetButton: this.showReset(),
             },
             LockPlugin: {
-                minDate: this.minDate(),
-                maxDate: this.maxDate(),
+                minDate: this.minDateAdjusted(),
+                maxDate: this.maxDateAdjusted(),
             },
             plugins: [AmpPlugin, LockPlugin],
             setup: (picker) => {
                 picker.on('select', (evt) => {
                     const date = formatISO(picker.getDate(), { representation: 'date' });
-                    //console.log('control', this.control?.value);
-                    //console.log('picker', date);
                     this.control?.control?.setValue(date);
-
                     this.dateUpdated.emit(date);
-                    //console.log('control after update', this.control?.value);
+                });
+                picker.on('clear', () => {
+                    this.control?.control?.setValue(null);
+                    this.dateUpdated.emit(null);
                 });
             },
         });
