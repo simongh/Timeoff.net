@@ -6,14 +6,9 @@ namespace Timeoff.Controllers
 {
     [Route("users")]
     [Authorize(Roles = "Admin")]
-    public class UsersController : Controller
+    public class UsersController(IMediator mediator) : Controller
     {
-        private readonly IMediator _mediator;
-
-        public UsersController(IMediator mediator)
-        {
-            _mediator = mediator;
-        }
+        private readonly IMediator _mediator = mediator;
 
         //[HttpGet("add")]
         //public async Task<IActionResult> CreateAsync()
@@ -46,11 +41,13 @@ namespace Timeoff.Controllers
         //    return View();
         //}
 
-        //[HttpGet("import-sample")]
-        //public async Task<IActionResult> ImportSampleAsync()
-        //{
-        //    return View();
-        //}
+        [HttpGet("import-sample")]
+        public async Task<IActionResult> ImportSampleAsync()
+        {
+            var result = await _mediator.Send(new Application.Users.SampleCommand());
+
+            return File(result, "text/csv", "sample.csv");
+        }
 
         //[HttpGet("edit/{id:int}")]
         //public async Task<IActionResult> EditAsync([FromRoute] Application.UserDetails.GetDetailsCommand command)
@@ -142,13 +139,13 @@ namespace Timeoff.Controllers
         //    return View("Edit", vm);
         //}
 
-        [HttpGet("summary/{id:int}")]
-        [Authorize()]
-        public async Task<IActionResult> SummaryAsync([FromRoute] Application.UserSummary.SummaryCommand command)
-        {
-            var vm = await _mediator.Send(command);
+        //[HttpGet("summary/{id:int}")]
+        //[Authorize()]
+        //public async Task<IActionResult> SummaryAsync([FromRoute] Application.UserSummary.SummaryCommand command)
+        //{
+        //    var vm = await _mediator.Send(command);
 
-            return View(vm);
-        }
+        //    return View(vm);
+        //}
     }
 }
