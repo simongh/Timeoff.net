@@ -5,7 +5,6 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { injectParams } from 'ngxtension/inject-params';
 
-import { DatePickerDirective } from '@components/date-picker.directive';
 import { DateInputDirective } from '@components/date-input.directive';
 import { TeamSelectComponent } from '@components/team-select/team-select.component';
 import { ValidatorMessageComponent } from '@components/validator-message/validator-message.component';
@@ -26,7 +25,6 @@ import { UserBreadcrumbComponent } from '../user-breadcrumb/user-breadcrumb.comp
         UserBreadcrumbComponent,
         ReactiveFormsModule,
         CommonModule,
-        DatePickerDirective,
         DateInputDirective,
         TeamSelectComponent,
         ValidatorMessageComponent,

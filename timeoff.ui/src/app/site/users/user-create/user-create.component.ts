@@ -6,7 +6,7 @@ import { CommonModule } from '@angular/common';
 
 import { FlashComponent } from '@components/flash/flash.component';
 import { ValidatorMessageComponent } from '@components/validator-message/validator-message.component';
-import { DatePickerDirective } from '@components/date-picker.directive';
+import { DateInputDirective } from '@components/date-input.directive';
 import { TeamSelectComponent } from '@components/team-select/team-select.component';
 
 import { MessagesService } from '@services/messages/messages.service';
@@ -27,7 +27,7 @@ import { UserBreadcrumbComponent } from '../user-breadcrumb/user-breadcrumb.comp
         FlashComponent,
         CommonModule,
         ValidatorMessageComponent,
-        DatePickerDirective,
+        DateInputDirective,
         UserBreadcrumbComponent,
         TeamSelectComponent,
     ],
