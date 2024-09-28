@@ -6,8 +6,8 @@ import { combineLatest } from 'rxjs';
 
 import { datePartList } from '@models/types';
 
-import { DatePickerDirective } from '@components/date-picker.directive';
-import { ValidatorMessageComponent } from "@components/validator-message/validator-message.component";
+import { DateInputDirective } from '@components/date-input.directive';
+import { ValidatorMessageComponent } from '@components/validator-message/validator-message.component';
 
 import { CompanyService } from '@services/company/company.service';
 import { LoggedInUserService } from '@services/logged-in-user/logged-in-user.service';
@@ -22,7 +22,7 @@ import { BookingService } from './booking.service';
     selector: 'add-new-absence-modal',
     templateUrl: 'add-new-modal.component.html',
     providers: [BookingService, CompanyService],
-    imports: [ReactiveFormsModule, CommonModule, DatePickerDirective, ValidatorMessageComponent]
+    imports: [ReactiveFormsModule, CommonModule, DateInputDirective, ValidatorMessageComponent],
 })
 export class AddNewModalComponent implements OnInit {
     protected readonly parts = signal(datePartList()).asReadonly();

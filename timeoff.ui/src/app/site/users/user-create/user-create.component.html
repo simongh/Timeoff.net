@@ -82,7 +82,7 @@
                 <div class="col-md-3 date" >
                 <div class="input-group">
                     <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                    <input class="form-control" datePicker type="text" formControlName="startDate" for="startDate" data-date-autoclose="1" data-provide="datepicker" [attr.data-date-format]="dateFormat()" data-date-week-start="1" aria-describedby="start_date_help"/>
+                    <input class="form-control" dateInput type="text" formControlName="startDate" aria-describedby="start_date_help" [maxDate]="form.value.endDate"/>
                 </div>
                 <validator-message controlName="startDate" validatorName="required">A start date is required</validator-message>
             </div>
@@ -94,7 +94,7 @@
                 <div class="col-md-3 date">
                     <div class="input-group">
                         <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                        <input class="form-control" datePicker type="text" formControlName="endDate" for="endDate" data-date-autoclose="1" data-provide="datepicker" [attr.data-date-format]="dateFormat()" data-date-week-start="1" aria-describedby="end_date_help"/>
+                        <input class="form-control" dateInput type="text" formControlName="endDate" aria-describedby="end_date_help" [minDate]="form.value.startDate"/>
                     </div>
                 </div>
                 <span id="end_date_help" class="help-block col-md-6">
