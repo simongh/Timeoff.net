@@ -36,7 +36,7 @@
                             <div class="col-md-7">
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                                    <input type="text" formControlName="start" datePicker class="form-control book-leave-from-input" id="from" data-provide="datepicker" data-date-autoclose="1" [attr.data-date-format]="dateFormat()" data-date-week-start="1" />
+                                    <input type="text" formControlName="start" dateInput class="form-control book-leave-from-input" id="from" [maxDate]="form.value.end" />
                                 </div>
                                 <validator-message controlName="start" validatorName="required">Start date is required</validator-message>
                             </div>
@@ -54,7 +54,7 @@
                             <div class="col-md-7">
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                                    <input type="text" formControlName="end" datePicker class="form-control book-leave-to-input" id="to" data-provide="datepicker" data-date-autoclose="1" [attr.data-date-format]="dateFormat()" data-date-week-start="1" />
+                                    <input type="text" formControlName="end" dateInput class="form-control book-leave-to-input" id="to" [minDate]="form.value.start" />
                                 </div>
                                 <validator-message controlName="end" validatorName="required">End date is required</validator-message>
                             </div>
