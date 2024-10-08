@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { UserAbsencesComponent } from './user-absences.component';
+import UserAbsencesComponent from './user-absences.component';
 
 describe('UserAbsencesComponent', () => {
     let component: UserAbsencesComponent;

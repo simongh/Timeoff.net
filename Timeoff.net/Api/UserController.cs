@@ -96,24 +96,5 @@ namespace Timeoff.Api
 
             return Ok(result);
         }
-
-        [HttpPost("import")]
-        [ApiExplorerSettings(IgnoreApi = true)]
-        public async Task<IActionResult> ImportAsync(Application.Users.ImportCommand command)
-        {
-            var result = await _mediator.Send(command);
-
-            if (result.IsSuccess)
-                return NoContent();
-            else
-                return BadRequest(result);
-        }
-
-        [HttpGet("import")]
-        [ApiExplorerSettings(IgnoreApi = true)]
-        public async Task<IActionResult> ImportAsync()
-        {
-            return Ok();
-        }
     }
 }

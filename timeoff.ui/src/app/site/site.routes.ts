@@ -17,17 +17,17 @@ export const siteRoutes: Routes = [
     {
         path: 'settings',
         canActivate: [adminGuard],
-        loadChildren: () => import('./settings/settings.routes').then((m) => m.settingsRoutes),
+        loadChildren: () => import('./settings/settings.routes'),
     },
     {
         path: 'users',
         canActivate: [adminGuard],
-        loadChildren: () => import('./users/users.routes').then((m) => m.usersRoutes),
+        loadChildren: () => import('./users/users.routes'),
     },
     {
         path: 'reports',
         canActivate: [adminGuard],
-        loadChildren: () => import('./reports/reports.routes').then((m) => m.reportsRoutes),
+        loadChildren: () => import('./reports/reports.routes'),
     },
     {
         path: 'audit/emails',

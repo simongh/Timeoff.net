@@ -1,5 +1,3 @@
-import { Routes } from '@angular/router';
-
 import { UserImportComponent } from './user-import/user-import.component';
 import { UserCreateComponent } from './user-create/user-create.component';
 import { UserListComponent } from './user-list/user-list.component';
@@ -9,7 +7,7 @@ import { UserCalendarComponent } from './user-calendar/user-calendar.component';
 import UserAbsencesComponent from './user-absences/user-absences.component';
 import { UsersComponent } from './users.component';
 
-export const usersRoutes: Routes = [
+export default [
     {
         path: '',
         component: UserListComponent,
@@ -28,7 +26,7 @@ export const usersRoutes: Routes = [
         children: [
             {
                 path: '',
-                component: UserEditComponent
+                component: UserEditComponent,
             },
             {
                 path: 'schedule',
@@ -42,6 +40,6 @@ export const usersRoutes: Routes = [
                 path: 'absences',
                 component: UserAbsencesComponent,
             },
-                ]
+        ],
     },
 ];
