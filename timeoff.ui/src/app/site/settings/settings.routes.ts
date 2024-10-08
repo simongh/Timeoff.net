@@ -5,7 +5,7 @@ import { TeamsListComponent } from './teams/teams-list/teams-list.component';
 import { IntegrationComponent } from './integration/integration.component';
 import { TeamEditComponent } from './teams/team-edit/team-edit.component';
 
-export const settingsRoutes: Routes = [
+export default [
     {
         path: '',
         component: HomeComponent,

@@ -19,15 +19,6 @@ namespace Timeoff.Application.Users
             csv.WriteHeader<ImportModel>();
             await csv.NextRecordAsync();
 
-            //csv.WriteRecord(new ImportModel()
-            //{
-            //    Email = "a",
-            //    LastName = "b",
-            //    FirstName = "c",
-            //    Department = "d",
-            //});
-            //await csv.NextRecordAsync();
-
             await writer.FlushAsync();
 
             stream.Seek(0, SeekOrigin.Begin);
