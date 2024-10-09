@@ -4,6 +4,7 @@ import { RouterLink } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ReactiveFormsModule } from '@angular/forms';
 import { combineLatest } from 'rxjs';
+import { TippyDirective } from '@ngneat/helipopper';
 
 import { FlashComponent } from '@components/flash/flash.component';
 import { TeamSelectComponent } from '@components/team-select/team-select.component';
@@ -20,7 +21,15 @@ import { LeaveService } from './leave.service';
     standalone: true,
     templateUrl: './leave.component.html',
     styleUrl: './leave.component.scss',
-    imports: [RouterLink, FlashComponent, TeamSelectComponent, CommonModule, DatePickerDirective, ReactiveFormsModule],
+    imports: [
+        RouterLink,
+        FlashComponent,
+        TeamSelectComponent,
+        CommonModule,
+        DatePickerDirective,
+        ReactiveFormsModule,
+        TippyDirective,
+    ],
     providers: [CompanyService, LeaveService],
 })
 export class LeaveComponent implements OnInit {

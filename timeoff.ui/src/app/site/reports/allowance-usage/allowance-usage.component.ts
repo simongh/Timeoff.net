@@ -5,6 +5,7 @@ import { RouterLink } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { formatDate } from 'date-fns';
 import { map, switchMap } from 'rxjs';
+import { TippyDirective } from '@ngneat/helipopper';
 
 import { FlashComponent } from '@components/flash/flash.component';
 import { DatePickerDirective } from '@components/date-picker.directive';
@@ -22,7 +23,15 @@ import { AllowanceUsageService } from './allowance-usage.service';
     templateUrl: './allowance-usage.component.html',
     styleUrl: './allowance-usage.component.scss',
     providers: [CompanyService, AllowanceUsageService],
-    imports: [FlashComponent, CommonModule, RouterLink, ReactiveFormsModule, DatePickerDirective, TeamSelectComponent],
+    imports: [
+        FlashComponent,
+        CommonModule,
+        RouterLink,
+        ReactiveFormsModule,
+        DatePickerDirective,
+        TeamSelectComponent,
+        TippyDirective,
+    ],
 })
 export class AllowanceUsageComponent implements OnInit {
     protected readonly results = signal<AllowanceModel[]>([]);
@@ -95,11 +104,13 @@ export class AllowanceUsageComponent implements OnInit {
     }
 
     private loadResults(data: AllowanceModel[]) {
-        this.results.set(data.map((d) => {
-            d.totals = this.leaveTypes().map((l) => d.leaveSummary.find((s) => s.id == l.id)?.allowanceUsed ?? 0);
+        this.results.set(
+            data.map((d) => {
+                d.totals = this.leaveTypes().map((l) => d.leaveSummary.find((s) => s.id == l.id)?.allowanceUsed ?? 0);
 
-            return d;
-        }));
+                return d;
+            })
+        );
 
         this.start.set(this.allowanceSvc.start);
         this.end.set(this.allowanceSvc.end);

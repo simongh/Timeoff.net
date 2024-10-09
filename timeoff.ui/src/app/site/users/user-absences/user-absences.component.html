@@ -5,18 +5,12 @@
         <div class="progress bigger">
             <div class="progress-bar progress-bar-success"
                     [ngStyle]="{ width: usedPercent() + '%' }"
-                    [attr.data-content]="name() + ' in current year used ' + summary().used + ' days from allowance'"
-                    data-placement="top"
-                    data-toggle="popover"
-                    data-trigger="focus hover">
+                    [tp]="name() + ' in current year used ' + summary().used + ' days from allowance'">
                 {{summary().used}} days used so far
             </div>
             <div class="progress-bar progress-bar-warning"
                     [ngStyle]="{ width: remainingPercent() + '%' }"
-                    [attr.data-content]="name() + ' in current year has ' + summary().remaining + ' remaining days in allowance'"
-                    data-placement="top"
-                    data-toggle="popover"
-                    data-trigger="focus hover">
+                    [tp]="name() + ' in current year has ' + summary().remaining + ' remaining days in allowance'">
                 {{summary().remaining}} days remaining in current year
             </div>
         </div>

@@ -35,10 +35,7 @@
                     </td>
                     <td>
                         <span class="teamview-deducted-days"
-                            [attr.data-content]="u.summary"
-                            data-placement="right"
-                            data-toggle="popover"
-                            data-trigger="focus hover">{{u.total}}</span>
+                            [tp]="u.summary">{{u.total}}</span>
                     </td>
                     @for (day of u.days; track $index) {
                         <td class="calendar_cell half_1st" [ngClass]="day.morningClasses">
