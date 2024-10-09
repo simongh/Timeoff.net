@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, computed, inject, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { eachDayOfInterval, endOfMonth, formatDate } from 'date-fns';
+import { TippyDirective } from '@ngneat/helipopper';
 
 import { DayModel } from '@components/calendar/day.model';
 
@@ -16,7 +17,7 @@ import { UserSummaryModel } from './user-summary.model';
     templateUrl: 'month-view.component.html',
     styleUrl: 'month-view.component.scss',
     selector: 'month-view',
-    imports: [CommonModule, RouterLink],
+    imports: [CommonModule, RouterLink, TippyDirective],
 })
 export class MonthViewComponent {
     public readonly team = input<TeamModel | null>(null);

@@ -2,6 +2,7 @@ import { Component, DestroyRef, OnInit, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { TippyDirective } from '@ngneat/helipopper';
 
 import { FlashComponent } from '@components/flash/flash.component';
 import { YesPipe } from '@components/yes.pipe';
@@ -14,7 +15,7 @@ import { AddNewModalComponent } from './add-new-modal.component';
     standalone: true,
     templateUrl: 'teams-list.component.html',
     providers: [TeamsService],
-    imports: [FlashComponent, CommonModule, RouterLink, YesPipe, AddNewModalComponent],
+    imports: [FlashComponent, CommonModule, RouterLink, YesPipe, AddNewModalComponent, TippyDirective],
 })
 export class TeamsListComponent implements OnInit {
     protected readonly teams = signal<TeamModel[]>([]);

@@ -3,11 +3,12 @@ import { RouterLink } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
+import { TippyDirective } from '@ngneat/helipopper';
 
 import { YesPipe } from '@components/yes.pipe';
 import { RequestsListComponent } from '@components/requests-list/requests-list.component';
-import { AllowanceBreakdownComponent } from "@components/allowance-breakdown/allowance-breakdown.component";
-import { LeaveSummaryComponent } from "@components/leave-summary/leave-summary.component";
+import { AllowanceBreakdownComponent } from '@components/allowance-breakdown/allowance-breakdown.component';
+import { LeaveSummaryComponent } from '@components/leave-summary/leave-summary.component';
 
 import { CalendarService } from '@services/calendar/calendar.service';
 import { AllowanceSummaryModel } from '@services/calendar/allowance-summary.model';
@@ -32,8 +33,9 @@ import { UserBreadcrumbComponent } from '../user-breadcrumb/user-breadcrumb.comp
         ReactiveFormsModule,
         RouterLink,
         AllowanceBreakdownComponent,
-        LeaveSummaryComponent
-    ]
+        LeaveSummaryComponent,
+        TippyDirective,
+    ],
 })
 export default class UserAbsencesComponent implements OnInit {
     protected get form() {
@@ -47,7 +49,7 @@ export default class UserAbsencesComponent implements OnInit {
     protected readonly remainingPercent = computed(() => (this.summary().remaining / this.summary().total) * 100);
 
     protected readonly name = computed(() => this.usersSvc.fullName);
-    
+
     protected groupedRequests = computed(() => {
         return Object.entries(
             this.leave().reduce((groups, item) => {
