@@ -3,9 +3,8 @@ import { RouterLink } from '@angular/router';
 
 @Component({
     selector: 'reports-home',
-    standalone: true,
     imports: [RouterLink],
     templateUrl: './home.component.html',
-    styleUrl: './home.component.scss',
+    styleUrl: './home.component.scss'
 })
 export class HomeComponent {}

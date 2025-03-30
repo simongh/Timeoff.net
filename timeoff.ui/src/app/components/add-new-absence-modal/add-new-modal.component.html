@@ -35,7 +35,7 @@
                             </div>
                             <div class="col-md-7">
                                 <div class="input-group">
-                                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                    <span class="input-group-addon"><i class="fa-solid fa-calendar"></i></span>
                                     <input type="text" formControlName="start" dateInput class="form-control book-leave-from-input" id="from" [maxDate]="form.value.end" />
                                 </div>
                                 <validator-message controlName="start" validatorName="required">Start date is required</validator-message>
@@ -53,7 +53,7 @@
                             </div>
                             <div class="col-md-7">
                                 <div class="input-group">
-                                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                    <span class="input-group-addon"><i class="fa-solid fa-calendar"></i></span>
                                     <input type="text" formControlName="end" dateInput class="form-control book-leave-to-input" id="to" [minDate]="form.value.start" />
                                 </div>
                                 <validator-message controlName="end" validatorName="required">End date is required</validator-message>

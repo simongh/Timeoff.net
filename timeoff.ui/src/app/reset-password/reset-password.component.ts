@@ -12,10 +12,9 @@ import { MessagesService } from '@services/messages/messages.service';
 
 @Component({
     selector: 'reset-password-page',
-    standalone: true,
     templateUrl: './reset-password.component.html',
     styleUrl: './reset-password.component.scss',
-    imports: [FlashComponent, CommonModule, ReactiveFormsModule, ValidatorMessageComponent],
+    imports: [FlashComponent, CommonModule, ReactiveFormsModule, ValidatorMessageComponent]
 })
 export class ResetPasswordComponent {
     protected get passwordForm() {

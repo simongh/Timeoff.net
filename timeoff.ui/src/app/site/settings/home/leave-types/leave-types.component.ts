@@ -11,11 +11,10 @@ import { LeaveTypeModalComponent } from '../leave-type-modal/leave-type-modal.co
 
 @Component({
     selector: 'leave-types',
-    standalone: true,
     templateUrl: './leave-types.component.html',
     styleUrl: './leave-types.component.scss',
     providers: [],
-    imports: [ColourPickerComponent, CommonModule, ReactiveFormsModule, LeaveTypeModalComponent],
+    imports: [ColourPickerComponent, CommonModule, ReactiveFormsModule, LeaveTypeModalComponent]
 })
 export class LeaveTypesComponent {
     protected get leaveTypes() {

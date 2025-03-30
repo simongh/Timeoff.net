@@ -18,11 +18,10 @@ import { UserModel } from '@services/company/user.model';
 import { BookingService } from './booking.service';
 
 @Component({
-    standalone: true,
     selector: 'add-new-absence-modal',
     templateUrl: 'add-new-modal.component.html',
     providers: [BookingService, CompanyService],
-    imports: [ReactiveFormsModule, CommonModule, DateInputDirective, ValidatorMessageComponent],
+    imports: [ReactiveFormsModule, CommonModule, DateInputDirective, ValidatorMessageComponent]
 })
 export class AddNewModalComponent implements OnInit {
     protected readonly parts = signal(datePartList()).asReadonly();

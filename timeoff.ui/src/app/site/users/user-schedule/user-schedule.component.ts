@@ -13,16 +13,14 @@ import { UserBreadcrumbComponent } from '../user-breadcrumb/user-breadcrumb.comp
 
 @Component({
     selector: 'user-schedule',
-    standalone: true,
     templateUrl: './user-schedule.component.html',
     styleUrl: './user-schedule.component.scss',
     imports: [
-        UserBreadcrumbComponent,
         ReactiveFormsModule,
         CommonModule,
         RouterLink,
         ScheduleComponent,
-    ],
+    ]
 })
 export class UserScheduleComponent {
     protected get schedule() {

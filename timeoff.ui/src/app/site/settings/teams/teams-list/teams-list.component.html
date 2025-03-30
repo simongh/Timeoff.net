@@ -27,7 +27,7 @@
                         <button type="button"
                                 class="btn btn-xs btn-link"
                                 tp="If set to YES, employees from team have public holidays added on top of their allowance">
-                            <span class="fa fa-question-circle"> </span>
+                            <span class="fa-solid fa-circle-question"> </span>
                         </button>
                     </th>
                     <th>
@@ -35,7 +35,7 @@
                         <button type="button"
                                 class="btn btn-xs btn-link"
                                 tp="If set to YES, holiday allowance starts to build up - or accrue - from the first day of employment. It accrues in proportion to the annual entitlement. E.g. an employee in the ninth month of employment would have built up 9/12ths (or three-quarters) of annual entitlement.">
-                            <span class="fa fa-question-circle"> </span>
+                            <span class="fa-solid fa-circle-question"> </span>
                         </button>
                     </th>
                     <th></th>
@@ -49,7 +49,7 @@
                     <td><a routerLink="/users" [queryParams]="{team: team.id}">{{team.employeeCount}}</a></td>
                     <td>{{team.includePublicHolidays | yes}}</td>
                     <td>{{team.isAccruedAllowance | yes}}</td>
-                    <td><a routerLink="./{{team.id}}" class="btn btn-link btn-xs pull-right"><span class="fa fa-chevron-right"></span></a></td>
+                    <td><a routerLink="./{{team.id}}" class="btn btn-link btn-xs pull-right"><span class="fa-solid fa-chevron-right"></span></a></td>
                 </tr>
             </tbody>
         </table>

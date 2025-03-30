@@ -8,10 +8,9 @@ import { RemoveCompanyModalComponent } from '../remove-company-modal/remove-comp
 
 @Component({
     selector: 'remove-company',
-    standalone: true,
     templateUrl: './remove-company.component.html',
     styleUrl: './remove-company.component.scss',
-    imports: [RemoveCompanyModalComponent],
+    imports: [RemoveCompanyModalComponent]
 })
 export class RemoveCompanyComponent {
     public readonly companyName = input.required<string>();

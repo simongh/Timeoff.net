@@ -13,7 +13,6 @@ import { UsersService } from './users.service';
 import { UserBreadcrumbComponent } from "./user-breadcrumb/user-breadcrumb.component";
 
 @Component({
-    standalone: true,
     templateUrl: 'users.component.html',
     providers: [UsersService],
     imports: [FlashComponent, RouterLink, RouterLinkActive, CommonModule, RouterOutlet, UserBreadcrumbComponent]

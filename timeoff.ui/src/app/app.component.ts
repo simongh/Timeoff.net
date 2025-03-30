@@ -10,7 +10,6 @@ import { LoggedInUserService } from '@services/logged-in-user/logged-in-user.ser
 
 @Component({
     selector: 'app-root',
-    standalone: true,
     templateUrl: './app.component.html',
     styleUrl: './app.component.scss',
     imports: [RouterOutlet, FooterComponent, HeaderComponent, AddNewModalComponent, NgIf]

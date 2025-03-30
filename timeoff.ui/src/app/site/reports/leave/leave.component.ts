@@ -18,7 +18,6 @@ import { LeaveService } from './leave.service';
 
 @Component({
     selector: 'leave',
-    standalone: true,
     templateUrl: './leave.component.html',
     styleUrl: './leave.component.scss',
     imports: [
@@ -30,7 +29,7 @@ import { LeaveService } from './leave.service';
         ReactiveFormsModule,
         TippyDirective,
     ],
-    providers: [CompanyService, LeaveService],
+    providers: [CompanyService, LeaveService]
 })
 export class LeaveComponent implements OnInit {
     protected readonly results = signal<LeaveResultModel[]>([]);

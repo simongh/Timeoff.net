@@ -6,11 +6,10 @@ import { MessagesService } from '@services/messages/messages.service';
 import { FlashModel } from './flash.model';
 
 @Component({
-    standalone: true,
     templateUrl: 'flash.component.html',
     selector: 'flash-message',
     imports: [CommonModule],
-    providers: [],
+    providers: []
 })
 export class FlashComponent implements OnInit {
     private readonly messages = signal(new FlashModel());

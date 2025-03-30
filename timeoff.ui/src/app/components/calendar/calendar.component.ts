@@ -18,10 +18,9 @@ import { DayModel } from './day.model';
 
 @Component({
     selector: 'calendar',
-    standalone: true,
     templateUrl: 'calendar.component.html',
     styleUrl: 'calendar.component.scss',
-    imports: [CommonModule],
+    imports: [CommonModule]
 })
 export class CalendarComponent {
     public readonly monthCount = input(0);

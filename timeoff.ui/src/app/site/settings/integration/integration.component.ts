@@ -11,11 +11,10 @@ import { IntegrationModel } from './integration.model';
 
 @Component({
     selector: 'integration',
-    standalone: true,
     templateUrl: './integration.component.html',
     styleUrl: './integration.component.scss',
     imports: [FlashComponent],
-    providers: [IntegrationService],
+    providers: [IntegrationService]
 })
 export class IntegrationComponent implements OnInit {
     protected readonly apiEnabled = signal(true);

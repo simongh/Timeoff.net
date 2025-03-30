@@ -7,11 +7,10 @@ import { CompanyService } from '@services/company/company.service';
 
 @Component({
     selector: 'user-select',
-    standalone: true,
     imports: [CommonModule, ReactiveFormsModule],
     templateUrl: './user-select.component.html',
     styleUrl: './user-select.component.scss',
-    providers: [CompanyService],
+    providers: [CompanyService]
 })
 export class UserListComponent {
     private readonly companySvc = inject(CompanyService);

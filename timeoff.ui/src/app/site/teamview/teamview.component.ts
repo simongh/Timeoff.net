@@ -19,11 +19,10 @@ import { dateString } from '@models/types';
 
 @Component({
     selector: 'team-view',
-    standalone: true,
     templateUrl: './teamview.component.html',
     styleUrl: './teamview.component.scss',
     imports: [CommonModule, RouterLink, MonthViewComponent, DateInputDirective],
-    providers: [CompanyService, TeamViewService],
+    providers: [CompanyService, TeamViewService]
 })
 export class TeamviewComponent implements OnInit {
     protected readonly name = this.currentUser.userName;

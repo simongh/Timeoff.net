@@ -16,7 +16,6 @@ import { TeamsService } from '../teams.service';
 
 @Component({
     selector: 'team-edit',
-    standalone: true,
     providers: [TeamsService],
     templateUrl: './team-edit.component.html',
     styleUrl: './team-edit.component.scss',
@@ -27,7 +26,7 @@ import { TeamsService } from '../teams.service';
         ValidatorMessageComponent,
         CommonModule,
         UserListComponent,
-    ],
+    ]
 })
 export class TeamEditComponent implements OnInit {
     protected get name() {

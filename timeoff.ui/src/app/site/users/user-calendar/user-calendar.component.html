@@ -1,12 +1,12 @@
 <div class="row">
     <div class="col-xs-2">
-        <a class="btn btn-default" routerLink="." [queryParams]="{year: lastYear()}"><span aria-hidden="true" class="fa fa-chevron-left"></span> {{lastYear()}} </a>
+        <a class="btn btn-default" routerLink="." [queryParams]="{year: lastYear()}"><span aria-hidden="true" class="fa-solid fa-chevron-left"></span> {{lastYear()}} </a>
     </div>
     <div class="col-xs-8 calendar-section-caption">
         <h3>{{currentYear()}}</h3>
     </div>
     <div class="col-xs-2">
-        <a class="btn btn-default pull-right" routerLink="." [queryParams]="{year: nextYear()}">{{nextYear()}} <span aria-hidden="true" class="fa fa-chevron-right"></span></a>
+        <a class="btn btn-default pull-right" routerLink="." [queryParams]="{year: nextYear()}">{{nextYear()}} <span aria-hidden="true" class="fa-solid fa-chevron-right"></span></a>
     </div>
 </div>
 

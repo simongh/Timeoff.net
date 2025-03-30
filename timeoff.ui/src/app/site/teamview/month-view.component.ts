@@ -13,11 +13,10 @@ import { RowModel } from './row.model';
 import { UserSummaryModel } from './user-summary.model';
 
 @Component({
-    standalone: true,
     templateUrl: 'month-view.component.html',
     styleUrl: 'month-view.component.scss',
     selector: 'month-view',
-    imports: [CommonModule, RouterLink, TippyDirective],
+    imports: [CommonModule, RouterLink, TippyDirective]
 })
 export class MonthViewComponent {
     public readonly team = input<TeamModel | null>(null);

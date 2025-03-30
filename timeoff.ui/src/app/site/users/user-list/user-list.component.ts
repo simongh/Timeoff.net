@@ -15,11 +15,10 @@ import { UsersService } from '../users.service';
 
 @Component({
     selector: 'user-list',
-    standalone: true,
     templateUrl: './user-list.component.html',
     styleUrl: './user-list.component.scss',
     providers: [UsersService, CompanyService],
-    imports: [FlashComponent, RouterLink, CommonModule, YesPipe, TippyDirective],
+    imports: [FlashComponent, RouterLink, CommonModule, YesPipe, TippyDirective]
 })
 export class UserListComponent {
     protected readonly name = inject(LoggedInUserService).companyName;

@@ -1,7 +1,7 @@
 <h1>Team View</h1>
 
 <div class="row">
-    <div class="col-md-6 lead">{{name()}}'s team <a routerLink="/feeds" data-toggle="tooltip" data-placement="right" title="Export Team View to external calendars"><span class="fa fa-rss"></span></a></div>
+    <div class="col-md-6 lead">{{name()}}'s team <a routerLink="/feeds" data-toggle="tooltip" data-placement="right" title="Export Team View to external calendars"><span class="fa-solid fa-rss"></span></a></div>
     <div class="col-md-3 col-md-offset-3">
         <div class="btn-group btn-group-sm pull-right" role="group">
             <a routerLink="." [queryParams]="{year: year(), month: month()}" class="btn btn-default" [attr.disabled]="grouped() ? null : 'disabled'">All</a>
@@ -15,15 +15,15 @@
 <nav>
     <div class="row">
         <div class="col-xs-2">
-            <a routerLink="." [queryParams]="lastParams()" class="btn btn-link btn-lg"><span aria-hidden="true" class="fa fa-chevron-left"></span>&nbsp;{{last() | date: 'MMM'}}</a>
+            <a routerLink="." [queryParams]="lastParams()" class="btn btn-link btn-lg"><span aria-hidden="true" class="fa-solid fa-chevron-left"></span>&nbsp;{{last() | date: 'MMM'}}</a>
         </div>
 
         <div class="col-xs-8 calendar-section-caption">
-            <div><button id="team_view_month_select_btn" dateInput [date]="start()" dateFormat="MMMM YYYY" (dateUpdated)="dateselected($event)" class="btn btn-link btn-lg"></button><i class="fa fa-angle-down"></i></div>
+            <div><button id="team_view_month_select_btn" dateInput [date]="start()" dateFormat="MMMM YYYY" (dateUpdated)="dateselected($event)" class="btn btn-link btn-lg"></button><i class="fa-solid fa-angle-down"></i></div>
         </div>
 
         <div class="col-xs-2">
-            <a class="btn btn-link btn-lg pull-right" routerLink="." [queryParams]="nextParams()">{{next() | date: 'MMM'}}&nbsp;<span aria-hidden="true" class="fa fa-chevron-right"></span></a>
+            <a class="btn btn-link btn-lg pull-right" routerLink="." [queryParams]="nextParams()">{{next() | date: 'MMM'}}&nbsp;<span aria-hidden="true" class="fa-solid fa-chevron-right"></span></a>
         </div>
     </div>
 </nav>

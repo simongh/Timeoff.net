@@ -17,7 +17,6 @@ import { LeaveRequestModel } from '@models/leave-request.model';
 import { CalendarDayModel } from '@models/calendar-day.model';
 
 @Component({
-    standalone: true,
     templateUrl: 'home.component.html',
     imports: [
         FlashComponent,
@@ -27,7 +26,7 @@ import { CalendarDayModel } from '@models/calendar-day.model';
         AllowanceBreakdownComponent,
         LeaveSummaryComponent,
     ],
-    providers: [CalendarService],
+    providers: [CalendarService]
 })
 export class HomeComponent implements OnInit {
     protected readonly name = signal('');

@@ -12,10 +12,9 @@ import { MessagesService } from '@services/messages/messages.service';
 import { TeamsService } from '../teams.service';
 
 @Component({
-    standalone: true,
     templateUrl: 'add-new-modal.component.html',
     selector: 'add-new-modal',
-    imports: [CommonModule, ReactiveFormsModule, ValidatorMessageComponent, UserListComponent],
+    imports: [CommonModule, ReactiveFormsModule, ValidatorMessageComponent, UserListComponent]
 })
 export class AddNewModalComponent {
     protected readonly allowance = getAllowances();

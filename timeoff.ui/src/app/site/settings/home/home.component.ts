@@ -20,7 +20,6 @@ import { LeaveTypesComponent } from './leave-types/leave-types.component';
 
 @Component({
     selector: 'app-home',
-    standalone: true,
     providers: [CompanyService],
     templateUrl: './home.component.html',
     styleUrl: './home.component.scss',
@@ -32,7 +31,7 @@ import { LeaveTypesComponent } from './leave-types/leave-types.component';
         ScheduleComponent,
         RemoveCompanyComponent,
         LeaveTypesComponent,
-    ],
+    ]
 })
 export class HomeComponent implements OnInit {
     protected readonly countries = signal<Country[]>([]);

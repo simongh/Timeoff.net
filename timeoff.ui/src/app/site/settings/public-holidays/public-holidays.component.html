@@ -7,7 +7,7 @@
     <div class="col-md-3 col-md-offset-3">
         <div class="btn-group pull-right">
             <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <span aria-hidden="true" class="fa fa-plus"></span> Add new
+                <span aria-hidden="true" class="fa-solid fa-plus"></span> Add new
                 <span class="caret"></span>
                 <span class="sr-only">Toggle Dropdown</span>
             </button>
@@ -24,13 +24,13 @@
 <flash-message/>
 <div class="row">
     <div class="col-xs-2">
-        <a class="btn btn-default" routerLink="." [queryParams]="{year: lastYear()}"><span aria-hidden="true" class="fa fa-chevron-left"></span> {{lastYear()}} </a>
+        <a class="btn btn-default" routerLink="." [queryParams]="{year: lastYear()}"><span aria-hidden="true" class="fa-solid fa-chevron-left"></span> {{lastYear()}} </a>
     </div>
     <div class="col-xs-8 calendar-section-caption">
         <strong>January - December {{currentYear()}}</strong>
     </div>
     <div class="col-xs-2">
-        <a class="btn btn-default pull-right" routerLink="." [queryParams]="{year:nextYear()}">{{nextYear()}} <span aria-hidden="true" class="fa fa-chevron-right"></span></a>
+        <a class="btn btn-default pull-right" routerLink="." [queryParams]="{year:nextYear()}">{{nextYear()}} <span aria-hidden="true" class="fa-solid fa-chevron-right"></span></a>
     </div>
 </div>
 
@@ -69,7 +69,7 @@
                         <validator-message controlName="name" validatorName="required">Name is required</validator-message>
                     </div>
                     <div class="col-md-2">
-                        <button class="btn btn-default pull-right publicholiday-remove-btn" type="button" (click)="remove(h.value.id)" tom-test-hook="remove__@i"><span class="fa fa-remove"></span></button>
+                        <button class="btn btn-default pull-right publicholiday-remove-btn" type="button" (click)="remove(h.value.id)" tom-test-hook="remove__@i"><span class="fa-solid fa-xmark"></span></button>
                     </div>
                 </div>
 

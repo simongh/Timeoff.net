@@ -11,10 +11,9 @@ import { PublicHolidaysService } from './public-holidays.service';
 import { LoggedInUserService } from '@services/logged-in-user/logged-in-user.service';
 
 @Component({
-    standalone: true,
     templateUrl: 'add-new-modal.component.html',
     selector: 'add-new-modal',
-    imports: [ReactiveFormsModule, ValidatorMessageComponent, DateInputDirective],
+    imports: [ReactiveFormsModule, ValidatorMessageComponent, DateInputDirective]
 })
 export class AddNewModalComponent {
     protected get form() {

@@ -5,7 +5,7 @@
     Team details
 </div>
 <div class="col-md-1 col-md-offset-8">
-    <button id="remove_btn" (click)="delete()" type="button" class="pull-right btn btn-danger single-click" data-toggle="tooltip" data-placement="top" title="Remove team"><i class="fa fa-trash"></i> Delete</button>
+    <button id="remove_btn" (click)="delete()" type="button" class="pull-right btn btn-danger single-click" data-toggle="tooltip" data-placement="top" title="Remove team"><i class="fa-solid fa-trash"></i> Delete</button>
 </div>
 </div>
 
@@ -37,7 +37,7 @@
         <div class="form-group">
             <label for="manager" class="control-label">Manager</label>
             <user-select [control]="editForm.controls.manager" for="manager"/>
-            <span class="help-block">Head of {{name}} team. Main manager. <a [routerLink]="['/users',editForm.controls.manager.value]">More details <i class="fa fa-angle-double-right"></i></a></span>
+            <span class="help-block">Head of {{name}} team. Main manager. <a [routerLink]="['/users',editForm.controls.manager.value]">More details <i class="fa-solid fa-angles-right"></i></a></span>
         </div>
 
         <!-- @*<div class="form-group">
@@ -46,7 +46,7 @@
                 {{# each department.supervisors }}
 
                 <li class="list-group-item">
-                    <span><a href='/users/edit/{{ this.id }}/'>{{ this.full_name }}</a> <button type="submit" name="remove_supervisor_id" value="{{this.id}}" class="pull-right btn btn-link btn-xs"><i class="fa fa-trash"></i> Remove</button><span>
+                    <span><a href='/users/edit/{{ this.id }}/'>{{ this.full_name }}</a> <button type="submit" name="remove_supervisor_id" value="{{this.id}}" class="pull-right btn btn-link btn-xs"><i class="fa-solid fa-trash"></i> Remove</button><span>
                 </li>
                 {{/ each }}
 
@@ -59,7 +59,7 @@
                            data-target="#add_secondary_supervisers_modal"
                            data-department_id="{{department.id}}"
                            data-department_name="{{department.name}}">
-                            <i class="fa fa-plus"></i> Add new secondary supervisor
+                            <i class="fa-solid fa-plus"></i> Add new secondary supervisor
                         </a>
                         <span>
                 </li>

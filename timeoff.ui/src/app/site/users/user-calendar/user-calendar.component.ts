@@ -15,17 +15,15 @@ import { UsersService } from '../users.service';
 
 @Component({
     selector: 'user-calendar',
-    standalone: true,
     templateUrl: './user-calendar.component.html',
     styleUrl: './user-calendar.component.scss',
     providers: [CalendarService],
     imports: [
         RouterLink,
-        UserBreadcrumbComponent,
         CalendarComponent,
         AllowanceBreakdownComponent,
         LeaveSummaryComponent,
-    ],
+    ]
 })
 export class UserCalendarComponent {
     private readonly calendarSvc = inject(CalendarService);

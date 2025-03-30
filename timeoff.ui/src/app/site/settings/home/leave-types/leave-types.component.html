@@ -50,7 +50,7 @@
                     <input type="number" class="form-control" formControlName="limit" min="0" max="365">
                 </div>
                 <div class="col-md-1">
-                    <button class="btn btn-default pull-right leavetype-remove-btn" (click)="removeLeaveType(leave.value.id!)" [disabled]="submitting()" [attr.data-tom-leave-type-order]="leave.controls.id.value"><span class="fa fa-remove"></span></button>
+                    <button class="btn btn-default pull-right leavetype-remove-btn" (click)="removeLeaveType(leave.value.id!)" [disabled]="submitting()" [attr.data-tom-leave-type-order]="leave.controls.id.value"><span class="fa-solid fa-xmark"></span></button>
                 </div>
             </div>
             <div class="row">&nbsp;</div>

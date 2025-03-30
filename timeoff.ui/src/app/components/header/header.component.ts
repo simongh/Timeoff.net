@@ -6,11 +6,10 @@ import { LoggedInUserService } from '@services/logged-in-user/logged-in-user.ser
 import { NotificationsService } from '@services/notifications/notifications.service';
 
 @Component({
-    standalone: true,
     templateUrl: 'header.component.html',
     selector: 'site-header',
     imports: [CommonModule, RouterLink],
-    providers: [NotificationsService],
+    providers: [NotificationsService]
 })
 export class HeaderComponent {
     private readonly currentUser = inject(LoggedInUserService);

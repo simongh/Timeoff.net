@@ -12,10 +12,9 @@ import { TeamModel } from '../team.model';
 import { AddNewModalComponent } from './add-new-modal.component';
 
 @Component({
-    standalone: true,
     templateUrl: 'teams-list.component.html',
     providers: [TeamsService],
-    imports: [FlashComponent, CommonModule, RouterLink, YesPipe, AddNewModalComponent, TippyDirective],
+    imports: [FlashComponent, CommonModule, RouterLink, YesPipe, AddNewModalComponent, TippyDirective]
 })
 export class TeamsListComponent implements OnInit {
     protected readonly teams = signal<TeamModel[]>([]);

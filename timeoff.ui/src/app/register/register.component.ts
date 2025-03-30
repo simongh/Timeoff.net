@@ -14,10 +14,9 @@ import { RegisterService } from './register.service';
 
 @Component({
     selector: 'register-page',
-    standalone: true,
     templateUrl: 'register.component.html',
     providers: [RegisterService, CompanyService],
-    imports: [FlashComponent, ReactiveFormsModule, CommonModule, ValidatorMessageComponent],
+    imports: [FlashComponent, ReactiveFormsModule, CommonModule, ValidatorMessageComponent]
 })
 export class RegisterComponent {
     protected get registerForm() {

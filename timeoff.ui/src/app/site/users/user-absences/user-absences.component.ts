@@ -21,21 +21,18 @@ import { UserBreadcrumbComponent } from '../user-breadcrumb/user-breadcrumb.comp
 
 @Component({
     selector: 'user-absences',
-    standalone: true,
     templateUrl: './user-absences.component.html',
     styleUrl: './user-absences.component.scss',
     providers: [CalendarService],
     imports: [
-        UserBreadcrumbComponent,
         CommonModule,
-        YesPipe,
         RequestsListComponent,
         ReactiveFormsModule,
         RouterLink,
         AllowanceBreakdownComponent,
         LeaveSummaryComponent,
         TippyDirective,
-    ],
+    ]
 })
 export default class UserAbsencesComponent implements OnInit {
     protected get form() {

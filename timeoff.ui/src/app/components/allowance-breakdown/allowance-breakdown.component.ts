@@ -6,10 +6,9 @@ import { AllowanceSummaryModel } from '@services/calendar/allowance-summary.mode
 
 @Component({
     selector: 'allowance-breakdown',
-    standalone: true,
     imports: [CommonModule, TippyDirective],
     templateUrl: './allowance-breakdown.component.html',
-    styleUrl: './allowance-breakdown.component.scss',
+    styleUrl: './allowance-breakdown.component.scss'
 })
 export class AllowanceBreakdownComponent {
     public summary = input.required<AllowanceSummaryModel>();

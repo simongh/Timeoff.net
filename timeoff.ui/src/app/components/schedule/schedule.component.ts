@@ -7,10 +7,9 @@ import { ScheduleFormGroup } from './schedule-form';
 
 @Component({
     selector: 'schedule',
-    standalone: true,
     imports: [CommonModule, ReactiveFormsModule],
     templateUrl: './schedule.component.html',
-    styleUrl: './schedule.component.scss',
+    styleUrl: './schedule.component.scss'
 })
 export class ScheduleComponent {
     public readonly days = input.required<ScheduleFormGroup>()

@@ -11,10 +11,9 @@ import { MessagesService } from '@services/messages/messages.service';
 
 @Component({
     selector: 'forgot-password-page',
-    standalone: true,
     templateUrl: 'forgot-password.component.html',
     providers: [AuthService],
-    imports: [FlashComponent, ReactiveFormsModule, NgIf, ValidatorMessageComponent],
+    imports: [FlashComponent, ReactiveFormsModule, ValidatorMessageComponent]
 })
 export class ForgotPasswordComponent {
     protected get passwordForm() {

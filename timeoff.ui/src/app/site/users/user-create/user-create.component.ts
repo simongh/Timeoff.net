@@ -17,7 +17,6 @@ import { UserBreadcrumbComponent } from '../user-breadcrumb/user-breadcrumb.comp
 
 @Component({
     selector: 'user-create',
-    standalone: true,
     providers: [UsersService],
     templateUrl: './user-create.component.html',
     styleUrl: './user-create.component.scss',
@@ -30,7 +29,7 @@ import { UserBreadcrumbComponent } from '../user-breadcrumb/user-breadcrumb.comp
         DateInputDirective,
         UserBreadcrumbComponent,
         TeamSelectComponent,
-    ],
+    ]
 })
 export class UserCreateComponent {
     protected get form() {

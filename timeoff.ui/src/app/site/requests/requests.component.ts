@@ -9,10 +9,9 @@ import { LoggedInUserService } from '@services/logged-in-user/logged-in-user.ser
 
 @Component({
     selector: 'app-requests',
-    standalone: true,
     templateUrl: './requests.component.html',
     styleUrl: './requests.component.scss',
-    imports: [FlashComponent, RequestsListComponent, CommonModule],
+    imports: [FlashComponent, RequestsListComponent, CommonModule]
 })
 export class RequestsComponent {
     protected readonly name = this.currentUser.userName;

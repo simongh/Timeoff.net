@@ -50,12 +50,12 @@
 <div class="row"></div>
 
 <div class="row main-row_header">
-    <div class="col-md-12">Calendar <a routerLink="/feeds" data-toggle="tooltip" data-placement="right" title="Export absences  to external calendars"><span class="fa fa-rss"></span></a></div>
+    <div class="col-md-12">Calendar <a routerLink="/feeds" data-toggle="tooltip" data-placement="right" title="Export absences  to external calendars"><span class="fa-solid fa-rss"></span></a></div>
 </div>
 
 <div class="row">
     <div class="col-xs-2">
-        <a *ngIf="showFullYear()" class="btn btn-default" routerLink="." [queryParams]="{year: lastYear(), showFullYear: true}"><span aria-hidden="true" class="fa fa-chevron-left"></span> {{lastYear()}} </a>
+        <a *ngIf="showFullYear()" class="btn btn-default" routerLink="." [queryParams]="{year: lastYear(), showFullYear: true}"><span aria-hidden="true" class="fa-solid fa-chevron-left"></span> {{lastYear()}} </a>
     </div>
     <div class="col-xs-8 calendar-section-caption">
        
@@ -63,11 +63,11 @@
         <strong *ngIf="!showFullYear()">Upcoming Months</strong>
         &nbsp;
 
-        <a *ngIf="showFullYear()" class="btn btn-default" routerLink=".">Less... &nbsp;<span class="fa fa-minus"></span></a>
-        <a *ngIf="!showFullYear()" class="btn btn-default" routerLink="." [queryParams]="{showFullYear: true}">More... &nbsp;<span class="fa fa-plus"></span></a>
+        <a *ngIf="showFullYear()" class="btn btn-default" routerLink=".">Less... &nbsp;<span class="fa-solid fa-minus"></span></a>
+        <a *ngIf="!showFullYear()" class="btn btn-default" routerLink="." [queryParams]="{showFullYear: true}">More... &nbsp;<span class="fa-solid fa-plus"></span></a>
     </div>
     <div class="col-xs-2" *ngIf="showFullYear()">
-        <a class="btn btn-default pull-right" routerLink="." [queryParams]="{year: nextYear(), showFullYear: true}">{{nextYear()}} <span aria-hidden="true" class="fa fa-chevron-right"></span></a>
+        <a class="btn btn-default pull-right" routerLink="." [queryParams]="{year: nextYear(), showFullYear: true}">{{nextYear()}} <span aria-hidden="true" class="fa-solid fa-chevron-right"></span></a>
     </div>
 </div>
 

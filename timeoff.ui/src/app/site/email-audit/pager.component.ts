@@ -3,10 +3,9 @@ import { Component, computed, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 @Component({
-    standalone: true,
     templateUrl: 'pager.component.html',
     selector: 'pager',
-    imports: [NgIf, RouterLink, NgClass],
+    imports: [NgIf, RouterLink, NgClass]
 })
 export class PagerComponent {
     public readonly totalPages = input.required<number>();

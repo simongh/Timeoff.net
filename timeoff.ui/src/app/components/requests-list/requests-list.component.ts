@@ -7,10 +7,9 @@ import { DatePartPipe } from '../date-part.pipe';
 
 @Component({
     selector: 'requests-list',
-    standalone: true,
     templateUrl: './requests-list.component.html',
     styleUrl: './requests-list.component.scss',
-    imports: [CommonModule, DatePartPipe],
+    imports: [CommonModule, DatePartPipe]
 })
 export class RequestsListComponent {
     public readonly requests = input<LeaveRequestModel[]>([]);

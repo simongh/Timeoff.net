@@ -7,10 +7,9 @@ import { LoggedInUserService } from '@services/logged-in-user/logged-in-user.ser
 
 @Component({
     selector: 'feeds',
-    standalone: true,
     imports: [FlashComponent, NgIf, RouterLink],
     templateUrl: './feeds.component.html',
-    styleUrl: './feeds.component.scss',
+    styleUrl: './feeds.component.scss'
 })
 export class FeedsComponent {
     private readonly currentUser = inject(LoggedInUserService);

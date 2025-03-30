@@ -1,22 +1,23 @@
-@import 'tippy.js/dist/tippy';
+@use 'tippy.js/dist/tippy';
+@use "theme";
+
 @import 'tippy.js/themes/light.css';
 @import 'tippy.js/animations/scale.css';
 
-@import "theme";
 
 body {
-  font: $font-size-primary "Open Sans", Helvetica, Arial, sans-serif;
-  color: $primary-font-color;
+  font: theme.$font-size-primary "Open Sans", Helvetica, Arial, sans-serif;
+  color: theme.$primary-font-color;
 }
 
 a {
-  color: $link-color;
+  color: theme.$link-color;
 }
 /*
   Simple class that makes its content's font size little bit bigger
  */
 .text-bigger {
-  font-size: $font-size-bigger;
+  font-size: theme.$font-size-bigger;
 }
 
 /*
@@ -123,7 +124,7 @@ td.current_day_cell {
 }
 
 td.weekend_cell {
-  background: $selected-item-background;
+  background: theme.$selected-item-background;
 }
 
 td.public_holiday_cell {
@@ -133,13 +134,13 @@ td.public_holiday_cell {
 
 td.leave_cell {
   background : #9fbb58;
-  color : $leave_cell_font_color;
+  color : theme.$leave_cell_font_color;
   font-weight: bolder;
 }
 
 td.leave_cell_pended {
   background: #FFCBA4;
-  color: $leave_cell_font_color;
+  color: theme.$leave_cell_font_color;
   font-weight: bolder;
 }
 
@@ -150,7 +151,7 @@ td.leave_cell_pended {
 .main-row_header { /* TODO refactore */
   border: none;
   font-weight: normal;
-  color: $link-color;
+  color: theme.$link-color;
   letter-spacing: -0.01em;
   font-size: 19px;
   line-height: 1.15em;
@@ -164,25 +165,25 @@ td.leave_cell_pended {
 
   dt {
     font-size: 75px;
-    color: $primary-font-color;
+    color: theme.$primary-font-color;
     font-weight: 100;
-    border-bottom  : 1px solid $border-color;
+    border-bottom  : 1px solid theme.$border-color;
     margin-bottom : 20px;
   }
 
   dd {
-    font-size: $font-size-bigger;
+    font-size: theme.$font-size-bigger;
   }
 }
 
 .secondary-leave-type-statistics {
-  font-size : $font-size-bigger;
+  font-size : theme.$font-size-bigger;
 
   dt {
     text-align: center;
     padding-bottom: 15px;
     margin-bottom: 15px;
-    border-bottom  : 1px solid $border-color;
+    border-bottom  : 1px solid theme.$border-color;
   }
 
   dd {
@@ -212,7 +213,7 @@ td.leave_cell_pended {
 
 /* To be used for selected items in lists */
 .selected-item {
-  background : $selected-item-background;
+  background : theme.$selected-item-background;
   font-weight: bolder;
 }
 

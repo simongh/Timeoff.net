@@ -22,7 +22,6 @@ import { PublicHolidaysService } from './public-holidays.service';
 import { AddNewModalComponent } from './add-new-modal.component';
 
 @Component({
-    standalone: true,
     templateUrl: 'public-holidays.component.html',
     providers: [PublicHolidaysService],
     imports: [
@@ -34,7 +33,7 @@ import { AddNewModalComponent } from './add-new-modal.component';
         ValidatorMessageComponent,
         AddNewModalComponent,
         DateInputDirective,
-    ],
+    ]
 })
 export class PublicHolidaysComponent {
     protected readonly companyName = this.currentUser.companyName;

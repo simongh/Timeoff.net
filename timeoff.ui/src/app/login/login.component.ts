@@ -14,10 +14,9 @@ import { LoggedInUserService } from '@services/logged-in-user/logged-in-user.ser
 
 @Component({
     selector: 'login-apge',
-    standalone: true,
     templateUrl: 'login.component.html',
     imports: [RouterLink, CommonModule, ReactiveFormsModule, FlashComponent, ValidatorMessageComponent],
-    providers: [AuthService],
+    providers: [AuthService]
 })
 export class LoginComponent {
     protected readonly allowRegistrations = signal(true);

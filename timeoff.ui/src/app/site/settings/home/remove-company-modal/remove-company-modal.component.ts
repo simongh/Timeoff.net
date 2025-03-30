@@ -5,10 +5,9 @@ import { ValidatorMessageComponent } from '@components/validator-message/validat
 
 @Component({
     selector: 'remove-company-modal',
-    standalone: true,
     templateUrl: './remove-company-modal.component.html',
     styleUrl: './remove-company-modal.component.scss',
-    imports: [ValidatorMessageComponent, ReactiveFormsModule],
+    imports: [ValidatorMessageComponent, ReactiveFormsModule]
 })
 export class RemoveCompanyModalComponent {
     protected readonly companyName = new FormControl<string>('', [Validators.required]);

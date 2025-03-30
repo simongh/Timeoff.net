@@ -18,11 +18,10 @@ import { EmailAuditService } from './email-audit.service';
 
 @Component({
     selector: 'email-audit',
-    standalone: true,
     providers: [EmailAuditService, CompanyService],
     templateUrl: './email-audit.component.html',
     styleUrl: './email-audit.component.scss',
-    imports: [ReactiveFormsModule, CommonModule, PagerComponent, FlashComponent, DateInputDirective],
+    imports: [ReactiveFormsModule, CommonModule, PagerComponent, FlashComponent, DateInputDirective]
 })
 export class EmailAuditComponent implements OnInit {
     protected get form() {

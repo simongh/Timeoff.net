@@ -19,7 +19,6 @@ import { AllowanceUsageService } from './allowance-usage.service';
 
 @Component({
     selector: 'allowance-usage',
-    standalone: true,
     templateUrl: './allowance-usage.component.html',
     styleUrl: './allowance-usage.component.scss',
     providers: [CompanyService, AllowanceUsageService],
@@ -31,7 +30,7 @@ import { AllowanceUsageService } from './allowance-usage.service';
         DateInputDirective,
         TeamSelectComponent,
         TippyDirective,
-    ],
+    ]
 })
 export class AllowanceUsageComponent implements OnInit {
     protected readonly results = signal<AllowanceModel[]>([]);

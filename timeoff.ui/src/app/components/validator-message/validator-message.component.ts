@@ -4,10 +4,9 @@ import { ControlContainer, FormControl } from '@angular/forms';
 
 @Component({
     selector: 'validator-message',
-    standalone: true,
     imports: [NgIf],
     templateUrl: './validator-message.component.html',
-    styleUrl: './validator-message.component.scss',
+    styleUrl: './validator-message.component.scss'
 })
 export class ValidatorMessageComponent {
     private readonly parent: ControlContainer;

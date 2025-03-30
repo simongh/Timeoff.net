@@ -17,18 +17,16 @@ import { UserBreadcrumbComponent } from '../user-breadcrumb/user-breadcrumb.comp
 
 @Component({
     selector: 'user-edit',
-    standalone: true,
     templateUrl: './user-edit.component.html',
     styleUrl: './user-edit.component.scss',
     imports: [
         RouterLink,
-        UserBreadcrumbComponent,
         ReactiveFormsModule,
         CommonModule,
         DateInputDirective,
         TeamSelectComponent,
         ValidatorMessageComponent,
-    ],
+    ]
 })
 export class UserEditComponent {
     protected readonly companyName = this.currentUser.companyName;

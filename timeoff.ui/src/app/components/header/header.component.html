@@ -28,7 +28,7 @@
                 <ul class="nav navbar-nav navbar-right">
                     <li class="dropdown" id="header-notification-dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                            <span class="fa fa-bell-o"></span>
+                            <span class="fa-regular fa-bell"></span>
                             <span *ngIf="notifications.count() > 0" class="label label-info notification-badge">{{notifications.count()}}</span>
                         </a>
                         <ul class="dropdown-menu" role="menu">
@@ -41,7 +41,7 @@
                         </ul>
                     </li>
                     <li *ngIf="isAdmin()" class="dropdown hidden-xs">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><span class="fa fa-gears"></span> <span class="caret"></span></a>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><span class="fa-solid fa-gears"></span> <span class="caret"></span></a>
                         <ul class="dropdown-menu" role="menu">
                             <li><a routerLink="/settings">General</a></li>
                             <li role="separator" class="divider"></li>

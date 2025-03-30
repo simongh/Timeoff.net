@@ -22,7 +22,7 @@
     <div class="form-group">
         <label for="team" class="control-label">Team</label>
         <team-select [control]="form.controls.team" for="team" aria-describedby="team_help"/>
-        <span id="team_help" class="help-block">Team current user is part of. <a routerLink="/settings/team/{{form.controls.team.value}}">More details <i class="fa fa-angle-double-right"></i></a></span>
+        <span id="team_help" class="help-block">Team current user is part of. <a routerLink="/settings/team/{{form.controls.team.value}}">More details <i class="fa-solid fa-angles-right"></i></a></span>
     </div>
 
     <div class="form-group">
@@ -43,7 +43,7 @@
     <div class="form-group">
         <label for="startDate" class="control-label">Started on</label>
         <div class="input-group col-md-4">
-            <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+            <span class="input-group-addon"><i class="fa-solid fa-calendar"></i></span>
             <input class="form-control" formControlName="startDate" id="StartDate" type="text" required aria-describedby="start_date_help" dateInput dateFormat="YYYY-MM-DD" [maxDate]="form.value.endDate">
         </div>
         <validator-message controlName="startDate" validatorName="required">Start date is required</validator-message>
@@ -53,7 +53,7 @@
     <div class="form-group">
         <label for="endDate" class="control-label">Ended on</label>
         <div class="input-group col-md-4">
-            <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+            <span class="input-group-addon"><i class="fa-solid fa-calendar"></i></span>
             <input class="form-control" formControlName="endDate" id="endDate" type="text" aria-describedby="end_date_help" dateInput dateFormat="YYYY-MM-DD" [minDate]="form.value.startDate">
         </div>
         <span id="end_date_help" class="help-block"><div>Date when user leaves {{companyName()}}.</div><div>After this date user is not able to access the company.</div><div>This is a way of deactivating user accounts.</div></span>
