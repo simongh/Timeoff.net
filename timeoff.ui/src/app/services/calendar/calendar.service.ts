@@ -1,15 +1,15 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 
 import { CalendarDayModel } from '@models/calendar-day.model';
 import { CalendarModel } from './calendar.model';
 
 @Injectable()
 export class CalendarService {
-    constructor(private readonly client: HttpClient) {}
+    readonly #client = inject(HttpClient);
 
     public publicHolidays(year: number) {
-        return this.client.get<CalendarDayModel[]>(`/api/public-holidays/${year}`);
+        return this.#client.get<CalendarDayModel[]>(`/api/public-holidays/${year}`);
     }
 
     public get(year: number, userId: number | null = null) {
@@ -21,6 +21,6 @@ export class CalendarService {
             options.params = options.params.append('user', userId);
         }
 
-        return this.client.get<CalendarModel>(`/api/calendar`, options);
+        return this.#client.get<CalendarModel>(`/api/calendar`, options);
     }
 }

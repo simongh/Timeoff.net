@@ -8,22 +8,27 @@ import { TeamEditComponent } from './teams/team-edit/team-edit.component';
 export default [
     {
         path: '',
+        title: 'Settings',
         component: HomeComponent,
     },
     {
         path: 'public-holidays',
+        title: 'Public Holidays',
         component: PublicHolidaysComponent,
     },
     {
         path: 'teams',
+        title: 'Teams',
         component: TeamsListComponent,
     },
     {
         path: 'teams/:id',
+        title: 'Team Details',
         component: TeamEditComponent,
     },
     {
         path: 'integration',
+        title: 'Integration',
         component: IntegrationComponent,
     },
 ];

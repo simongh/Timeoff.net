@@ -12,6 +12,7 @@ import { RequestsComponent } from './requests/requests.component';
 export const siteRoutes: Routes = [
     {
         path: '',
+        title: 'Home',
         component: HomeComponent,
     },
     {
@@ -31,19 +32,23 @@ export const siteRoutes: Routes = [
     },
     {
         path: 'audit/emails',
+        title: 'Email Audit',
         canActivate: [adminGuard],
         component: EmailAuditComponent,
     },
     {
         path: 'teamview',
+        title: 'Team View',
         component: TeamviewComponent,
     },
     {
         path: 'feeds',
+        title: 'My Feeds',
         component: FeedsComponent,
     },
     {
         path: 'requests',
+        title: 'Requests',
         component: RequestsComponent,
     },
     {

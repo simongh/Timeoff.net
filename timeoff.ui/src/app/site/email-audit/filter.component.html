@@ -1,0 +1,14 @@
+<div class="form-group input-group">
+    <span class="input-group-addon"><i class="fa-solid fa-calendar"></i></span>
+    <input type="text" formControlName="start" class="form-control" dateInput placeholder="Start Date" [maxDate]="form.value.end" [showReset]="true"/>
+</div>
+<div class="form-group input-group">
+    <span class="input-group-addon"><i class="fa-solid fa-calendar"></i></span>
+    <input type="text" formControlName="end" class="form-control" dateInput placeholder="End Date" [minDate]="form.value.start" [showReset]="true"/>
+</div>
+<div class="form-group">
+    <select class="form-control" formControlName="user">
+        <option [value]="null">Employee to filter by</option>
+        <option *ngFor="let u of users()" [value]="u.id">{{u.name}}</option>
+    </select>
+</div> 

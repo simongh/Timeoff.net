@@ -1,6 +1,6 @@
 import { FormBuilder } from '@angular/forms';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { map } from 'rxjs';
 
 import { EmailModel } from './email.model';
@@ -13,7 +13,7 @@ interface QueryResult {
 
 @Injectable()
 export class EmailAuditService {
-    public searchForm = this.fb.group({
+    public searchForm = inject(FormBuilder).group({
         start: ['' as dateString | null],
         end: ['' as dateString | null],
         user: [null as number | null],
@@ -23,15 +23,21 @@ export class EmailAuditService {
 
     public totalPages: number = 0;
 
-    constructor(private readonly fb: FormBuilder, private readonly client: HttpClient) {}
+    constructor(private readonly client: HttpClient) {}
 
     public search() {
         const options = {
             params: new HttpParams()
-                .set('page', this.currentPage)
-                .set('start', this.searchForm.value.start!)
-                .set('end', this.searchForm.value.end!),
+                .set('page', this.currentPage),
         };
+
+        if (!!this.searchForm.value.start) {
+            options.params = options.params.append('start', this.searchForm.value.start);
+        }
+
+        if (!!this.searchForm.value.end) {
+            options.params = options.params.append('end', this.searchForm.value.end);
+        }
 
         const u = this.searchForm.controls.user.value;
         if (!!u && u.toString() != 'null') {

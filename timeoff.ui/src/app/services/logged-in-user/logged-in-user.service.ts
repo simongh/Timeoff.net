@@ -1,13 +1,16 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable, computed, signal } from '@angular/core';
+import { Injectable, computed, inject, signal } from '@angular/core';
 import { Subject, catchError, of, tap } from 'rxjs';
 
 import { LoggedInUserModel } from '@models/logged-in-user.model';
+import { differenceInSeconds, getMinutes } from 'date-fns';
 
 @Injectable({
     providedIn: 'root',
 })
 export class LoggedInUserService {
+    readonly #client = inject(HttpClient);
+
     public readonly companyName = computed(() => this.user().companyName || '');
 
     public readonly userName = computed(() => this.user().name || '');
@@ -18,23 +21,26 @@ export class LoggedInUserService {
 
     public readonly token = computed(() => this.user().token ?? null);
 
-    public readonly expires = computed(() => {
+    public readonly needsExtending = computed(() => {
         const value = this.user().expires;
-        return value ? new Date(value) : null;
+
+        if (!value) {
+            return true;
+        }
+
+        return differenceInSeconds(new Date(value), new Date()) < 60;
     });
 
-    public readonly dateFormat = computed(()=> {
+    public readonly dateFormat = computed(() => {
         const value = this.user().dateFormat;
         return value || 'yyyy-MM-dd';
     });
 
-    public readonly isUserLoggedIn = computed(()=> !!this.token());
+    public readonly isUserLoggedIn = computed(() => !!this.token());
 
     private user = signal({} as LoggedInUserModel);
 
     public readonly refresh$ = new Subject();
-
-    constructor(private readonly client: HttpClient) {}
 
     public load(user: LoggedInUserModel | null) {
         if (!user) {
@@ -49,7 +55,7 @@ export class LoggedInUserService {
     }
 
     public extend() {
-        return this.client.get<LoggedInUserModel>('/api/account/token').pipe(
+        return this.#client.get<LoggedInUserModel>('/api/account/token').pipe(
             catchError(() => {
                 return of(null);
             }),

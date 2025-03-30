@@ -10,18 +10,22 @@ import { UsersComponent } from './users.component';
 export default [
     {
         path: '',
+        title: 'Employees',
         component: UserListComponent,
     },
     {
         path: 'import',
+        title: 'Import Employees',
         component: UserImportComponent,
     },
     {
         path: 'add',
+        title: 'New Employee',
         component: UserCreateComponent,
     },
     {
         path: ':id',
+        title: 'Employee Details',
         component: UsersComponent,
         children: [
             {
