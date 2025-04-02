@@ -1,0 +1,25 @@
+<div class="row" [formGroup]="form()">
+
+    <div class="col-md-3">
+        <div class="form-group">
+            <label for="team_id">Team</label>
+            <team-select [control]="form().controls.team" for="team_id" [allowAll]="true"/>
+        </div>
+    </div>
+
+    <div class="col-md-5 col-md-offset-1">
+        <div class="form-group">
+            <label>Date range within single year</label>
+            <div class="input-group">
+                <span class="input-group-addon"><i class="fa-solid fa-calendar"></i></span>
+                <input type="text" dateInput dateFormat="YYYY-MM" formControlName="start" class="form-control" id="start_date" placeholder="From Month"/>
+                <span class="input-group-addon">(YYYY-MM)</span>
+                <span class="input-group-addon"><i class="fa-solid fa-arrow-right-long"></i></span>
+                <input type="text" dateInput dateFormat="YYYY-MM" formControlName="end" class="form-control" id="end_date" placeholder="To Month"/>
+                <span class="input-group-addon">(YYYY-MM)</span>
+            </div>
+            <span class="help-block">Date range must be within a single year</span>
+        </div>
+    </div>
+
+</div>

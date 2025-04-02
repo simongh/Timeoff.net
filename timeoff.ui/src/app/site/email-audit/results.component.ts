@@ -4,7 +4,7 @@ import { LoggedInUserService } from '@services/logged-in-user/logged-in-user.ser
 import { CommonModule } from '@angular/common';
 
 @Component({
-    templateUrl: 'results.html',
+    templateUrl: 'results.component.html',
     selector: 'results',
     imports: [CommonModule],
 })

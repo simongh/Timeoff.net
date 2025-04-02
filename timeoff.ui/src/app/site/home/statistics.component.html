@@ -1,0 +1,36 @@
+<div class="row main-row_header hidden-xs">
+    <div class="col-md-12">Statistics</div>
+</div>
+
+<div class="row">
+
+    <div class="col-md-3 top-leave-type-statistics">
+        <dl>
+            <dt data-tom-days-available-in-allowance>{{allowanceSummary().remaining}}</dt>
+            <dd>Days available</dd>
+            <dd>out of <span data-tom-total-days-in-allowance>{{allowanceSummary().total}}</span> in allowance</dd>
+        </dl>
+    </div>
+
+    <div class="col-md-3 secondary-leave-type-statistics hidden-xs">
+        <allowance-breakdown [summary]="allowanceSummary()"/>
+    </div>
+
+    <div class="col-md-3 secondary-leave-type-statistics hidden-xs">
+        <leave-summary [items]="allowanceSummary().leaveSummary"/>
+    </div>
+
+    <div class="col-md-3 secondary-leave-type-statistics hidden-xs">
+        <dl>
+            <dt>Details</dt>
+            <dd>
+                <em>Supervisor:&nbsp;</em>
+                <span class="pull-right"><a href="mailto:{{managerEmail()}}">{{managerName()}}</a></span>
+            </dd>
+            <dd><em>Team:</em> <span class="pull-right"><a [routerLink]="['calendar','team',teamId]">{{teamName()}}</a></span></dd>
+            <dd><em>Allowance in {{year()}}:</em><span class="pull-right"> {{allowanceSummary().total}} days</span>
+            <dd>
+        </dl>
+    </div>
+
+</div>

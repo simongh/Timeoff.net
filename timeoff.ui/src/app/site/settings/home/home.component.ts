@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, DestroyRef, OnInit, computed, signal } from '@angular/core';
+import { Component, DestroyRef, OnInit, computed, inject, signal } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -17,6 +17,7 @@ import { Country } from '@services/company/country.model';
 
 import { RemoveCompanyComponent } from './remove-company/remove-company.component';
 import { LeaveTypesComponent } from './leave-types/leave-types.component';
+import { derivedAsync } from 'ngxtension/derived-async';
 
 @Component({
     selector: 'app-home',
@@ -34,11 +35,17 @@ import { LeaveTypesComponent } from './leave-types/leave-types.component';
     ]
 })
 export class HomeComponent implements OnInit {
-    protected readonly countries = signal<Country[]>([]);
+    readonly #destroyed = inject(DestroyRef);
+
+    readonly #companySvc = inject(CompanyService);
+
+    readonly #messagesSvc = inject(MessagesService);
+
+    protected readonly countries = derivedAsync(()=>this.#companySvc.countries());
 
     protected readonly dateFormats = signal(dateFormats);
 
-    protected readonly timeZones = signal<TimeZoneModel[]>([]);
+    protected readonly timeZones = derivedAsync(()=> this.#companySvc.timeZones());
 
     protected readonly carryOverDays = computed(() => {
         const days = Array<number>();
@@ -55,31 +62,23 @@ export class HomeComponent implements OnInit {
     protected readonly lastYear = computed(() => this.currentYear() - 1);
 
     protected get companyName() {
-        return this.companySvc.settingsForm.value.name;
+        return this.#companySvc.settingsForm.value.name;
     }
 
     public get settingsForm() {
-        return this.companySvc.settingsForm;
+        return this.#companySvc.settingsForm;
     }
 
     public get days() {
-        return this.companySvc.settingsForm.controls.schedule;
+        return this.#companySvc.settingsForm.controls.schedule;
     }
 
     protected readonly submitting = signal(false);
 
-    constructor(
-        private destroyed: DestroyRef,
-        private readonly companySvc: CompanyService,
-        private readonly msgsSvc: MessagesService
-    ) {}
-
     public ngOnInit(): void {
-        combineLatest([this.companySvc.timeZones(), this.companySvc.countries(), this.companySvc.getSettings()])
-            .pipe(takeUntilDestroyed(this.destroyed))
-            .subscribe(([timeZones, countries, data]) => {
-                this.timeZones.set(timeZones);
-                this.countries.set(countries);
+        this.#companySvc.getSettings()
+            .pipe(takeUntilDestroyed(this.#destroyed))
+            .subscribe((data) => {
 
                 this.settingsForm.setValue({
                     name: data.name,
@@ -92,7 +91,7 @@ export class HomeComponent implements OnInit {
                     schedule: data.schedule,
                 });
 
-                this.companySvc.fillLeaveTypes(data.leaveTypes);
+                this.#companySvc.fillLeaveTypes(data.leaveTypes);
             });
     }
 
@@ -105,13 +104,13 @@ export class HomeComponent implements OnInit {
 
         this.submitting.set(true);
 
-        this.companySvc
+        this.#companySvc
             .saveSettings()
-            .pipe(takeUntilDestroyed(this.destroyed))
+            .pipe(takeUntilDestroyed(this.#destroyed))
             .subscribe({
                 next: () => {
                     this.submitting.set(false);
-                    this.msgsSvc.isSuccess('Company details updated');
+                    this.#messagesSvc.isSuccess('Company details updated');
                 },
             });
     }
@@ -126,12 +125,12 @@ export class HomeComponent implements OnInit {
 
         this.submitting.set(true);
 
-        this.companySvc
+        this.#companySvc
             .saveSchedule()
-            .pipe(takeUntilDestroyed(this.destroyed))
+            .pipe(takeUntilDestroyed(this.#destroyed))
             .subscribe({
                 next: () => {
-                    this.msgsSvc.isSuccess('Schedule updated');
+                    this.#messagesSvc.isSuccess('Schedule updated');
                     this.submitting.set(false);
                 },
             });

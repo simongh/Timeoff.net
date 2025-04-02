@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, DestroyRef, OnInit, computed, signal } from '@angular/core';
+import { Component, DestroyRef, OnInit, computed, effect, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -8,35 +8,33 @@ import { map, switchMap } from 'rxjs';
 import { TippyDirective } from '@ngneat/helipopper';
 
 import { FlashComponent } from '@components/flash/flash.component';
-import { DateInputDirective } from '@components/date-input.directive';
-import { TeamSelectComponent } from '@components/team-select/team-select.component';
 
 import { CompanyService } from '@services/company/company.service';
 import { LeaveTypeModel } from '@services/company/leave-type.model';
 
 import { AllowanceModel } from './allowance.model';
 import { AllowanceUsageService } from './allowance-usage.service';
+import { FilterComponent } from './filter.component';
+import { derivedAsync } from 'ngxtension/derived-async';
 
 @Component({
     selector: 'allowance-usage',
     templateUrl: './allowance-usage.component.html',
     styleUrl: './allowance-usage.component.scss',
     providers: [CompanyService, AllowanceUsageService],
-    imports: [
-        FlashComponent,
-        CommonModule,
-        RouterLink,
-        ReactiveFormsModule,
-        DateInputDirective,
-        TeamSelectComponent,
-        TippyDirective,
-    ]
+    imports: [FlashComponent, CommonModule, RouterLink, ReactiveFormsModule, TippyDirective, FilterComponent],
 })
-export class AllowanceUsageComponent implements OnInit {
+export class AllowanceUsageComponent {
+    readonly #destroyed = inject(DestroyRef);
+
+    readonly #allowanceSvc = inject(AllowanceUsageService);
+
+    readonly #companySvc = inject(CompanyService);
+
     protected readonly results = signal<AllowanceModel[]>([]);
 
     protected get form() {
-        return this.allowanceSvc.form;
+        return this.#allowanceSvc.form;
     }
 
     protected readonly prettyDateRange = computed(() => {
@@ -52,38 +50,26 @@ export class AllowanceUsageComponent implements OnInit {
         return parts.join(' ');
     });
 
-    protected readonly leaveTypes = signal<LeaveTypeModel[]>([]);
+    protected readonly leaveTypes = derivedAsync(
+        () => this.#companySvc.getLeaveTypes().pipe(takeUntilDestroyed(this.#destroyed)),
+        { initialValue: [] }
+    );
 
     protected readonly submitting = signal(false);
 
-    private readonly start = signal(new Date());
+    private readonly start = computed(() => this.#allowanceSvc.start);
 
-    private readonly end = signal(new Date());
+    private readonly end = computed(() => this.#allowanceSvc.end);
 
-    constructor(
-        private destroyed: DestroyRef,
-        private readonly allowanceSvc: AllowanceUsageService,
-        private readonly companySvc: CompanyService
-    ) {}
-
-    public ngOnInit(): void {
-        this.companySvc
-            .getLeaveTypes()
-            .pipe(
-                takeUntilDestroyed(this.destroyed),
-                switchMap((leaveTypes) => {
-                    return this.allowanceSvc.getResults().pipe(
-                        map((results) => ({
-                            results: results,
-                            leaveTypes: leaveTypes,
-                        }))
-                    );
-                })
-            )
-            .subscribe((data) => {
-                this.leaveTypes.set(data.leaveTypes);
-                this.loadResults(data.results);
-            });
+    constructor() {
+        effect(() => {
+            this.#allowanceSvc
+                .getResults()
+                .pipe(takeUntilDestroyed(this.#destroyed))
+                .subscribe((data) => {
+                    this.loadResults(data);
+                });
+        });
     }
 
     public update() {
@@ -93,9 +79,9 @@ export class AllowanceUsageComponent implements OnInit {
 
         this.submitting.set(true);
 
-        this.allowanceSvc
+        this.#allowanceSvc
             .getResults()
-            .pipe(takeUntilDestroyed(this.destroyed))
+            .pipe(takeUntilDestroyed(this.#destroyed))
             .subscribe((data) => {
                 this.loadResults(data);
                 this.submitting.set(false);
@@ -110,8 +96,5 @@ export class AllowanceUsageComponent implements OnInit {
                 return d;
             })
         );
-
-        this.start.set(this.allowanceSvc.start);
-        this.end.set(this.allowanceSvc.end);
     }
 }

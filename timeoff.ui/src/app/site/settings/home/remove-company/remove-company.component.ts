@@ -1,4 +1,4 @@
-import { Component, DestroyRef, input } from '@angular/core';
+import { Component, DestroyRef, inject, input } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
 
@@ -13,21 +13,21 @@ import { RemoveCompanyModalComponent } from '../remove-company-modal/remove-comp
     imports: [RemoveCompanyModalComponent]
 })
 export class RemoveCompanyComponent {
+    readonly #destroyed = inject(DestroyRef);
+
+    readonly #companySvc = inject(CompanyService);
+
+    readonly #router = inject(Router);
+
     public readonly companyName = input.required<string>();
 
-    constructor(
-        private readonly companySvc: CompanyService,
-        private destroyed: DestroyRef,
-        private readonly router: Router
-    ) {}
-
     public deleteCompany(name: string) {
-        this.companySvc
+        this.#companySvc
             .deleteCompany(name)
-            .pipe(takeUntilDestroyed(this.destroyed))
+            .pipe(takeUntilDestroyed(this.#destroyed))
             .subscribe({
                 next: () => {
-                    this.router.navigateByUrl('/logout');
+                    this.#router.navigateByUrl('/logout');
                 },
             });
     }

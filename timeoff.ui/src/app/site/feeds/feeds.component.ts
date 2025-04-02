@@ -12,7 +12,5 @@ import { LoggedInUserService } from '@services/logged-in-user/logged-in-user.ser
     styleUrl: './feeds.component.scss'
 })
 export class FeedsComponent {
-    private readonly currentUser = inject(LoggedInUserService);
-    
-    protected readonly showTeamView = this.currentUser.showTeamView;
+    protected readonly showTeamView = inject(LoggedInUserService).showTeamView;
 }

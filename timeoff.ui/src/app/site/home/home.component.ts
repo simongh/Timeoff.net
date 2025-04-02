@@ -1,4 +1,13 @@
-import { Component, DestroyRef, OnInit, booleanAttribute, computed, numberAttribute, signal } from '@angular/core';
+import {
+    Component,
+    DestroyRef,
+    OnInit,
+    booleanAttribute,
+    computed,
+    inject,
+    numberAttribute,
+    signal,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
@@ -15,27 +24,30 @@ import { CalendarService } from '@services/calendar/calendar.service';
 
 import { LeaveRequestModel } from '@models/leave-request.model';
 import { CalendarDayModel } from '@models/calendar-day.model';
+import { NavigationComponent } from './navigation.component';
+import { StatisticsComponent } from "./statistics.component";
+import { AbsencesComponent } from "./absences.component";
 
 @Component({
     templateUrl: 'home.component.html',
     imports: [
-        FlashComponent,
-        CommonModule,
-        RouterLink,
-        CalendarComponent,
-        AllowanceBreakdownComponent,
-        LeaveSummaryComponent,
-    ],
-    providers: [CalendarService]
+    FlashComponent,
+    CommonModule,
+    CalendarComponent,
+    NavigationComponent,
+    StatisticsComponent,
+    AbsencesComponent
+],
+    providers: [CalendarService],
 })
 export class HomeComponent implements OnInit {
+    readonly #destroyed = inject(DestroyRef);
+
+    readonly #calendarSvc = inject(CalendarService);
+
     protected readonly name = signal('');
 
     protected readonly year = injectQueryParams((p) => numberAttribute(p['year'] ?? new Date().getFullYear()));
-
-    protected readonly nextYear = computed(() => this.year() + 1);
-
-    protected readonly lastYear = computed(() => this.year() - 1);
 
     protected readonly showFullYear = injectQueryParams((p) => booleanAttribute(p['showFullYear'] ?? false));
 
@@ -45,14 +57,6 @@ export class HomeComponent implements OnInit {
 
     protected readonly days = signal<CalendarDayModel[]>([]);
 
-    protected readonly managerName = signal('manager');
-
-    protected readonly managerEmail = signal('manager@email');
-
-    protected readonly teamName = signal('team');
-
-    protected readonly teamId = signal(0);
-
     protected readonly start = computed(() => {
         if (this.showFullYear()) {
             return new Date(this.year(), 0, 1);
@@ -61,12 +65,10 @@ export class HomeComponent implements OnInit {
         }
     });
 
-    constructor(private readonly destroyed: DestroyRef, private readonly calendarSvc: CalendarService) {}
-
     public ngOnInit(): void {
-        this.calendarSvc
+        this.#calendarSvc
             .get(this.year())
-            .pipe(takeUntilDestroyed(this.destroyed))
+            .pipe(takeUntilDestroyed(this.#destroyed))
             .subscribe((calendar) => {
                 this.allowanceSummary.set(calendar.summary);
                 this.days.set(calendar.days);

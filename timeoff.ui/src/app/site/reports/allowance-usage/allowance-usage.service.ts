@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { endOfMonth, formatDate, formatISO, parseISO, startOfMonth } from 'date-fns';
@@ -6,11 +6,17 @@ import { endOfMonth, formatDate, formatISO, parseISO, startOfMonth } from 'date-
 import { dateString } from '@models/types';
 import { AllowanceModel } from './allowance.model';
 
-type SearchFormGroup = ReturnType<AllowanceUsageService['createForm']>;
+export type SearchFormGroup = AllowanceUsageService['form'];
 
 @Injectable()
 export class AllowanceUsageService {
-    public form: SearchFormGroup;
+    readonly #client = inject(HttpClient);
+
+    public readonly form = inject(FormBuilder).group({
+        team: [null as number | null],
+        start: [formatDate(new Date(), 'yyyy-MM') as dateString, Validators.required],
+        end: [formatDate(new Date(), 'yyyy-MM') as dateString, Validators.required],
+    });
 
     public get start() {
         return parseISO(this.form.value.start!);
@@ -18,10 +24,6 @@ export class AllowanceUsageService {
 
     public get end() {
         return parseISO(this.form.value.end!);
-    }
-
-    constructor(private readonly fb: FormBuilder, private readonly client: HttpClient) {
-        this.form = this.createForm();
     }
 
     public getResults() {        
@@ -35,14 +37,6 @@ export class AllowanceUsageService {
             options.params = options.params.append('team', this.form.value.team);
         }
 
-        return this.client.get<AllowanceModel[]>('/api/reports/allowance-usage', options);
-    }
-
-    private createForm() {
-        return this.fb.group({
-            team: [null as number | null],
-            start: [formatDate(new Date(), 'yyyy-MM') as dateString, Validators.required],
-            end: [formatDate(new Date(), 'yyyy-MM') as dateString, Validators.required],
-        });
+        return this.#client.get<AllowanceModel[]>('/api/reports/allowance-usage', options);
     }
 }

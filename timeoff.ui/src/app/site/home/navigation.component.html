@@ -1,0 +1,45 @@
+<div class="row main-row_header">
+    <div class="col-md-12">
+        Calendar
+        <a
+            routerLink="/feeds"
+            data-toggle="tooltip"
+            data-placement="right"
+            title="Export absences  to external calendars"
+            ><span class="fa-solid fa-rss"></span
+        ></a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-xs-2">
+        <a
+            *ngIf="showFullYear()"
+            class="btn btn-default"
+            routerLink="."
+            [queryParams]="{ year: lastYear(), showFullYear: true }"
+            ><span aria-hidden="true" class="fa-solid fa-chevron-left"></span> {{ lastYear() }}
+        </a>
+    </div>
+    <div class="col-xs-8 calendar-section-caption">
+        @if (showFullYear()) {
+            <strong>January - December {{ year() }}</strong>
+        }
+        @else {
+            <strong>Upcoming Months</strong>
+        }
+        &nbsp;
+
+        <a *ngIf="showFullYear()" class="btn btn-default" routerLink="."
+            >Less... &nbsp;<span class="fa-solid fa-minus"></span
+        ></a>
+        <a *ngIf="!showFullYear()" class="btn btn-default" routerLink="." [queryParams]="{ showFullYear: true }"
+            >More... &nbsp;<span class="fa-solid fa-plus"></span
+        ></a>
+    </div>
+    @if (showFullYear()) {
+    <div class="col-xs-2">
+        <a class="btn btn-default pull-right" routerLink="." [queryParams]="{ year: nextYear(), showFullYear: true }">{{ nextYear() }} <span aria-hidden="true" class="fa-solid fa-chevron-right"></span></a>
+    </div>
+    }
+</div>

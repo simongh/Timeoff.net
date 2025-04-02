@@ -1,4 +1,4 @@
-import { Component, DestroyRef, computed, numberAttribute, signal } from '@angular/core';
+import { Component, DestroyRef, computed, inject, numberAttribute, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
@@ -33,12 +33,18 @@ import { AddNewModalComponent } from './add-new-modal.component';
         ValidatorMessageComponent,
         AddNewModalComponent,
         DateInputDirective,
-    ]
+    ],
 })
 export class PublicHolidaysComponent {
-    protected readonly companyName = this.currentUser.companyName;
+    readonly #destroyed = inject(DestroyRef);
 
-    protected readonly dateFormat = this.currentUser.dateFormat;
+    readonly #holidaySvc = inject(PublicHolidaysService);
+
+    readonly #messagesSvc = inject(MessagesService);
+
+    protected readonly companyName = inject(LoggedInUserService).companyName;
+
+    protected readonly dateFormat = inject(LoggedInUserService).dateFormat;
 
     protected readonly currentYear = injectQueryParams((p) => numberAttribute(p['year'] ?? new Date().getFullYear()));
 
@@ -56,16 +62,11 @@ export class PublicHolidaysComponent {
     protected readonly holidays = signal<CalendarDayModel[]>([]);
 
     protected get holidaysForm() {
-        return this.holidaySvc.holidays;
+        return this.#holidaySvc.holidays;
     }
 
-    constructor(
-        private readonly holidaySvc: PublicHolidaysService,
-        private readonly msgsSvc: MessagesService,
-        private readonly currentUser: LoggedInUserService,
-        private destroyed: DestroyRef
-    ) {
-        holidaySvc.setAddForm(this.currentYear());
+    constructor() {
+        this.#holidaySvc.setAddForm(this.currentYear());
     }
 
     public remove(id?: number | null) {
@@ -73,43 +74,43 @@ export class PublicHolidaysComponent {
             return;
         }
 
-        this.holidaySvc
+        this.#holidaySvc
             .delete(id!)
             .pipe(
-                takeUntilDestroyed(this.destroyed),
+                takeUntilDestroyed(this.#destroyed),
                 switchMap(() => {
-                    return this.holidaySvc.get(this.currentYear());
+                    return this.#holidaySvc.get(this.currentYear());
                 })
             )
             .subscribe({
                 next: (data) => {
                     this.loadHolidays(data);
-                    this.msgsSvc.isSuccess('Holiday was successfully removed');
+                    this.#messagesSvc.isSuccess('Holiday was successfully removed');
                 },
             });
     }
 
     public save() {
-        this.holidaySvc
+        this.#holidaySvc
             .update(this.holidaysForm.value as PublicHolidayModel[])
             .pipe(
-                takeUntilDestroyed(this.destroyed),
+                takeUntilDestroyed(this.#destroyed),
                 switchMap(() => {
-                    return this.holidaySvc.get(this.currentYear());
+                    return this.#holidaySvc.get(this.currentYear());
                 })
             )
             .subscribe({
                 next: (data) => {
                     this.loadHolidays(data);
-                    this.msgsSvc.isSuccess('Holidays updated');
+                    this.#messagesSvc.isSuccess('Holidays updated');
                 },
             });
     }
 
     private getHolidays() {
-        this.holidaySvc
+        this.#holidaySvc
             .get(this.currentYear())
-            .pipe(takeUntilDestroyed(this.destroyed))
+            .pipe(takeUntilDestroyed(this.#destroyed))
             .subscribe({
                 next: (data) => {
                     this.loadHolidays(data);
@@ -123,10 +124,10 @@ export class PublicHolidaysComponent {
 
     private loadHolidays(data: CalendarDayModel[]) {
         this.holidaysForm.clear();
-        this.holidaySvc.setAddForm(this.currentYear());
+        this.#holidaySvc.setAddForm(this.currentYear());
 
         data.map((h) => {
-            this.holidaySvc.holidays.push(this.holidaySvc.newForm(h, this.currentYear()));
+            this.#holidaySvc.holidays.push(this.#holidaySvc.newForm(h, this.currentYear()));
         });
 
         this.holidays.set(data);

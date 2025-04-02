@@ -1,10 +1,10 @@
 <h1>Allowance usage</h1>
 
 <div class="row">
-    <div class="col-md-6 lead">Shows allowance usage in {{prettyDateRange()}}</div>
+    <div class="col-md-6 lead">Shows allowance usage in {{ prettyDateRange() }}</div>
 </div>
 
-<flash-message/>
+<flash-message />
 
 <ol class="breadcrumb">
     <li><a routerLink="..">All reports</a></li>
@@ -15,83 +15,74 @@
     <span class="col-md-12">Filter</span>
 </div>
 
-<form [formGroup]="form">
     <div class="row">
         <div class="col-md-12">
-
             <div class="panel panel-default">
                 <div class="panel-body">
-
-                    <div class="row">
-
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label for="team_id">Team</label>
-                                <team-select [control]="form.controls.team" for="team_id" [allowAll]="true"/>
-                            </div>
-                        </div>
-
-                        <div class="col-md-5 col-md-offset-1">
-                            <div class="form-group">
-                                <label>Date range within single year</label>
-                                <div class="input-group">
-                                    <span class="input-group-addon"><i class="fa-solid fa-calendar"></i></span>
-                                    <input type="text" dateInput dateFormat="YYYY-MM" formControlName="start" class="form-control" id="start_date" placeholder="From Month"/>
-                                    <span class="input-group-addon">(YYYY-MM)</span>
-                                    <span class="input-group-addon"><i class="fa-solid fa-arrow-right-long"></i></span>
-                                    <input type="text" dateInput dateFormat="YYYY-MM" formControlName="end" class="form-control" id="end_date" placeholder="To Month"/>
-                                    <span class="input-group-addon">(YYYY-MM)</span>
-                                </div>
-                                <span class="help-block">Date range must be within a single year</span>
-                            </div>
-                        </div>
-
-                    </div>
+                    <filter [form]="form" />
 
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group pull-right">
-                                <button class="btn btn-link" type="button" [disabled]="submitting()" name="as-csv" value="1"
-                                        tp="Download report as .CSV file">
+                                <button
+                                    class="btn btn-link"
+                                    type="button"
+                                    [disabled]="submitting()"
+                                    name="as-csv"
+                                    value="1"
+                                    tp="Download report as .CSV file"
+                                >
                                     <i class="fa-solid fa-download"></i> .csv
                                 </button>
-                                <button class="btn btn-success" (click)="update()" [disabled]="submitting()" type="button">Update results</button>
+                                <button
+                                    class="btn btn-success"
+                                    (click)="update()"
+                                    [disabled]="submitting()"
+                                    type="button"
+                                >
+                                    Update results
+                                </button>
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
     </div>
-</form>
 
 <div class="row main-row_header">
     <span class="col-md-12">Report</span>
 </div>
 
 <div class="row">
-
-    <div *ngIf="results().length === 0" class="col-md-12 text-muted">
-        There are no users in selected department {{prettyDateRange()}}
-    </div>
-
-    <div class="col-md-12" *ngIf="results().length > 0">
+    @if(results().length === 0) {
+    <div class="col-md-12 text-muted">There are no users in selected department {{ prettyDateRange() }}</div>
+    } @else {
+    <div class="col-md-12">
         <table class="table table-hover">
             <thead>
                 <tr>
-                    <th>Employee full name</th>
-                    <th *ngFor="let lt of leaveTypes()">{{lt.name}}</th>
-                    <th>Days deducted from allowance<br>in {{ prettyDateRange() }}</th>
+                    <th>Employee full name {{leaveTypes().length}}</th>
+                    @for (lt of leaveTypes(); track $index) {
+                    <th>{{ lt.name }}</th>
+                    }
+                    <th>Days deducted from allowance<br />in {{ prettyDateRange() }}</th>
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let u of results()" [attr.data-vpp-user-list-row]="u.id">
-                    <td><a [routerLink]="['/users',u.id]">{{ u.firstName }} {{ u.lastName }}</a></td>
-                    <td *ngFor="let a of u.totals">{{ a }}</td>
+                @for (u of results(); track $index) {
+                <tr [attr.data-vpp-user-list-row]="u.id">
+                    <td>
+                        <a [routerLink]="['/users', u.id]">{{ u.firstName }} {{ u.lastName }}</a>
+                    </td>
+                    @for (a of u.totals; track $index) {
+                        <td>{{ a }}</td>
+                    }
                     <td>{{ u.allowanceUsed }}</td>
                 </tr>
+                }
             </tbody>
         </table>
     </div>
+    }
 </div>
