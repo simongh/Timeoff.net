@@ -11,8 +11,12 @@ interface QueryResult {
     results: EmailModel[];
 }
 
+export type EmailSearchGroup = EmailAuditService['searchForm'];
+
 @Injectable()
 export class EmailAuditService {
+    readonly #client = inject(HttpClient);
+
     public searchForm = inject(FormBuilder).group({
         start: ['' as dateString | null],
         end: ['' as dateString | null],
@@ -22,8 +26,6 @@ export class EmailAuditService {
     public currentPage: number = 1;
 
     public totalPages: number = 0;
-
-    constructor(private readonly client: HttpClient) {}
 
     public search() {
         const options = {
@@ -44,7 +46,7 @@ export class EmailAuditService {
             options.params = options.params.append('user', u);
         }
 
-        return this.client.get<QueryResult>('/api/audit/email', options).pipe(
+        return this.#client.get<QueryResult>('/api/audit/email', options).pipe(
             map((result) => {
                 this.totalPages = result.pages;
 

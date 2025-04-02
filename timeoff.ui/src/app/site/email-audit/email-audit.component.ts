@@ -3,12 +3,9 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { injectQueryParams } from 'ngxtension/inject-query-params';
-import { derivedAsync } from 'ngxtension/derived-async';
 
 import { FlashComponent } from '@components/flash/flash.component';
-import { DateInputDirective } from '@components/date-input.directive';
 
-import { MessagesService } from '@services/messages/messages.service';
 import { CompanyService } from '@services/company/company.service';
 import { LoggedInUserService } from '@services/logged-in-user/logged-in-user.service';
 
@@ -16,22 +13,23 @@ import { PagerComponent } from './pager.component';
 import { EmailModel } from './email.model';
 import { EmailAuditService } from './email-audit.service';
 import { FilterComponent } from './filter.component';
+import { ResultsComponent } from "./results.component";
 
 @Component({
     selector: 'email-audit',
     providers: [EmailAuditService, CompanyService],
     templateUrl: './email-audit.component.html',
     styleUrl: './email-audit.component.scss',
-    imports: [ReactiveFormsModule, CommonModule, PagerComponent, FlashComponent, FilterComponent]
+    imports: [ReactiveFormsModule, CommonModule, PagerComponent, FlashComponent, FilterComponent, ResultsComponent]
 })
 export class EmailAuditComponent implements OnInit {
     readonly #searchSvc = inject(EmailAuditService);
 
+    readonly #destroyed = inject(DestroyRef);
+
     protected get form() {
         return this.#searchSvc.searchForm;
     }
-
-    protected readonly dateFormat = this.currentUser.dateFormat;
 
     protected readonly emails = signal<EmailModel[]>([]);
 
@@ -42,11 +40,6 @@ export class EmailAuditComponent implements OnInit {
     protected readonly user = injectQueryParams((p) => (p['user'] ? numberAttribute(p['user']) : null));
 
     protected readonly totalPages = signal(0);
-
-    constructor(
-        private readonly destroyed: DestroyRef,
-        private readonly currentUser: LoggedInUserService
-    ) {}
 
     public ngOnInit(): void {
         this.#searchSvc.currentPage = this.currentPage();
@@ -82,7 +75,7 @@ export class EmailAuditComponent implements OnInit {
     private find() {
         this.#searchSvc
             .search()
-            .pipe(takeUntilDestroyed(this.destroyed))
+            .pipe(takeUntilDestroyed(this.#destroyed))
             .subscribe({
                 next: (data) => {
                     this.emails.set(data);

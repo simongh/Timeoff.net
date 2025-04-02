@@ -1,63 +1,38 @@
-import { effect, inject, Injectable, signal } from '@angular/core';
-import { toObservable } from '@angular/core/rxjs-interop';
-import { HubConnection, HubConnectionBuilder, HubConnectionState, LogLevel } from '@microsoft/signalr';
+import { inject, Injectable, OnDestroy } from '@angular/core';
+import { HubConnectionBuilder, HubConnectionState, LogLevel } from '@microsoft/signalr';
 
 import { LoggedInUserService } from '@services/logged-in-user/logged-in-user.service';
 import { derivedAsync } from 'ngxtension/derived-async';
-import { filter, map, merge, Subject, switchMap, tap } from 'rxjs';
+import { filter, map, startWith, Subject, tap } from 'rxjs';
 
 @Injectable()
-export class NotificationsService {
+export class NotificationsService implements OnDestroy {
     readonly #userSvc = inject(LoggedInUserService);
 
-    #hub: HubConnection | null = null;
+    #hub = this.create();
 
-    #h = this.create();
-
-    public readonly count = signal(0);
-
-    public readonly c = derivedAsync(()=> {
-        return this.#h.state$.pipe(
-            tap(() => this.#h.connect('/subs/requests',this.#userSvc.token()!,{})),
+    public readonly count = derivedAsync(() => {
+        return this.#hub.state$.pipe(
+            tap(() => {
+                this.#hub.subscribeToMessage('AwaitingApproval')
+                this.#hub.connect('/subs/requests', this.#userSvc.token()!, {})
+            }),
+            filter((value) => value.event == 'message-received' && value.messageType === 'AwaitingApproval'),
+            map((value) => {
+                if (value.event == 'message-received') {
+                    return value.payload[0] as number;
+                } else {
+                    return 0;
+                }
+            }),
+            startWith(0)
         );
-    })
-    constructor() {
-        // effect(() => {
-        //     if (this.#userSvc.isUserLoggedIn()) {
-        //         this.newHub();
+    }, {
+        initialValue: 0
+    });
 
-        //         //let h = this.create()
-        //         //h.subscribeToMessage('AwaitingApproval');
-
-        //         h.state$.pipe(
-        //             tap(() => h.connect('/subs/requests',this.#userSvc.token()!,{})),
-        //             // switchMap(
-        //             //     merge(
-        //             //         filter((value) => value.event === 'message-received' && value.messageType === 'AwaitingApproval'),
-        //             //         //map((value: Extract<T, {event: 'message-received'}>) => value),
-        //             //         map((value) => null),
-        //             //     )
-        //             // )
-        //         )
-        //     }
-
-        //     if (!this.#userSvc.isUserLoggedIn() && this.#hub) {
-        //         this.#hub.stop();
-        //     }
-        // });
-    }
-
-    private newHub() {
-        this.#hub = new HubConnectionBuilder()
-            .withUrl('/hubs/requests', { accessTokenFactory: () => this.#userSvc.token()! })
-            .configureLogging(LogLevel.Debug)
-            .build();
-
-        this.#hub.on('AwaitingApproval', (count: number) => {
-            this.count.set(count);
-        });
-
-        this.#hub.start();
+    ngOnDestroy(): void {
+        this.#hub.disconnect();
     }
 
     private create() {
@@ -157,11 +132,19 @@ export class NotificationsService {
                 }
 
                 trackedTypes = trackedTypes.filter((m) => m !== messageType);
-                stream.next({ event: 'message-removed-from-watch-list', messageType, trackedMessageTypes: trackedTypes });
+                stream.next({
+                    event: 'message-removed-from-watch-list',
+                    messageType,
+                    trackedMessageTypes: trackedTypes,
+                });
 
                 if (hub) {
                     hub.off(messageType);
-                    stream.next({ event: 'stopped-listening-for-message', messageType, trackedMessageTypes: trackedTypes });
+                    stream.next({
+                        event: 'stopped-listening-for-message',
+                        messageType,
+                        trackedMessageTypes: trackedTypes,
+                    });
                 }
             },
             disconnect: (): void => {

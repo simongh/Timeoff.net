@@ -19,12 +19,10 @@
                 <tbody>
                     <tr>
                         <td>
-                            <form [formGroup]="form">
-                                <filter/> 
+                            <filter [form]="form"/> 
 
-                                <button (click)="search()" [disabled]="searching()" class="btn btn-info single-click">Filter</button>&nbsp;
-                                <button (click)="reset()" class="btn btn-default" [disabled]="this.form.pristine">Reset</button>
-                            </form>
+                            <button (click)="search()" [disabled]="searching()" class="btn btn-info single-click">Filter</button>&nbsp;
+                            <button (click)="reset()" class="btn btn-default" [disabled]="this.form.pristine">Reset</button>
                         </td>
                     </tr>
                 </tbody>
@@ -32,48 +30,7 @@
         </div>
 
         <div class="col-md-9">
-            <table class="table table-hover" id="email_list">
-                <thead>
-                <tr>
-                    <th>To Employee</th>
-                    <th>Subject</th>
-                    <th>Date And Time</th>
-                </tr>
-                </thead>
-                <tbody>
-                    <tr *ngIf="emails().length === 0">
-                        <td colspan="3">
-                        <div class="text-center">No emails recorded yet</div>
-                        </td>
-                    </tr>
-
-                    @for (e of emails(); track $index)
-                    {
-                    <tr id="heading_@item.Id" class="vpp-email-audit-entry-header">
-                        <td class="user-link-cell">
-                            <a (click)="searchByUser(e.user.id)">{{e.user.name}}</a>
-                        </td>
-                        <td>
-                            <a class="collapsed" data-toggle="collapse" data-parent="#email_list" href="#collapse_{{$index}}">
-                            {{e.subject}}
-                            </a>
-                        </td>
-                        <td>
-                            {{e.createdAt | date: dateFormat() + ' HH:mm:ss'}}
-                        </td>
-                    </tr>
-                    <tr id="collapse_{{$index}}" class="collapse">
-                        <td colspan=3>
-                            <address>
-                                <strong>To Email:</strong>
-                                <a href="mailto:#">{{e.email}}</a>
-                            </address>
-                            <pre>{{e.body}}</pre>
-                        </td>
-                    </tr>
-                    }
-                </tbody>
-            </table>
+            <results [emails]="emails()" (userSelected)="searchByUser($event)"/>
 
             <div class="text-center">
                 <pager *ngIf="emails().length > 0" [totalPages]="totalPages()" [currentPage]="currentPage()"/>
