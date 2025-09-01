@@ -1,6 +1,5 @@
-import { Component, DestroyRef, signal } from '@angular/core';
+import { Component, DestroyRef, inject, signal } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
-import { NgIf } from '@angular/common';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { FlashComponent } from '@components/flash/flash.component';
@@ -14,32 +13,32 @@ import { MessagesService } from '@services/messages/messages.service';
     standalone: true,
     templateUrl: 'forgot-password.component.html',
     providers: [AuthService],
-    imports: [FlashComponent, ReactiveFormsModule, NgIf, ValidatorMessageComponent],
+    imports: [FlashComponent, ReactiveFormsModule, ValidatorMessageComponent],
 })
 export class ForgotPasswordComponent {
+    readonly #passwordSvc = inject(AuthService);
+
+    readonly #msgsSvc = inject(MessagesService);
+
+    readonly #destroyed = inject(DestroyRef);
+
     protected get passwordForm() {
-        return this.passwordSvc.passwordForm;
+        return this.#passwordSvc.passwordForm;
     }
 
     protected readonly submitting = signal(false);
-
-    constructor(
-        private readonly passwordSvc: AuthService,
-        private readonly msgsSvc: MessagesService,
-        private destroyed: DestroyRef
-    ) {}
 
     public forgot() {
         this.passwordForm.markAllAsTouched();
         if (this.passwordForm.invalid) return;
 
         this.submitting.set(true);
-        this.passwordSvc
+        this.#passwordSvc
             .forgotPassword()
-            .pipe(takeUntilDestroyed(this.destroyed))
+            .pipe(takeUntilDestroyed(this.#destroyed))
             .subscribe({
                 next: () => {
-                    this.msgsSvc.isSuccess(`Password reset email sent to ${this.passwordForm.controls.email.value}`);
+                    this.#msgsSvc.isSuccess(`Password reset email sent to ${this.passwordForm.controls.email.value}`);
 
                     this.passwordForm.reset();
                     this.submitting.set(false);

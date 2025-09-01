@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 
 import { createScheduleForm } from '@components/schedule/schedule-form';
@@ -11,54 +11,61 @@ import { LeaveTypeModel } from './leave-type.model';
 import { Country } from './country.model';
 import { TimeZoneModel } from './time-zone.model';
 
-type SettingsFormGroup = ReturnType<CompanyService['createForm']>;
 export type LeaveTypeFormGroup = ReturnType<CompanyService['createLeaveTypeForm']>;
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class CompanyService {
-    public settingsForm: SettingsFormGroup;
+    readonly #client = inject(HttpClient);
 
-    public leaveTypeForm: LeaveTypeFormGroup;
+    readonly #fb = inject(FormBuilder);
 
-    public leaveTypes = this.fb.array<LeaveTypeFormGroup>([]);
+    public settingsForm = this.#fb.group({
+        name: ['', [Validators.required]],
+        dateFormat: [''],
+        country: ['GB', [Validators.required]],
+        timeZone: ['', [Validators.required]],
+        carryOver: [5, [Validators.min(0), Validators.max(1000)]],
+        showHoliday: [false],
+        hideTeamView: [false],
+        schedule: createScheduleForm(this.#fb),
+    });
 
-    public first = this.fb.control<number>(0);
+    public leaveTypeForm = this.createLeaveTypeForm();
 
-    constructor(private readonly client: HttpClient, private readonly fb: FormBuilder) {
-        this.settingsForm = this.createForm();
-        this.leaveTypeForm = this.createLeaveTypeForm();
-    }
+    public leaveTypes = this.#fb.array<LeaveTypeFormGroup>([]);
+
+    public first = this.#fb.control<number>(0);
 
     public getTeams() {
-        return this.client.get<TeamModel[]>('/api/company/teams');
+        return this.#client.get<TeamModel[]>('/api/company/teams');
     }
 
     public getUsers() {
-        return this.client.get<UserModel[]>('/api/company/users');
+        return this.#client.get<UserModel[]>('/api/company/users');
     }
 
     public getLeaveTypes() {
-        return this.client.get<LeaveTypeModel[]>('/api/company/leave-types');
+        return this.#client.get<LeaveTypeModel[]>('/api/company/leave-types');
     }
 
     public getSettings() {
-        return this.client.get<SettingsModel>('/api/company');
+        return this.#client.get<SettingsModel>('/api/company');
     }
 
     public saveSettings() {
-        return this.client.put<void>('/api/customer', this.settingsForm.value);
+        return this.#client.put<void>('/api/customer', this.settingsForm.value);
     }
 
     public saveSchedule() {
         const schedule = this.settingsForm.value.schedule!;
 
-        return this.client.put<void>('/api/company/schedule', schedule);
+        return this.#client.put<void>('/api/company/schedule', schedule);
     }
 
     public updateLeaveTypes() {
-        return this.client.put<void>('/api/company/leave-types',{
+        return this.#client.put<void>('/api/company/leave-types', {
             first: this.first.value,
-            types: this.leaveTypes.value
+            types: this.leaveTypes.value,
         });
     }
 
@@ -76,43 +83,28 @@ export class CompanyService {
         this.leaveTypeForm = this.createLeaveTypeForm();
     }
 
-    public removeLeaveType(id: number){
-        return this.client.delete<void>(`/api/company/leave-types/${id}`);
+    public removeLeaveType(id: number) {
+        return this.#client.delete<void>(`/api/company/leave-types/${id}`);
     }
 
     public countries() {
-        return this.client.get<Country[]>('/api/company/countries');
+        return this.#client.get<Country[]>('/api/company/countries');
     }
 
     public timeZones() {
-        return this.client.get<TimeZoneModel[]>('/api/company/time-zones');
+        return this.#client.get<TimeZoneModel[]>('/api/company/time-zones');
     }
 
     public deleteCompany(companyName: string) {
-        return this.client.delete<void>('/api/company', {
+        return this.#client.delete<void>('/api/company', {
             body: {
                 name: companyName,
             },
         });
     }
 
-    private createForm() {
-        const form = this.fb.group({
-            name: ['', [Validators.required]],
-            dateFormat: [''],
-            country: ['GB', [Validators.required]],
-            timeZone: ['', [Validators.required]],
-            carryOver: [5, [Validators.min(0), Validators.max(1000)]],
-            showHoliday: [false],
-            hideTeamView: [false],
-            schedule: createScheduleForm(this.fb),
-        });
-
-        return form;
-    }
-
     private createLeaveTypeForm(model?: LeaveTypeModel) {
-        const form = this.fb.group({
+        const form = this.#fb.group({
             id: [model?.id],
             name: [model?.name, [Validators.required]],
             colour: [model?.colour ?? ''],

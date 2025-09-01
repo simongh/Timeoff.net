@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable, computed, signal } from '@angular/core';
+import { Injectable, computed, inject, signal } from '@angular/core';
 import { Subject, catchError, of, tap } from 'rxjs';
 
 import { LoggedInUserModel } from '@models/logged-in-user.model';
@@ -8,48 +8,48 @@ import { LoggedInUserModel } from '@models/logged-in-user.model';
     providedIn: 'root',
 })
 export class LoggedInUserService {
-    public readonly companyName = computed(() => this.user().companyName || '');
+    readonly #client = inject(HttpClient);
 
-    public readonly userName = computed(() => this.user().name || '');
+    readonly #user = signal({} as LoggedInUserModel);
 
-    public readonly showTeamView = computed(() => !!this.user().showTeamView);
+    public readonly companyName = computed(() => this.#user().companyName || '');
 
-    public readonly isAdmin = computed(() => !!this.user().isAdmin);
+    public readonly userName = computed(() => this.#user().name || '');
 
-    public readonly token = computed(() => this.user().token ?? null);
+    public readonly showTeamView = computed(() => !!this.#user().showTeamView);
+
+    public readonly isAdmin = computed(() => !!this.#user().isAdmin);
+
+    public readonly token = computed(() => this.#user().token ?? null);
 
     public readonly expires = computed(() => {
-        const value = this.user().expires;
+        const value = this.#user().expires;
         return value ? new Date(value) : null;
     });
 
-    public readonly dateFormat = computed(()=> {
-        const value = this.user().dateFormat;
+    public readonly dateFormat = computed(() => {
+        const value = this.#user().dateFormat;
         return value || 'yyyy-MM-dd';
     });
 
-    public readonly isUserLoggedIn = computed(()=> !!this.token());
-
-    private user = signal({} as LoggedInUserModel);
+    public readonly isUserLoggedIn = computed(() => !!this.token());
 
     public readonly refresh$ = new Subject();
-
-    constructor(private readonly client: HttpClient) {}
 
     public load(user: LoggedInUserModel | null) {
         if (!user) {
             this.clear();
         } else {
-            this.user.set(user);
+            this.#user.set(user);
         }
     }
 
     public clear() {
-        this.user.set({} as LoggedInUserModel);
+        this.#user.set({} as LoggedInUserModel);
     }
 
     public extend() {
-        return this.client.get<LoggedInUserModel>('/api/account/token').pipe(
+        return this.#client.get<LoggedInUserModel>('/api/account/token').pipe(
             catchError(() => {
                 return of(null);
             }),

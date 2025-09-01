@@ -4,7 +4,9 @@ import { HubConnection, HubConnectionBuilder, HubConnectionState, LogLevel } fro
 
 import { LoggedInUserService } from '@services/logged-in-user/logged-in-user.service';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class NotificationsService {
     private hub: HubConnection | null = null;
 

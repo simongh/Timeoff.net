@@ -1,4 +1,4 @@
-import { Component, computed } from '@angular/core';
+import { Component, signal } from '@angular/core';
 
 @Component({
     selector: 'site-footer',
@@ -7,5 +7,5 @@ import { Component, computed } from '@angular/core';
     styleUrl: 'footer.component.scss',
 })
 export class FooterComponent {
-    protected readonly year = computed(()=>new Date().getFullYear());
+    protected readonly year = signal(() => new Date().getFullYear()).asReadonly();
 }

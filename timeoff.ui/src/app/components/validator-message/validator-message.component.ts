@@ -1,13 +1,14 @@
-import { NgIf } from '@angular/common';
 import { Component, Host, Optional, SkipSelf, input } from '@angular/core';
 import { ControlContainer, FormControl } from '@angular/forms';
 
 @Component({
     selector: 'validator-message',
     standalone: true,
-    imports: [NgIf],
-    templateUrl: './validator-message.component.html',
+    imports: [],
     styleUrl: './validator-message.component.scss',
+    template: `@if (hasError) {
+        <small class="text-danger"><ng-content></ng-content></small>
+        } `,
 })
 export class ValidatorMessageComponent {
     private readonly parent: ControlContainer;

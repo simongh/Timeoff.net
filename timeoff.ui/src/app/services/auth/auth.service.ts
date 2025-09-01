@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
 
@@ -16,50 +16,50 @@ interface LoginResult extends LoggedInUserModel {
     providedIn: 'root',
 })
 export class AuthService {
+    readonly #client = inject(HttpClient);
+
+    readonly #loggedInUser = inject(LoggedInUserService);
+
+    readonly #fb = inject(FormBuilder);
+
     public get isUserLoggedIn() {
-        return this.loggedInUser.isUserLoggedIn;
+        return this.#loggedInUser.isUserLoggedIn;
     }
 
-    public loginForm = this.fb.group({
+    public loginForm = this.#fb.group({
         username: ['', [Validators.required, Validators.email]],
         password: ['', Validators.required],
     });
 
-    public passwordForm = this.fb.group({
+    public passwordForm = this.#fb.group({
         email: ['', [Validators.required, Validators.email]],
     });
 
-    public resetForm = this.fb.group(
+    public resetForm = this.#fb.group(
         {
             current: [''],
             password: ['', [Validators.required, Validators.minLength(8)]],
             confirmPassword: ['', []],
-            token: [null as string | null]
+            token: [null as string | null],
         },
         {
             validators: [compareValidator('password', 'confirmPassword')],
         }
     );
 
-    constructor(
-        private client: HttpClient,
-        private readonly loggedInUser: LoggedInUserService,
-        private readonly fb: FormBuilder
-    ) {}
-
     public login() {
-        return this.client.post<LoginResult>('/api/account/login', this.loginForm.value);
+        return this.#client.post<LoginResult>('/api/account/login', this.loginForm.value);
     }
 
     public logout() {
-        return this.client.post<void>('/api/account/logout', {});
+        return this.#client.post<void>('/api/account/logout', {});
     }
 
     public resetPassword() {
-        return this.client.post<void>('/api/account/reset-password', this.resetForm.value);
+        return this.#client.post<void>('/api/account/reset-password', this.resetForm.value);
     }
 
     public forgotPassword() {
-        return this.client.post<void>('/api/account/forgot-password', this.passwordForm.value);
+        return this.#client.post<void>('/api/account/forgot-password', this.passwordForm.value);
     }
 }

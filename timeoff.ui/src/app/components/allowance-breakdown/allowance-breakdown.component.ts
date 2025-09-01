@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { Component, input } from '@angular/core';
 import { TippyDirective } from '@ngneat/helipopper';
 
@@ -7,7 +6,7 @@ import { AllowanceSummaryModel } from '@services/calendar/allowance-summary.mode
 @Component({
     selector: 'allowance-breakdown',
     standalone: true,
-    imports: [CommonModule, TippyDirective],
+    imports: [TippyDirective],
     templateUrl: './allowance-breakdown.component.html',
     styleUrl: './allowance-breakdown.component.scss',
 })

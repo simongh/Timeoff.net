@@ -1,8 +1,8 @@
 <div class="row">
-    <div *ngIf="requests.length === 0" class="col-md-12 text-muted">
-        There are no leave requests yet.
-    </div>
-    <div *ngIf="requests.length > 0" class="col-md-12">
+    @if (requests.length === 0) {
+    <div class="col-md-12 text-muted">There are no leave requests yet.</div>
+    } @else {
+    <div class="col-md-12">
         <p class="visible-xs-block"><em class="text-muted">Scroll table horizontally</em></p>
         <div class="table-responsive">
             <table class="table table-hover user-requests-table">
@@ -19,26 +19,41 @@
                 </thead>
 
                 <tbody>
-                    <tr *ngFor="let r of requests()" class="leave-request-row">
+                    @for (r of requests(); track $index) {
+                    <tr class="leave-request-row">
                         <td data-tom-leave-dates="1">
                             <a class="leave-details-summary-trigger" [attr.data-leave-id]="r.id" href="#">
-                                {{r.startDate | date: dateFormat()}} ({{r.startPart | datePart}})
+                                {{ r.startDate | date : dateFormat() }} ({{ r.startPart | datePart }})
                                 <i class="fa fa-long-arrow-right"></i>
-                                {{r.endDate | date: dateFormat()}} ({{r.endPart | datePart}})
+                                {{ r.endDate | date : dateFormat() }} ({{ r.endPart | datePart }})
                             </a>
                         </td>
                         <td>
-                            {{r.type}}
-                            <ng-container *ngIf="r.status === 'PendingRevoke'">
-                                <br/>
-                                (pended revoke)
-                            </ng-container>
+                            {{ r.type }}
+                            @if(r.status === 'PendingRevoke') {
+                            <br />
+                            (pended revoke) }
                         </td>
-                        <td>{{r.days}}</td>
-                        <td class="user-request-table-approver">{{r.approver.name}}</td>
+                        <td>{{ r.days }}</td>
+                        <td class="user-request-table-approver">{{ r.approver.name }}</td>
                         <td>
-                            <button type="button" *ngIf="r.status === 'PendingRevoke'" class="pull-right btn btn-default btn-xs revoke-btn single-click" title="Revoke leave request. Subject of approval."><i class="fa fa-trash"></i> Revoke</button>
-                            <button type="submit" *ngIf="r.status !== 'PendingRevoke'" class="pull-right btn btn-default btn-xs revoke-btn single-click" title="Cancel leave request" value="cancel"><i class="fa fa-trash"></i> Cancel</button>
+                            @if (r.status === 'PendingRevoke') {
+                            <button
+                                type="button"
+                                class="pull-right btn btn-default btn-xs revoke-btn single-click"
+                                title="Revoke leave request. Subject of approval."
+                            >
+                                <i class="fa fa-trash"></i> Revoke
+                            </button>}
+                            @else {
+                            <button
+                                type="submit"
+                                class="pull-right btn btn-default btn-xs revoke-btn single-click"
+                                title="Cancel leave request"
+                                value="cancel"
+                            >
+                                <i class="fa fa-trash"></i> Cancel
+                            </button>}
                             <!-- @if (item.Status == Timeoff.LeaveStatus.PendingRevoke)
                             {
                                 <form method="post" asp-controller="Request" asp-action="Revoke">
@@ -53,15 +68,17 @@
                                 </form>
                             } -->
                         </td>
-                        <td>{{r.comment}}</td>
+                        <td>{{ r.comment }}</td>
                         <td>
-                            <span class="pull-right leave-request-row-status">{{r.status}}</span>
+                            <span class="pull-right leave-request-row-status">{{ r.status }}</span>
                         </td>
                     </tr>
-                    </tbody>
-                </table>
-            </div>
+                    }
+                </tbody>
+            </table>
         </div>
+    </div>
+    }
 </div>
 
 <!-- @functions {

@@ -1,39 +1,52 @@
 <dl>
     <dt>
         Allowance breakdown
-        <i class="fa fa-question-circle"
-           tp="This is explanation how we get the total allowance. Hover on each number to get details what does one mean."></i>
+        <i
+            class="fa fa-question-circle"
+            tp="This is explanation how we get the total allowance. Hover on each number to get details what does one mean."
+        ></i>
     </dt>
     <dd>
         <em>Nominal allowance </em>
-        <span class="pull-right"
-              tp="Allowance derived from team current user belongs to."
-              id='nominalAllowancePart'>{{summary().allowance}}</span>
+        <span class="pull-right" tp="Allowance derived from team current user belongs to." id="nominalAllowancePart">{{
+            summary().allowance
+        }}</span>
     </dd>
     <dd>
-        <em>Carried over from {{summary().previousYear}}</em>
-        <span class="pull-right"
-              tp="Allowance carried over from previous year. Note: this amount is calculated on the very first day of the year."
-              id="allowanceCarriedOverPart">{{summary().carryOver}}</span>
+        <em>Carried over from {{ summary().previousYear }}</em>
+        <span
+            class="pull-right"
+            tp="Allowance carried over from previous year. Note: this amount is calculated on the very first day of the year."
+            id="allowanceCarriedOverPart"
+            >{{ summary().carryOver }}</span
+        >
     </dd>
     <dd>
         <em>Individual adjustment</em>
-        <span class="pull-right"
-              tp="Adjustment to allowance done by admin user.">{{summary().adjustment}}</span>
+        <span class="pull-right" tp="Adjustment to allowance done by admin user.">{{ summary().adjustment }}</span>
     </dd>
     <dd>
         <em>Start/end of employment</em>
-        <span class="pull-right"
-              tp="Automatic adjustment to allowance based on employee's start and end day of employment.">{{summary().employmentRangeAdjustment}}</span>
+        <span
+            class="pull-right"
+            tp="Automatic adjustment to allowance based on employee's start and end day of employment."
+            >{{ summary().employmentRangeAdjustment }}</span
+        >
     </dd>
     <dd>
         <em>Used so far</em>
-        <span class="pull-right"
-              tp="Number of days already taken from allowance.">{{ summary().used === 0 ? '-' : summary().used }}</span>
+        <span class="pull-right" tp="Number of days already taken from allowance.">{{
+            summary().used === 0 ? "-" : summary().used
+        }}</span>
     </dd>
-    <dd *ngIf="summary().isAccrued">
+    @if (summary().isAccrued) {
+    <dd>
         <em>Locked so far</em>
-        <span class="pull-right"
-              tp="Number of unavailable days in allowance due to accrual nature of vacation entitlement.">{{summary().accruedAdjustment}}</span>
+        <span
+            class="pull-right"
+            tp="Number of unavailable days in allowance due to accrual nature of vacation entitlement."
+            >{{ summary().accruedAdjustment }}</span
+        >
     </dd>
+    }
 </dl>
