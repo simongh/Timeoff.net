@@ -1,9 +1,10 @@
-<div *ngFor="let month of weeks()" class="{{colStyle()}} month_container">
-    <table class="calendar_month month_{{month.date| date: 'MMMM'}}">
+@for (month of weeks(); track $index) {
+<div class="{{ colStyle() }} month_container">
+    <table class="calendar_month month_{{ month.date | date : 'MMMM' }}">
         <thead>
             <tr>
                 <td colspan="14">
-                    {{month.date| date: monthFormat()}}
+                    {{ month.date | date : monthFormat() }}
                 </td>
             </tr>
             <tr>
@@ -17,20 +18,25 @@
             </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let week of month.weeks">
-                <td *ngIf="week.num === 0 && month.padding > 0" [attr.colspan]="2 * month.padding"></td>
-                @for (day of week.days; track $index) {
-                    <td class="calendar_cell half_1st" [ngClass]="day.morningClasses">
-                        @if (!day.label) {
-                            <span>{{day.date| date: 'd'}}</span>
-                        }
-                        @else {
-                            <span data-toggle="tooltip" data-placement="top" [title]="day.label">{{day.date| date: 'd'}}</span>
-                        }
-                    </td>
-                    <td class="calendar_cell half_2nd" [ngClass]="day.afternoonClasses"></td>
+            @for (week of month.weeks; track $index) {
+            <tr>
+                @if (week.num === 0 && month.padding > 0) {
+                <td [attr.colspan]="2 * month.padding"></td>
+                } @for (day of week.days; track $index) {
+                <td class="calendar_cell half_1st" [ngClass]="day.morningClasses">
+                    @if (!day.label) {
+                    <span>{{ day.date | date : "d" }}</span>
+                    } @else {
+                    <span data-toggle="tooltip" data-placement="top" [title]="day.label">{{
+                        day.date | date : "d"
+                    }}</span>
+                    }
+                </td>
+                <td class="calendar_cell half_2nd" [ngClass]="day.afternoonClasses"></td>
                 }
             </tr>
+            }
         </tbody>
     </table>
 </div>
+}

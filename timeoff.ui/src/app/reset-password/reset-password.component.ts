@@ -1,5 +1,4 @@
-import { Component, DestroyRef, computed, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, DestroyRef, inject, signal } from '@angular/core';
 import { ReactiveFormsModule, Validators } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { injectQueryParams } from 'ngxtension/inject-query-params';
@@ -14,31 +13,33 @@ import { MessagesService } from '@services/messages/messages.service';
     selector: 'reset-password-page',
     templateUrl: './reset-password.component.html',
     styleUrl: './reset-password.component.scss',
-    imports: [FlashComponent, CommonModule, ReactiveFormsModule, ValidatorMessageComponent]
+    imports: [FlashComponent, ReactiveFormsModule, ValidatorMessageComponent],
 })
 export class ResetPasswordComponent {
+    readonly #authSvc = inject(AuthService);
+
+    readonly #msgsSvc = inject(MessagesService);
+
+    readonly #destroyed = inject(DestroyRef);
+
     protected get passwordForm() {
-        return this.authSvc.resetForm;
+        return this.#authSvc.resetForm;
     }
 
-    protected readonly showCurrent = computed(() => this.authSvc.isUserLoggedIn());
+    protected readonly showCurrent = signal(() => this.#authSvc.isUserLoggedIn()).asReadonly();
 
     protected readonly submitting = signal(false);
 
     protected readonly token = injectQueryParams('t');
 
-    constructor(
-        private readonly authSvc: AuthService,
-        private readonly msgsSvc: MessagesService,
-        private destroyed: DestroyRef
-    ) {
+    constructor() {
         this.passwordForm.controls.token.setValue(this.token());
 
         if (this.showCurrent()) {
             this.passwordForm.controls.current.addValidators(Validators.required);
         } else {
             if (!this.passwordForm.value.token) {
-                this.msgsSvc.isError('Invalid reset link');
+                this.#msgsSvc.isError('Invalid reset link');
                 this.submitting.set(true);
             }
         }
@@ -53,12 +54,12 @@ export class ResetPasswordComponent {
 
         this.submitting.set(true);
 
-        this.authSvc
+        this.#authSvc
             .resetPassword()
-            .pipe(takeUntilDestroyed(this.destroyed))
+            .pipe(takeUntilDestroyed(this.#destroyed))
             .subscribe({
                 next: () => {
-                    this.msgsSvc.isSuccess('Password updated successfully');
+                    this.#msgsSvc.isSuccess('Password updated successfully');
                     this.submitting.set(false);
                     this.passwordForm.reset();
                 },

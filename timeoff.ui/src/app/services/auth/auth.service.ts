@@ -16,14 +16,14 @@ interface LoginResult extends LoggedInUserModel {
     providedIn: 'root',
 })
 export class AuthService {
-    readonly #fb = inject(FormBuilder);
-    
-    readonly #userSvc = inject(LoggedInUserService);
-
     readonly #client = inject(HttpClient);
 
+    readonly #loggedInUser = inject(LoggedInUserService);
+
+    readonly #fb = inject(FormBuilder);
+
     public get isUserLoggedIn() {
-        return this.#userSvc.isUserLoggedIn;
+        return this.#loggedInUser.isUserLoggedIn;
     }
 
     public loginForm = this.#fb.group({
@@ -40,7 +40,7 @@ export class AuthService {
             current: [''],
             password: ['', [Validators.required, Validators.minLength(8)]],
             confirmPassword: ['', []],
-            token: [null as string | null]
+            token: [null as string | null],
         },
         {
             validators: [compareValidator('password', 'confirmPassword')],

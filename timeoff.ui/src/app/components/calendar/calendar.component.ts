@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { Component, computed, input } from '@angular/core';
 import {
     addMonths,
@@ -20,7 +19,7 @@ import { DayModel } from './day.model';
     selector: 'calendar',
     templateUrl: 'calendar.component.html',
     styleUrl: 'calendar.component.scss',
-    imports: [CommonModule]
+    imports: [],
 })
 export class CalendarComponent {
     public readonly monthCount = input(0);

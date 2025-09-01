@@ -1,9 +1,9 @@
 import { Component, inject, input } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { derivedAsync } from 'ngxtension/derived-async';
 
 import { CompanyService } from '@services/company/company.service';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
     selector: 'user-select',
@@ -13,9 +13,9 @@ import { CompanyService } from '@services/company/company.service';
     providers: [CompanyService]
 })
 export class UserListComponent {
-    private readonly companySvc = inject(CompanyService);
+    readonly #companySvc = inject(CompanyService);
 
-    protected readonly users = derivedAsync(() => this.companySvc.getUsers(), { initialValue: [] });
+    protected readonly users = toSignal(this.#companySvc.getUsers(), { initialValue: [] });
 
     public readonly for = input('');
 

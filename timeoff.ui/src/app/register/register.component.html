@@ -63,7 +63,9 @@
                 <label for="country" class="col-md-2 control-label">Country</label>
                 <div class="col-md-6">
                     <select class="form-control" formControlName="country">
-                        <option *ngFor="let country of countries()" [ngValue]="country.code">{{country.code}}: {{ country.name }}</option>
+                        @for (country of countries(); track $index) {
+                        <option [ngValue]="country.code">{{country.code}}: {{ country.name }}</option>
+                        }
                     </select>
                     <validator-message controlName="country" validatorName="invalidItem">Invalid country selected</validator-message>
                 </div>
@@ -73,7 +75,9 @@
                 <label for="timezone" class="col-md-2 control-label">Time zone</label>
                 <div class="col-md-6">
                     <select class="form-control" formControlName="timezone">
-                        <option *ngFor="let tz of timezones()" [ngValue]="tz.id">{{ tz.name }}</option>
+                        @for (tz of timezones(); track $index) {
+                        <option [ngValue]="tz.id">{{ tz.name }}</option>
+                        }
                     </select>
                     <validator-message controlName="timezone" validatorName="required">Timezone is required</validator-message>
                 </div>

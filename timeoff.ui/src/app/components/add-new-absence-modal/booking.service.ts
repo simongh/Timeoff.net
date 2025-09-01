@@ -5,19 +5,23 @@ import { formatISO } from 'date-fns';
 
 import { datePart, dateString } from '@models/types';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class BookingService {
     readonly #client = inject(HttpClient);
 
-    public readonly form =  inject(FormBuilder).group({
-        employee: [null as number | null, Validators.required],
-        leaveType: ['' as number | string, Validators.required],
-        startPart: [datePart.wholeDay],
-        start: [formatISO(new Date(), { representation: 'date' }) as dateString | null, Validators.required],
-        endPart: [datePart.wholeDay],
-        end: [formatISO(new Date(), { representation: 'date' }) as dateString | null, Validators.required],
-        comment: [null as string | null],
-    });
+    readonly #fb = inject(FormBuilder);
+
+    public readonly form = this.#fb.group({
+            employee: [null as number | null, Validators.required],
+            leaveType: ['' as number | string, Validators.required],
+            startPart: [datePart.wholeDay],
+            start: [formatISO(new Date(), { representation: 'date' }) as dateString | null, Validators.required],
+            endPart: [datePart.wholeDay],
+            end: [formatISO(new Date(), { representation: 'date' }) as dateString | null, Validators.required],
+            comment: [null as string | null],
+        });
 
     public reset() {
         this.form.reset({

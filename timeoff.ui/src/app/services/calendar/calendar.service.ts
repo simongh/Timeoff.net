@@ -4,7 +4,9 @@ import { inject, Injectable } from '@angular/core';
 import { CalendarDayModel } from '@models/calendar-day.model';
 import { CalendarModel } from './calendar.model';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class CalendarService {
     readonly #client = inject(HttpClient);
 

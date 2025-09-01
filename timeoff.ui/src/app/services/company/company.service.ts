@@ -11,18 +11,26 @@ import { LeaveTypeModel } from './leave-type.model';
 import { Country } from './country.model';
 import { TimeZoneModel } from './time-zone.model';
 
-type SettingsFormGroup = ReturnType<CompanyService['createForm']>;
 export type LeaveTypeFormGroup = ReturnType<CompanyService['createLeaveTypeForm']>;
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class CompanyService {
-    readonly #fb = inject(FormBuilder);
-
     readonly #client = inject(HttpClient);
 
-    public settingsForm: SettingsFormGroup = this.createForm();
+    readonly #fb = inject(FormBuilder);
 
-    public leaveTypeForm: LeaveTypeFormGroup = this.createLeaveTypeForm();
+    public settingsForm = this.#fb.group({
+        name: ['', [Validators.required]],
+        dateFormat: [''],
+        country: ['GB', [Validators.required]],
+        timeZone: ['', [Validators.required]],
+        carryOver: [5, [Validators.min(0), Validators.max(1000)]],
+        showHoliday: [false],
+        hideTeamView: [false],
+        schedule: createScheduleForm(this.#fb),
+    });
+
+    public leaveTypeForm = this.createLeaveTypeForm();
 
     public leaveTypes = this.#fb.array<LeaveTypeFormGroup>([]);
 
@@ -55,9 +63,9 @@ export class CompanyService {
     }
 
     public updateLeaveTypes() {
-        return this.#client.put<void>('/api/company/leave-types',{
+        return this.#client.put<void>('/api/company/leave-types', {
             first: this.first.value,
-            types: this.leaveTypes.value
+            types: this.leaveTypes.value,
         });
     }
 
@@ -75,7 +83,7 @@ export class CompanyService {
         this.leaveTypeForm = this.createLeaveTypeForm();
     }
 
-    public removeLeaveType(id: number){
+    public removeLeaveType(id: number) {
         return this.#client.delete<void>(`/api/company/leave-types/${id}`);
     }
 
@@ -93,21 +101,6 @@ export class CompanyService {
                 name: companyName,
             },
         });
-    }
-
-    private createForm() {
-        const form = this.#fb.group({
-            name: ['', [Validators.required]],
-            dateFormat: [''],
-            country: ['GB', [Validators.required]],
-            timeZone: ['', [Validators.required]],
-            carryOver: [5, [Validators.min(0), Validators.max(1000)]],
-            showHoliday: [false],
-            hideTeamView: [false],
-            schedule: createScheduleForm(this.#fb),
-        });
-
-        return form;
     }
 
     private createLeaveTypeForm(model?: LeaveTypeModel) {

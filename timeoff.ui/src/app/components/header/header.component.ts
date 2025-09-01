@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
@@ -8,17 +7,17 @@ import { NotificationsService } from '@services/notifications/notifications.serv
 @Component({
     templateUrl: 'header.component.html',
     selector: 'site-header',
-    imports: [CommonModule, RouterLink],
-    providers: [NotificationsService]
+    imports: [RouterLink],
+    providers: [NotificationsService],
 })
 export class HeaderComponent {
-    private readonly currentUser = inject(LoggedInUserService);
+    readonly #currentUser = inject(LoggedInUserService);
 
     protected readonly notifications = inject(NotificationsService);
 
-    protected readonly showTeamView = this.currentUser.showTeamView;
+    protected readonly showTeamView = this.#currentUser.showTeamView;
 
-    protected readonly isAdmin = this.currentUser.isAdmin;
+    protected readonly isAdmin = this.#currentUser.isAdmin;
 
-    protected readonly isSignedIn = this.currentUser.isUserLoggedIn;
+    protected readonly isSignedIn = this.#currentUser.isUserLoggedIn;
 }

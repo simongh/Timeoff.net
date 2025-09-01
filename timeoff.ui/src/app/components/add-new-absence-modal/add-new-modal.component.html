@@ -1,28 +1,46 @@
-<div class="modal fade" id="book_leave_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div
+    class="modal fade"
+    id="book_leave_modal"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true"
+>
     <div class="modal-dialog">
         <div class="modal-content">
             <form [formGroup]="form">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                     <h4 class="modal-title" id="exampleModalLabel">New absence</h4>
                 </div>
                 <div class="modal-body">
-
-                    <div class="form-group" *ngIf="users().length > 1">
+                    @if (users().length > 1) {
+                    <div class="form-group">
                         <label for="employee" class="control-label">For employee:</label>
                         <select class="form-control" id="employee" formControlName="employee">
-                            <option *ngFor="let u of users()" [value]="u.id">{{u.name}}</option>
+                            @for (u of users(); track $index) {
+                            <option [value]="u.id">{{ u.name }}</option>
+                            }
                         </select>
-                        <validator-message controlName="employee" validatorName="required">Employee is required</validator-message>
+                        <validator-message controlName="employee" validatorName="required"
+                            >Employee is required</validator-message>
                     </div>
+                    }
 
                     <div class="form-group">
                         <label for="leavetype" class="control-label">Leave type:</label>
                         <select class="form-control" id="leavetype" formControlName="leaveType">
                             <option disabled value="">-- select an option --</option>
-                            <option *ngFor="let lt of leaveTypes()" [value]="lt.id" [attr.data-tom]="lt.name" [attr.data-tom-index]="lt.id">{{lt.name}}</option>
+                            @for (lt of leaveTypes(); track $index) {
+                            <option [value]="lt.id" [attr.data-tom]="lt.name" [attr.data-tom-index]="lt.id">
+                                {{ lt.name }}
+                            </option>
+                            }
                         </select>
-                        <validator-message controlName="leaveType" validatorName="required">Leave type is required</validator-message>
+                        <validator-message controlName="leaveType" validatorName="required"
+                            >Leave type is required</validator-message>
                     </div>
 
                     <div class="form-group">
@@ -30,15 +48,24 @@
                         <div class="row">
                             <div class="col-md-5">
                                 <select class="form-control" formControlName="startPart">
-                                    <option *ngFor="let p of parts()" [value]="p.id">{{p.name}}</option>
+                                    @for (p of parts(); track $index) {
+                                    <option [value]="p.id">{{ p.name }}</option>
+                                    }
                                 </select>
                             </div>
                             <div class="col-md-7">
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="fa-solid fa-calendar"></i></span>
-                                    <input type="text" formControlName="start" dateInput class="form-control book-leave-from-input" id="from" [maxDate]="form.value.end" />
+                                    <input
+                                        type="text"
+                                        formControlName="start"
+                                        dateInput
+                                        class="form-control book-leave-from-input"
+                                        id="from"
+                                        [maxDate]="form.value.end" />
                                 </div>
-                                <validator-message controlName="start" validatorName="required">Start date is required</validator-message>
+                                <validator-message controlName="start" validatorName="required"
+                                    >Start date is required</validator-message>
                             </div>
                         </div>
                     </div>
@@ -48,15 +75,24 @@
                         <div class="row">
                             <div class="col-md-5">
                                 <select class="form-control" formControlName="endPart">
-                                    <option *ngFor="let p of parts()" [value]="p.id">{{p.name}}</option>
+                                    @for (p of parts(); track $index) {
+                                    <option [value]="p.id">{{ p.name }}</option>
+                                    }
                                 </select>
                             </div>
                             <div class="col-md-7">
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="fa-solid fa-calendar"></i></span>
-                                    <input type="text" formControlName="end" dateInput class="form-control book-leave-to-input" id="to" [minDate]="form.value.start" />
+                                    <input
+                                        type="text"
+                                        formControlName="end"
+                                        dateInput
+                                        class="form-control book-leave-to-input"
+                                        id="to"
+                                        [minDate]="form.value.start" />
                                 </div>
-                                <validator-message controlName="end" validatorName="required">End date is required</validator-message>
+                                <validator-message controlName="end" validatorName="required"
+                                    >End date is required</validator-message>
                             </div>
                         </div>
                     </div>
@@ -65,7 +101,6 @@
                         <label for="comment" class="control-label">Comment (optional):</label>
                         <textarea class="form-control" id="comment" formControlName="comment"></textarea>
                     </div>
-
                 </div>
                 <div class="modal-footer">
                     <button type="button" (click)="cancel()" class="btn btn-link" data-dismiss="modal">Cancel</button>
@@ -75,5 +110,3 @@
         </div>
     </div>
 </div>
-
-

@@ -11,18 +11,20 @@ import { differenceInSeconds, getMinutes } from 'date-fns';
 export class LoggedInUserService {
     readonly #client = inject(HttpClient);
 
-    public readonly companyName = computed(() => this.user().companyName || '');
+    readonly #user = signal({} as LoggedInUserModel);
 
-    public readonly userName = computed(() => this.user().name || '');
+    public readonly companyName = computed(() => this.#user().companyName || '');
 
-    public readonly showTeamView = computed(() => !!this.user().showTeamView);
+    public readonly userName = computed(() => this.#user().name || '');
 
-    public readonly isAdmin = computed(() => !!this.user().isAdmin);
+    public readonly showTeamView = computed(() => !!this.#user().showTeamView);
 
-    public readonly token = computed(() => this.user().token ?? null);
+    public readonly isAdmin = computed(() => !!this.#user().isAdmin);
+
+    public readonly token = computed(() => this.#user().token ?? null);
 
     public readonly needsExtending = computed(() => {
-        const value = this.user().expires;
+        const value = this.#user().expires;
 
         if (!value) {
             return true;
@@ -32,13 +34,11 @@ export class LoggedInUserService {
     });
 
     public readonly dateFormat = computed(() => {
-        const value = this.user().dateFormat;
+        const value = this.#user().dateFormat;
         return value || 'yyyy-MM-dd';
     });
 
     public readonly isUserLoggedIn = computed(() => !!this.token());
-
-    private user = signal({} as LoggedInUserModel);
 
     public readonly refresh$ = new Subject();
 
@@ -46,12 +46,12 @@ export class LoggedInUserService {
         if (!user) {
             this.clear();
         } else {
-            this.user.set(user);
+            this.#user.set(user);
         }
     }
 
     public clear() {
-        this.user.set({} as LoggedInUserModel);
+        this.#user.set({} as LoggedInUserModel);
     }
 
     public extend() {

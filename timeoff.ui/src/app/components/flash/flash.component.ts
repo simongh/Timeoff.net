@@ -1,45 +1,42 @@
-import { CommonModule } from '@angular/common';
-import { Component, DestroyRef, OnInit, computed, signal } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Component, OnInit, computed, inject } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 import { MessagesService } from '@services/messages/messages.service';
 import { FlashModel } from './flash.model';
 
 @Component({
-    templateUrl: 'flash.component.html',
+    standalone: true,
     selector: 'flash-message',
-    imports: [CommonModule],
-    providers: []
+    imports: [],
+    providers: [],
+    template: `@for (msg of errors(); track $index) {
+        <div class="alert alert-danger" role="alert">{{ msg }}</div>
+        } @for (msg of success(); track $index) {
+        <div class="alert alert-success" role="alert">{{ msg }}</div>
+        } `,
 })
 export class FlashComponent implements OnInit {
-    private readonly messages = signal(new FlashModel());
+    readonly #msgSvc = inject(MessagesService);
+
+    readonly #messages = toSignal(this.#msgSvc.getMessages(), { initialValue: new FlashModel() });
 
     protected readonly errors = computed(() => {
-        if (this.messages().isError) {
-            return this.messages().messages;
+        if (this.#messages().isError) {
+            return this.#messages().messages;
         } else {
             return [];
         }
     });
 
     protected readonly success = computed(() => {
-        if (!this.messages().isError) {
-            return this.messages().messages;
+        if (!this.#messages().isError) {
+            return this.#messages().messages;
         } else {
             return [];
         }
     });
 
-    constructor(private readonly msgSvc: MessagesService, private destroyed: DestroyRef) {}
-
     public ngOnInit(): void {
-        this.msgSvc
-            .getMessages()
-            .pipe(takeUntilDestroyed(this.destroyed))
-            .subscribe((m) => {
-                this.messages.set(m);
-            });
-
-        this.msgSvc.clearStored();
+        this.#msgSvc.clearStored();
     }
 }
