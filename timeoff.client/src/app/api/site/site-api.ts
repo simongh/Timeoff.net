@@ -1,13 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 
+import { Country } from './country';
+
 @Injectable({
   providedIn: 'root',
 })
-export class AuthApi {
+export class SiteApi {
   readonly #client = inject(HttpClient);
-
-  public logout() {
-    return this.#client.post<void>('/api/account/logout', {});
-  }
 }

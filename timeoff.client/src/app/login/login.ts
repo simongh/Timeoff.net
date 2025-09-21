@@ -1,26 +1,32 @@
 import { Component, DestroyRef, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { ReactiveFormsModule } from '@angular/forms';
+import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { NgbAlert } from '@ng-bootstrap/ng-bootstrap';
 import { injectQueryParams } from 'ngxtension/inject-query-params';
 
 import { Card } from '@components/cards';
+import { Messages } from '@components/messages/messages';
+import { MessagesService } from '@components/messages/messages.service';
 import { ValidatorMessage } from '@components/validator-message/validator-message';
 
-import { AuthApi } from '@api/auth/auth-api';
 import { AuthService } from '@app-types/auth/auth.service';
+
+import { LoginApi } from './login-api/login-api';
+
+export type LoginForm = Login['loginForm']['value'];
 
 @Component({
   selector: 'ton-login-page',
-  imports: [ReactiveFormsModule, Card, ValidatorMessage, NgbAlert, RouterLink],
+  imports: [ReactiveFormsModule, Card, ValidatorMessage, RouterLink, Messages],
   templateUrl: './login.html',
   styleUrl: './login.scss',
 })
 export class Login {
-  readonly #authService = inject(AuthApi);
+  readonly #loginSvc = inject(LoginApi);
 
   readonly #currentUserSvc = inject(AuthService);
+
+  readonly #msgsSvc = inject(MessagesService);
 
   readonly #router = inject(Router);
 
@@ -28,17 +34,18 @@ export class Login {
 
   readonly #destroyed = inject(DestroyRef);
 
-  protected readonly submitting = signal(false);
+  readonly #fb = inject(NonNullableFormBuilder);
 
-  protected readonly error = signal('');
+  protected readonly submitting = signal(false);
 
   protected readonly allowRegistrations = signal(true);
 
-  protected get loginForm() {
-    return this.#authService.loginForm;
-  }
+  protected loginForm = this.#fb.group({
+    username: ['', [Validators.required, Validators.email]],
+    password: ['', Validators.required],
+  });
 
-  public login() {
+  protected login() {
     this.loginForm.markAllAsTouched();
 
     if (!this.loginForm.valid) {
@@ -47,8 +54,8 @@ export class Login {
 
     this.submitting.set(true);
 
-    this.#authService
-      .login()
+    this.#loginSvc
+      .login(this.loginForm.value)
       .pipe(takeUntilDestroyed(this.#destroyed))
       .subscribe({
         next: (r) => {
@@ -59,17 +66,21 @@ export class Login {
 
             this.#router.navigateByUrl(this.#returnUrl());
           } else {
-            this.loginForm.controls.password.setValue('');
-            this.loginForm.markAsUntouched();
+            this.clearPassword();
 
-            this.error.set('Unable to login');
+            this.#msgsSvc.addError('Unable to login');
           }
 
           this.submitting.set(false);
         },
-        error:()=> {
-          this.error.set('Unable to login');
-        }
+        error: () => {
+          this.clearPassword();
+        },
       });
+  }
+
+  protected clearPassword() {
+    this.loginForm.controls.password.setValue('');
+    this.loginForm.markAsUntouched();
   }
 }

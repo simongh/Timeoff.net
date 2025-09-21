@@ -3,9 +3,7 @@
     <ton-card>
       <div class="card-body">
         <h2 class="h2 text-center mb-4">Login to your account</h2>
-        @if (error()!='') {
-        <ngb-alert [type]="'danger'" [dismissible]="false">{{ error() }}</ngb-alert>
-        }
+        <ton-messages />
         <form autocomplete="off" [formGroup]="loginForm">
           <div class="mb-4">
             <label for="username" class="form-label">Email</label>
@@ -26,7 +24,7 @@
           </div>
 
           <div class="mb-4">
-            <label for="password" class="form-label">Password</label>
+            <label for="password" class="form-label">Password <span class="form-label-description"><a routerLink="/forgot-password">Forgotten password</a></span></label>
             <input
               type="password"
               id="password"
@@ -54,7 +52,9 @@
       </div>
     </ton-card>
     @if (allowRegistrations()) {
-    <div class="text-center text-secondary mt-3"><a routerLink="/register">Register</a> new company</div>
+    <div class="text-center text-secondary mt-3">
+      <a routerLink="/register">Register</a> new company
+    </div>
     }
   </div>
 </div>

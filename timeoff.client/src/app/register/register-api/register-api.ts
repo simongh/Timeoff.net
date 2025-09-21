@@ -1,13 +1,17 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 
+import { RegisterForm } from '../register';
+
 @Injectable({
   providedIn: 'root',
 })
-export class AuthApi {
+export class RegisterApi {
+
   readonly #client = inject(HttpClient);
 
-  public logout() {
-    return this.#client.post<void>('/api/account/logout', {});
+
+  public register(form: RegisterForm) {
+    return this.#client.post<void>('/api/account/register', form);
   }
 }

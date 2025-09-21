@@ -11,7 +11,8 @@ export const routes: Routes = [
     {
         path: 'login',
         title: 'Login',
-        component: LoginComponent,
+        //component: LoginComponent,
+        loadComponent: () => LoginComponent,
     },
     {
         path: 'forgot-password',
@@ -32,6 +33,6 @@ export const routes: Routes = [
         path: '',
         canActivate: [authGuard],
         canActivateChild: [authGuard],
-        loadChildren: () => import('./site/site.routes').then(m=>m.siteRoutes)
+        loadChildren: () => import('./site/site.routes').then((m) => m.siteRoutes),
     },
 ];
