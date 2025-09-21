@@ -1,0 +1,60 @@
+<div class="page page-center">
+  <div class="container container-tight py-4">
+    <ton-card>
+      <div class="card-body">
+        <h2 class="h2 text-center mb-4">Login to your account</h2>
+        @if (error()!='') {
+        <ngb-alert [type]="'danger'" [dismissible]="false">{{ error() }}</ngb-alert>
+        }
+        <form autocomplete="off" [formGroup]="loginForm">
+          <div class="mb-4">
+            <label for="username" class="form-label">Email</label>
+            <input
+              type="text"
+              id="username"
+              placeholder="Your email"
+              autocomplete="off"
+              class="form-control"
+              formControlName="username"
+            />
+            <ton-validator-message controlName="username" validatorName="required"
+              >Email is required</ton-validator-message
+            >
+            <ton-validator-message controlName="username" validatorName="email"
+              >A valid email address is required</ton-validator-message
+            >
+          </div>
+
+          <div class="mb-4">
+            <label for="password" class="form-label">Password</label>
+            <input
+              type="password"
+              id="password"
+              placeholder="Your password"
+              autocomplete="off"
+              class="form-control"
+              formControlName="password"
+            />
+            <ton-validator-message controlName="password" validatorName="required"
+              >Password is required</ton-validator-message
+            >
+          </div>
+
+          <div class="form-footer">
+            <button
+              type="button"
+              class="btn btn-primary w-100"
+              [disabled]="submitting()"
+              (click)="login()"
+            >
+              Sign In
+            </button>
+          </div>
+        </form>
+      </div>
+    </ton-card>
+    @if (allowRegistrations()) {
+    <div class="text-center text-secondary mt-3"><a routerLink="/register">Register</a> new company</div>
+    }
+  </div>
+</div>
