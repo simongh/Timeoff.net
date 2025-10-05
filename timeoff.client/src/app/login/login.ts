@@ -1,6 +1,6 @@
 import { Component, DestroyRef, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { injectQueryParams } from 'ngxtension/inject-query-params';
 
@@ -12,8 +12,6 @@ import { ValidatorMessage } from '@components/validator-message/validator-messag
 import { AuthService } from '@app-types/auth/auth.service';
 
 import { LoginApi } from './login-api/login-api';
-
-export type LoginForm = Login['loginForm']['value'];
 
 @Component({
   selector: 'ton-login-page',
@@ -34,16 +32,11 @@ export class Login {
 
   readonly #destroyed = inject(DestroyRef);
 
-  readonly #fb = inject(NonNullableFormBuilder);
-
   protected readonly submitting = signal(false);
 
   protected readonly allowRegistrations = signal(true);
 
-  protected loginForm = this.#fb.group({
-    username: ['', [Validators.required, Validators.email]],
-    password: ['', Validators.required],
-  });
+  protected readonly loginForm = this.#loginSvc.createLoginForm();
 
   protected login() {
     this.loginForm.markAllAsTouched();

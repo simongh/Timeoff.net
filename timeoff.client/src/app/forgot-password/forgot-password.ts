@@ -1,6 +1,6 @@
 import { Component, DestroyRef, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 
 import { Card } from '@components/cards';
@@ -23,11 +23,7 @@ export class ForgotPassword {
 
   readonly #destroyed = inject(DestroyRef);
 
-  readonly #fb = inject(NonNullableFormBuilder);
-
-  protected readonly passwordForm = this.#fb.group({
-    email: ['', [Validators.required, Validators.email]],
-  });
+  protected readonly passwordForm = this.#forgotPasswordSvc.createPasswordForm();
 
   protected readonly submitting = signal(false);
 

@@ -1,7 +1,7 @@
 import { HttpClient, HttpContext } from '@angular/common/http';
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { differenceInSeconds, parseISO } from 'date-fns';
-import { catchError, of, tap } from 'rxjs';
+import { catchError, of, switchMap, tap } from 'rxjs';
 
 import { LoggedInUserModel } from '@api/auth/logged-in-user.model';
 
@@ -58,6 +58,24 @@ export class AuthService {
       .pipe(
         catchError((e) => of(null)),
         tap((u) => this.#user.set(u ?? ({} as LoggedInUserModel)))
+      );
+  }
+
+  public logout() {
+    return this.#client
+      .post(
+        '/api/auth/logout',
+        {},
+        {
+          context: new HttpContext().set(BYPASS_TOKEN, true),
+        }
+      )
+      .pipe(
+        switchMap(() => {
+          this.clear();
+
+          return of(null);
+        })
       );
   }
 }

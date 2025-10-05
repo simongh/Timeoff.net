@@ -1,14 +1,12 @@
 import { Component, DestroyRef, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 
 import { Card } from '@components/cards';
 import { Messages } from '@components/messages/messages';
 import { MessagesService } from '@components/messages/messages.service';
 import { ValidatorMessage } from '@components/validator-message/validator-message';
-
-import { compareValidator } from '@app-types/validators';
 
 import { RegisterApi } from './register-api/register-api';
 
@@ -27,21 +25,7 @@ export class Register {
 
   readonly #destroyed = inject(DestroyRef);
 
-  readonly #fb = inject(NonNullableFormBuilder);
-
-  protected readonly form = this.#fb.group(
-    {
-      companyName: ['', [Validators.required]],
-      firstName: ['', [Validators.required]],
-      lastName: ['', [Validators.required]],
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(8)]],
-      confirmPassword: ['', [Validators.required]],
-    },
-    {
-      validators: [compareValidator('password', 'confirmPassword')],
-    }
-  );
+  protected readonly form = this.#registerSvc.createRegisterForm();
 
   protected readonly submitting = signal(false);
 

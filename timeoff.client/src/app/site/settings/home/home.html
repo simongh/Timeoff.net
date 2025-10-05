@@ -1,0 +1,104 @@
+<ton-page-header>
+  <div class="page-pretitle">Account main settings</div>
+  <h2 class="page-title">General settings</h2>
+</ton-page-header>
+<div class="page-body">
+  <div class="container-xl">
+    <div class="row row-deck row-cards">
+      <div class="col-12">
+        <ton-card>
+          <div class="card-header">
+            <h3 class="card-title">Company</h3>
+          </div>
+          <form class="card-body">
+            <div class="container-xl">
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="row">
+                    <label class="col-md-4 col-form-label required" for="name">Company Name</label>
+                    <div class="col">
+                      <input class="form-control" type="text" id="name" />
+                    </div>
+                  </div>
+                  <div class="row mt-2">
+                    <label class="col-md-4 col-form-label required" for="date-format"
+                      >Date format</label
+                    >
+                    <div class="col">
+                      <select class="form-select" id="date-format">
+                        <option></option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="row mt-2">
+                    <label class="col-md-4 col-form-label required" for="carry-over"
+                      >Carried over days</label
+                    >
+                    <div class="col">
+                      <select class="form-select" id="carry-over"></select>
+                      <small class="form-hint"
+                        >Number of days of employee allowance that are carried over to the next
+                        year.</small
+                      >
+                    </div>
+                  </div>
+                  <div class="row mt-3">
+                    <div class="offset-4 col">
+                      <label class="form-check" for="show-holiday">
+                        <input class="form-check-input" type="checkbox" id="show-holiday" />
+                        <span class="form-check-label">Share absences between employees</span>
+                        <small class="form-hint"
+                          >If enabled all employees can see information about everybody's absences
+                          regardless of team.</small
+                        >
+                      </label>
+                    </div>
+                  </div>
+                  <div class="row mt-3">
+                    <div class="offset-4 col">
+                      <label class="form-check" for="show-teamview">
+                        <input class="form-check-input" type="checkbox" id="show-teamview" />
+                        <span class="form-check-label"
+                          >Hide Team View page for non-admin users</span
+                        >
+                        <small class="form-hint"
+                          >If marked Team view page is shown only to admin users.</small
+                        >
+                      </label>
+                    </div>
+                  </div>
+
+                  <div class="row mt-2">
+                    <div class="col text-end">
+                      <button class="btn btn-primary">Save changes</button>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-md-6">
+                  <div class="row">
+                    <ton-backup />
+                  </div>
+                  <div class="row mt-4">
+                    <ton-schedule />
+                  </div>
+                  <div class="row mt-4">
+                    <ton-carry-over />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+        </ton-card>
+      </div>
+      <div class="col-8">
+        <ton-card>
+          <form class="card-body"></form>
+        </ton-card>
+      </div>
+      <div class="col-4">
+        <ton-card></ton-card>
+      </div>
+    </div>
+  </div>
+</div>

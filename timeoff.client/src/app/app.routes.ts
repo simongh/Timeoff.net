@@ -6,6 +6,7 @@ import { ForgotPassword } from './forgot-password/forgot-password';
 import { Login } from './login/login';
 import { Register } from './register/register';
 import { ResetPassword } from './reset-password/reset-password';
+import { Site } from './site/site';
 
 export const routes: Routes = [
   {
@@ -32,6 +33,7 @@ export const routes: Routes = [
     path: '',
     canActivate: [authGuard],
     canActivateChild: [authGuard],
+    loadComponent: ()=> Site,
     loadChildren: () => import('./site/site.routes').then((m) => m.siteRoutes),
   },
 ];

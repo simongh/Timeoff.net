@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
-import { RouterLink } from '@angular/router';
+
+import { PageHeader } from '@components/page-header/page-header';
 
 @Component({
   selector: 'ton-home',
-  imports: [RouterLink],
+  imports: [PageHeader],
   templateUrl: './home.html',
   styleUrl: './home.scss'
 })

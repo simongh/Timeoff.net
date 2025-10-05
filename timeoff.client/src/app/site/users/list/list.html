@@ -1,0 +1,67 @@
+<ton-page-header>
+  <div class="page-pretitle">{{ company() }}'s staff</div>
+  <h2 class="page-title">Employees</h2>
+</ton-page-header>
+<div class="page-body">
+  <div class="container-xl">
+    <div class="row row-deck row cards">
+      <div class="col-lg-3">
+        <ton-card>
+          <div class="list-group list-group-flush">
+            <a routerLink="/users" class="list-group-item" [class.active]="team() === null"
+              >All teams</a
+            >
+            @for (t of teams(); track $index) {
+            <a
+              class="list-group-item"
+              [class.active]="team() === t.id"
+              routerLink="/users"
+              [queryParams]="{ team: t.id }"
+              >{{ t.name }}</a
+            >
+            }
+            <div class="list-group-item"></div>
+          </div>
+        </ton-card>
+        
+      </div>
+      <div class="col">
+        <ton-card>
+          <div class="table-responsive">
+            <table class="table card-table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Team</th>
+                  <th>Is Administrator</th>
+                  <th>Available allowance</th>
+                  <th>Days used</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (user of users(); track $index) {
+                <tr>
+                  <td>
+                    <a routerLink="/users/{{ user.id }}">
+                      @if (user.isActive) {
+                      {{ user.firstName }} {{ user.lastName }} } @else {
+                      <s>{{ user.firstName }} {{ user.lastName }}</s>
+                      }</a
+                    >
+                  </td>
+                  <td>
+                    <a routerLink="/settings/teams/{{ user.team.id }}">{{ user.team.name }}</a>
+                  </td>
+                  <td>{{ user.isAdmin | yes }}</td>
+                  <td>{{ user.availableAllowance }}</td>
+                  <td>{{ user.daysUsed }}</td>
+                </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </ton-card>
+      </div>
+    </div>
+  </div>
+</div>
