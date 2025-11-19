@@ -1,5 +1,4 @@
-import { Component, computed, DestroyRef, effect, inject, signal } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Component, computed, effect, inject, signal } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { injectQueryParams } from 'ngxtension/inject-query-params';
@@ -26,7 +25,7 @@ export class ResetPassword {
 
   readonly #authSvc = inject(AuthService);
 
-  readonly #destroyed = inject(DestroyRef);
+  readonly #invalidLink = signal(false);
 
   protected readonly showCurrent = computed(() => this.#authSvc.isUserLoggedIn());
 
@@ -37,14 +36,16 @@ export class ResetPassword {
     this.token()
   );
 
-  protected readonly submitting = signal(false);
+  protected readonly submitting = computed(
+    () => this.#resetPasswordSvc.resetPassword.isLoading() || this.#invalidLink()
+  );
 
   constructor() {
     effect(() => {
       if (!this.showCurrent()) {
         if (!this.resetForm.value.token) {
           this.#msgsSvc.addError('Invalid reset link');
-          this.submitting.set(true);
+          this.#invalidLink.set(true);
         }
       }
     });
@@ -57,17 +58,14 @@ export class ResetPassword {
       return;
     }
 
-    this.submitting.set(true);
-
-    this.#resetPasswordSvc
-      .resetPassword(this.resetForm.value)
-      .pipe(takeUntilDestroyed(this.#destroyed))
-      .subscribe({
+    this.#resetPasswordSvc.resetPassword.load({
+      payload: [this.resetForm.value],
+      subscriber: {
         next: () => {
           this.#msgsSvc.addSuccess('Password updated successfully');
-          this.submitting.set(false);
           this.resetForm.reset();
         },
-      });
+      },
+    });
   }
 }

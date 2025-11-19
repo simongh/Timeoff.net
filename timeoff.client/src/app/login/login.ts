@@ -1,5 +1,4 @@
-import { Component, DestroyRef, inject, signal } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Component, computed, inject, signal } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { injectQueryParams } from 'ngxtension/inject-query-params';
@@ -30,9 +29,7 @@ export class Login {
 
   readonly #returnUrl = injectQueryParams((p) => p['returnUrl'] ?? '/');
 
-  readonly #destroyed = inject(DestroyRef);
-
-  protected readonly submitting = signal(false);
+  protected readonly submitting = computed(() => this.#loginSvc.login.isLoading());
 
   protected readonly allowRegistrations = signal(true);
 
@@ -45,12 +42,9 @@ export class Login {
       return;
     }
 
-    this.submitting.set(true);
-
-    this.#loginSvc
-      .login(this.loginForm.value)
-      .pipe(takeUntilDestroyed(this.#destroyed))
-      .subscribe({
+    this.#loginSvc.login.load({
+      payload: [this.loginForm.value],
+      subscriber: {
         next: (r) => {
           this.#currentUserSvc.clear();
 
@@ -63,13 +57,12 @@ export class Login {
 
             this.#msgsSvc.addError('Unable to login');
           }
-
-          this.submitting.set(false);
         },
         error: () => {
           this.clearPassword();
         },
-      });
+      },
+    });
   }
 
   protected clearPassword() {

@@ -1,5 +1,4 @@
-import { Component, DestroyRef, inject, signal } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Component, computed, inject } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 
@@ -21,11 +20,11 @@ export class ForgotPassword {
 
   readonly #msgsSvc = inject(MessagesService);
 
-  readonly #destroyed = inject(DestroyRef);
-
   protected readonly passwordForm = this.#forgotPasswordSvc.createPasswordForm();
 
-  protected readonly submitting = signal(false);
+  protected readonly submitting = computed(() =>
+    this.#forgotPasswordSvc.forgotPassword.isLoading()
+  );
 
   public forgot() {
     this.passwordForm.markAllAsTouched();
@@ -33,19 +32,17 @@ export class ForgotPassword {
       return;
     }
 
-    this.submitting.set(true);
-    this.#forgotPasswordSvc
-      .forgotPassword(this.passwordForm.value.email!)
-      .pipe(takeUntilDestroyed(this.#destroyed))
-      .subscribe({
+    this.#forgotPasswordSvc.forgotPassword.load({
+      payload: [this.passwordForm.value.email!],
+      subscriber: {
         next: () => {
           this.#msgsSvc.addSuccess(
             `Password reset email sent to ${this.passwordForm.controls.email.value}`
           );
 
           this.passwordForm.reset();
-          this.submitting.set(false);
         },
-      });
+      },
+    });
   }
 }

@@ -1,5 +1,4 @@
-import { Component, DestroyRef, inject, signal } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Component, computed, inject } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 
@@ -23,11 +22,9 @@ export class Register {
 
   readonly #msgsSvc = inject(MessagesService);
 
-  readonly #destroyed = inject(DestroyRef);
-
   protected readonly form = this.#registerSvc.createRegisterForm();
 
-  protected readonly submitting = signal(false);
+  protected readonly submitting = computed(() => this.#registerSvc.register.isLoading());
 
   public register() {
     this.form.markAllAsTouched();
@@ -35,17 +32,16 @@ export class Register {
       return;
     }
 
-    this.submitting.set(true);
-    this.#registerSvc
-      .register(this.form.value)
-      .pipe(takeUntilDestroyed(this.#destroyed))
-      .subscribe({
+    this.#registerSvc.register.load({
+      payload: [this.form.value],
+      subscriber: {
         next: () => {
           this.#msgsSvc.addSuccess(
             'Company registered successfully. Please login using the details you supplied'
           );
           this.form.reset();
         },
-      });
+      },
+    });
   }
 }
