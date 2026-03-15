@@ -26,12 +26,15 @@ export class List {
   protected readonly company = inject(AuthService).companyName;
 
   protected readonly team = injectQueryParams((p) =>
-    p['team'] ? numberAttribute(p['team']) : null
+    p['team'] ? numberAttribute(p['team']) : null,
   );
 
   protected readonly teams = derivedAsync(() => this.#siteSvc.getTeams(), { initialValue: [] });
 
-  protected readonly users = derivedAsync(() => this.#usersSvc.getUsers(this.team()), {
-    initialValue: [],
-  });
+  protected readonly users = derivedAsync(
+    () => this.#usersSvc.getUsers(() => this.team()).value(),
+    {
+      initialValue: [],
+    },
+  );
 }

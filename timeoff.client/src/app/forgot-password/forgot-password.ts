@@ -1,5 +1,6 @@
 import { Component, computed, inject } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
+import { FormField } from '@angular/forms/signals';
 import { RouterLink } from '@angular/router';
 
 import { Card } from '@components/cards';
@@ -11,7 +12,7 @@ import { ForgotPasswordApi } from './forgot-password-api/forgot-password-api';
 
 @Component({
   selector: 'ton-forgot-password',
-  imports: [Card, Messages, RouterLink, ReactiveFormsModule, ValidatorMessage],
+  imports: [Card, Messages, RouterLink, ReactiveFormsModule, ValidatorMessage, FormField],
   templateUrl: './forgot-password.html',
   styleUrl: './forgot-password.scss',
 })
@@ -27,20 +28,20 @@ export class ForgotPassword {
   );
 
   public forgot() {
-    this.passwordForm.markAllAsTouched();
-    if (this.passwordForm.invalid) {
+    this.passwordForm().reset();
+    if (this.passwordForm().invalid()) {
       return;
     }
 
     this.#forgotPasswordSvc.forgotPassword.load({
-      payload: [this.passwordForm.value.email!],
+      payload: [this.passwordForm.email().value()],
       subscriber: {
         next: () => {
           this.#msgsSvc.addSuccess(
-            `Password reset email sent to ${this.passwordForm.controls.email.value}`
+            `Password reset email sent to ${this.passwordForm.email().value()}`
           );
 
-          this.passwordForm.reset();
+          this.passwordForm().reset();
         },
       },
     });

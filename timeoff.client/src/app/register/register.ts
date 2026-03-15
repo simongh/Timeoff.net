@@ -1,5 +1,6 @@
 import { Component, computed, inject } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
+import { FormField } from '@angular/forms/signals';
 import { RouterLink } from '@angular/router';
 
 import { Card } from '@components/cards';
@@ -9,11 +10,9 @@ import { ValidatorMessage } from '@components/validator-message/validator-messag
 
 import { RegisterApi } from './register-api/register-api';
 
-export type RegisterForm = Register['form']['value'];
-
 @Component({
   selector: 'ton-register',
-  imports: [Card, Messages, ReactiveFormsModule, ValidatorMessage, RouterLink],
+  imports: [Card, Messages, ReactiveFormsModule, ValidatorMessage, RouterLink, FormField],
   templateUrl: './register.html',
   styleUrl: './register.scss',
 })
@@ -27,19 +26,19 @@ export class Register {
   protected readonly submitting = computed(() => this.#registerSvc.register.isLoading());
 
   public register() {
-    this.form.markAllAsTouched();
-    if (this.form.invalid) {
+    this.form().touched();
+    if (this.form().invalid()) {
       return;
     }
 
     this.#registerSvc.register.load({
-      payload: [this.form.value],
+      payload: [this.form().value()],
       subscriber: {
         next: () => {
           this.#msgsSvc.addSuccess(
             'Company registered successfully. Please login using the details you supplied'
           );
-          this.form.reset();
+          this.form().reset();
         },
       },
     });

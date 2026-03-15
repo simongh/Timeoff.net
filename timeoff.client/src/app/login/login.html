@@ -4,7 +4,7 @@
       <div class="card-body">
         <h2 class="h2 text-center mb-4">Login to your account</h2>
         <ton-messages />
-        <form autocomplete="off" [formGroup]="loginForm">
+        <form autocomplete="off">
           <div class="mb-4">
             <label for="username" class="form-label">Email</label>
             <input
@@ -13,12 +13,12 @@
               placeholder="Your email"
               autocomplete="off"
               class="form-control"
-              formControlName="username"
+              [formField]="loginForm.username"
             />
-            <ton-validator-message controlName="username" validatorName="required"
+            <ton-validator-message [field]="loginForm.username" validatorName="required"
               >Email is required</ton-validator-message
             >
-            <ton-validator-message controlName="username" validatorName="email"
+            <ton-validator-message [field]="loginForm.username" validatorName="email"
               >A valid email address is required</ton-validator-message
             >
           </div>
@@ -31,9 +31,9 @@
               placeholder="Your password"
               autocomplete="off"
               class="form-control"
-              formControlName="password"
+              [formField]="loginForm.password"
             />
-            <ton-validator-message controlName="password" validatorName="required"
+            <ton-validator-message [field]="loginForm.password" validatorName="required"
               >Password is required</ton-validator-message
             >
           </div>

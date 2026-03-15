@@ -1,11 +1,18 @@
 import { HttpClient } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
-import { NonNullableFormBuilder, Validators } from '@angular/forms';
+import { inject, Injectable, signal } from '@angular/core';
+import { email, form, minLength, required, validate } from '@angular/forms/signals';
 
 import { injectApi } from '@app-types/apiResource';
-import { compareValidator } from '@app-types/validators';
+import { compare } from '@app-types/validators';
 
-type RegisterForm = ReturnType<RegisterApi['createRegisterForm']>['value'];
+interface RegisterModel {
+  companyName: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+}
 
 @Injectable({
   providedIn: 'root',
@@ -13,23 +20,34 @@ type RegisterForm = ReturnType<RegisterApi['createRegisterForm']>['value'];
 export class RegisterApi {
   readonly #client = inject(HttpClient);
 
-  readonly #fb = inject(NonNullableFormBuilder);
-
-  public readonly register = injectApi((form: RegisterForm) => this.#client.post<void>('/api/account/register', form));
+  public readonly register = injectApi((form: RegisterModel) =>
+    this.#client.post<void>('/api/account/register', form),
+  );
 
   public createRegisterForm() {
-    return this.#fb.group(
-      {
-        companyName: ['', [Validators.required]],
-        firstName: ['', [Validators.required]],
-        lastName: ['', [Validators.required]],
-        email: ['', [Validators.required, Validators.email]],
-        password: ['', [Validators.required, Validators.minLength(8)]],
-        confirmPassword: ['', [Validators.required]],
-      },
-      {
-        validators: [compareValidator('password', 'confirmPassword')],
-      }
-    );
+    const model = signal<RegisterModel>({
+      companyName: '',
+      firstName: '',
+      lastName: '',
+      email: '',
+      password: '',
+      confirmPassword: '',
+    });
+
+    return form(model, (schema) => {
+      required(schema.companyName);
+      required(schema.firstName);
+      required(schema.lastName);
+
+      required(schema.email);
+      email(schema.email);
+
+      required(schema.password);
+      minLength(schema.password, 8);
+
+      required(schema.confirmPassword);
+
+      compare(schema.confirmPassword, schema.password);
+    });
   }
 }

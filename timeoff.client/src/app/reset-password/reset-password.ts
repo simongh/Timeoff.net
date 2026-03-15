@@ -1,5 +1,6 @@
 import { Component, computed, effect, inject, signal } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
+import { FormField } from '@angular/forms/signals';
 import { RouterLink } from '@angular/router';
 import { injectQueryParams } from 'ngxtension/inject-query-params';
 
@@ -14,7 +15,7 @@ import { ResetPasswordApi } from './reset-password-api/reset-password-api';
 
 @Component({
   selector: 'ton-reset-password',
-  imports: [ValidatorMessage, Messages, Card, ReactiveFormsModule, RouterLink],
+  imports: [ValidatorMessage, Messages, Card, ReactiveFormsModule, RouterLink, FormField],
   templateUrl: './reset-password.html',
   styleUrl: './reset-password.scss',
 })
@@ -33,17 +34,17 @@ export class ResetPassword {
 
   protected readonly resetForm = this.#resetPasswordSvc.createResetForm(
     this.showCurrent(),
-    this.token()
+    this.token(),
   );
 
   protected readonly submitting = computed(
-    () => this.#resetPasswordSvc.resetPassword.isLoading() || this.#invalidLink()
+    () => this.#resetPasswordSvc.resetPassword.isLoading() || this.#invalidLink(),
   );
 
   constructor() {
     effect(() => {
       if (!this.showCurrent()) {
-        if (!this.resetForm.value.token) {
+        if (!this.resetForm.token().value()) {
           this.#msgsSvc.addError('Invalid reset link');
           this.#invalidLink.set(true);
         }
@@ -52,18 +53,18 @@ export class ResetPassword {
   }
 
   public save() {
-    this.resetForm.markAllAsTouched();
+    this.resetForm().touched();
 
-    if (this.resetForm.invalid) {
+    if (this.resetForm().invalid()) {
       return;
     }
 
     this.#resetPasswordSvc.resetPassword.load({
-      payload: [this.resetForm.value],
+      payload: [this.resetForm().value()],
       subscriber: {
         next: () => {
           this.#msgsSvc.addSuccess('Password updated successfully');
-          this.resetForm.reset();
+          this.resetForm().reset();
         },
       },
     });

@@ -1,41 +1,31 @@
-import { Component, computed, inject, input } from '@angular/core';
+import { Component, computed, inject, input, model, ModelSignal } from '@angular/core';
 import { ControlContainer, FormControl } from '@angular/forms';
+import { FieldState, FieldTree, FormValueControl } from '@angular/forms/signals';
 
 @Component({
   selector: 'ton-validator-message',
   imports: [],
-  template: `@if (hasError) {
+  template: `@if (hasError()) {
     <small class="text-danger"><ng-content></ng-content></small>
-    } `,
+  } `,
   styleUrl: './validator-message.scss',
 })
-export class ValidatorMessage {
-  readonly #parent = inject(ControlContainer, { optional: true, skipSelf: true, host: true });
-
-  public readonly control = input<FormControl | null>(null);
-
-  public readonly controlName = input<string | null>(null);
+export class ValidatorMessage<T> {
+  public readonly field = input.required<FieldTree<T>>();
 
   public readonly validatorName = input<string | null>(null);
 
-  protected get hasError() {
-    const control = this.control() || this.#parent?.control?.get(this.controlName()!);
+  protected readonly hasError = computed(() => {
+    const errors = this.field()().errors();
 
-    if (!control) {
-      throw new Error(`Control was not found for validator ${this.validatorName}`);
-    }
-
-    if (control.touched) {
+    if (this.field()().touched()) {
       if (this.validatorName()) {
-        return (
-          control.hasError(this.validatorName()!) ||
-          (control.parent?.hasError(this.validatorName()!) ?? false)
-        );
+        return errors.some((e) => e.kind == this.validatorName());
       } else {
-        return control.errors != null;
+        return this.field()().invalid();
       }
     } else {
       return false;
     }
-  };
+  });
 }

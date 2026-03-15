@@ -1,15 +1,40 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { NonNullableFormBuilder, Validators } from '@angular/forms';
+import { email, form, required } from '@angular/forms/signals';
+import { tr } from 'date-fns/locale';
 
 import { injectApi } from '@app-types/apiResource';
 import { dateString } from '@app-types/dateString';
 
 import { UserListModel } from './user-list.model';
 
-type UserForm = ReturnType<UsersApi['createUserForm']>['value'];
-type AdjustmentForm = ReturnType<UsersApi['createAdjustmentForm']>['value'];
+interface UserModel {
+  firstName: string;
+  lastName: string;
+  email: string;
+  team: number | null;
+  isAdmin: boolean;
+  autoApprove: boolean;
+  startDate: dateString | null;
+  endDate: dateString | null;
+  isActive: boolean;
+  schedule: {
+    monday: boolean;
+    tuesday: boolean;
+    wednesday: boolean;
+    thursday: boolean;
+    friday: boolean;
+    saturday: boolean;
+    sunday: boolean;
+  };
+  scheduleOverride: boolean;
+}
+interface AdjustmentModel {
+  carryOver: number;
+  adjustment: number;
+}
 
 @Injectable({
   providedIn: 'root',
@@ -17,11 +42,11 @@ type AdjustmentForm = ReturnType<UsersApi['createAdjustmentForm']>['value'];
 export class UsersApi {
   readonly #httpClient = inject(HttpClient);
 
-  readonly #fb = inject(NonNullableFormBuilder);
+  public readonly updateSchedule = injectApi((form: UserModel['schedule'] | null, id: number) =>
+    this.#httpClient.put<UserModel['schedule']>(`/api/users/${id}/schedule`, form),
+  );
 
-  public readonly updateSchedule = injectApi((form: UserForm['schedule']|null, id: number)=>this.#httpClient.put<UserForm['schedule']>(`/api/users/${id}/schedule`, form));
-
-  public readonly createOrUpdate = injectApi((form: UserForm, id: number) => {
+  public readonly createOrUpdate = injectApi((form: UserModel, id: number) => {
     if (id === 0) {
       return this.#httpClient.post<void>('/api/users', form);
     } else {
@@ -33,15 +58,15 @@ export class UsersApi {
   });
 
   public readonly delete = injectApi((id: number) =>
-    this.#httpClient.delete<void>(`/api/users/${id}`)
+    this.#httpClient.delete<void>(`/api/users/${id}`),
   );
 
   public readonly resetPassword = injectApi((id: number) =>
-    this.#httpClient.post<void>(`/api/users/${id}/reset-password`, {})
+    this.#httpClient.post<void>(`/api/users/${id}/reset-password`, {}),
   );
 
-  public readonly updateAdjustments = injectApi((form: AdjustmentForm, id: number) =>
-    this.#httpClient.put<void>(`/api/users/${id}/adjustments`, form)
+  public readonly updateAdjustments = injectApi((form: AdjustmentModel, id: number) =>
+    this.#httpClient.put<void>(`/api/users/${id}/adjustments`, form),
   );
 
   public getUsers(p: () => number | null) {
@@ -58,50 +83,53 @@ export class UsersApi {
     });
   }
 
-  public getAbsences(p:()=> number){
+  public getAbsences(p: () => number) {
     return rxResource({
       params: p,
-      stream:(params)=>this.#httpClient.get<object>(`/api/users/${params.params}/absences`)
-    })
+      stream: (params) => this.#httpClient.get<object>(`/api/users/${params.params}/absences`),
+    });
   }
 
   public createUserForm() {
-    const form = this.#fb.group(
-      {
-        firstName: ['', Validators.required],
-        lastName: ['', Validators.required],
-        email: ['', [Validators.required, Validators.email]],
-        team: [null as number | null],
-        isAdmin: [false],
-        autoApprove: [false],
-        startDate: [null as dateString | null, Validators.required],
-        endDate: [null as dateString | null],
-        isActive: [true],
-        schedule: this.#fb.group({
-          monday: [false],
-          tuesday: [false],
-          wednesday: [false],
-          thursday: [false],
-          friday: [false],
-          saturday: [false],
-          sunday: [false],
-        }),
-        scheduleOverride: [false],
+    const model = signal<UserModel>({
+      firstName: '',
+      lastName:'',
+      email: '',
+      team: null,
+      isAdmin: false,
+      autoApprove: false,
+      startDate: null,
+      endDate: null,
+      isActive: true,
+      schedule: {
+        monday: true,
+        tuesday: true,
+        wednesday: true,
+        thursday: true,
+        friday: true,
+        saturday: false,
+        sunday: false,
       },
-      {
-        validators: [],
-      }
-    );
+      scheduleOverride: false
+    });
 
-    return form;
+    return form(model,(schema)=>{
+      required(schema.firstName);
+      required(schema.lastName);
+      
+      required(schema.email);
+      email(schema.email);
+
+      required(schema.startDate);
+    });
   }
 
   public createAdjustmentForm() {
-    const form = this.#fb.group({
-      carryOver: [0],
-      adjustment: [0],
+    const model = signal<AdjustmentModel>({
+      carryOver: 0,
+      adjustment: 0,
     });
 
-    return form;
+    return form(model);
   }
 }

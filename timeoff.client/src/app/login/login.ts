@@ -1,5 +1,6 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
+import { FormField } from '@angular/forms/signals';
 import { Router, RouterLink } from '@angular/router';
 import { injectQueryParams } from 'ngxtension/inject-query-params';
 
@@ -14,7 +15,7 @@ import { LoginApi } from './login-api/login-api';
 
 @Component({
   selector: 'ton-login-page',
-  imports: [ReactiveFormsModule, Card, ValidatorMessage, RouterLink, Messages],
+  imports: [ReactiveFormsModule, Card, ValidatorMessage, RouterLink, Messages, FormField],
   templateUrl: './login.html',
   styleUrl: './login.scss',
 })
@@ -36,14 +37,14 @@ export class Login {
   protected readonly loginForm = this.#loginSvc.createLoginForm();
 
   protected login() {
-    this.loginForm.markAllAsTouched();
+    this.loginForm().markAsTouched();
 
-    if (!this.loginForm.valid) {
+    if (!this.loginForm().valid) {
       return;
     }
 
     this.#loginSvc.login.load({
-      payload: [this.loginForm.value],
+      payload: [this.loginForm().value()],
       subscriber: {
         next: (r) => {
           this.#currentUserSvc.clear();
@@ -66,7 +67,7 @@ export class Login {
   }
 
   protected clearPassword() {
-    this.loginForm.controls.password.setValue('');
-    this.loginForm.markAsUntouched();
+    this.loginForm.password().value.set('');
+    this.loginForm().reset();
   }
 }

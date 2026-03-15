@@ -1,11 +1,16 @@
 import { HttpClient } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
-import { NonNullableFormBuilder, Validators } from '@angular/forms';
+import { inject, Injectable, signal } from '@angular/core';
+import { disabled, form, minLength, required } from '@angular/forms/signals';
 
 import { injectApi } from '@app-types/apiResource';
-import { compareValidator } from '@app-types/validators';
+import { compare } from '@app-types/validators';
 
-type ResetForm = ReturnType<ResetPasswordApi['createResetForm']>['value'];
+interface ResetModel {
+  current: string;
+  password: string;
+  confirmPassword: string;
+  token: string | null;
+}
 
 @Injectable({
   providedIn: 'root',
@@ -13,23 +18,27 @@ type ResetForm = ReturnType<ResetPasswordApi['createResetForm']>['value'];
 export class ResetPasswordApi {
   readonly #client = inject(HttpClient);
 
-  readonly #fb = inject(NonNullableFormBuilder);
-
-  public readonly resetPassword = injectApi((form: ResetForm) =>
-    this.#client.post<void>('/api/account/reset-password', form)
+  public readonly resetPassword = injectApi((form: ResetModel) =>
+    this.#client.post<void>('/api/account/reset-password', form),
   );
 
   public createResetForm(showCurrent: boolean, token: string | null) {
-    return this.#fb.group(
-      {
-        current: ['', showCurrent ? [Validators.required] : []],
-        password: ['', [Validators.required, Validators.minLength(8)]],
-        confirmPassword: ['', []],
-        token: [token],
-      },
-      {
-        validators: [compareValidator('password', 'confirmPassword')],
-      }
-    );
+    const model = signal<ResetModel>({
+      password: '',
+      confirmPassword: '',
+      token: null,
+      current: '',
+    });
+
+    return form(model, (schema) => {
+      required(schema.current, { when: () => showCurrent });
+      disabled(schema.current, () => !showCurrent);
+
+      required(schema.password);
+      minLength(schema.password, 8);
+
+      required(schema.confirmPassword);
+      compare(schema.confirmPassword, schema.password);
+    });
   }
 }
