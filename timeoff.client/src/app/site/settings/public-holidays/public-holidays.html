@@ -1,0 +1,27 @@
+<ton-page-header>
+  <div class="page-pretitle">
+    Public holidays for {{ company() }}'s account in {{ currentYear() }}
+  </div>
+  <h2>Public Holidays</h2>
+</ton-page-header>
+
+<div class="page-body">
+  <div class="container-xl">
+    <div class="row row-deck row cards">
+      <div class="col-lg-9">
+        <ton-card>
+            content
+          @for (item of holidays.value(); track item.id) {
+            {{ item.id }}
+          }
+        </ton-card>
+      </div>
+      <div class="col">
+        <ton-card></ton-card>
+      </div>
+    </div>
+  </div>
+</div>
+@for (item of holidays.value(); track item.id) {
+  {{ item.id }}
+}
