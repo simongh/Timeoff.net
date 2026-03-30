@@ -1,7 +1,11 @@
-import { Component, computed, inject, numberAttribute, signal } from '@angular/core';
-import { derivedAsync } from 'ngxtension/derived-async';
+import { Component, computed, inject, numberAttribute } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { RouterLink } from '@angular/router';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { faChevronRight, faChevronLeft} from '@fortawesome/free-solid-svg-icons'
 import { injectQueryParams } from 'ngxtension/inject-query-params';
 
+import { Calendar } from '@components/calendar/calendar';
 import { Card } from '@components/cards';
 import { PageHeader } from '@components/page-header/page-header';
 
@@ -11,7 +15,7 @@ import { PublicHolidaysApi } from './public-holidays-api/public-holidays-api';
 
 @Component({
   selector: 'ton-public-holidays',
-  imports: [PageHeader, Card],
+  imports: [PageHeader, Card, RouterLink, FormsModule, Calendar, FontAwesomeModule],
   templateUrl: './public-holidays.html',
   styleUrl: './public-holidays.scss',
 })
@@ -28,5 +32,11 @@ export class PublicHolidays {
 
   protected readonly lastYear = computed(() => this.currentYear() - 1);
 
+  protected readonly start = computed(()=>`${this.currentYear()}-01-01`);
+
   protected readonly holidays = this.#holidayApi.getHolidays(() => this.currentYear());
+
+  protected readonly faChevronLeft = faChevronLeft;
+
+  protected readonly faChevronRight = faChevronRight;
 }

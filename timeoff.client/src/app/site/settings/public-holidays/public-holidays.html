@@ -10,18 +10,34 @@
     <div class="row row-deck row cards">
       <div class="col-lg-9">
         <ton-card>
-            content
-          @for (item of holidays.value(); track item.id) {
-            {{ item.id }}
-          }
+          <div class="card-header">
+            <div class="container-xl">
+              <div class="row">
+                <div class="col">
+                  <a class="btn" routerLink="." [queryParams]="{ year: lastYear() }"><fa-icon [icon]="faChevronLeft"/> {{
+                    lastYear()
+                  }}</a>
+                  
+                </div>
+                <div class="col text-end">
+                  <a class="btn" routerLink="." [queryParams]="{ year: nextYear() }">{{
+                    nextYear()
+                  }} <fa-icon [icon]="faChevronRight"/></a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card-body">
+            <ton-calendar [start]="start()" [monthCount]="12" [events]="holidays.value()?? []" colStyle="col-md-4"></ton-calendar>
+          </div>
         </ton-card>
       </div>
       <div class="col">
-        <ton-card></ton-card>
+        <ton-card>
+          <div class="card-body"></div>
+        </ton-card>
       </div>
     </div>
   </div>
 </div>
-@for (item of holidays.value(); track item.id) {
-  {{ item.id }}
-}
+

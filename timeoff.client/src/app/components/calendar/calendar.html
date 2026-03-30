@@ -1,0 +1,37 @@
+<div class="row">
+  @for (month of weeks(); track month) {
+    <div [class]="['month_container', colStyle()]">
+      <table class="calendar_month">
+        <thead>
+          <tr>
+            <td colspan="14">{{ month.month }}</td>
+          </tr>
+          <tr>
+            <td colspan="2">M</td>
+            <td colspan="2">T</td>
+            <td colspan="2">W</td>
+            <td colspan="2">T</td>
+            <td colspan="2">F</td>
+            <td colspan="2">S</td>
+            <td colspan="2">S</td>
+          </tr>
+        </thead>
+        <tbody>
+          @for (week of month.weeks; track week) {
+            <tr>
+              @if (week.num == 0 && month.padding > 0) {
+                <td [attr.colspan]="2 * month.padding"></td>
+              }
+              @for (day of week.days; track day) {
+                <td [class]="['calendar_cell', 'half_1st', day.morning]">
+                  <span [ngbTooltip]="day.label">{{ day.day }}</span>
+                </td>
+                <td [class]="['calendar_cell', 'half_2nd', day.afternoon]"></td>
+              }
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>

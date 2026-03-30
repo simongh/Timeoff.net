@@ -6,7 +6,7 @@ import { form, required } from '@angular/forms/signals';
 import { injectApi } from '@app-types/apiResource';
 import { dateString } from '@app-types/dateString';
 
-import { CalendarDayModel } from './calendar-day.model';
+import { CalendarDayModel } from '../../../../types/calendar-day.model';
 
 interface AddModel {
   id: number | null;
