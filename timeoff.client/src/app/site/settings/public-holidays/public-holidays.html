@@ -34,7 +34,14 @@
       </div>
       <div class="col">
         <ton-card>
-          <div class="card-body"></div>
+          <div class="card-body">
+            {{form.length}}
+            @for (item of form; track $index) {
+              <input type="text" [formField]="form[$index].date"/>
+              <input type="text" [formField]="form[$index].name"/>
+              <hr/>
+            }
+          </div>
         </ton-card>
       </div>
     </div>

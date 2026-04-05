@@ -11,7 +11,7 @@ import { CalendarDayModel } from '../../../../types/calendar-day.model';
 interface AddModel {
   id: number | null;
   name: string;
-  date: dateString | null;
+  date: dateString;
 }
 
 @Injectable({
@@ -47,12 +47,24 @@ export class PublicHolidaysApi {
     const model = signal<AddModel>({
       id: null,
       name: '',
-      date: null,
+      date: '',
     });
 
     return form(model, (schema) => {
       required(schema.name);
       required(schema.date);
     });
+  }
+
+  public createEditForm(holidays: CalendarDayModel[]) {
+    const model = signal<AddModel[]>(
+      holidays.map((h) => ({
+        id: h.id,
+        date: h.date,
+        name: h.name,
+      })),
+    );
+
+    return form(model);
   }
 }

@@ -1,5 +1,5 @@
 <div class="row">
-  @for (month of weeks(); track month) {
+  @for (month of weeks(); track month.id) {
     <div [class]="['month_container', colStyle()]">
       <table class="calendar_month">
         <thead>
@@ -17,12 +17,12 @@
           </tr>
         </thead>
         <tbody>
-          @for (week of month.weeks; track week) {
+          @for (week of month.weeks; track week.num) {
             <tr>
               @if (week.num == 0 && month.padding > 0) {
                 <td [attr.colspan]="2 * month.padding"></td>
               }
-              @for (day of week.days; track day) {
+              @for (day of week.days; track day.day) {
                 <td [class]="['calendar_cell', 'half_1st', day.morning]">
                   <span [ngbTooltip]="day.label">{{ day.day }}</span>
                 </td>

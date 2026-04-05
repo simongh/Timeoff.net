@@ -45,6 +45,7 @@ export class Calendar {
   private formatMonth(date: Date) {
     return {
       start: date,
+      id: date.getMonth(),
       month: formatDate(date, this.monthFormat()),
       padding: (getDay(date) + 6) % 7,
       weeks: eachWeekOfInterval(

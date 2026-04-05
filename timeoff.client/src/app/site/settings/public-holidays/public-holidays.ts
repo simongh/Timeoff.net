@@ -1,5 +1,6 @@
 import { Component, computed, inject, numberAttribute } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { FormField } from '@angular/forms/signals';
 import { RouterLink } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faChevronRight, faChevronLeft} from '@fortawesome/free-solid-svg-icons'
@@ -15,7 +16,7 @@ import { PublicHolidaysApi } from './public-holidays-api/public-holidays-api';
 
 @Component({
   selector: 'ton-public-holidays',
-  imports: [PageHeader, Card, RouterLink, FormsModule, Calendar, FontAwesomeModule],
+  imports: [PageHeader, Card, RouterLink, FormsModule, Calendar, FontAwesomeModule, FormField],
   templateUrl: './public-holidays.html',
   styleUrl: './public-holidays.scss',
 })
@@ -39,4 +40,6 @@ export class PublicHolidays {
   protected readonly faChevronLeft = faChevronLeft;
 
   protected readonly faChevronRight = faChevronRight;
+
+  protected readonly form = this.#holidayApi.createEditForm(this.holidays.value() ?? []);
 }
