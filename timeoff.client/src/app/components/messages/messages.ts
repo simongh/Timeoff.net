@@ -6,7 +6,7 @@ import { MessagesService } from './messages.service';
 @Component({
   selector: 'ton-messages',
   imports: [NgbAlert],
-  template: `@if (hasMessage()) {
+  template: `@if (hasMessage()) { 
     <ngb-alert [type]="type()" [dismissible]="false">{{ text() }}</ngb-alert>
     }`,
 })

@@ -5,19 +5,22 @@ import { computed, Injectable, signal, untracked } from '@angular/core';
 })
 export class MessagesService {
   readonly #store = signal<{
-    type: 'success' | 'danger';
+    type: 'success' | 'danger' | '';
     text: string;
   } | null>(null);
 
   public readonly message = computed(() => {
     const msg = this.#store();
-    this.clear();
+    untracked(() => {
+      this.#store.set(null);
+    });
     return msg;
   });
 
   public clear() {
-    untracked(() => {
-      this.#store.set(null);
+    this.#store.set({
+      type: '',
+      text: '',
     });
   }
 

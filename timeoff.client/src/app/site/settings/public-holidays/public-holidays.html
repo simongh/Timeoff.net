@@ -3,6 +3,7 @@
     Public holidays for {{ company() }}'s account in {{ currentYear() }}
   </div>
   <h2>Public Holidays</h2>
+  <ton-messages />
 </ton-page-header>
 
 <div class="page-body">
@@ -14,32 +15,48 @@
             <div class="container-xl">
               <div class="row">
                 <div class="col">
-                  <a class="btn" routerLink="." [queryParams]="{ year: lastYear() }"><fa-icon [icon]="faChevronLeft"/> {{
-                    lastYear()
-                  }}</a>
-                  
+                  <a
+                    class="btn"
+                    routerLink="."
+                    [queryParams]="{ year: lastYear() }"
+                    (click)="clear()"
+                    ><fa-icon [icon]="faChevronLeft" /> {{ lastYear() }}</a
+                  >
                 </div>
                 <div class="col text-end">
-                  <a class="btn" routerLink="." [queryParams]="{ year: nextYear() }">{{
-                    nextYear()
-                  }} <fa-icon [icon]="faChevronRight"/></a>
+                  <a
+                    class="btn"
+                    routerLink="."
+                    [queryParams]="{ year: nextYear() }"
+                    (click)="clear()"
+                    >{{ nextYear() }} <fa-icon [icon]="faChevronRight"
+                  /></a>
                 </div>
               </div>
             </div>
           </div>
           <div class="card-body">
-            <ton-calendar [start]="start()" [monthCount]="12" [events]="holidays.value()?? []" colStyle="col-md-4"></ton-calendar>
+            <ton-calendar
+              [start]="start()"
+              [monthCount]="12"
+              [events]="holidays.value() ?? []"
+              colStyle="col-md-4"
+            ></ton-calendar>
           </div>
         </ton-card>
       </div>
       <div class="col">
         <ton-card>
           <div class="card-body">
-            {{form.length}}
-            @for (item of form; track $index) {
-              <input type="text" [formField]="form[$index].date"/>
-              <input type="text" [formField]="form[$index].name"/>
-              <hr/>
+            @for (item of form; track item) {
+              <input type="text" [formField]="form[$index].date" class="form-control" [placeholder]="dateFormat()" />
+              <input type="text" [formField]="form[$index].name" class="form-control mt-1" />
+              @if (!$last) {
+                <hr class="my-3" />
+              }
+            }
+            @if (form.length > 0) {
+              <button class="btn btn-primary mt-4" (click)="save()">Save</button>
             }
           </div>
         </ton-card>
@@ -47,4 +64,3 @@
     </div>
   </div>
 </div>
-

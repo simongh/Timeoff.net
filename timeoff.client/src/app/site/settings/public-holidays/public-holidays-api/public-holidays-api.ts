@@ -1,14 +1,16 @@
 import { HttpClient } from '@angular/common/http';
-import { inject, Injectable, signal } from '@angular/core';
+import { inject, Injectable, Signal, signal, WritableSignal } from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
-import { form, required } from '@angular/forms/signals';
+import { applyEach, form, required, SchemaPathTree } from '@angular/forms/signals';
+import { it } from 'date-fns/locale';
+import { map } from 'rxjs';
 
 import { injectApi } from '@app-types/apiResource';
 import { dateString } from '@app-types/dateString';
 
 import { CalendarDayModel } from '../../../../types/calendar-day.model';
 
-interface AddModel {
+export interface AddModel {
   id: number | null;
   name: string;
   date: dateString;
@@ -28,7 +30,7 @@ export class PublicHolidaysApi {
 
   public update = injectApi((form: AddModel[]) =>
     this.#httpClient.put<void>('/api/public-holidays', {
-      publicHolidays: [form],
+      publicHolidays: form,
     }),
   );
 
@@ -38,10 +40,12 @@ export class PublicHolidaysApi {
     return rxResource({
       params: p,
       stream: (params) => {
-        return this.#httpClient.get<CalendarDayModel[]>(`/api/public-holidays/${params.params}`);
+        return this.#httpClient
+          .get<CalendarDayModel[]>(`/api/public-holidays/${params.params}`);
       },
     });
   }
+
 
   public createAddForm() {
     const model = signal<AddModel>({
@@ -50,21 +54,18 @@ export class PublicHolidaysApi {
       date: '',
     });
 
-    return form(model, (schema) => {
-      required(schema.name);
-      required(schema.date);
+    return form(model, this.AddModelValidator);
+  }
+
+  public createEditForm(holidays: WritableSignal<AddModel[]>) {
+    return form(holidays, (schema) => {
+      applyEach(schema, this.AddModelValidator);
     });
   }
 
-  public createEditForm(holidays: CalendarDayModel[]) {
-    const model = signal<AddModel[]>(
-      holidays.map((h) => ({
-        id: h.id,
-        date: h.date,
-        name: h.name,
-      })),
-    );
-
-    return form(model);
+  private AddModelValidator(item: SchemaPathTree<AddModel>)
+  {
+    required(item.date);
+    required(item.name);
   }
 }
