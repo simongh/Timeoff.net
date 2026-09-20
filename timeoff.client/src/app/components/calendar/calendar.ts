@@ -1,4 +1,4 @@
-import { Component, computed, input } from '@angular/core';
+import { Component, computed, input, ChangeDetectionStrategy } from '@angular/core';
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
 import {
   addMonths,
@@ -20,6 +20,7 @@ import { dateString } from '@app-types/dateString';
   selector: 'ton-calendar',
   imports: [NgbTooltip],
   templateUrl: './calendar.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './calendar.scss',
 })
 export class Calendar {

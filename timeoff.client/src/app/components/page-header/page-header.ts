@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
   selector: 'ton-page-header',
@@ -10,6 +10,7 @@ import { Component } from '@angular/core';
       </div>
     </div>
   </div>`,
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './page-header.scss',
 })
 export class PageHeader {}

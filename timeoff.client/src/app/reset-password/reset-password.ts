@@ -1,4 +1,4 @@
-import { Component, computed, effect, inject, signal } from '@angular/core';
+import { Component, computed, effect, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FormField } from '@angular/forms/signals';
 import { RouterLink } from '@angular/router';
@@ -17,6 +17,7 @@ import { ResetPasswordApi } from './reset-password-api/reset-password-api';
   selector: 'ton-reset-password',
   imports: [ValidatorMessage, Messages, Card, ReactiveFormsModule, RouterLink, FormField],
   templateUrl: './reset-password.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './reset-password.scss',
 })
 export class ResetPassword {

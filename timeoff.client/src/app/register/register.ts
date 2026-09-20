@@ -1,4 +1,4 @@
-import { Component, computed, inject } from '@angular/core';
+import { Component, computed, inject, ChangeDetectionStrategy } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FormField } from '@angular/forms/signals';
 import { RouterLink } from '@angular/router';
@@ -14,6 +14,7 @@ import { RegisterApi } from './register-api/register-api';
   selector: 'ton-register',
   imports: [Card, Messages, ReactiveFormsModule, ValidatorMessage, RouterLink, FormField],
   templateUrl: './register.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './register.scss',
 })
 export class Register {

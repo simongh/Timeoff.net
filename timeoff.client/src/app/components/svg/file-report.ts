@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation } from '@angular/core';
+import { Component, ViewEncapsulation, ChangeDetectionStrategy } from '@angular/core';
 
 import { SvgIcon } from './svg';
 
@@ -22,6 +22,7 @@ import { SvgIcon } from './svg';
     'stroke-linejoin': 'round',
     class: 'icon icon-tabler icons-tabler-outline icon-file-report',
   },
+  changeDetection: ChangeDetectionStrategy.Eager,
   encapsulation: ViewEncapsulation.None,
 })
 export class FileReportIcon extends SvgIcon {}

@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 
@@ -11,6 +11,7 @@ import { AuthService } from '@app-types/auth/auth.service';
   selector: 'ton-header',
   imports: [CalendarWeekIcon, FileReportIcon, UsersIcon, BellIcon, SettingsIcon, UserCircleIcon, NgbDropdownModule, RouterLink],
   templateUrl: './header.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './header.scss'
 })
 export class Header {

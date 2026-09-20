@@ -1,4 +1,4 @@
-import { Component, computed, effect, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, effect, inject, OnInit, signal, ChangeDetectionStrategy } from '@angular/core';
 import { NgbAlert } from '@ng-bootstrap/ng-bootstrap';
 
 import { MessagesService } from './messages.service';
@@ -6,6 +6,7 @@ import { MessagesService } from './messages.service';
 @Component({
   selector: 'ton-messages',
   imports: [NgbAlert],
+  changeDetection: ChangeDetectionStrategy.Eager,
   template: `@if (hasMessage()) { 
     <ngb-alert [type]="type()" [dismissible]="false">{{ text() }}</ngb-alert>
     }`,

@@ -1,4 +1,4 @@
-import { Component, computed, inject, input, model, ModelSignal } from '@angular/core';
+import { Component, computed, inject, input, model, ModelSignal, ChangeDetectionStrategy } from '@angular/core';
 import { ControlContainer, FormControl } from '@angular/forms';
 import { FieldState, FieldTree, FormValueControl } from '@angular/forms/signals';
 
@@ -8,6 +8,7 @@ import { FieldState, FieldTree, FormValueControl } from '@angular/forms/signals'
   template: `@if (hasError()) {
     <small class="text-danger"><ng-content></ng-content></small>
   } `,
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './validator-message.scss',
 })
 export class ValidatorMessage<T> {

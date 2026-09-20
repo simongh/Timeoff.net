@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 import { Card } from '@components/cards';
 import { PageHeader } from '@components/page-header/page-header';
@@ -11,6 +11,7 @@ import { Schedule } from './schedule/schedule';
   selector: 'ton-home',
   imports: [PageHeader, Card, Backup, Schedule, CarryOver],
   templateUrl: './home.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './home.scss'
 })
 export class Home {

@@ -1,4 +1,4 @@
-import { Component, computed, inject } from '@angular/core';
+import { Component, computed, inject, ChangeDetectionStrategy } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FormField } from '@angular/forms/signals';
 import { RouterLink } from '@angular/router';
@@ -14,6 +14,7 @@ import { ForgotPasswordApi } from './forgot-password-api/forgot-password-api';
   selector: 'ton-forgot-password',
   imports: [Card, Messages, RouterLink, ReactiveFormsModule, ValidatorMessage, FormField],
   templateUrl: './forgot-password.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './forgot-password.scss',
 })
 export class ForgotPassword {

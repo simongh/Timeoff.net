@@ -1,4 +1,4 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FormField } from '@angular/forms/signals';
 import { Router, RouterLink } from '@angular/router';
@@ -17,6 +17,7 @@ import { LoginApi } from './login-api/login-api';
   selector: 'ton-login-page',
   imports: [ReactiveFormsModule, Card, ValidatorMessage, RouterLink, Messages, FormField],
   templateUrl: './login.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './login.scss',
 })
 export class Login {

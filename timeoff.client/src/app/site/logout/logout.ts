@@ -1,4 +1,4 @@
-import { Component, DestroyRef, effect, inject, OnInit } from '@angular/core';
+import { Component, DestroyRef, effect, inject, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
 
@@ -7,6 +7,7 @@ import { AuthService } from '@app-types/auth/auth.service';
 @Component({
   selector: 'ton-logout',
   imports: [],
+  changeDetection: ChangeDetectionStrategy.Eager,
   template: '',
 })
 export class Logout implements OnInit {

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { RouterLink, RouterOutlet } from '@angular/router';
 
 import { Footer } from './footer/footer';
@@ -8,6 +8,7 @@ import { Header } from './header/header';
   selector: 'ton-site',
   imports: [RouterOutlet, Header, Footer],
   templateUrl: './site.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './site.scss'
 })
 export class Site {

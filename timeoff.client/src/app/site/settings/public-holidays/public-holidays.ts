@@ -1,4 +1,4 @@
-import { Component, computed, inject, linkedSignal, numberAttribute, signal } from '@angular/core';
+import { Component, computed, inject, linkedSignal, numberAttribute, signal, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { FormField } from '@angular/forms/signals';
 import { RouterLink } from '@angular/router';
@@ -21,6 +21,7 @@ import { AddModel, PublicHolidaysApi } from './public-holidays-api/public-holida
   selector: 'ton-public-holidays',
   imports: [PageHeader, Card, RouterLink, FormsModule, Calendar, FontAwesomeModule, FormField, Messages, NgbInputDatepicker],
   templateUrl: './public-holidays.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './public-holidays.scss',
 })
 export class PublicHolidays {

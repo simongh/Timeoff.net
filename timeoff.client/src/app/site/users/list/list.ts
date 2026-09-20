@@ -1,4 +1,4 @@
-import { Component, inject, numberAttribute } from '@angular/core';
+import { Component, inject, numberAttribute, ChangeDetectionStrategy } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { derivedAsync } from 'ngxtension/derived-async';
 import { injectQueryParams } from 'ngxtension/inject-query-params';
@@ -16,6 +16,7 @@ import { UsersApi } from '../users-api/users-api';
   selector: 'ton-list',
   imports: [RouterLink, YesPipe, PageHeader, Card],
   templateUrl: './list.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './list.scss',
 })
 export class List {
