@@ -1,9 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { inject, Injectable, signal } from '@angular/core';
+import { inject, Service, signal } from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
-import { NonNullableFormBuilder, Validators } from '@angular/forms';
 import { email, form, required } from '@angular/forms/signals';
-import { tr } from 'date-fns/locale';
 
 import { injectApi } from '@app-types/apiResource';
 import { dateString } from '@app-types/dateString';
@@ -36,9 +34,7 @@ interface AdjustmentModel {
   adjustment: number;
 }
 
-@Injectable({
-  providedIn: 'root',
-})
+@Service()
 export class UsersApi {
   readonly #httpClient = inject(HttpClient);
 

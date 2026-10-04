@@ -1,0 +1,44 @@
+<ton-page-header>
+  <h2>Teams</h2>
+  <ton-messages />
+</ton-page-header>
+
+<div class="page-body">
+  <div class="container-xl">
+    <div class="row">
+      <div class="col-md-12">
+        @if (teams.value()?.length === 0) {
+          No team records
+        }
+        @else {
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Manager</th>
+                <th>Allowance</th>
+                <th>Number Employees</th>
+                <th>Public Holidays</th>
+                <th>Accrued Allowance</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (team of teams.value(); track team.id) {
+                <tr>
+                  <td><a routerLink="./{{team.id}}">{{team.name}}</a></td>
+                  <td><a routerLink="/users/{{team.manager.id}}">{{team.manager.name}}</a></td>
+                  <td>{{team.allowance}}</td>
+                  <td><a routerLink="/users" [queryParams]="{team: team.id}">{{team.employeeCount}}</a></td>
+                  <td>{{team.includePublicHolidays | yes}}</td>
+                  <td>{{team.isAccruedAllowance | yes}}</td>
+                  <td><a routerLink="./{{team.id}}"><fa-icon [icon]="faChevronRight"/></a></td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        }
+      </div>
+    </div>
+  </div>
+</div>

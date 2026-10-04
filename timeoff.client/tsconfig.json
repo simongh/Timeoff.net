@@ -16,16 +16,15 @@
     "importHelpers": true,
     "target": "ES2022",
     "module": "es2022",
-    "baseUrl": "src",
     "paths": {
       "@app-types/*": [
-        "app/types/*"
+        "./src/app/types/*"
       ],
       "@components/*": [
-        "app/components/*"
+        "./src/app/components/*"
       ],
       "@api/*": [
-        "app/api/*"
+        "./src/app/api/*"
       ]
     }
   },

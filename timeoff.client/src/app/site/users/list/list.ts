@@ -32,10 +32,5 @@ export class List {
 
   protected readonly teams = derivedAsync(() => this.#siteSvc.getTeams(), { initialValue: [] });
 
-  protected readonly users = derivedAsync(
-    () => this.#usersSvc.getUsers(() => this.team()).value(),
-    {
-      initialValue: [],
-    },
-  );
+  protected readonly users = this.#usersSvc.getUsers(() => this.team());
 }

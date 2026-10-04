@@ -1,0 +1,25 @@
+<ton-page-header>
+  <h2>{{ model().name }} Details</h2>
+  <div class="page-pretitle">Team details</div>
+  <ton-messages />
+</ton-page-header>
+
+<div class="page-body">
+  <div class="container-xl">
+    <div class="row">
+      <div class="col-md-3 list-group">
+        <a class="list-group-item selected-item">General details</a>
+        <a class="list-group-item" routerLink="/users" [queryParams]="{ team: id() }"
+          >Employees from team</a
+        >
+      </div>
+
+      <div class="col-md-7">
+        <div class="form-group">
+          <label for="name" class="form-label">Name</label>
+          <input class="form-control" id="name" [formField]="form.name" />
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
